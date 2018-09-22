@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <title>zxysilent</title>
+    {{template "tpl-linker.html" .}}
+</head>
+<body>
+    {{template "tpl-naver.html" .}}
+    <div id="header">
+        <div class="btn-bar"><i></i></div>
+        <h1><a href="/">zxysilent</a></h1><a class="me" href="/about/"><img src="/res/logo.png" alt="zxysilent"></a>
+    </div>
+    <div id="sidebar-mask"></div>
+    <div id="main">
+        <section id="page-index">
+            {{ range $k, $v := .Posts }}
+            <article class="post">
+                <div class="meta">
+                    <div><span class="author">zxysilent</span><span>发布于</span>
+                        <span class="date">{{ date $v.CreateTime "2006-01-02" }}</span></div>
+                    <div class="comment"><a href="/post/{{$v.Pathname}}.html#comments">comments</a></div>
+                </div>
+                <h1 class="title"><a href="/post/{{$v.Pathname}}.html">{{$v.Title}}</a></h1>
+                <div class="entry-content">
+                    {{ str2html $v.Summary }}
+                    <p class="more"><a href="/post/{{$v.Pathname}}.html">阅读全文 »</a></p>
+                </div>
+            </article>
+            {{ end }}
+            <nav class="pagination">
+                {{ if ne .Naver.Prev ""}}
+                <a href="{{.Naver.Prev}}" class="prev">&laquo; 上一页</a>
+                {{end}}
+                <div class="center"><a href="/archives">博客归档</a></div>
+                {{ if ne .Naver.Next ""}}
+                <a href="{{.Naver.Next}}" class="next">下一页 &raquo;</a>
+                {{end}}
+            </nav>
+        </section>
+        {{template "tpl-footer.html" .}}
+</body>
+</html>
