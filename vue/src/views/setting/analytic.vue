@@ -7,7 +7,7 @@
         <div>
             <Form label-position="top">
                 <FormItem label="网站统计代码">
-                    <Input v-model="analytic" style="width:600px" type="textarea" :autosize="{minRows: 15,maxRows: 20}" placeholder="Enter code "></Input>
+                    <Input v-model="model.value" style="width:600px" type="textarea" :autosize="{minRows: 15,maxRows: 20}" placeholder="Enter code "></Input>
                 </FormItem>
                 <div>
                     <Button type="warning" :loading="saveLoading" @click="cmtSave">保&nbsp;&nbsp;&nbsp;&nbsp;存</Button>
@@ -17,21 +17,43 @@
     </Card>
 </template>
 <script>
+import { optsGet, optsEdit } from "@/api/opts";
 export default {
 	data() {
 		return {
-			analytic: "",
+			model: {
+				key: "analytic",
+				value: ""
+			},
 			saveLoading: false
 		};
 	},
 	methods: {
 		cmtSave() {
 			this.saveLoading = true;
-			setTimeout(() => {
+			optsEdit(this.model).then(resp => {
 				this.saveLoading = false;
-			}, 1500);
+				if (resp.code == 200) {
+					this.$Message.success({
+						content: "网站统计代码,更新成功",
+					});
+				} else {
+					this.$Message.error({
+						content: `网站统计代码,更新失败`,
+						duration: 3
+					});
+				}
+			});
 		},
-		init() {}
+		init() {
+			optsGet(this.model.key).then(resp => {
+				if (resp.code == 200) {
+					this.model.value = resp.data;
+				} else {
+					this.model.value = "";
+				}
+			});
+		}
 	},
 	mounted() {
 		this.init();

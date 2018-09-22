@@ -26,5 +26,9 @@ func Run(addr string) {
 	engine.GET(`/links`, control.Links)
 	engine.GET(`/post/*`, control.Post)
 	engine.GET(`/page/*`, control.Page)
+
+	admin := engine.Group(`/adm`)
+	admin.GET(`/opts/:key`, control.OptsGet)
+	admin.POST(`/opts/edit`, control.OptsEdit)
 	engine.Start(addr)
 }
