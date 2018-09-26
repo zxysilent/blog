@@ -19,44 +19,47 @@
 <script>
 import { optsGet, optsEdit } from "@/api/opts";
 export default {
-	data() {
-		return {
-			model: {
-				key: "analytic",
-				value: ""
-			},
-			saveLoading: false
-		};
-	},
-	methods: {
-		cmtSave() {
-			this.saveLoading = true;
-			optsEdit(this.model).then(resp => {
-				this.saveLoading = false;
-				if (resp.code == 200) {
-					this.$Message.success({
-						content: "网站统计代码,更新成功",
-					});
-				} else {
-					this.$Message.error({
-						content: `网站统计代码,更新失败`,
-						duration: 3
-					});
-				}
-			});
-		},
-		init() {
-			optsGet(this.model.key).then(resp => {
-				if (resp.code == 200) {
-					this.model.value = resp.data;
-				} else {
-					this.model.value = "";
-				}
-			});
-		}
-	},
-	mounted() {
-		this.init();
-	}
+  data() {
+    return {
+      model: {
+        key: "analytic",
+        value: ""
+      },
+      saveLoading: false
+    };
+  },
+  methods: {
+    cmtSave() {
+      this.saveLoading = true;
+      optsEdit(this.model).then(resp => {
+        this.saveLoading = false;
+        if (resp.code == 200) {
+          this.$Message.success({
+            content: "网站统计代码,更新成功"
+          });
+        } else {
+          this.$Message.error({
+            content: `网站统计代码,更新失败,请重试`,
+            duration: 3,
+            onClose() {
+              this.init();
+            }
+          });
+        }
+      });
+    },
+    init() {
+      optsGet(this.model.key).then(resp => {
+        if (resp.code == 200) {
+          this.model.value = resp.data;
+        } else {
+          this.model.value = "";
+        }
+      });
+    }
+  },
+  mounted() {
+    this.init();
+  }
 };
 </script>

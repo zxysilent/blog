@@ -2,6 +2,7 @@ package util
 
 import (
 	"math/rand"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -27,4 +28,13 @@ func RandStr(ln int) string {
 		buf.WriteByte(chars[rand.Intn(charsLen)])
 	}
 	return buf.String()
+}
+
+// Atoi 字符串转数字 def 默认值
+func Atoi(s string, def ...int) int {
+	rtn, err := strconv.Atoi(s)
+	if err != nil && len(def) > 0 {
+		return def[0]
+	}
+	return rtn
 }

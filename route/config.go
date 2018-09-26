@@ -39,7 +39,15 @@ type TplRender struct {
 // Render renders a template document
 func (t *TplRender) Render(w io.Writer, name string, data interface{}, ctx echo.Context) error {
 	if mp, is := data.(map[string]interface{}); is {
-		mp["site"] = "ddd"
+		mp["title"] = model.MapOpts.MustGet("title")
+		mp["favicon"] = model.MapOpts.MustGet("favicon")
+		mp["site_url"] = model.MapOpts.MustGet("site_url")
+		mp["logo_url"] = model.MapOpts.MustGet("logo_url")
+		mp["keywords"] = model.MapOpts.MustGet("keywords")
+		mp["miitbeian"] = model.MapOpts.MustGet("miitbeian")
+		mp["weibo_url"] = model.MapOpts.MustGet("weibo_url")
+		mp["github_url"] = model.MapOpts.MustGet("github_url")
+		mp["description"] = model.MapOpts.MustGet("description")
 	}
 	if model.Conf.Debug {
 		funcMap := template.FuncMap{"str2html": Str2html, "date": Date, "md5": Md5}

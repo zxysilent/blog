@@ -13,6 +13,15 @@ func (m mapOpts) Get(key string) (string, bool) {
 	value, ok := m[key]
 	return value, ok
 }
+func (m mapOpts) Set(key, val string) {
+	if m[key] != val {
+		m[key] = val
+	}
+}
+
+func (m mapOpts) MustGet(key string) string {
+	return m[key]
+}
 
 //MapOpts 数据库配置信息
 var MapOpts mapOpts
@@ -36,6 +45,11 @@ func OptsGet(key string) (string, bool) {
 	return MapOpts.Get(key)
 }
 
+// OptsMustGet 获取某个 配置
+func OptsMustGet(key string) string {
+	return MapOpts.MustGet(key)
+}
+
 // OptsEdit 编辑配置
 func OptsEdit(mod *Opts) bool {
 	sess := DB.NewSession()
@@ -44,7 +58,8 @@ func OptsEdit(mod *Opts) bool {
 	affect, err := sess.ID(mod.Key).Cols("Value").Update(mod)
 	if affect >= 1 || err == nil {
 		sess.Commit()
-		initMap()
+		//	initMap()
+		MapOpts.Set(mod.Key, mod.Value)
 		return true
 	}
 	sess.Rollback()

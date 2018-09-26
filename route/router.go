@@ -28,6 +28,7 @@ func Run(addr string) {
 	engine.GET(`/page/*`, control.Page)
 
 	admin := engine.Group(`/adm`)
+	admin.GET(`/opts/base`, control.OptsBase)
 	admin.GET(`/opts/:key`, control.OptsGet)
 	admin.POST(`/opts/edit`, control.OptsEdit)
 	engine.Start(addr)

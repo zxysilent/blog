@@ -31,3 +31,19 @@ func OptsEdit(ctx echo.Context) error {
 	}
 	return ctx.Res(util.NewSucc(`配置项修改成功`))
 }
+
+// OptsBase 基本配置项目
+func OptsBase(ctx echo.Context) error {
+	// ipt := &model.Opts{}
+	// err := ctx.Bind(ipt)
+	// if err != nil {
+	// 	return ctx.Res(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+	// }
+	// if !model.OptsEdit(ipt) {
+	// 	return ctx.Res(util.NewFail(`配置项修改失败`))
+	// }
+	mp := model.MapOpts
+	// delete(mp, "analytic")
+	// delete(mp, "comment")
+	return ctx.Res(util.NewSucc(`基本配置项目`, mp))
+}

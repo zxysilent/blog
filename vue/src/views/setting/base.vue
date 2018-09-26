@@ -6,136 +6,128 @@
                 <Icon type="ios-settings-outline" /> 基本设置
             </p>
             <div>
-                <Form ref="userForm" :model="userForm" label-position="top" :rules="inforValidate">
-                    <FormItem label="站点名称" prop="name">
+                <Form ref="base" :model="base" label-position="top" :rules="base">
+                    <FormItem label="站点名称" prop="title">
                         <div style="display:inline-block;width:600px;">
-                            <Input v-model="userForm.name"></Input>
+                            <Input v-model="base.title" search enter-button="确    定" @on-search="cmtSave('title')"></Input>
                         </div>
                     </FormItem>
-                    <FormItem label="Logo" prop="cellphone">
+                    <FormItem label="Logo" prop="logo_url">
                         <div style="display:inline-block;width:600px;">
-                            <Input v-model="userForm.cellphone" @on-keydown="hasChangePhone"></Input>
+                            <Input v-model="base.logo_url" search enter-button="确    定" @on-search="cmtSave('logo_url')"></Input>
                         </div>
                     </FormItem>
-                    <FormItem label="站点描述" prop="name">
+                    <FormItem label="站点描述" prop="description">
                         <div style="display:inline-block;width:600px;">
-                            <Input v-model="userForm.name"></Input>
+                            <Input v-model="base.description" search enter-button="确    定" @on-search="cmtSave('description')" ></Input>
                         </div>
                     </FormItem>
-                    <FormItem label="站点地址" prop="name">
+                    <FormItem label="站点地址" prop="site_url">
                         <div style="display:inline-block;width:600px;">
-                            <Input v-model="userForm.name"></Input>
+                            <Input v-model="base.site_url" search enter-button="确    定" @on-search="cmtSave('site_url')"></Input>
                         </div>
                     </FormItem>
-                    <FormItem label="Favicon" prop="name">
+                    <FormItem label="Favicon" prop="favicon_url">
                         <div style="display:inline-block;width:600px;">
-                            <Input v-model="userForm.name"></Input>
+                            <Input v-model="base.favicon_url" search enter-button="确    定" @on-search="cmtSave('favicon_url')"></Input>
                         </div>
                     </FormItem>
-                    <FormItem label="关键词" prop="name">
+                    <FormItem label="关键词" prop="keywords">
                         <div style="display:inline-block;width:600px;">
-                            <Input v-model="userForm.name"></Input>
+                            <Input v-model="base.keywords" search enter-button="确    定" @on-search="cmtSave('keywords')"></Input>
                         </div>
                     </FormItem>
-                    <FormItem label="Github" prop="name">
+                    <FormItem label="每页文章数目" prop="page_size">
                         <div style="display:inline-block;width:600px;">
-                            <Input v-model="userForm.name"></Input>
+                            <br>
+                            <Slider v-model="page_size" :min="4" :max="12" show-stops show-tip="always" @on-change="onChange"></Slider>
+                            此数目用于指定文章每页显示的文章数目.
                         </div>
                     </FormItem>
-                    <FormItem label="Weibo" prop="name">
+                    <FormItem label="Github" prop="github_url">
                         <div style="display:inline-block;width:600px;">
-                            <Input v-model="userForm.name"></Input>
+                            <Input v-model="base.github_url" search enter-button="确    定" @on-search="cmtSave('github_url')"></Input>
                         </div>
                     </FormItem>
-                    <FormItem label="备案号" prop="name">
+                    <FormItem label="Weibo" prop="weibo_url">
                         <div style="display:inline-block;width:600px;">
-                            <Input v-model="userForm.name"></Input>
+                            <Input v-model="base.weibo_url" search enter-button="确    定" @on-search="cmtSave('weibo_url')"></Input>
                         </div>
                     </FormItem>
-                    <div>
-                        <Button type="warning" :loading="saveLoading" @click="cmtSave">保&nbsp;&nbsp;&nbsp;&nbsp;存</Button>
-                    </div>
+                    <FormItem label="备案号" prop="miitbeian">
+                        <div style="display:inline-block;width:600px;">
+                            <Input v-model="base.miitbeian" search enter-button="确    定" @on-search="cmtSave('miitbeian')"></Input>
+                        </div>
+                    </FormItem>
                 </Form>
             </div>
         </Card>
     </div>
 </template>
-
 <script>
+import { optsBase, optsEdit } from "@/api/opts";
 export default {
-	name: "ownspace_index",
-	data() {
-		return {
-			userForm: {
-				name: "",
-				cellphone: "",
-				company: "",
-				department: ""
-			},
-			saveLoading: false,
-			identifyError: "", // 验证码错误
-			editPasswordModal: false, // 修改密码模态框显示
-			savePassLoading: false,
-			oldPassError: "",
-			identifyCodeRight: false, // 验证码是否正确
-			checkIdentifyCodeLoading: false,
-			editPasswordForm: {
-				oldPass: "",
-				newPass: "",
-				rePass: ""
-			},
-			inputCodeVisible: false, // 显示填写验证码box
-			initPhone: "",
-			gettingIdentifyCodeBtnContent: "获取验证码" // “获取验证码”按钮的文字
-		};
-	},
-	methods: {
-		cancelEditUserInfor() {
-			this.$store.commit("removeTag", "ownspace_index");
-			localStorage.pageOpenedList = JSON.stringify(
-				this.$store.state.app.pageOpenedList
-			);
-			let lastPageName = "";
-			if (this.$store.state.app.pageOpenedList.length > 1) {
-				lastPageName = this.$store.state.app.pageOpenedList[1].name;
-			} else {
-				lastPageName = this.$store.state.app.pageOpenedList[0].name;
-			}
-			this.$router.push({
-				name: lastPageName
-			});
-		},
-		cmtSave() {
-			this.$refs["userForm"].validate(valid => {
-				if (valid) {
-					if (
-						this.phoneHasChanged &&
-						this.userForm.cellphone !== this.initPhone
-					) {
-						// 手机号码修改过了而且修改之后的手机号和原来的不一样
-					} else {
-						this.saveInfoAjax();
-					}
-				}
-			});
-		},
-		init() {
-			this.userForm.name = "";
-			this.userForm.cellphone = "17712345678";
-			this.initPhone = "17712345678";
-			this.userForm.company = "TalkingData";
-			this.userForm.department = "可视化部门";
-		},
-		saveInfoAjax() {
-			this.save_loading = true;
-			setTimeout(() => {
-				this.$Message.success("保存成功");
-				this.save_loading = false;
-			}, 1000);
-		}
-	},
-	mounted() {
-		this.init();
-	}
+  data() {
+    return {
+      page_size: 2,
+      base: {},
+      saveLoading: false
+    };
+  },
+  methods: {
+    cmtSave(key) {
+      this.save_loading = true;
+      optsEdit({
+        key: key,
+        value: this.base[key]
+      }).then(resp => {
+        this.saveLoading = false;
+        if (resp.code == 200) {
+          this.$Message.success({
+            content: "更新成功"
+          });
+        } else {
+          this.$Message.error({
+            content: `更新失败`,
+            duration: 3,
+            onClose() {
+              this.init();
+            }
+          });
+        }
+      });
+    },
+    onChange(val) {
+      optsEdit({
+        key: "page_size",
+        value: val + ""
+      }).then(resp => {
+        this.saveLoading = false;
+        if (resp.code != 200) {
+          this.$Message.error({
+            content: `更新失败,请重试`,
+            duration: 3,
+            onClose() {
+              this.init();
+            }
+          });
+        }
+      });
+    },
+    init() {
+      optsBase().then(resp => {
+        if (resp.code == 200) {
+          this.page_size = Number(resp.data["page_size"], 10);
+          console.log(resp.data);
+          this.base = resp.data;
+        } else {
+          this.base = {};
+        }
+      });
+    }
+  },
+  mounted() {
+    this.init();
+  }
 };
 </script>

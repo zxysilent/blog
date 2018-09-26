@@ -2,13 +2,12 @@ package control
 
 import (
 	"blog/model"
+	"blog/util"
 	"net/http"
 	"strconv"
 
 	"github.com/labstack/echo"
 )
-
-var ps = 4
 
 // Index 主页面
 func Index(ctx echo.Context) error {
@@ -17,6 +16,7 @@ func Index(ctx echo.Context) error {
 	if pi == 0 {
 		pi = 1
 	}
+	ps := util.Atoi(model.MapOpts.MustGet("page_size"), 6)
 	mods, _ := model.PostPage(pi, ps)
 	total := model.PostCount()
 	naver := model.Naver{}

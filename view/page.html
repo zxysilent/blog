@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <title>zxysilent·{{.Page.Title}}</title>
+    <title>{{.title}}·{{.Page.Title}}</title>
     {{template "tpl-linker.html" .}}
 </head>
 <body>
@@ -15,7 +15,7 @@
                 </div>
             </article>
             {{if .Page.AllowComment}}
-            <div id="comments" data-type="gitalk" data-thread-key="{{md5 .Page.Pathname}}" data-url="https://blog.zxysilent.com/post/{{.Page.Pathname}}.html">
+            <div id="comments" data-type="gitalk" data-thread-key="{{md5 .Page.Pathname}}" data-url="{{.site_url}}/post/{{.Page.Pathname}}.html">
                 <h1 class="title">Comments</h1>
                 <div id="gitalk-container" data-identifier="c30b652848870724491444cc3d23de5b" data-name="{&quot;clientID&quot;:&quot;2d028c155cbc14d10f53&quot;,&quot;clientSecret&quot;:&quot;e503c3d371fb046b2ec9ca99253c10b320be0052&quot;,&quot;repo&quot;:&quot;blog&quot;,&quot;owner&quot;:&quot;zxysilent&quot;,&quot;admin&quot;:[&quot;zxysilent&quot;],&quot;distractionFreeMode&quot;:true,&quot;githubUserName&quot;:&quot;zxysilent&quot;}"></div>
             </div>

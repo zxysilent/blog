@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <title>zxysilent·{{.Post.Title}}</title>
+    <title>{{.title}}·{{.Post.Title}}</title>
     {{template "tpl-linker.html" .}}
 </head>
 <body>
@@ -19,7 +19,7 @@
                 <div class="entry-content">
                     {{str2html .Post.Content}}
                 </div>
-                <p>本文链接：<a href="https://blog.zxysilent.com/post/{{.Post.Pathname}}.html">https://blog.zxysilent.com/post/{{.Post.Pathname}}.html</a></p>
+                <p>本文链接：<a href="{{.site_url}}/post/{{.Post.Pathname}}.html">{{.site_url}}/post/{{.Post.Pathname}}.html</a></p>
                 <p>-- <acronym title="End of File">EOF</acronym> --</p>
                 <div class="post-info">
                     <!-- <code class="notebook">zxysilent</code> -->
@@ -47,7 +47,7 @@
                 {{ str2html .Naver.Next }}
             </nav>
             {{if .Page.AllowComment}}
-            <div id="comments" data-type="gitalk" data-thread-key="{{md5 .Page.Pathname}}" data-url="https://blog.zxysilent.com/post/{{.Page.Pathname}}.html">
+            <div id="comments" data-type="gitalk" data-thread-key="{{md5 .Page.Pathname}}" data-url="{{.site_url}}/post/{{.Page.Pathname}}.html">
                 <h1 class="title">Comments</h1>
                 <div id="gitalk-container" data-identifier="c30b652848870724491444cc3d23de5b" data-name="{&quot;clientID&quot;:&quot;2d028c155cbc14d10f53&quot;,&quot;clientSecret&quot;:&quot;e503c3d371fb046b2ec9ca99253c10b320be0052&quot;,&quot;repo&quot;:&quot;blog&quot;,&quot;owner&quot;:&quot;zxysilent&quot;,&quot;admin&quot;:[&quot;zxysilent&quot;],&quot;distractionFreeMode&quot;:true,&quot;githubUserName&quot;:&quot;zxysilent&quot;}"></div>
             </div>
