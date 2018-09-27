@@ -39,8 +39,17 @@ func TagPost(ctx echo.Context) error {
 	if err != nil || len(mods) < 1 {
 		return ctx.Redirect(302, "/tags")
 	}
+	total := model.TagPostCount(mod.Id)
+	naver := model.Naver{}
+	if pi > 1 {
+		naver.Prev = "/tag/" + mod.Name + "?page=1"
+	}
+	if total > (pi * ps) {
+		naver.Next = "/tag/" + mod.Name + "?page=" + strconv.Itoa(pi+1)
+	}
 	return ctx.Render(http.StatusOK, "tag-post.html", map[string]interface{}{
 		"Tag":      mod,
 		"TagPosts": mods,
+		"Naver":    naver,
 	})
 }
