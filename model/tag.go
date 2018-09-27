@@ -7,18 +7,27 @@ type Tag struct {
 	Pathname string `xorm:"default 'NULL' VARCHAR(255)"`
 }
 
-// tagIds 通过id返回新闻类别信息集合
+// tagIds 通过id返回标签集合
 func tagIds(ids []int) map[int]*Tag {
 	mods := make([]Tag, 0, 6)
 	DB.In("id", ids).Find(&mods)
 	if len(mods) > 0 {
-		mapTag := make(map[int]*Tag, len(mods))
+		mapSet := make(map[int]*Tag, len(mods))
 		for idx := range mods {
-			mapTag[mods[idx].Id] = &mods[idx]
+			mapSet[mods[idx].Id] = &mods[idx]
 		}
-		return mapTag
+		return mapSet
 	}
 	return nil
+}
+
+// TagName 通过name 查询标签
+func TagName(nam string) (*Tag, bool) {
+	mod := &Tag{
+		Name: nam,
+	}
+	has, _ := DB.Get(mod)
+	return mod, has
 }
 
 // TagAll 所有标签

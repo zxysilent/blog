@@ -112,3 +112,17 @@ func PostSingle(path string) (*Post, bool) {
 	has, _ := DB.Get(mod)
 	return mod, has
 }
+
+// postIds 通过id返回文章集合
+func postIds(ids []int) map[int]*Post {
+	mods := make([]Post, 0, 6)
+	DB.Cols("id", "title", "pathname", "create_time", "summary", "comment_num", "options").Where("Type = 0 AND Is_Public = 1").In("id", ids).Find(&mods)
+	if len(mods) > 0 {
+		mapSet := make(map[int]*Post, len(mods))
+		for idx := range mods {
+			mapSet[mods[idx].Id] = &mods[idx]
+		}
+		return mapSet
+	}
+	return nil
+}

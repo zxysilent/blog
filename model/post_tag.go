@@ -2,8 +2,9 @@ package model
 
 //PostTag 文章标签
 type PostTag struct {
-	Id     int  `xorm:"not null pk autoincr INT(11)"`
-	PostId int  `xorm:"not null unique(post_tag) INT(11)"`
+	Id     int `xorm:"not null pk autoincr INT(11)"`
+	PostId int `xorm:"not null unique(post_tag) INT(11)"`
+	Post   `xorm:"<-"`
 	TagId  int  `xorm:"not null unique(post_tag) INT(11)"`
 	Tag    *Tag `xorm:"- <- ->"`
 }
@@ -27,4 +28,11 @@ func PostTags(pid int) ([]PostTag, error) {
 		}
 	}
 	return mods, nil
+}
+
+// TagPostList 通过标签查询文章分页
+func TagPostList(tid, pi, ps int) ([]PostTag, error) {
+	mods := make([]PostTag, 0, ps)
+	err := DB.SQL(`SELECT post.id,post_id,tag_id,title,pathname,summary,create_time,comment_num FROM post_tag LEFT JOIN post ON post_id=post.id WHERE is_public=1 and tag_id=? limit ?,? `, tid, (pi-1)*ps, ps).Find(&mods)
+	return mods, err
 }

@@ -22,6 +22,7 @@ func Run(addr string) {
 	engine.GET(`/`, control.Index)
 	engine.GET(`/archives`, control.Archives)
 	engine.GET(`/tags`, control.Tags)
+	engine.GET(`/tag/:tag`, control.TagPost)
 	engine.GET(`/about`, control.About)
 	engine.GET(`/links`, control.Links)
 	engine.GET(`/post/*`, control.Post)
