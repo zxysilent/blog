@@ -122,6 +122,15 @@ func PostPageAll() ([]Post, error) {
 	return mods, err
 }
 
+//PostGet 一个
+func PostGet(id int) (*Post, bool) {
+	mod := &Post{
+		Id: id,
+	}
+	has, _ := DB.Get(mod)
+	return mod, has
+}
+
 // postIds 通过id返回文章集合
 func postIds(ids []int) map[int]*Post {
 	mods := make([]Post, 0, 6)

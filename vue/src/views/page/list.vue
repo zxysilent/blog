@@ -10,16 +10,21 @@
             </Card>
             </Col>
         </Row>
+        <Modal v-model="showEdit" fullscreen title="修改页面">
+            <div>This is a fullscreen modal</div>
+            <div v-html="post.content"></div>
+        </Modal>
     </div>
-
 </template>
 <script>
 import { cateAll } from "@/api/cate";
-import { pageAll, articleChgtop, articleDel } from "@/api/post";
+import { pageAll, postGet, articleDel } from "@/api/post";
 export default {
   data() {
     return {
-      total: 0,
+      pageId: 0,
+      showEdit: false,
+      post: {},
       colPage: [
         {
           type: "index",
@@ -63,20 +68,14 @@ export default {
           title: "创建日期",
           width: 150,
           render: (h, data) => {
-            return h(
-              "div",
-              data.row.create_time.replace(/T|\+08:00/g, " ")
-            );
+            return h("div", data.row.create_time.replace(/T|\+08:00/g, " "));
           }
         },
         {
           title: "修改日期",
           width: 150,
           render: (h, data) => {
-            return h(
-              "div",
-              data.row.update_time.replace(/T|\+08:00/g, " ")
-            );
+            return h("div", data.row.update_time.replace(/T|\+08:00/g, " "));
           }
         },
         {
@@ -100,10 +99,9 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.$router.push({
-                      name: "news-edit",
-                      params: { id: data.row.id }
-                    });
+                    this.showEdit = true;
+                    this.pageId = data.row.id;
+                    this.getOne();
                   }
                 }
               }),
@@ -136,7 +134,17 @@ export default {
           this.dataPage = resp.data;
         } else {
           this.dataPage = [];
-          this.$Message.warning("未查询到新闻数据，请重试！");
+          this.$Message.warning("未查询到信息，请重试！");
+        }
+      });
+    },
+    getOne() {
+      postGet(this.pageId).then(resp => {
+        if (resp.code == 200) {
+          this.post = resp.data;
+        } else {
+          this.post = {};
+          this.$Message.warning("未查询到信息，请重试！");
         }
       });
     },

@@ -3,11 +3,6 @@
 </style>
 <template>
     <div class="margin-top-10">
-        <div class="sub-view-con" v-show="subView">
-            <div class="single-page">
-                <router-view></router-view>
-            </div>
-        </div>
         <Row>
             <Col span="24">
             <Card>
@@ -31,21 +26,27 @@
             </Card>
             </Col>
         </Row>
+        <Modal v-model="showEdit" fullscreen title="修改文章">
+            <div>This is a fullscreen modal</div>
+            <div v-html="post.content"></div>
+        </Modal>
     </div>
-
 </template>
 <script>
 import { cateAll } from "@/api/cate";
-import { catePost, articleChgtop, articleDel } from "@/api/post";
+import { catePost, postGet, articleDel } from "@/api/post";
 export default {
   data() {
     return {
       mult: "",
+      pageId: 0,
+      showEdit: false,
       cateAll: [],
       cateId: 0, //all
+      post:{},
       page: {
         pi: 1,
-        ps: 10
+        ps: 15
       },
       total: 0,
       colPost: [
@@ -56,7 +57,7 @@ export default {
         },
         {
           title: "标题",
-          ellipsis:true,
+          ellipsis: true,
           tooltip: true,
           render: (h, data) => {
             return h("div", data.row.post.title);
@@ -93,7 +94,10 @@ export default {
           title: "日期",
           width: 150,
           render: (h, data) => {
-            return h("div", data.row.post.create_time.replace(/T|\+08:00/g, " ") );
+            return h(
+              "div",
+              data.row.post.create_time.replace(/T|\+08:00/g, " ")
+            );
           }
         },
         {
@@ -117,11 +121,9 @@ export default {
                 },
                 on: {
                   click: () => {
-                  //  this.$store.commit("showSubView");
-                    this.$router.push({
-                      name: "news-edit",
-                      params: { id: data.row.id }
-                    });
+                    this.showEdit = true;
+                    this.pageId = data.row.id;
+                    this.getOne();
                   }
                 }
               }),
@@ -146,11 +148,6 @@ export default {
       ],
       dataPost: []
     };
-  },
-  computed: {
-    subView() {
-      return this.$store.state.app.subView;
-    }
   },
   methods: {
     init_() {
@@ -188,6 +185,16 @@ export default {
       this.page.ps = ps;
       this.init();
     },
+    getOne() {
+      postGet(this.pageId).then(resp => {
+        if (resp.code == 200) {
+          this.post = resp.data;
+        } else {
+          this.post = {};
+          this.$Message.warning("未查询到信息，请重试！");
+        }
+      });
+    },
     //删除
     delete(data) {
       this.$Modal.confirm({
@@ -210,19 +217,7 @@ export default {
       });
     }
   },
-  beforeRouteUpdate(to, from, next) {
-    // if (from.name == "news-edit") {
-    // 	this.$store.commit("closeSubView");
-    // 	this.init();
-    // }
-    // next();
-  },
   created() {
-    // if (this.$route.name != "news-list") {
-    // 	this.$router.push({
-    // 		name: "news-list"
-    // 	});
-    // }
     this.init_();
     this.init();
   }

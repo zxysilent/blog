@@ -39,6 +39,17 @@ func Post(ctx echo.Context) error {
 	return nil
 }
 
+// PostGet 一个
+// id int
+func PostGet(ctx echo.Context) error {
+	id := util.Atoi(ctx.Param("id"))
+	mod, has := model.PostGet(id)
+	if !has {
+		return ctx.Res(util.NewErrOpt(`未查询信息`))
+	}
+	return ctx.Res(util.NewSucc(`信息`, mod))
+}
+
 // PostPageAll 页面列表
 // @Success 200 {object} util.Result "成功数据"
 func PostPageAll(ctx echo.Context) error {

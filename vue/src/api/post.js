@@ -8,9 +8,9 @@ export const catePost = (cls, data) => {
 export const pageAll = () => {
   return ajax.get("/adm/page/all");
 };
-
-export const articleGet = id => {
-  return ajax.get(`/news/article/${id}`);
+// 一条信息
+export const postGet = id => {
+  return ajax.get(`/adm/post/get/${id}`);
 };
 export const articleChgtop = (id, val) => {
   return ajax.get(`/article/chgtop/${id}`, { params: { val: val } });

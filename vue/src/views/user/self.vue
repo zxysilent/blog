@@ -45,7 +45,7 @@
             </Row>
         </Card>
         <Modal v-model="showPasswordModal" :closable='false' :mask-closable=false :width="500">
-            <h3 slot="header" style="color:#2D8CF0">修改密码</h3>
+            <h3 slot="header" style="color:#2D8CF0"><Icon type="ios-eye-off-outline" /> 修改密码</h3>
             <Form ref="passForm" :model="passForm" :label-width="100" label-position="right" :rules="passRules">
                 <FormItem label="原密码" prop="oldPass" :error="oldPassError">
                     <Input v-model="passForm.oldPass" type="password" placeholder="请输入现在使用的密码"></Input>

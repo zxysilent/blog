@@ -40,6 +40,7 @@ func Run(addr string) {
 
 	adm := app.Group(`/adm`)
 	adm.GET(`/cate/all`, control.CateAll)
+	adm.GET(`/post/get/:id`, control.PostGet)
 
 	adm.GET(`/cate/post/:cid`, control.CatePost)
 	adm.GET(`/page/all`, control.PostPageAll)
