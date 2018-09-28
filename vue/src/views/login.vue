@@ -11,14 +11,14 @@
                     欢迎登录
                 </p>
                 <div class="form-con">
-                    <Form ref="loginForm" :model="form" :rules="rules">
-                        <FormItem prop="userName">
-                            <Input type="text" v-model="form.userName" placeholder="Username">
+                    <Form ref="loginForm" :model="user" :rules="rules">
+                        <FormItem prop="num">
+                            <Input type="text" v-model="user.num" placeholder="请输入用户名">
                             <Icon type="ios-person-outline" slot="prepend"></Icon>
                             </Input>
                         </FormItem>
-                        <FormItem prop="password">
-                            <Input type="password" v-model="form.password" placeholder="Password">
+                        <FormItem prop="pass">
+                            <Input type="password" v-model="user.pass" placeholder="请输入密码">
                             <Icon type="ios-lock-outline" slot="prepend"></Icon>
                             </Input>
                         </FormItem>
@@ -26,7 +26,11 @@
                             <Button @click="handleSubmit" type="primary" long>登录</Button>
                         </FormItem>
                     </Form>
-                    <p class="login-tip">输入任意用户名和密码即可</p>
+                    <p class="login-tip">官网
+                        <a href="/" title="author">
+                            <Icon type="ios-send-outline" />
+                        </a>
+                    </p>
                 </div>
             </Card>
         </div>
@@ -34,39 +38,44 @@
 </template>
 
 <script>
-import Cookies from "js-cookie";
+import md5 from "js-md5";
+import { login } from "@/api/auth";
+import util from "@/libs/util";
 export default {
   data() {
     return {
-      form: {
-        userName: "iview_admin",
-        password: ""
+      user: {
+        num: "zxysilent",
+        pass: "zxyslt"
       },
       rules: {
-        userName: [
-          { required: true, message: "账号不能为空", trigger: "blur" }
-        ],
-        password: [{ required: true, message: "密码不能为空", trigger: "blur" }]
+        num: [{ required: true, message: "账号不能为空", trigger: "blur" }],
+        pass: [{ required: true, message: "密码不能为空", trigger: "blur" }]
       }
     };
   },
   methods: {
     handleSubmit() {
-      this.$refs.loginForm.validate(valid => {
+      let that = this;
+      that.$refs.loginForm.validate(valid => {
         if (valid) {
-          Cookies.set("user", this.form.userName);
-          Cookies.set("password", this.form.password);
-          this.$store.commit(
-            "setAvator",
-            "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=3448484253,3685836170&fm=27&gp=0.jpg"
-          );
-          if (this.form.userName === "iview_admin") {
-            Cookies.set("access", 0);
-          } else {
-            Cookies.set("access", 1);
-          }
-          this.$router.push({
-            name: "home_index"
+          let data = {
+            num: that.user.num,
+            pass: md5(that.user.pass).substr(1, 30)
+          };
+          login(data).then(res => {
+            if (res.code == 200) {
+              this.$Message.success({
+                content: "登陆成功",
+                onClose: () => {
+                  util.setToken(res.data);
+                  this.$store.commit("updateMenulist");
+                  that.$router.push({ name: "home_index" });
+                }
+              });
+            } else {
+              this.$Message.error(res.msg);
+            }
           });
         }
       });
@@ -74,6 +83,3 @@ export default {
   }
 };
 </script>
-
-<style>
-</style>

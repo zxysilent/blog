@@ -1,7 +1,6 @@
 import axios from "axios";
 import env from "../../build/env";
-import semver from "semver";
-import packjson from "../../package.json";
+import { Base64 } from "js-base64";
 
 let util = {};
 util.title = function(title) {
@@ -101,5 +100,82 @@ util.fullscreenEvent = function(vm) {
 };
 
 util.checkUpdate = function(vm) {};
+//保存数据
+util.setData = (k, v) => {
+  localStorage.setItem(k, v);
+};
+util.getData = k => {
+  return localStorage.getItem(k);
+};
+util.clearData = k => {
+  localStorage.removeItem(k);
+};
+util.setToken = token => {
+  util.setData("bearer", token);
+};
+util.getToken = () => {
+  return util.getData("bearer");
+};
+// 获取保存的用户信息
+util.getAuth = () => {
+  try {
+    let token = Base64.decode(localStorage.getItem("bearer").split(".")[1]);
+    let auth = JSON.parse(token);
+    if (!auth.hasOwnProperty("id")) {
+   //   localStorage.removeItem("bearer");
+   //   location.href = "/#/login";
+    }
+    return auth;
+  } catch (e) {
+    localStorage.removeItem("bearer");
+   // location.href = "/#/login";
+  }
+};
+//  RSup uint32 = 30 //super 		超级管理员
+// 	RAdm uint32 = 29 //admin 		管理员
+// 	RHmt uint32 = 28 //headmaster 	教师-班主任 可以发新闻
+// 	RTea uint32 = 27 //teacher 		教师-课程老师
+// 	RStu uint32 = 26 //student 		学生
+// 	RAtv uint32 = 10 //active		启用/禁用
+// 	RBas uint32 = 8  //base 		基本权限
+util.Role = {
+  RSup: 30, //超级管理员
+  RAdm: 29, //管理员
+  RHmt: 28, //教师-班主任 可以发新闻
+  RTea: 27, //教师-课程老师
+  RStu: 26, //学生
+  RAtv: 10, //启用/禁用
+  RBas: 8, //基本权限
+  //判断指定位置权限
+  getRole: (rl, r) => {
+    if ((rl & (1 << r)) >> r == 1) {
+      return true;
+    }
+    return false;
+  }
+};
+util.Role.isSup = rl => {
+  return util.Role.getRole(rl, util.Role.RSup);
+};
+util.Role.isAdm = rl => {
+  return util.Role.getRole(rl, util.Role.RAdm);
+};
+util.Role.isHmt = rl => {
+  return util.Role.getRole(rl, util.Role.RHmt);
+};
+util.Role.isTea = rl => {
+  return util.Role.getRole(rl, util.Role.RTea);
+};
+util.Role.isAtv = rl => {
+  return util.Role.getRole(rl, util.Role.RAtv);
+};
 
+util.Role.allow = (role, arr) => {
+  for (let i = 0; i < arr.length; i++) {
+    if (util.Role.getRole(role, arr[i])) {
+      return true;
+    }
+  }
+  return false;
+};
 export default util;

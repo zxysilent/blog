@@ -67,15 +67,6 @@ export const otherRouter = {
       component: () => import("@/views/home/home.vue")
     },
     {
-      path: "ownspace",
-      icon: "ios-bus",
-      meta: {
-        title: "个人中心"
-      },
-      name: "ownspace_index",
-      component: () => import("@/views/own-space/own-space.vue")
-    },
-    {
       path: "message",
       icon: "ios-bus",
       meta: {
@@ -218,35 +209,6 @@ export const appRouter = [
       }
     ]
   },
-  {
-    path: "/user",
-    icon: "ios-bus",
-    name: "form",
-    meta: {
-      title: "用户管理"
-    },
-    component: Main,
-    children: [
-      {
-        path: "list",
-        meta: {
-          title: "用户列表"
-        },
-        name: "user-list",
-        icon: "ios-bus",
-        component: () => import("@/views/user/list.vue")
-      },
-      {
-        path: "workflow",
-        meta: {
-          title: "添加用户"
-        },
-        name: "workflow",
-        icon: "ios-bus",
-        component: () => import("@/views/form/work-flow/work-flow.vue")
-      }
-    ]
-  },
   // {
   //     path: '/charts',
   //     icon: 'ios-bus',
@@ -294,6 +256,34 @@ export const appRouter = [
         name: "setting-analytic",
         icon: "ios-pulse",
         component: () => import("@/views/setting/analytic.vue")
+      },
+      {
+        path: "custom",
+        meta: {
+          title: "自 定 义"
+        },
+        name: "setting-custom",
+        icon: "ios-code-working",
+        component: () => import("@/views/setting/custom.vue")
+      }
+    ]
+  },
+  {
+    path: "/",
+    icon: "ios-contact-outline",
+    meta: {
+      title: "个人中心"
+    },
+    component: Main,
+    children: [
+      {
+        path: "self",
+        meta: {
+          title: "个人中心"
+        },
+        name: "self",
+        icon: "ios-contact-outline",
+        component: () => import("@/views/user/self.vue")
       }
     ]
   }

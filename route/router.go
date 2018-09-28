@@ -18,7 +18,7 @@ func Run(addr string) {
 	engine.HTTPErrorHandler = HTTPErrorHandler
 	engine.Static(`/res`, "res")
 	engine.Static(`/static`, "static")
-	engine.File(`/favicon.ico`, "favicon.ico")
+
 	engine.GET(`/`, control.Index)
 	engine.GET(`/archives`, control.Archives)
 	engine.GET(`/tags`, control.Tags)
@@ -27,10 +27,20 @@ func Run(addr string) {
 	engine.GET(`/links`, control.Links)
 	engine.GET(`/post/*`, control.Post)
 	engine.GET(`/page/*`, control.Page)
+	engine.File(`/favicon.ico`, "favicon.ico")
 
-	admin := engine.Group(`/adm`)
-	admin.GET(`/opts/base`, control.OptsBase)
-	admin.GET(`/opts/:key`, control.OptsGet)
-	admin.POST(`/opts/edit`, control.OptsEdit)
+	engine.GET(`/user/exist/:num`, control.UserExist)
+	engine.POST(`/login`, control.UserLogin)
+	engine.POST(`/logout`, control.UserLogout)
+
+	app := engine.Group(``, midJwt)
+	app.GET(`/auth`, control.UserAuth)
+	app.POST(`/user/edit/self`, control.UserEditSelf)
+	app.POST(`/user/pass`, control.UserPass)
+
+	adm := app.Group(`/adm`)
+	adm.GET(`/opts/base`, control.OptsBase)
+	adm.GET(`/opts/:key`, control.OptsGet)
+	adm.POST(`/opts/edit`, control.OptsEdit)
 	engine.Start(addr)
 }

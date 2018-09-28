@@ -7,8 +7,8 @@ import (
 
 // Post 文章
 type Post struct {
-	Id              int       `xorm:"not null pk autoincr INT(10)"`
-	UserId          int       `xorm:"not null INT(10)"`
+	Id              int       `xorm:"not null pk autoincr INT(11)"`
+	UserId          int       `xorm:"not null INT(11)"`
 	Type            int       `xorm:"not null default 0 comment('0 为文章，1 为页面') TINYINT(11)"`
 	Status          int       `xorm:"not null default 0 comment('0 为草稿，1 为待审核，2 为已拒绝，3 为已经发布') TINYINT(11)"`
 	Title           string    `xorm:"not null VARCHAR(255)"`

@@ -60,7 +60,7 @@ type JwtClaims struct {
 	Id   int    `json:"id"`
 	Name string `json:"name"`
 	Num  string `json:"num"`
-	//	Role Role   `json:"role"`
+	Role Role   `json:"role"`
 	jwt.StandardClaims
 }
 

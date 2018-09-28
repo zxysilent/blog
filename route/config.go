@@ -9,6 +9,7 @@ import (
 	"io"
 	"time"
 
+	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
@@ -41,11 +42,13 @@ func (t *TplRender) Render(w io.Writer, name string, data interface{}, ctx echo.
 	if mp, is := data.(map[string]interface{}); is {
 		mp["title"] = model.MapOpts.MustGet("title")
 		mp["favicon"] = model.MapOpts.MustGet("favicon")
+		mp["analytic"] = model.MapOpts.MustGet("analytic")
 		mp["site_url"] = model.MapOpts.MustGet("site_url")
 		mp["logo_url"] = model.MapOpts.MustGet("logo_url")
 		mp["keywords"] = model.MapOpts.MustGet("keywords")
 		mp["miitbeian"] = model.MapOpts.MustGet("miitbeian")
 		mp["weibo_url"] = model.MapOpts.MustGet("weibo_url")
+		mp["custom_js"] = model.MapOpts.MustGet("custom_js")
 		mp["github_url"] = model.MapOpts.MustGet("github_url")
 		mp["description"] = model.MapOpts.MustGet("description")
 	}
@@ -81,34 +84,34 @@ func initRender() *TplRender {
 	}
 }
 
-// // midJwt 中间件-jwt验证
-// func midJwt(next echo.HandlerFunc) echo.HandlerFunc {
-// 	return func(ctx echo.Context) error {
-// 		// query form 查找 token
-// 		tokenString := ctx.FormValue("token")
-// 		if tokenString == "" {
-// 			// header 查找token
-// 			tokenString = ctx.Request().Header.Get(echo.HeaderAuthorization)
-// 			if tokenString == "" {
-// 				ctx.Res(util.NewErrJwt(`未发现jwt认证信息`))
-// 				return nil
-// 			}
-// 			// Bearer token
-// 			tokenString = tokenString[7:] //len("Bearer ")
-// 		}
-// 		jwtAuth := &model.JwtClaims{}
-// 		jwt, err := jwt.ParseWithClaims(tokenString, jwtAuth, func(token *jwt.Token) (interface{}, error) {
-// 			return []byte("zxy.sil.ent"), nil
-// 		})
-// 		if err == nil && jwt.Valid {
-// 			ctx.Set("auth", jwtAuth)
-// 		} else {
-// 			return ctx.Res(util.NewErrJwt(`对不起，请重新登陆^_^!","jwt验证失败`))
-// 		}
-// 		ctx.Response().Header().Set(echo.HeaderServer, "dev ")
-// 		return next(ctx)
-// 	}
-// }
+// midJwt 中间件-jwt验证
+func midJwt(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(ctx echo.Context) error {
+		// query form 查找 token
+		tokenString := ctx.FormValue("token")
+		if tokenString == "" {
+			// header 查找token
+			tokenString = ctx.Request().Header.Get(echo.HeaderAuthorization)
+			if tokenString == "" {
+				ctx.Res(util.NewErrJwt(`未发现jwt认证信息`))
+				return nil
+			}
+			// Bearer token
+			tokenString = tokenString[7:] //len("Bearer ")
+		}
+		jwtAuth := &model.JwtClaims{}
+		jwt, err := jwt.ParseWithClaims(tokenString, jwtAuth, func(token *jwt.Token) (interface{}, error) {
+			return []byte("zxy.sil.ent"), nil
+		})
+		if err == nil && jwt.Valid {
+			ctx.Set("auth", jwtAuth)
+		} else {
+			return ctx.Res(util.NewErrJwt(`对不起，请重新登陆^_^!","jwt验证失败`))
+		}
+		ctx.Response().Header().Set(echo.HeaderServer, "dev ")
+		return next(ctx)
+	}
+}
 
 // // midAdmin 中间件-后台管理权限验证
 // func midAdmin(next echo.HandlerFunc) echo.HandlerFunc {

@@ -2,7 +2,7 @@ package model
 
 // Cate 分类
 type Cate struct {
-	Id       int    `xorm:"not null pk autoincr INT(10)"`
+	Id       int    `xorm:"not null pk autoincr INT(11)"`
 	Name     string `xorm:"not null unique VARCHAR(255)"`
 	Pid      int    `xorm:"not null default 0 INT(11)"`
 	Pathname string `xorm:"default 'NULL' VARCHAR(255)"`
