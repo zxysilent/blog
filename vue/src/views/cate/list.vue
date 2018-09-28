@@ -1,15 +1,15 @@
 <template>
     <div>
         <Card dis-hover>
-            <Table stripe size="small" :columns="colTag" :data="dataTag"></Table>
+            <Table stripe size="small" :columns="colCate" :data="dataCate"></Table>
         </Card>
-        <Modal v-model="showEdit" title="修改标签信息">
+        <Modal v-model="showEdit" title="修改分类信息">
             <Form ref="editForm" :model="editForm" label-position="top" :rules="editRules">
-                <FormItem label="标签名称" prop="name">
-                    <Input v-model="editForm.name" placeholder="请填写标签名"></Input>
+                <FormItem label="分类名称" prop="name">
+                    <Input v-model="editForm.name" placeholder="请填写分类名"></Input>
                 </FormItem>
-                <FormItem label="标签介绍" prop="intro">
-                    <Input v-model="editForm.intro"  placeholder="请填写标签介绍"></Input>
+                <FormItem label="分类介绍" prop="intro">
+                    <Input v-model="editForm.intro"  placeholder="请填写分类介绍"></Input>
                 </FormItem>
             </Form>
             <div slot="footer">
@@ -22,35 +22,13 @@
     </div>
 </template>
 <script>
-import { tagAll, tagEdit, tagDel } from "@/api/tag";
+import { cateAll, cateEdit, cateDel } from "@/api/cate";
 export default {
 	data() {
 		return {
 			showEdit: false,
 			editLoading: false,
-			editForm: {
-				name: "",
-				intro: ""
-			},
-			editRules: {
-				name: [
-					{
-						required: true,
-						message: "请填写标签名",
-						trigger: "blur",
-						max: 64
-					}
-				],
-				intro: [
-					{
-						required: true,
-						message: "请填写标签介绍",
-						trigger: "blur",
-						max: 64
-					}
-				]
-			},
-			colTag: [
+			colCate: [
 				{
 					type: "index",
 					minWidth: 60,
@@ -58,13 +36,13 @@ export default {
 					align: "center"
 				},
 				{
-					title: "标签名",
+					title: "分类名",
 					minWidth: 100,
 					maxWidth: 300,
 					key: "name"
 				},
 				{
-					title: "标签介绍",
+					title: "分类介绍",
 					minWidth: 100,
 					maxWidth: 300,
 					key: "intro"
@@ -113,17 +91,39 @@ export default {
 					}
 				}
 			],
-			dataTag: []
+			dataCate: [],
+			editForm: {
+				name: "",
+				intro: ""
+			},
+			editRules: {
+				name: [
+					{
+						required: true,
+						message: "请填写分类名",
+						trigger: "blur",
+						max: 64
+					}
+				],
+				intro: [
+					{
+						required: true,
+						message: "请填写分类介绍",
+						trigger: "blur",
+						max: 64
+					}
+				]
+			}
 		};
 	},
 	methods: {
 		init() {
-			tagAll().then(resp => {
+			cateAll().then(resp => {
 				if (resp.code == 200) {
-					this.dataTag = resp.data;
+					this.dataCate = resp.data;
 				} else {
-					this.dataTag = [];
-					this.$Message.warning("未查询到标签信息,请重试！");
+					this.dataCate = [];
+					this.$Message.warning("未查询到分类信息,请重试！");
 				}
 			});
 		},
@@ -131,18 +131,18 @@ export default {
 			this.$refs["editForm"].validate(valid => {
 				if (valid) {
 					this.editLoading = true;
-					tagEdit(this.editForm).then(resp => {
+					cateEdit(this.editForm).then(resp => {
 						this.editLoading = false;
 						if (resp.code == 200) {
 							this.$Message.success({
-								content: "标签信息修改成功",
+								content: "分类信息修改成功",
 								onClose: () => {
 									this.showEdit = false;
 								}
 							});
 						} else {
 							this.$Message.error({
-								content: `标签信息修改失败,请重试`,
+								content: `分类信息修改失败,请重试`,
 								duration: 3
 							});
 						}
@@ -155,12 +155,12 @@ export default {
 				title: "系统提示",
 				content: "你确定要删除吗？",
 				onOk: () => {
-					tagDel(data.row.id).then(resp => {
+					cateDel(data.row.id).then(resp => {
 						if (resp.code == 200) {
 							this.$Message.success({
 								content: "删除成功",
 								onClose: () => {
-									this.dataTag.splice(data.index, 1);
+									this.dataCate.splice(data.index, 1);
 								}
 							});
 						} else {

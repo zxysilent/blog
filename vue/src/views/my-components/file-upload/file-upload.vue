@@ -147,7 +147,7 @@
                                                 <img :src="item.url">
                                                 <div class="admin-upload-list-cover">
                                                     <Icon type="ios-eye-outline" @click.native="handleView(item.name)"></Icon>
-                                                    <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
+                                                    <Icon type="md-trash" @click.native="handleRemove(item)"></Icon>
                                                 </div>
                                             </template>
                                             <template v-else>

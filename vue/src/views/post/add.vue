@@ -4,87 +4,87 @@
 
 <template>
     <div>
-     <Card>
+        <Card>
             <Row>
-            <Col span="18">
-                <Form :label-width="80">
-                    <FormItem label="文章标题" :error="articleError">
-                        <Input v-model="articleTitle" @on-blur="handleArticletitleBlur" icon="android-list" />
-                    </FormItem>
+                <Col span="18">
+                <Form>
                     <FormItem>
-                        <Input v-model="value11">
-                        <span slot="prepend">https://blog.zxysilent.com/post/</span>
-                        <span slot="append">.html
-                            <Icon type="ios-eye-outline" />
-                        </span>
-                        </Input>
+                        <Input v-model="articleTitle" placeholder="请输入标题"  icon="android-list" />
                     </FormItem>
+                        <FormItem>
+                            <Input v-model="value11">
+                            <span slot="prepend">https://blog.zxysilent.com/post/</span>
+                            <span slot="append">.html
+                                <Icon type="ios-eye-outline" />
+                            </span>
+                            </Input>
+                        </FormItem>
                 </Form>
                 <div class="margin-top-20">
                     <mavon-editor style="height: 100%"></mavon-editor>
                 </div>
-            </Col>
-            <Col span="6" class="padding-left-10">
-            <Card>
-                <p slot="title">
-                    <Icon type="paper-airplane"></Icon>
-                    发布
-                </p>
-                <p class="margin-top-10">
-                    <Icon type="android-time"></Icon>权限
-                    <i-switch  size="large" />
-                </p>
-                <p class="margin-top-10">
-                    <Icon type="ios-eye"></Icon>&nbsp;&nbsp;公开度：&nbsp;
-                    <i-switch  />
-                </p>
-                <p class="margin-top-10">
-                    <Icon type="ios-calendar-outline"></Icon>&nbsp;&nbsp;
-                    <DatePicker @on-change="setPublishTime" type="datetime" style="width:200px;" placeholder="选择日期和时间"></DatePicker>
-                </p>
-                <Row class="margin-top-20 publish-button-con">
-                    <span class="publish-button">
-                        <Button @click="handlePreview">预览</Button>
-                    </span>
-                    <span class="publish-button">
-                        <Button @click="handleSaveDraft">保存草稿</Button>
-                    </span>
-                    <span class="publish-button">
-                        <Button @click="handlePublish" :loading="publishLoading" icon="ios-checkmark" style="width:90px;" type="primary">发布</Button>
-                    </span>
-                </Row>
-            </Card>
-            <div class="margin-top-10">
-                <Card>
+                </Col>
+                <Col span="6" class="padding-left-10">
+                <Card dis-hover>
                     <p slot="title">
-                        <Icon type="ios-pricetags-outline"></Icon>
-                        标签
+                        <Icon type="paper-airplane"></Icon>
+                        发布
                     </p>
-                    <Row>
-                        <Col span="24">
-                        <Select v-model="articleTagSelected" multiple @on-change="handleSelectTag" placeholder="请选择文章标签">
-                            <Option v-for="item in articleTagList" :value="item.value" :key="item.value">{{ item.value }}</Option>
-                        </Select>
-                        </Col>
+                    <p class="margin-top-10">
+                        <Icon type="android-time"></Icon>权限
+                        <i-switch size="large" />
+                    </p>
+                    <p class="margin-top-10">
+                        <Icon type="ios-eye"></Icon>&nbsp;&nbsp;公开度：&nbsp;
+                        <i-switch />
+                    </p>
+                    <p class="margin-top-10">
+                        <Icon type="ios-calendar-outline"></Icon>&nbsp;&nbsp;
+                        <DatePicker @on-change="setPublishTime" type="datetime" style="width:200px;" placeholder="选择日期和时间"></DatePicker>
+                    </p>
+                    <Row class="margin-top-20 publish-button-con">
+                        <span class="publish-button">
+                            <Button @click="handlePreview">预览</Button>
+                        </span>
+                        <span class="publish-button">
+                            <Button @click="handleSaveDraft">保存草稿</Button>
+                        </span>
+                        <span class="publish-button">
+                            <Button @click="handlePublish" :loading="publishLoading" icon="ios-checkmark" style="width:90px;" type="primary">发布</Button>
+                        </span>
                     </Row>
-                    <transition name="add-new-tag">
-                        <div v-show="addingNewTag" class="add-new-tag-con">
-                            <Col span="14">
-                            <Input v-model="newTagName" placeholder="请输入标签名" />
-                            </Col>
-                            <Col span="5" class="padding-left-10">
-                            <Button @click="createNewTag" long type="primary">确定</Button>
-                            </Col>
-                            <Col span="5" class="padding-left-10">
-                            <Button @click="cancelCreateNewTag" long type="ghost">取消</Button>
-                            </Col>
-                        </div>
-                    </transition>
                 </Card>
-            </div>
-            </Col>
-        </Row>
-     </Card>
+                <div class="margin-top-10">
+                    <Card dis-hover>
+                        <p slot="title">
+                            <Icon type="ios-pricetags-outline"></Icon>
+                            标签
+                        </p>
+                        <Row>
+                            <Col span="24">
+                            <Select v-model="articleTagSelected" multiple @on-change="handleSelectTag" placeholder="请选择文章标签">
+                                <Option v-for="item in articleTagList" :value="item.value" :key="item.value">{{ item.value }}</Option>
+                            </Select>
+                            </Col>
+                        </Row>
+                        <transition name="add-new-tag">
+                            <div v-show="addingNewTag" class="add-new-tag-con">
+                                <Col span="14">
+                                <Input v-model="newTagName" placeholder="请输入标签名" />
+                            </Col>
+                                <Col span="5" class="padding-left-10">
+                                <Button @click="createNewTag" long type="primary">确定</Button>
+                                </Col>
+                                <Col span="5" class="padding-left-10">
+                                <Button @click="cancelCreateNewTag" long type="ghost">取消</Button>
+                                </Col>
+                            </div>
+                        </transition>
+                    </Card>
+                </div>
+                </Col>
+            </Row>
+        </Card>
     </div>
 </template>
 

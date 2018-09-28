@@ -34,7 +34,7 @@
                         </template>
                         <MenuItem name="post-list" to="/post/list">
                         <Icon type="ios-list-box-outline" />文章列表</MenuItem>
-                        <MenuItem name="post-add">
+                        <MenuItem name="post-add"  to="/post/add">
                         <Icon type="ios-add-circle-outline" />添加文章</MenuItem>
                     </Submenu>
                     <Submenu name="page">
@@ -52,9 +52,9 @@
                             <Icon type="ios-school-outline" />
                             分类管理
                         </template>
-                        <MenuItem name="cate-list">
+                        <MenuItem name="cate-list" to="/cate/list">
                         <Icon type="ios-list-box-outline" />分类列表</MenuItem>
-                        <MenuItem name="cate-add">
+                        <MenuItem name="cate-add" to="/cate/add">
                         <Icon type="ios-add-circle-outline" />添加分类</MenuItem>
                     </Submenu>
                     <Submenu name="tag">
@@ -62,9 +62,9 @@
                             <Icon type="ios-pricetags-outline" />
                             标签管理
                         </template>
-                        <MenuItem name="tag-list">
+                        <MenuItem name="tag-list" to="/tag/list">
                         <Icon type="ios-list-box-outline" />标签列表</MenuItem>
-                        <MenuItem name="tag-add">
+                        <MenuItem name="tag-add"  to="/tag/add">
                         <Icon type="ios-add-circle-outline" />添加标签</MenuItem>
                     </Submenu>
                     <Submenu name="setting">
@@ -129,93 +129,93 @@ import messageTip from "./main-components/message-tip.vue";
 import util from "@/libs/util.js";
 import { auth } from "@/api/auth";
 export default {
-  components: {
-    lockScreen,
-    messageTip
-  },
-  data() {
-    return {
-      user: {
-        name: "--",
-        num: "--",
-        avatar: ""
-      },
-      shrink: false,
-      userName: "",
-      isFullScreen: false,
-      openedSubmenuArr: this.$store.state.app.openedSubmenuArr
-    };
-  },
-  computed: {
-    menuList() {
-      return this.$store.state.app.menuList;
-    },
-    avatorPath() {
-      return localStorage.avatorImgPath;
-    },
-    cachePage() {
-      return this.$store.state.app.cachePage;
-    },
-    menuTheme() {
-      return this.$store.state.app.menuTheme;
-    },
-    mesCount() {
-      return this.$store.state.app.messageCount;
-    }
-  },
-  methods: {
-    init() {
-      auth().then(resp => {
-        if (resp.code == 200) {
-          this.user = resp.data;
-        }
-      });
-      this.$store.commit("updateMenulist");
-      let messageCount = 3;
-      this.messageCount = messageCount.toString();
-      this.$store.commit("setMessageCount", 3);
-    },
-    toggleClick() {
-      this.shrink = !this.shrink;
-    },
-    handleClickUserDropdown(name) {
-      if (name === "self") {
-        this.$router.push({
-          name: "self"
-        });
-      } else if (name === "loginout") {
-        // 退出登录
-        this.$store.commit("logout", this);
-        this.$store.commit("clearOpenedSubmenu");
-        this.$router.push({
-          name: "login"
-        });
-      }
-    },
-    handleSubmenuChange(val) {
-      // console.log(val)
-    },
-    beforePush(name) {
-      // if (name === 'accesstest_index') {
-      //     return false;
-      // } else {
-      //     return true;
-      // }
-      return true;
-    },
-    fullscreenChange(isFullScreen) {
-      // console.log(isFullScreen);
-    }
-  },
-  watch: {
-    $route(to) {
-      localStorage.currentPageName = to.name;
-    }
-  },
-  created() {
-    this.init();
-    // 显示打开的页面的列表
-    this.$store.commit("setOpenedList");
-  }
+	components: {
+		lockScreen,
+		messageTip
+	},
+	data() {
+		return {
+			user: {
+				name: "--",
+				num: "--",
+				avatar: ""
+			},
+			shrink: false,
+			userName: "",
+			isFullScreen: false,
+			openedSubmenuArr: this.$store.state.app.openedSubmenuArr
+		};
+	},
+	computed: {
+		menuList() {
+			return this.$store.state.app.menuList;
+		},
+		avatorPath() {
+			return localStorage.avatorImgPath;
+		},
+		cachePage() {
+			return this.$store.state.app.cachePage;
+		},
+		menuTheme() {
+			return this.$store.state.app.menuTheme;
+		},
+		mesCount() {
+			return this.$store.state.app.messageCount;
+		}
+	},
+	methods: {
+		init() {
+			auth().then(resp => {
+				if (resp.code == 200) {
+					this.user = resp.data;
+				}
+			});
+			this.$store.commit("updateMenulist");
+			let messageCount = 3;
+			this.messageCount = messageCount.toString();
+			this.$store.commit("setMessageCount", 3);
+		},
+		toggleClick() {
+			this.shrink = !this.shrink;
+		},
+		handleClickUserDropdown(name) {
+			if (name === "self") {
+				this.$router.push({
+					name: "self"
+				});
+			} else if (name === "loginout") {
+				// 退出登录
+				this.$store.commit("logout", this);
+				this.$store.commit("clearOpenedSubmenu");
+				this.$router.push({
+					name: "login"
+				});
+			}
+		},
+		handleSubmenuChange(val) {
+			// console.log(val)
+		},
+		beforePush(name) {
+			// if (name === 'accesstest_index') {
+			//     return false;
+			// } else {
+			//     return true;
+			// }
+			return true;
+		},
+		fullscreenChange(isFullScreen) {
+			// console.log(isFullScreen);
+		}
+	},
+	watch: {
+		$route(to) {
+			localStorage.currentPageName = to.name;
+		}
+	},
+	created() {
+		this.init();
+		// 显示打开的页面的列表
+		this.$store.commit("setOpenedList");
+	}
 };
 </script>

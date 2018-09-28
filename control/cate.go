@@ -3,6 +3,7 @@ package control
 import (
 	"blog/model"
 	"blog/util"
+	"strconv"
 
 	"github.com/labstack/echo"
 )
@@ -40,4 +41,42 @@ func CatePost(ctx echo.Context) error {
 		return ctx.Res(util.NewErrOpt(`未查询到文章信息,请重试`, err.Error()))
 	}
 	return ctx.Res(util.NewPage(`文章信息`, mods, count))
+}
+
+// CateAdd 添加分类
+func CateAdd(ctx echo.Context) error {
+	ipt := &model.Cate{}
+	err := ctx.Bind(ipt)
+	if err != nil {
+		return ctx.Res(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+	}
+	if !model.CateAdd(ipt) {
+		return ctx.Res(util.NewFail(`添加分类失败,请重试`))
+	}
+	return ctx.Res(util.NewSucc(`添加分类成功`))
+}
+
+// CateEdit 修改分类
+func CateEdit(ctx echo.Context) error {
+	ipt := &model.Cate{}
+	err := ctx.Bind(ipt)
+	if err != nil {
+		return ctx.Res(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+	}
+	if !model.CateEdit(ipt) {
+		return ctx.Res(util.NewFail(`分类修改失败`))
+	}
+	return ctx.Res(util.NewSucc(`分类修改成功`))
+}
+
+// CateDel  删除分类
+func CateDel(ctx echo.Context) error {
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		return ctx.Res(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+	}
+	if !model.CateDel(id) {
+		return ctx.Res(util.NewFail(`分类删除失败,请重试`))
+	}
+	return ctx.Res(util.NewSucc(`分类删除成功`))
 }

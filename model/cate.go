@@ -24,6 +24,48 @@ func cateIds(ids []int) map[int]*Cate {
 // CateAll 所有分类
 func CateAll() ([]Cate, error) {
 	mods := make([]Cate, 0, 4)
-	err := DB.Find(&mods)
+	err := DB.Asc("id").Find(&mods)
 	return mods, err
+}
+
+// CateAdd 添加分类
+func CateAdd(mod *Cate) bool {
+	sess := DB.NewSession()
+	defer sess.Close()
+	sess.Begin()
+	affect, _ := sess.InsertOne(mod)
+	if affect != 1 {
+		sess.Rollback()
+		return false
+	}
+	sess.Commit()
+	return true
+}
+
+// CateEdit 修改分类
+func CateEdit(mod *Cate) bool {
+	sess := DB.NewSession()
+	defer sess.Close()
+	sess.Begin()
+	affect, err := sess.ID(mod.Id).Cols("Name", "Intro").Update(mod)
+	if affect >= 0 && err == nil {
+		sess.Commit()
+		return true
+	}
+	sess.Rollback()
+	return false
+}
+
+// CateDel 删除分类
+func CateDel(id int) bool {
+	sess := DB.NewSession()
+	defer sess.Close()
+	sess.Begin()
+	if affect, err := sess.ID(id).Delete(&Cate{}); affect > 0 && err == nil {
+		sess.Commit()
+		DB.ClearCacheBean(&Cate{}, string(id))
+		return true
+	}
+	sess.Rollback()
+	return false
 }
