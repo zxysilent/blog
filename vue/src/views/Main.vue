@@ -27,33 +27,45 @@
                 <Menu :active-name="$route.name" :open-names="$route.name.split('-')" width="auto" accordion>
                     <!-- <MenuItem name="home"  to="/home">
                     <Icon type="ios-home-outline" /> 主页</MenuItem> -->
-                    <Submenu name="博客管理">
+                    <Submenu name="post">
                         <template slot="title">
-                            <Icon type="ios-ionic-outline" />
+                            <Icon type="ios-megaphone-outline" />
                             博客管理
                         </template>
-                        <MenuGroup title="post">
-                            <MenuItem name="post-list" to="/post/list">文章列表</MenuItem>
-                            <MenuItem name="post-add">添加文章</MenuItem>
-                        </MenuGroup>
-                        <MenuGroup title="page">
-                            <MenuItem name="page-list">页面列表</MenuItem>
-                            <MenuItem name="page-add">添加页面</MenuItem>
-                        </MenuGroup>
+                        <MenuItem name="post-list" to="/post/list">
+                        <Icon type="ios-list-box-outline" />文章列表</MenuItem>
+                        <MenuItem name="post-add">
+                        <Icon type="ios-add-circle-outline" />添加文章</MenuItem>
                     </Submenu>
-                    <Submenu name="类型管理">
+                    <Submenu name="page">
+                        <template slot="title">
+                            <Icon type="ios-map-outline" />
+                            页面管理
+                        </template>
+                        <MenuItem name="page-list"  to="/page/list">
+                        <Icon type="ios-list-box-outline" />页面列表</MenuItem>
+                        <MenuItem name="page-add">
+                        <Icon type="ios-add-circle-outline" />添加页面</MenuItem>
+                    </Submenu>
+                    <Submenu name="cate">
                         <template slot="title">
                             <Icon type="ios-school-outline" />
-                            类型管理
+                            分类管理
                         </template>
-                        <MenuGroup title="cate">
-                            <MenuItem name="cate-list">分类列表</MenuItem>
-                            <MenuItem name="cate-add">添加分类</MenuItem>
-                        </MenuGroup>
-                        <MenuGroup title="tag">
-                            <MenuItem name="tag-list">标签列表</MenuItem>
-                            <MenuItem name="tag-add">添加标签</MenuItem>
-                        </MenuGroup>
+                        <MenuItem name="cate-list">
+                        <Icon type="ios-list-box-outline" />分类列表</MenuItem>
+                        <MenuItem name="cate-add">
+                        <Icon type="ios-add-circle-outline" />添加分类</MenuItem>
+                    </Submenu>
+                    <Submenu name="tag">
+                        <template slot="title">
+                            <Icon type="ios-pricetags-outline" />
+                            标签管理
+                        </template>
+                        <MenuItem name="tag-list">
+                        <Icon type="ios-list-box-outline" />标签列表</MenuItem>
+                        <MenuItem name="tag-add">
+                        <Icon type="ios-add-circle-outline" />添加标签</MenuItem>
                     </Submenu>
                     <Submenu name="setting">
                         <template slot="title">

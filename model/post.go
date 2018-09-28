@@ -115,6 +115,13 @@ func PostSingle(path string) (*Post, bool) {
 	return mod, has
 }
 
+// PostPageAll 所有页面
+func PostPageAll() ([]Post, error) {
+	mods := make([]Post, 0, 4)
+	err := DB.Cols("id", "title", "path", "create_time", "summary", "comment_num", "options", "update_time").Where("Type = 1").Desc("create_time").Find(&mods)
+	return mods, err
+}
+
 // postIds 通过id返回文章集合
 func postIds(ids []int) map[int]*Post {
 	mods := make([]Post, 0, 6)

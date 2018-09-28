@@ -137,7 +137,7 @@ export const appRouter = [
         name: "page-list",
         icon: "ios-bus",
         component: () =>
-          import("@/views/form/article-publish/article-publish.vue")
+          import("@/views/page/list.vue")
       },
       {
         path: "add",
@@ -146,7 +146,7 @@ export const appRouter = [
         },
         name: "page-add",
         icon: "ios-bus",
-        component: () => import("@/views/form/work-flow/work-flow.vue")
+        component: () => import("@/views/page/add.vue")
       }
     ]
   },

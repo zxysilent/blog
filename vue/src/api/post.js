@@ -3,10 +3,15 @@ import ajax from "./base";
 export const catePost = (cls, data) => {
   return ajax.get(`/adm/cate/post/${cls}`, { params: data });
 };
+
+// 页面信息
+export const pageAll = () => {
+  return ajax.get("/adm/page/all");
+};
+
 export const articleGet = id => {
   return ajax.get(`/news/article/${id}`);
 };
-//---------需要权限
 export const articleChgtop = (id, val) => {
   return ajax.get(`/article/chgtop/${id}`, { params: { val: val } });
 };

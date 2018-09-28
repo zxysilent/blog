@@ -38,3 +38,16 @@ func Post(ctx echo.Context) error {
 	}
 	return nil
 }
+
+// PostPageAll 页面列表
+// @Success 200 {object} util.Result "成功数据"
+func PostPageAll(ctx echo.Context) error {
+	mods, err := model.PostPageAll()
+	if err != nil {
+		return ctx.Res(util.NewErrOpt(`未查询到页面信息`, err.Error()))
+	}
+	if len(mods) < 1 {
+		return ctx.Res(util.NewErrOpt(`未查询到页面信息`, "len"))
+	}
+	return ctx.Res(util.NewSucc(`页面信息`, mods))
+}

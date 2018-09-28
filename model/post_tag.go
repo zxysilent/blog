@@ -34,7 +34,6 @@ func PostTags(pid int) ([]PostTag, error) {
 func TagPostCount(tid int) int {
 	var count int
 	DB.SQL(`SELECT count(post_id) as count FROM post_tag LEFT JOIN post ON post_id=post.id WHERE is_public=1 and tag_id=?`, tid).Get(&count)
-
 	return count
 }
 

@@ -13,6 +13,9 @@ func CateAll(ctx echo.Context) error {
 	if err != nil {
 		return ctx.Res(util.NewErrOpt(`未查询到分类信息`, err.Error()))
 	}
+	if len(mods) < 1 {
+		return ctx.Res(util.NewErrOpt(`未查询到分类信息`, "len"))
+	}
 	return ctx.Res(util.NewSucc(`分类信息`, mods))
 }
 

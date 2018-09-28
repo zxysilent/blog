@@ -42,6 +42,7 @@ func Run(addr string) {
 	adm.GET(`/cate/all`, control.CateAll)
 
 	adm.GET(`/cate/post/:cid`, control.CatePost)
+	adm.GET(`/page/all`, control.PostPageAll)
 
 	adm.GET(`/opts/base`, control.OptsBase)
 	adm.GET(`/opts/:key`, control.OptsGet)
