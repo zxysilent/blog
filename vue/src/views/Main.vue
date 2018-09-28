@@ -10,31 +10,49 @@
                     <p class="main-user-name">{{ user.name }}</p>
                     <div class="header-avator-con">
                         <Tooltip content="主页" placement="bottom">
-                            <router-link to="/home">
+                            <router-link to="/home" tag="span">
                                 <Icon type="ios-home-outline" size="20" />
                             </router-link>
                         </Tooltip>
                         <Divider type="vertical" />
-                        <lock-screen></lock-screen>
+                        <Tooltip content="个人中心" placement="bottom">
+                            <router-link to="/self" tag="span">
+                                <Icon type="ios-person-outline" size="20" />
+                            </router-link>
+                        </Tooltip>
                         <Divider type="vertical" />
                         <message-tip v-model="mesCount"></message-tip>
                     </div>
                 </div>
-                <Menu :active-name="$route.name" :open-names="['1']" width="auto" accordion>
+                <Menu :active-name="$route.name" :open-names="$route.name.split('-')" width="auto" accordion>
                     <!-- <MenuItem name="home"  to="/home">
                     <Icon type="ios-home-outline" /> 主页</MenuItem> -->
-                    <Submenu name="1">
+                    <Submenu name="博客管理">
                         <template slot="title">
-                            <Icon type="ios-analytics" />
-                            Navigation
+                            <Icon type="ios-ionic-outline" />
+                            博客管理
                         </template>
-                        <MenuGroup title="Item 1">
-                            <MenuItem name="1-1">Option 1</MenuItem>
-                            <MenuItem name="1-2">Option 2</MenuItem>
+                        <MenuGroup title="post">
+                            <MenuItem name="post-list" to="/post/list">文章列表</MenuItem>
+                            <MenuItem name="post-add">添加文章</MenuItem>
                         </MenuGroup>
-                        <MenuGroup title="Item 2">
-                            <MenuItem name="1-3">Option 3</MenuItem>
-                            <MenuItem name="1-4">Option 4</MenuItem>
+                        <MenuGroup title="page">
+                            <MenuItem name="page-list">页面列表</MenuItem>
+                            <MenuItem name="page-add">添加页面</MenuItem>
+                        </MenuGroup>
+                    </Submenu>
+                    <Submenu name="类型管理">
+                        <template slot="title">
+                            <Icon type="ios-school-outline" />
+                            类型管理
+                        </template>
+                        <MenuGroup title="cate">
+                            <MenuItem name="cate-list">分类列表</MenuItem>
+                            <MenuItem name="cate-add">添加分类</MenuItem>
+                        </MenuGroup>
+                        <MenuGroup title="tag">
+                            <MenuItem name="tag-list">标签列表</MenuItem>
+                            <MenuItem name="tag-add">添加标签</MenuItem>
                         </MenuGroup>
                     </Submenu>
                     <Submenu name="setting">
@@ -51,8 +69,6 @@
                         <MenuItem name="setting-custom" to="/setting/custom">
                         <Icon type="ios-code-working" /> 自 定 义</MenuItem>
                     </Submenu>
-                    <MenuItem name="self"  to="/self">
-                    <Icon type="ios-contact-outline" /> 个人中心</MenuItem>
                 </Menu>
             </div>
         </div>
@@ -67,10 +83,7 @@
                         sss
                     </div>
                 </div>
-                <div class="header-avator-con">dd
-                    <full-screen v-model="isFullScreen" @on-change="fullscreenChange"></full-screen>
-                    <lock-screen></lock-screen>
-                    <message-tip v-model="mesCount"></message-tip>
+                <div class="header-avator-con">
                     <div class="user-dropdown-menu-con">
                         <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
                             <Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
@@ -99,14 +112,12 @@
     </div>
 </template>
 <script>
-import fullScreen from "./main-components/fullscreen.vue";
 import lockScreen from "./main-components/lockscreen/lockscreen.vue";
 import messageTip from "./main-components/message-tip.vue";
 import util from "@/libs/util.js";
 import { auth } from "@/api/auth";
 export default {
   components: {
-    fullScreen,
     lockScreen,
     messageTip
   },

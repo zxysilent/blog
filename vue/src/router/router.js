@@ -97,7 +97,7 @@ export const appRouter = [
           title: "文章列表"
         },
         component: () =>
-          import("@/views/my-components/file-upload/file-upload.vue")
+          import("@/views/post/list.vue")
       },
       {
         path: "add",

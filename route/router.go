@@ -39,6 +39,10 @@ func Run(addr string) {
 	app.POST(`/user/pass`, control.UserPass)
 
 	adm := app.Group(`/adm`)
+	adm.GET(`/cate/all`, control.CateAll)
+
+	adm.GET(`/cate/post/:cid`, control.CatePost)
+
 	adm.GET(`/opts/base`, control.OptsBase)
 	adm.GET(`/opts/:key`, control.OptsGet)
 	adm.POST(`/opts/edit`, control.OptsEdit)

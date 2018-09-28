@@ -3,11 +3,12 @@
 </style>
 <template>
     <div>
-        <Row>
-            <Col span="12">
-            <Card>
+        <Card>
+            <Row>
+                <Col span="12">
+
                 <p slot="title">
-                    <Icon type="ios-contact-outline" /> 个人信息
+                    <Icon type="ios-person-outline" /> 个人信息
                 </p>
                 <div style="max-width:520px">
                     <Alert closable type="error">部分信息「用户名」修改后刷新后有效</Alert>
@@ -40,9 +41,9 @@
                         </FormItem>
                     </Form>
                 </div>
-            </Card>
-            </Col>
-        </Row>
+                </Col>
+            </Row>
+        </Card>
         <Modal v-model="showPasswordModal" :closable='false' :mask-closable=false :width="500">
             <h3 slot="header" style="color:#2D8CF0">修改密码</h3>
             <Form ref="passForm" :model="passForm" :label-width="100" label-position="right" :rules="passRules">
@@ -84,8 +85,8 @@ export default {
         num: "",
         name: "",
         email: "",
-        app_key:"",
-        app_secret:"",
+        app_key: "",
+        app_secret: "",
         create_time: ""
       },
       loadingSaveInfo: false,

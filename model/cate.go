@@ -2,10 +2,9 @@ package model
 
 // Cate 分类
 type Cate struct {
-	Id       int    `xorm:"not null pk autoincr INT(11)"`
-	Name     string `xorm:"not null unique VARCHAR(255)"`
-	Pid      int    `xorm:"not null default 0 INT(11)"`
-	Pathname string `xorm:"default 'NULL' VARCHAR(255)"`
+	Id    int    `xorm:"not null pk autoincr INT(11)" json:"id" form:"id"`
+	Name  string `xorm:"not null unique VARCHAR(64)" json:"name" form:"name"`
+	Intro string `xorm:"default 'NULL' VARCHAR(64)" json:"intro" form:"intro"`
 }
 
 // CateIds 通过id返回新闻类别信息集合
@@ -20,4 +19,11 @@ func cateIds(ids []int) map[int]*Cate {
 		return mapSet
 	}
 	return nil
+}
+
+// CateAll 所有分类
+func CateAll() ([]Cate, error) {
+	mods := make([]Cate, 0, 4)
+	err := DB.Find(&mods)
+	return mods, err
 }

@@ -17,7 +17,7 @@
                 <div class="unlock-input-overflow-con">
                     <div class="unlock-overflow-body" :style="{right: inputLeft}">
                         <input ref="inputEle" v-model="password" class="unlock-input" type="password" placeholder="密码同登录密码" />
-                        <button ref="unlockBtn" @mousedown="unlockMousedown" @mouseup="unlockMouseup" @click="handleUnlock" class="unlock-btn"><Icon color="white" type="key"></Icon></button>
+                        <button ref="unlockBtn" @mousedown="unlockMousedown" @mouseup="unlockMouseup" @click="handleUnlock" class="unlock-btn" icon="md-key" size="small">unlock</button>
                     </div>
                 </div>
             </div>

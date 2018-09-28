@@ -2,9 +2,9 @@ package model
 
 // Tag 标签
 type Tag struct {
-	Id       int    `xorm:"not null pk autoincr INT(11)"`
-	Name     string `xorm:"default 'NULL' unique VARCHAR(255)"`
-	Pathname string `xorm:"default 'NULL' VARCHAR(255)"`
+	Id    int    `xorm:"not null pk autoincr INT(11)"`
+	Name  string `xorm:"default 'NULL' unique VARCHAR(64)"`
+	Intro string `xorm:"default 'NULL' VARCHAR(64)"`
 }
 
 // tagIds 通过id返回标签集合
