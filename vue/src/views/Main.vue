@@ -9,7 +9,6 @@
                     <img src="../images/logo.png" alt="" srcset="">
                     <p class="main-user-name">{{ user.name }}</p>
                     <div class="header-avator-con">
-
                         <Tooltip content="主页" placement="bottom">
                             <router-link to="/home">
                                 <Icon type="ios-home-outline" size="20" />
