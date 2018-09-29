@@ -7,7 +7,16 @@
             <div :style="{background: '#fff'}" class="ivu-shrinkable-menu">
                 <div class="logo-con">
                     <img src="../images/logo.png" alt="" srcset="">
-                    <p class="main-user-name">{{ user.name }}</p>
+                    <Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
+                                <a href="javascript:void(0)">
+                                    <span class="main-user-name">{{ user.name }}</span>
+                                    <Icon type="md-arrow-dropdown"></Icon>
+                                </a>
+                                <DropdownMenu slot="list">
+                                    <DropdownItem name="self">个人中心</DropdownItem>
+                                    <DropdownItem name="loginout" divided>退出登录</DropdownItem>
+                                </DropdownMenu>
+                            </Dropdown>
                     <div class="header-avator-con">
                         <Tooltip content="主页" placement="bottom">
                             <router-link to="/home" tag="span">
@@ -127,6 +136,12 @@
 import messageTip from "./main-components/message-tip.vue";
 import util from "@/libs/util.js";
 import { auth } from "@/api/auth";
+const setLockBackSize = () => {
+    let x = document.body.clientWidth;
+    let y = document.body.clientHeight;
+    let r = Math.sqrt(x * x + y * y);
+    return parseInt(r);
+};
 export default {
 	components: {
 		messageTip

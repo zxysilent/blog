@@ -2,7 +2,7 @@
 @import "../../styles/common.less";
 </style>
 <template>
-    <div class="margin-top-10">
+    <div>
         <Card dis-hover>
             <Form inline>
                 <FormItem>
