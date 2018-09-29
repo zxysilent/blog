@@ -1,7 +1,6 @@
 <style lang="less">
 @import "./add.less";
 </style>
-
 <template>
     <div>
         <Card dis-hover>
@@ -16,19 +15,21 @@
                             <Col span="10">
                             <Input type="text"  v-model="dataForm.path" placeholder="请输入访问路径"></Input>
                             </Col>
-                            <Col span="8">.html
+                            <Col span="10"> .html   &nbsp;
                             <Button type="dashed" @click="clkPreview">
-                                <Icon type="ios-eye" size="20" /> 预 览</Button>
+                                <Icon type="ios-eye" size="20" />预 览</Button>
                             <Button type="info">
-                                <Icon type="ios-trash" size="20" /> 存草稿</Button>
+                                <Icon type="ios-trash" size="20" />存草稿</Button>
                             <Button type="warning">
-                                <Icon type="ios-send" size="20" /> 发 布</Button>
+                                <Icon type="ios-send" size="20" />发 布</Button>
                             </Col>
                         </Row>
                     </FormItem>
                 </Form>
                 <div style="min-height: 600px;height: calc(100vh - 200px);">
-                    <mavon-editor :boxShadow="false" :toolbars="toolbars" @fullScreen="fullScreen" v-model="dataForm.markdown_content" style="height:100%"></mavon-editor>
+                    <button ref="diy" type="button" @click="diyMore" class="op-icon ivu-icon ivu-icon-md-code" aria-hidden="true" title="更多"></button>
+                    <mavon-editor ref="md" :boxShadow="false" @change="change" :toolbars="toolbars" v-model="dataForm.markdown_content" style="height:100%">
+                    </mavon-editor>
                 </div>
                 </Col>
                 <Col span="4">
@@ -37,7 +38,7 @@
                         <Icon type="ios-settings-outline" />
                         设置
                     </p>
-                    <Form ref="dataForm" :model="dataForm" :rules="dataRules"  label-position="top">
+                    <Form ref="dataForm" :model="dataForm" :rules="dataRules" label-position="top">
                         <FormItem label="分类">
                             <RadioGroup v-model="dataForm.cateId">
                                 <Radio label="cate" v-for="item in cateAll" :label="item.id" :key="item.id">{{item.name}}[{{item.intro}}]</Radio>
@@ -64,7 +65,7 @@
                 </Col>
             </Row>
         </Card>
-        <Modal v-model="showPreview" fullscreen title="预览文章">
+        <Modal v-model="showPreview" fullscreen footer-hide title="预览文章">
             <div v-html="dataForm.content"></div>
         </Modal>
     </div>
@@ -85,7 +86,6 @@ export default {
       cateAll: [],
       tagAll: [],
       showPreview: false,
-      showFull: false,
       dataForm: {
         title: "",
         path: "",
@@ -171,15 +171,23 @@ export default {
         }
       });
     },
+    change(value, html) {
+      this.dataForm.content = html;
+    //   console.log(this);
+    },
     clkPreview() {
       this.showPreview = true;
     },
-    fullScreen(status, value) {
-      this.showFull = status;
-      console.log(status, value);
-    },
     handleSelectTag() {
       localStorage.tagsList = JSON.stringify(this.articleTagSelected); // 本地存储文章标签列表
+    },
+    diyMore(val) {
+      console.log(val);
+      this.$refs.md.insertText(this.$refs.md.getTextareaDom(), {
+        prefix: "",
+        subfix: "",
+        str: "<!--more-->"
+      });
     }
   },
   computed: {
@@ -189,7 +197,12 @@ export default {
       return finalUrl;
     }
   },
-  mounted() {},
+  mounted() {
+    var md = this.$refs.md;
+    var toolbar_left = md.$refs.toolbar_left;
+    var diy = this.$refs.diy;
+    toolbar_left.$el.append(diy);
+  },
   created() {
     this.dataForm.create_time = new Date();
     this.init();

@@ -2,21 +2,12 @@
 @import "./main.less";
 </style>
 <template>
-    <div class="main" :class="{'main-hide-text': shrink}">
-        <div class="sidebar-menu-con">
-            <div :style="{background: '#fff'}" class="ivu-shrinkable-menu">
+    <Layout style="height: 100%" class="main">
+        <Sider hide-trigger :width="200" class="left-sider" :style="{overflow: 'hidden'}">
+            <div class="sidebar-menu-con">
                 <div class="logo-con">
                     <img src="../images/logo.png" alt="" srcset="">
-                    <Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
-                                <a href="javascript:void(0)">
-                                    <span class="main-user-name">{{ user.name }}</span>
-                                    <Icon type="md-arrow-dropdown"></Icon>
-                                </a>
-                                <DropdownMenu slot="list">
-                                    <DropdownItem name="self">个人中心</DropdownItem>
-                                    <DropdownItem name="loginout" divided>退出登录</DropdownItem>
-                                </DropdownMenu>
-                            </Dropdown>
+                    <div>{{ user.name }}</div>
                     <div class="header-avator-con">
                         <Tooltip content="主页" placement="bottom">
                             <router-link to="/home" tag="span">
@@ -92,143 +83,130 @@
                     </Submenu>
                 </Menu>
             </div>
-        </div>
-        <div class="main-header-con">
-            <div class="main-header">
-                <div class="navicon-con">
-                    <Button icon="ios-home-outline" type="text" shape="circle" @click="toggleClick">
-                    </Button>
-                </div>
-                <div class="header-middle-con">
-                    <div class="main-breadcrumb">
-                        sss
+        </Sider>
+        <Layout>
+            <Header class="header-con">
+                <div class="header-bar">
+                    <div class="custom-content-con">
+                        <Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
+                            <a href="javascript:void(0)">
+                                <span class="main-user-name">{{ user.name }}</span>
+                                <Icon type="md-arrow-dropdown"></Icon>
+                            </a>
+                            <DropdownMenu slot="list">
+                                <DropdownItem name="self">个人中心</DropdownItem>
+                                <DropdownItem name="loginout" divided>退出登录</DropdownItem>
+                            </DropdownMenu>
+                        </Dropdown>
                     </div>
                 </div>
-                <div class="header-avator-con">
-                    <div class="user-dropdown-menu-con">
-                        <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
-                            <Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
-                                <a href="javascript:void(0)">
-                                    <span class="main-user-name">{{ user.name }}</span>
-                                    <Icon type="md-arrow-dropdown"></Icon>
-                                </a>
-                                <DropdownMenu slot="list">
-                                    <DropdownItem name="self">个人中心</DropdownItem>
-                                    <DropdownItem name="loginout" divided>退出登录</DropdownItem>
-                                </DropdownMenu>
-                            </Dropdown>
-                            <!-- <Avatar size="large" :src="avatorPath" style="background: #619fe7;margin-left: 10px;"></Avatar> -->
-                        </Row>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="single-page-con">
-            <div class="single-page">
-                <keep-alive :include="cachePage">
-                    <router-view></router-view>
-                </keep-alive>
-            </div>
-        </div>
-    </div>
+            </Header>
+            <Content class="main-content-con">
+                <Layout class="main-layout-con">
+                    <Content class="content-wrapper">
+                        <keep-alive>
+                            <router-view />
+                        </keep-alive>
+                    </Content>
+                </Layout>
+            </Content>
+        </Layout>
+    </Layout>
 </template>
 <script>
 import messageTip from "./main-components/message-tip.vue";
 import util from "@/libs/util.js";
 import { auth } from "@/api/auth";
-const setLockBackSize = () => {
-    let x = document.body.clientWidth;
-    let y = document.body.clientHeight;
-    let r = Math.sqrt(x * x + y * y);
-    return parseInt(r);
-};
 export default {
-	components: {
-		messageTip
-	},
-	data() {
-		return {
-			user: {
-				name: "--",
-				num: "--",
-				avatar: ""
-			},
-			shrink: false,
-			userName: "",
-			isFullScreen: false,
-			openedSubmenuArr: this.$store.state.app.openedSubmenuArr
-		};
-	},
-	computed: {
-		menuList() {
-			return this.$store.state.app.menuList;
-		},
-		avatorPath() {
-			return localStorage.avatorImgPath;
-		},
-		cachePage() {
-			return this.$store.state.app.cachePage;
-		},
-		menuTheme() {
-			return this.$store.state.app.menuTheme;
-		},
-		mesCount() {
-			return this.$store.state.app.messageCount;
-		}
-	},
-	methods: {
-		init() {
-			auth().then(resp => {
-				if (resp.code == 200) {
-					this.user = resp.data;
-				}
-			});
-			this.$store.commit("updateMenulist");
-			let messageCount = 3;
-			this.messageCount = messageCount.toString();
-			this.$store.commit("setMessageCount", 3);
-		},
-		toggleClick() {
-			this.shrink = !this.shrink;
-		},
-		handleClickUserDropdown(name) {
-			if (name === "self") {
-				this.$router.push({
-					name: "self"
-				});
-			} else if (name === "loginout") {
-				// 退出登录
-				this.$store.commit("logout", this);
-				this.$store.commit("clearOpenedSubmenu");
-				this.$router.push({
-					name: "login"
-				});
-			}
-		},
-		handleSubmenuChange(val) {
-			// console.log(val)
-		},
-		beforePush(name) {
-			// if (name === 'accesstest_index') {
-			//     return false;
-			// } else {
-			//     return true;
-			// }
-			return true;
-		},
-		fullscreenChange(isFullScreen) {
-			// console.log(isFullScreen);
-		}
-	},
-	watch: {
-		$route(to) {
-			localStorage.currentPageName = to.name;
-		}
-	},
-	created() {
-		this.init();
-		// 显示打开的页面的列表
-		this.$store.commit("setOpenedList");
-	}
+  components: {
+    messageTip
+  },
+  data() {
+    return {
+      collapsed: false,
+      user: {
+        name: "--",
+        num: "--",
+      },
+      shrink: false,
+      userName: "",
+      isFullScreen: false,
+      openedSubmenuArr: this.$store.state.app.openedSubmenuArr
+    };
+  },
+  computed: {
+    menuitemClasses: function() {
+      return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
+    },
+    menuList() {
+      return this.$store.state.app.menuList;
+    },
+    avatorPath() {
+      return localStorage.avatorImgPath;
+    },
+    cachePage() {
+      return this.$store.state.app.cachePage;
+    },
+    menuTheme() {
+      return this.$store.state.app.menuTheme;
+    },
+    mesCount() {
+      return this.$store.state.app.messageCount;
+    }
+  },
+  methods: {
+    init() {
+      auth().then(resp => {
+        if (resp.code == 200) {
+          this.user = resp.data;
+        }
+      });
+      this.$store.commit("updateMenulist");
+      let messageCount = 3;
+      this.messageCount = messageCount.toString();
+      this.$store.commit("setMessageCount", 3);
+    },
+    toggleClick() {
+      this.shrink = !this.shrink;
+    },
+    handleClickUserDropdown(name) {
+      if (name === "self") {
+        this.$router.push({
+          name: "self"
+        });
+      } else if (name === "loginout") {
+        // 退出登录
+        this.$store.commit("logout", this);
+        this.$store.commit("clearOpenedSubmenu");
+        this.$router.push({
+          name: "login"
+        });
+      }
+    },
+    handleSubmenuChange(val) {
+      // console.log(val)
+    },
+    beforePush(name) {
+      // if (name === 'accesstest_index') {
+      //     return false;
+      // } else {
+      //     return true;
+      // }
+      return true;
+    },
+    fullscreenChange(isFullScreen) {
+      // console.log(isFullScreen);
+    }
+  },
+  watch: {
+    $route(to) {
+      localStorage.currentPageName = to.name;
+    }
+  },
+  created() {
+    this.init();
+    // 显示打开的页面的列表
+    this.$store.commit("setOpenedList");
+  }
 };
 </script>

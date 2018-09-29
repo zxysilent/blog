@@ -3,49 +3,45 @@
 </style>
 <template>
     <div>
-        <Card>
-            <Row>
-                <Col span="12">
-
-                <p slot="title">
-                    <Icon type="ios-person-outline" /> 个人信息
-                </p>
-                <div style="max-width:520px">
-                    <Alert closable type="error">部分信息「用户名」修改后刷新后有效</Alert>
-                    <Form ref="userForm" :model="userForm" :label-width="100" label-position="right" :rules="userRules">
-                        <FormItem label="用户账号：" prop="num">
-                            <Input readonly disabled v-model="userForm.num">
+        <Card dis-hover>
+            <p slot="title">
+                <Icon type="ios-person-outline" /> 个人信息
+            </p>
+            <div style="max-width:520px">
+                <Alert closable type="error">部分信息「用户名」修改后刷新后有效</Alert>
+                <Form ref="userForm" :model="userForm" :label-width="100" label-position="right" :rules="userRules">
+                    <FormItem label="用户账号：" prop="num">
+                        <Input readonly disabled v-model="userForm.num">
                             </Input>
-                        </FormItem>
-                        <FormItem label="用户姓名：" prop="name">
-                            <Input v-model="userForm.name"></Input>
-                        </FormItem>
-                        <FormItem label="邮箱地址：" prop="email">
-                            <Input v-model="userForm.email"></Input>
-                        </FormItem>
-                        <FormItem label="登录密码：">
-                            <Button type="text" size="small" @click="showModel">修改密码</Button>
-                        </FormItem>
-                        <FormItem label="创建时间：">
-                            <span>{{ userForm.create_time.replace(/T|\+08:00/g, " ") }}</span>
-                        </FormItem>
-                        <FormItem label="App Key：" prop="app_key">
-                            <span>{{userForm.app_key}}</span>
-                        </FormItem>
-                        <FormItem label="App Secret：" prop="app_secret">
-                            <span>{{userForm.app_secret}}</span>
-                        </FormItem>
-                        <FormItem>
-                            <Button type="warning" :loading="loadingSaveInfo" @click="saveUser">提交保存</Button>
-                            <Button type="success" @click="resetEdit()" style="margin-left: 8px">重置填写</Button>
-                        </FormItem>
-                    </Form>
-                </div>
-                </Col>
-            </Row>
+                    </FormItem>
+                    <FormItem label="用户姓名：" prop="name">
+                        <Input v-model="userForm.name"></Input>
+                    </FormItem>
+                    <FormItem label="邮箱地址：" prop="email">
+                        <Input v-model="userForm.email"></Input>
+                    </FormItem>
+                    <FormItem label="登录密码：">
+                        <Button type="text" size="small" @click="showModel">修改密码</Button>
+                    </FormItem>
+                    <FormItem label="创建时间：">
+                        <span>{{ userForm.create_time.replace(/T|\+08:00/g, " ") }}</span>
+                    </FormItem>
+                    <FormItem label="App Key：" prop="app_key">
+                        <span>{{userForm.app_key}}</span>
+                    </FormItem>
+                    <FormItem label="App Secret：" prop="app_secret">
+                        <span>{{userForm.app_secret}}</span>
+                    </FormItem>
+                    <FormItem>
+                        <Button type="warning" :loading="loadingSaveInfo" @click="saveUser">提交保存</Button>
+                        <Button type="success" @click="resetEdit()" style="margin-left: 8px">重置填写</Button>
+                    </FormItem>
+                </Form>
+            </div>
         </Card>
         <Modal v-model="showPasswordModal" :closable='false' :mask-closable=false :width="500">
-            <h3 slot="header" style="color:#2D8CF0"><Icon type="ios-eye-off-outline" /> 修改密码</h3>
+            <h3 slot="header" style="color:#2D8CF0">
+                <Icon type="ios-eye-off-outline" /> 修改密码</h3>
             <Form ref="passForm" :model="passForm" :label-width="100" label-position="right" :rules="passRules">
                 <FormItem label="原密码" prop="oldPass" :error="oldPassError">
                     <Input v-model="passForm.oldPass" type="password" placeholder="请输入现在使用的密码"></Input>

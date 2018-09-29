@@ -1,20 +1,17 @@
 {
   "name": "vue-blog",
   "version": "1.0.0",
-  "description": "",
+  "description": "zxysilent blog admin",
   "main": "index.js",
   "scripts": {
-    "init": "webpack --progress --config build/webpack.dev.config.js",
     "dev": "webpack-dev-server --content-base ./ --open --inline --hot --compress --config build/webpack.dev.config.js",
-    "build": "webpack --progress --hide-modules --config build/webpack.prod.config.js",
-    "lint": "eslint --fix --ext .js,.vue src",
-    "test": "npm run lint"
+    "build": "webpack --progress --hide-modules --config build/webpack.prod.config.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/iview/iview-admin.git"
+    "url": "no"
   },
-  "author": "Lison<zhigang.li@tendcloud.com>",
+  "author": "zxysilent<zxysilent@foxmail.com>",
   "license": "MIT",
   "dependencies": {
     "axios": "^0.17.1",
