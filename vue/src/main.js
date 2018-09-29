@@ -9,7 +9,7 @@ import util from "./libs/util";
 
 Vue.use(iView, {
   transfer: true,
-  size: "large"
+//   size: "large"
 });
 
 new Vue({
