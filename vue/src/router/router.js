@@ -101,6 +101,15 @@ export const appRouter = [
 				component: () => import("@/views/post/add.vue")
 			},
 			{
+				path: "edit/:id(\\d+)",
+				icon: "ios-bus",
+				name: "post-edit",
+				meta: {
+					title: "编辑文章"
+				},
+				component: () => import("@/views/post/edit.vue")
+			},
+			{
 				path: "image-editor",
 				icon: "ios-bus",
 				name: "image-editor",
@@ -166,7 +175,7 @@ export const appRouter = [
 				},
 				name: "cate-add",
 				icon: "ios-bus",
-                component: () => import("@/views/cate/add.vue")
+				component: () => import("@/views/cate/add.vue")
 			}
 		]
 	},

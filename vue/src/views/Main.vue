@@ -104,9 +104,9 @@
             <Content class="main-content-con">
                 <Layout class="main-layout-con">
                     <Content class="content-wrapper">
-                        <keep-alive>
+                        <!-- <keep-alive> -->
                             <router-view />
-                        </keep-alive>
+                        <!-- </keep-alive> -->
                     </Content>
                 </Layout>
             </Content>
@@ -200,7 +200,6 @@ export default {
   },
   watch: {
     $route(to) {
-      localStorage.currentPageName = to.name;
     }
   },
   created() {

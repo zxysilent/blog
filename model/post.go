@@ -45,7 +45,7 @@ func PostCount() int {
 		Type:     0,
 		IsPublic: true,
 	}
-	count, _ := DB.Count(mod)
+	count, _ := DB.UseBool("is_public").Count(mod)
 	return int(count)
 }
 
@@ -86,7 +86,7 @@ func PostPath(path string) (*Post, *Naver, bool) {
 		Type:     0,
 		IsPublic: true,
 	}
-	has, _ := DB.Get(mod)
+	has, _ := DB.UseBool("is_public").Get(mod)
 	if has {
 		mod.Cate, _ = CateGet(mod.CateId)
 		naver := &Naver{}
@@ -114,7 +114,7 @@ func PostSingle(path string) (*Post, bool) {
 		Type:     1,
 		IsPublic: true,
 	}
-	has, _ := DB.Get(mod)
+	has, _ := DB.UseBool("is_public").Get(mod)
 	return mod, has
 }
 
@@ -146,4 +146,26 @@ func postIds(ids []int) map[int]*Post {
 		return mapSet
 	}
 	return nil
+}
+
+//PostExist 判断是否存在
+func PostExist(ptah string) bool {
+	has, _ := DB.Exist(&Post{
+		Path: ptah,
+	})
+	return has
+}
+
+// PostAdd 添加文章
+func PostAdd(mod *Post) bool {
+	sess := DB.NewSession()
+	defer sess.Close()
+	sess.Begin()
+	affect, _ := sess.InsertOne(mod)
+	if affect != 1 {
+		sess.Rollback()
+		return false
+	}
+	sess.Commit()
+	return true
 }

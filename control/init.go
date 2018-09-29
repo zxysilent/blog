@@ -32,7 +32,7 @@ func IndexView(ctx echo.Context) error {
 	})
 }
 
-// Archives 归档
+// ArchivesView 归档
 func ArchivesView(ctx echo.Context) error {
 	mods, err := model.PostArchive()
 	if err != nil {
