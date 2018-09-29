@@ -98,7 +98,7 @@ export const appRouter = [
 				meta: {
 					title: "添加文章"
 				},
-				component: () => import("@/views/post/add.vue")
+				component: () => import("@/views/article/article.vue")
 			},
 			{
 				path: "edit/:id(\\d+)",
@@ -107,7 +107,7 @@ export const appRouter = [
 				meta: {
 					title: "编辑文章"
 				},
-				component: () => import("@/views/post/edit.vue")
+				component: () => import("@/views/article/article.vue")
 			},
 			{
 				path: "image-editor",
@@ -146,7 +146,7 @@ export const appRouter = [
 				},
 				name: "page-add",
 				icon: "ios-bus",
-				component: () => import("@/views/page/add.vue")
+				component: () => import("@/views/article/article.vue")
 			}
 		]
 	},

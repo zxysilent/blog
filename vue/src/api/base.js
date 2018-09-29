@@ -5,8 +5,8 @@ const ajaxUrl =
   env === "development"
     ? "http://127.0.0.1:88"
     : env === "production"
-      ? "http://122.114.95.80:85"
-      : "http://122.114.95.80:85";
+      ? "http://127.0.0.1:88"
+      : "http://127.0.0.1:88";
 
 const loginUrl = "/#/login";
 

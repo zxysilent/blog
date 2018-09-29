@@ -28,7 +28,7 @@
                     </Form>
                     <p class="login-tip">官网
                         <a href="/" title="author">
-                            <Icon type="ios-send-outline" />
+                            <Icon type="ios-send-outline" size="20" />
                         </a>
                     </p>
                 </div>

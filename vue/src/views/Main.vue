@@ -44,7 +44,7 @@
                         </template>
                         <MenuItem name="page-list"  to="/page/list">
                         <Icon type="ios-list-box-outline" />页面列表</MenuItem>
-                        <MenuItem name="page-add">
+                        <MenuItem name="page-add" to="/page/add">
                         <Icon type="ios-add-circle-outline" />添加页面</MenuItem>
                     </Submenu>
                     <Submenu name="cate">

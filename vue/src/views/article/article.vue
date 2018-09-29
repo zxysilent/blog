@@ -1,5 +1,5 @@
 <style lang="less">
-@import "./post.less";
+@import "./article.less";
 </style>
 <template>
     <div>
@@ -10,10 +10,10 @@
                     <FormItem style="margin-bottom:15px" prop="titel">
                         <Input v-model="dataForm.title" placeholder="请输入标题" ></Input>
                     </FormItem>
-                    <FormItem style="margin-bottom:15px" label="https://blog.zxysilent.com/post/" prop="path">
+                    <FormItem style="margin-bottom:15px" :label="prefix" prop="path">
                         <Row>
                             <Col span="10">
-                            <Input type="text" readonly disabled v-model="dataForm.path" placeholder="请输入访问路径"></Input>
+                            <Input type="text" v-bind:disabled="isEdit"  v-model="dataForm.path" placeholder="请输入访问路径"></Input>
                             </Col>
                             <Col span="10"> .html   &nbsp;
                             <Button type="dashed" @click="clkPreview">
@@ -39,7 +39,7 @@
                         设置
                     </p>
                     <Form ref="dataForm" :model="dataForm" :rules="dataRules" label-position="top">
-                        <FormItem label="分类">
+                        <FormItem v-if="isPost" label="分类">
                             <RadioGroup v-model="dataForm.cate_id">
                                 <Radio label="cate" v-for="item in cateAll" :label="item.id" :key="item.id">{{item.name}}[{{item.intro}}]</Radio>
                             </RadioGroup>
@@ -54,7 +54,7 @@
                         <FormItem label="发布日期">
                             <DatePicker v-model="dataForm.create_time" type="datetime" placeholder="选择发布日期和时间" :clearable="false" :editable="false"></DatePicker>
                         </FormItem>
-                        <FormItem label="标签">
+                        <FormItem v-if="isPost" label="标签">
                             <Select v-model="dataForm.tags" multiple @on-change="handleSelectTag" placeholder="请选择文章标签">
                                 <Option v-for="item in tagAll" :value="item.id" :key="item.id">{{ item.name }}</Option>
                             </Select>
@@ -76,8 +76,8 @@ import { mavonEditor } from "mavon-editor";
 import "mavon-editor/dist/css/index.css";
 import { cateAll } from "@/api/cate";
 import { tagAll } from "@/api/tag";
-import { postGet } from "@/api/post";
-
+// 通用 文章/页面 + 添加/修改
+// 减少js体积
 export default {
 	components: {
 		mavonEditor
@@ -171,25 +171,6 @@ export default {
 					this.$Message.warning("未查询到标签信息,请重试！");
 				}
 			});
-			postGet(this.$route.params.id).then(resp => {
-				if (resp.code == 200) {
-					this.dataForm = resp.data;
-				} else {
-					this.dataForm = {
-						title: "",
-						path: "",
-						summary: "",
-						cate_id: 0,
-						is_public: true,
-						allow_comment: false,
-						create_time: "",
-						tags: [],
-						content: "",
-						markdown_content: ""
-					};
-					this.$Message.warning("未查询到文章信息,请重试！");
-				}
-			});
 		},
 		change(value, html) {
 			this.dataForm.content = html;
@@ -211,10 +192,26 @@ export default {
 		}
 	},
 	computed: {
-		completeUrl() {
-			let finalUrl = this.fixedLink + this.articlePath;
-			localStorage.finalUrl = finalUrl; // 本地存储完整文章路径
-			return finalUrl;
+		// 是否 post
+		isPost() {
+			return this.$route.name.indexOf("post") > 0;
+		},
+		isEdit() {
+			return this.$route.name.indexOf("edit") > 0;
+		},
+		id() {
+            let id = parseInt(this.$route.params.id,10);
+            console.log(id)
+			if (isNaN(id)) {
+				return 0;
+            }
+			return id;
+		},
+		prefix() {
+			if (this.isPost) {
+				return "https://blog.zxysilent.com/post/";
+			}
+			return "https://blog.zxysilent.com/page/";
 		}
 	},
 	mounted() {
@@ -225,8 +222,9 @@ export default {
 	},
 	created() {
 		this.dataForm.create_time = new Date();
+  let id = parseInt(this.$route.params.id,10);
+            console.log(id)
 		this.init();
-	},
-	destroyed() {}
+	}
 };
 </script>
