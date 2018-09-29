@@ -1,7 +1,7 @@
 
 <template>
     <div>
-        <Card>
+        <Card dis-hover>
             <p slot="title">
                 <Icon type="ios-settings-outline" /> 基本设置
             </p>

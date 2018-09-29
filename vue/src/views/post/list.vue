@@ -7,7 +7,7 @@
             <Form inline>
                 <FormItem>
                     <Select v-model="cateId" placeholder="请选择文章类别" style="width:200px">
-                        <Option v-for="item in cateAll" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                        <Option v-for="item in cateAll" :value="item.id" :key="item.id">{{ item.name }} [{{ item.intro }}]</Option>
                     </Select>
                 </FormItem>
                 <!-- <FormItem>
@@ -32,189 +32,186 @@
 import { cateAll } from "@/api/cate";
 import { catePost, postGet, articleDel } from "@/api/post";
 export default {
-	data() {
-		return {
-			mult: "",
-			pageId: 0,
-			showEdit: false,
-			cateAll: [],
-			cateId: 0, //all
-			post: {},
-			page: {
-				pi: 1,
-				ps: 15
-			},
-			total: 0,
-			colPost: [
-				{
-					type: "index",
-					width: 60,
-					align: "center"
-				},
-				{
-					title: "标题",
-					ellipsis: true,
-					tooltip: true,
-					render: (h, data) => {
-						return h("div", data.row.post.title);
-					}
-				},
-				{
-					title: "状态",
-					width: 80,
-					render: (h, data) => {
-						if (data.row.post.status == 3) {
-							return h("div", "已发布");
-						} else {
-							return h("div", "草稿");
-						}
-					}
-				},
-				{
-					title: "权限",
-					width: 80,
-					render: (h, data) => {
-						if (data.row.post.is_public) {
-							return h("div", "公开");
-						} else {
-							return h("div", "私有");
-						}
-					}
-				},
-				{
-					title: "点击量",
-					width: 80,
-					key: "hits"
-				},
-				{
-					title: "日期",
-					width: 150,
-					render: (h, data) => {
-						return h(
-							"div",
-							data.row.post.create_time.replace(/T|\+08:00/g, " ")
-						);
-					}
-				},
-				{
-					title: "操作",
-					key: "action",
-					width: 120,
-					align: "center",
-					render: (h, data) => {
-						return h("a", [
-							h("Icon", {
-								props: {
-									type: "md-create",
-									size: "20",
-									color: "#FFB800"
-								},
-								attrs: {
-									title: "修改"
-								},
-								style: {
-									marginRight: "15px"
-								},
-								on: {
-									click: () => {
-										this.showEdit = true;
-										this.pageId = data.row;
-									}
-								}
-							}),
-							h("Icon", {
-								props: {
-									type: "ios-trash",
-									size: "20",
-									color: "#FF5722"
-								},
-								attrs: {
-									title: "删除"
-								},
-								on: {
-									click: () => {
-										this.delete(data);
-									}
-								}
-							})
-						]);
-					}
-				}
-			],
-			dataPost: []
-		};
-	},
-	methods: {
-		init_() {
-			cateAll().then(resp => {
-				if (resp.code == 200) {
-					resp.data.unshift({ id: 0, name: "全部分类" });
-					this.cateAll = resp.data;
-				} else {
-					this.cateAll = [];
-					this.$Message.warning("未查询到分类信息,请重试！");
-				}
-			});
-		},
-		init() {
-			catePost(this.cateId, this.page).then(resp => {
-				if (resp.code == 200) {
-					this.dataPost = resp.data.items;
-					this.total = resp.data.count;
-				} else {
-					this.dataPost = [];
-					this.total = 0;
-					this.$Message.warning("未查询到新闻数据，请重试！");
-				}
-			});
-		},
-		search() {
-			this.page.pi = 1;
-			this.init();
-		},
-		piChange(pi) {
-			this.page.pi = pi;
-			this.init();
-		},
-		psChange(ps) {
-			this.page.ps = ps;
-			this.init();
-		},
-		getOne() {
-			postGet(this.pageId).then(resp => {
-				if (resp.code == 200) {
-					this.post = resp.data;
-				} else {
-					this.post = {};
-					this.$Message.warning("未查询到信息，请重试！");
-				}
-			});
-		},
-		//删除
-		delete(data) {
-			this.$Modal.confirm({
-				title: "系统提示",
-				content: "你确定要删除吗？",
-				onOk: () => {
-					articleDel(data.row.id).then(resp => {
-						if (resp.code == 200) {
-							this.$Message.success({
-								content: "删除成功",
-								onClose: () => {
-									this.dataPost.splice(data.index, 1);
-								}
-							});
-						} else {
-							this.$Message.error("删除失败,请重试！");
-						}
-					});
-				}
-			});
-		}
-	},
-	created() {
-		this.init_();
-		this.init();
-	}
+  data() {
+    return {
+      mult: "",
+      pageId: 0,
+      showEdit: false,
+      cateAll: [],
+      cateId: 0, //all
+      post: {},
+      page: {
+        pi: 1,
+        ps: 15
+      },
+      total: 0,
+      colPost: [
+        {
+          type: "index",
+          width: 60,
+          align: "center"
+        },
+        {
+          title: "标题",
+          ellipsis: true,
+          tooltip: true,
+          render: (h, data) => {
+            return h("div", data.row.title);
+          }
+        },
+        {
+          title: "状态",
+          width: 80,
+          render: (h, data) => {
+            if (data.row.status == 3) {
+              return h("div", "已发布");
+            } else {
+              return h("div", "草稿");
+            }
+          }
+        },
+        {
+          title: "权限",
+          width: 80,
+          render: (h, data) => {
+            if (data.row.is_public) {
+              return h("div", "公开");
+            } else {
+              return h("div", "私有");
+            }
+          }
+        },
+        {
+          title: "点击量",
+          width: 80,
+          key: "hits"
+        },
+        {
+          title: "日期",
+          width: 150,
+          render: (h, data) => {
+            return h("div", data.row.create_time.replace(/T|\+08:00/g, " "));
+          }
+        },
+        {
+          title: "操作",
+          key: "action",
+          width: 120,
+          align: "center",
+          render: (h, data) => {
+            return h("a", [
+              h("Icon", {
+                props: {
+                  type: "md-create",
+                  size: "20",
+                  color: "#FFB800"
+                },
+                attrs: {
+                  title: "修改"
+                },
+                style: {
+                  marginRight: "15px"
+                },
+                on: {
+                  click: () => {
+                    this.showEdit = true;
+                    this.pageId = data.row;
+                  }
+                }
+              }),
+              h("Icon", {
+                props: {
+                  type: "ios-trash",
+                  size: "20",
+                  color: "#FF5722"
+                },
+                attrs: {
+                  title: "删除"
+                },
+                on: {
+                  click: () => {
+                    this.delete(data);
+                  }
+                }
+              })
+            ]);
+          }
+        }
+      ],
+      dataPost: []
+    };
+  },
+  methods: {
+    init_() {
+      cateAll().then(resp => {
+        if (resp.code == 200) {
+          resp.data.unshift({ id: 0, name: " all ", intro: "全部分类" });
+          this.cateAll = resp.data;
+        } else {
+          this.cateAll = [];
+          this.$Message.warning("未查询到分类信息,请重试！");
+        }
+      });
+    },
+    init() {
+      catePost(this.cateId, this.page).then(resp => {
+        if (resp.code == 200) {
+          this.dataPost = resp.data.items;
+          this.total = resp.data.count;
+        } else {
+          this.dataPost = [];
+          this.total = 0;
+          this.$Message.warning("未查询到新闻数据，请重试！");
+        }
+      });
+    },
+    search() {
+      this.page.pi = 1;
+      this.init();
+    },
+    piChange(pi) {
+      this.page.pi = pi;
+      this.init();
+    },
+    psChange(ps) {
+      this.page.ps = ps;
+      this.init();
+    },
+    getOne() {
+      postGet(this.pageId).then(resp => {
+        if (resp.code == 200) {
+          this.post = resp.data;
+        } else {
+          this.post = {};
+          this.$Message.warning("未查询到信息，请重试！");
+        }
+      });
+    },
+    //删除
+    delete(data) {
+      this.$Modal.confirm({
+        title: "系统提示",
+        content: "你确定要删除吗？",
+        onOk: () => {
+          articleDel(data.row.id).then(resp => {
+            if (resp.code == 200) {
+              this.$Message.success({
+                content: "删除成功",
+                onClose: () => {
+                  this.dataPost.splice(data.index, 1);
+                }
+              });
+            } else {
+              this.$Message.error("删除失败,请重试！");
+            }
+          });
+        }
+      });
+    }
+  },
+  created() {
+    this.init_();
+    this.init();
+  }
 };
 </script>

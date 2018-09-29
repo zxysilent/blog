@@ -124,13 +124,11 @@
     </div>
 </template>
 <script>
-import lockScreen from "./main-components/lockscreen/lockscreen.vue";
 import messageTip from "./main-components/message-tip.vue";
 import util from "@/libs/util.js";
 import { auth } from "@/api/auth";
 export default {
 	components: {
-		lockScreen,
 		messageTip
 	},
 	data() {

@@ -1,6 +1,6 @@
 
 <template>
-    <Card :bordered="false" dis-hover>
+    <Card dis-hover>
         <p slot="title">
             <Icon type="ios-text-outline" /> 评论设置
         </p>

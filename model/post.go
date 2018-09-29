@@ -9,19 +9,21 @@ import (
 type Post struct {
 	Id              int       `xorm:"not null pk autoincr INT(11)" json:"id" form:"id"`
 	UserId          int       `xorm:"not null INT(11)" json:"user_id" form:"user_id"`
+	CateId          int       `xorm:"not null unique(post_cate) INT(11)" json:"cate_id" form:"cate_id"`
+	Cate            *Cate     `xorm:"- <- ->" json:"cate,omitempty" form:"cate"`
 	Type            int       `xorm:"not null default 0 comment('0 为文章，1 为页面') TINYINT(11)" json:"type" form:"type"`
 	Status          int       `xorm:"not null default 0 comment('0 为草稿，1 为待审核，2 为已拒绝，3 为已经发布') TINYINT(11)" json:"status" form:"status"`
 	Title           string    `xorm:"not null VARCHAR(255)" json:"title" form:"title"`
 	Path            string    `xorm:"not null default '''' comment('URL 的 path') VARCHAR(255)" json:"path" form:"path"`
-	Summary         string    `xorm:"not null comment('摘要') LONGTEXT" json:"summary" form:"summary"`
-	MarkdownContent string    `xorm:"not null LONGTEXT" json:"markdown_content" form:"markdown_content"`
-	Content         string    `xorm:"not null LONGTEXT" json:"content" form:"content"`
+	Summary         string    `xorm:"not null comment('摘要') LONGTEXT" json:"summary,omitempty" form:"summary"`
+	MarkdownContent string    `xorm:"not null LONGTEXT" json:"markdown_content,omitempty" form:"markdown_content"`
+	Content         string    `xorm:"not null LONGTEXT" json:"content,omitempty" form:"content"`
 	AllowComment    bool      `xorm:"not null default 1 comment('1 为允许， 0 为不允许') TINYINT(4)" json:"allow_comment" form:"allow_comment"`
 	CreateTime      time.Time `xorm:"default 'NULL' index DATETIME" json:"create_time" form:"create_time"`
 	UpdateTime      time.Time `xorm:"not null DATETIME" json:"update_time" form:"update_time"`
 	IsPublic        bool      `xorm:"not null default 1 comment('1 为公开，0 为不公开') TINYINT(4)" json:"is_public" form:"is_public"`
 	CommentNum      int       `xorm:"not null default 0 INT(11)" json:"comment_num" form:"comment_num"`
-	Options         string    `xorm:"default 'NULL' comment('一些选项，JSON 结构') TEXT" json:"options" form:"options"`
+	Options         string    `xorm:"default 'NULL' comment('一些选项，JSON 结构') TEXT" json:"options,omitempty" form:"options"`
 }
 
 // Archive 归档
@@ -86,6 +88,7 @@ func PostPath(path string) (*Post, *Naver, bool) {
 	}
 	has, _ := DB.Get(mod)
 	if has {
+		mod.Cate, _ = CateGet(mod.CateId)
 		naver := &Naver{}
 		p := Post{}
 		b, _ := DB.Where("Type = 0 and Is_Public = 1 and Status = 3 and Create_Time <?", mod.CreateTime.Format(util.FormatDateTime)).Desc("Create_Time").Get(&p)
@@ -134,7 +137,7 @@ func PostGet(id int) (*Post, bool) {
 // postIds 通过id返回文章集合
 func postIds(ids []int) map[int]*Post {
 	mods := make([]Post, 0, 6)
-	DB.Cols("id", "title", "path", "create_time", "summary", "comment_num", "options").In("id", ids).Find(&mods)
+	DB.Cols("id", "title", "path", "cate_id", "create_time", "summary", "comment_num", "options").In("id", ids).Find(&mods)
 	if len(mods) > 0 {
 		mapSet := make(map[int]*Post, len(mods))
 		for idx := range mods {

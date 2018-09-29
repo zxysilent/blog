@@ -1,6 +1,6 @@
 
 <template>
-    <Card :bordered="false" dis-hover>
+    <Card dis-hover>
         <p slot="title">
            <Icon type="ios-code-working" />自定义设置
         </p>

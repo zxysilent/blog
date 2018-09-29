@@ -1,6 +1,6 @@
 
 <template>
-    <Card :bordered="false" dis-hover>
+    <Card dis-hover>
         <p slot="title">
             <Icon type="ios-pulse" /> 统计设置
         </p>

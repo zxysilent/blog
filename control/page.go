@@ -7,8 +7,8 @@ import (
 	"github.com/labstack/echo"
 )
 
-// About 关于
-func About(ctx echo.Context) error {
+// AboutView 关于
+func AboutView(ctx echo.Context) error {
 	mod, has := model.PostSingle("about")
 	if !has {
 		return ctx.Redirect(302, "/")
@@ -19,8 +19,8 @@ func About(ctx echo.Context) error {
 	})
 }
 
-// Links 关于
-func Links(ctx echo.Context) error {
+// LinksView 关于
+func LinksView(ctx echo.Context) error {
 	mod, has := model.PostSingle("links")
 	if !has {
 		return ctx.Redirect(302, "/")
@@ -31,8 +31,8 @@ func Links(ctx echo.Context) error {
 	})
 }
 
-// Page 页面
-func Page(ctx echo.Context) error {
+// PageView 页面
+func PageView(ctx echo.Context) error {
 	mod, has := model.PostSingle(ctx.Param("*"))
 	if !has {
 		return ctx.Redirect(302, "/")

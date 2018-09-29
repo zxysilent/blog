@@ -9,8 +9,8 @@ import (
 	"github.com/labstack/echo"
 )
 
-// Tags 标签列表
-func Tags(ctx echo.Context) error {
+// TagsView 标签列表
+func TagsView(ctx echo.Context) error {
 	mods, err := model.TagAll()
 	if err != nil {
 		return ctx.Redirect(302, "/")
@@ -20,8 +20,8 @@ func Tags(ctx echo.Context) error {
 	})
 }
 
-// TagPost 标签文章列表
-func TagPost(ctx echo.Context) error {
+// TagPostView 标签文章列表
+func TagPostView(ctx echo.Context) error {
 	tag := ctx.Param("tag")
 	if tag == "" {
 		return ctx.Redirect(302, "/tags")

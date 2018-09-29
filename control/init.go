@@ -9,8 +9,8 @@ import (
 	"github.com/labstack/echo"
 )
 
-// Index 主页面
-func Index(ctx echo.Context) error {
+// IndexView 主页面
+func IndexView(ctx echo.Context) error {
 	//return ctx.HTML(200, `<html><head><meta charset="UTF-8"><title>文档</title></head><body><a href="/swagger/index.html">doc</a></body></html>`)
 	pi, _ := strconv.Atoi(ctx.FormValue("page"))
 	if pi == 0 {
@@ -33,7 +33,7 @@ func Index(ctx echo.Context) error {
 }
 
 // Archives 归档
-func Archives(ctx echo.Context) error {
+func ArchivesView(ctx echo.Context) error {
 	mods, err := model.PostArchive()
 	if err != nil {
 		return ctx.Redirect(302, "/")

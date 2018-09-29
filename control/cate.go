@@ -3,10 +3,45 @@ package control
 import (
 	"blog/model"
 	"blog/util"
+	"net/http"
 	"strconv"
 
 	"github.com/labstack/echo"
 )
+
+// CatePostView 标签文章列表
+func CatePostView(ctx echo.Context) error {
+	cate := ctx.Param("cate")
+	if cate == "" {
+		return ctx.Redirect(302, "/")
+	}
+	mod, has := model.CateName(cate)
+	if !has {
+		return ctx.Redirect(302, "/")
+	}
+	pi, _ := strconv.Atoi(ctx.FormValue("page"))
+	if pi == 0 {
+		pi = 1
+	}
+	ps := util.Atoi(model.MapOpts.MustGet("page_size"), 6)
+	mods, err := model.CatePostList(mod.Id, pi, ps, true)
+	if err != nil || len(mods) < 1 {
+		return ctx.Redirect(302, "/")
+	}
+	total := model.CatePostCount(mod.Id, true)
+	naver := model.Naver{}
+	if pi > 1 {
+		naver.Prev = "/cate/" + mod.Name + "?page=1"
+	}
+	if total > (pi * ps) {
+		naver.Next = "/cate/" + mod.Name + "?page=" + strconv.Itoa(pi+1)
+	}
+	return ctx.Render(http.StatusOK, "cate-post.html", map[string]interface{}{
+		"Cate":      mod,
+		"CatePosts": mods,
+		"Naver":     naver,
+	})
+}
 
 // CateAll 所有分类
 func CateAll(ctx echo.Context) error {
@@ -32,11 +67,11 @@ func CatePost(ctx echo.Context) error {
 	if err != nil {
 		return ctx.Res(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
-	count := model.CatePostCount(cid)
+	count := model.CatePostCount(cid, false)
 	if count == 0 {
 		return ctx.Res(util.NewErrOpt(`未查询到文章信息,请重试`))
 	}
-	mods, err := model.CatePostList(cid, ipt.Pi, ipt.Ps)
+	mods, err := model.CatePostList(cid, ipt.Pi, ipt.Ps, false)
 	if err != nil {
 		return ctx.Res(util.NewErrOpt(`未查询到文章信息,请重试`, err.Error()))
 	}
