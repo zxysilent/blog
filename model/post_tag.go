@@ -85,3 +85,17 @@ func TagPostAdds(mod *[]PostTag) bool {
 	sess.Commit()
 	return true
 }
+
+// TagPostDels 删除标签文章
+func TagPostDels(tid int) bool {
+	sess := DB.NewSession()
+	defer sess.Close()
+	sess.Begin()
+	if affect, err := sess.Where("tag_id = ?", tid).Delete(&PostTag{}); affect > 0 && err == nil {
+		sess.Commit()
+		DB.ClearCache(new(PostTag)) //清空缓存
+		return true
+	}
+	sess.Rollback()
+	return false
+}
