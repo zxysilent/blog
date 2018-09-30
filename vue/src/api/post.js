@@ -1,9 +1,8 @@
 import ajax from "./base";
-
+// 分类文章列表
 export const catePost = (cls, data) => {
   return ajax.get(`/adm/cate/post/${cls}`, { params: data });
 };
-
 // 页面信息
 export const pageAll = () => {
   return ajax.get("/adm/page/all");
@@ -12,18 +11,15 @@ export const pageAll = () => {
 export const postGet = id => {
   return ajax.get(`/adm/post/get/${id}`);
 };
-export const articleChgtop = (id, val) => {
-  return ajax.get(`/article/chgtop/${id}`, { params: { val: val } });
+// 一条文章的tag信息列表
+export const postTagIds = id => {
+  return ajax.get(`/adm/post/tag/ids/${id}`);
 };
 //删除
-export const articleDel = id => {
-  return ajax.get(`/article/del/${id}`);
+export const postDel = id => {
+  return ajax.get(`/adm/post/del/${id}`);
 };
-//添加新闻
-export const articleAdd = data => {
-  return ajax.post(`/article/add`, data);
-};
-//修改新闻
-export const articleEdit = data => {
-  return ajax.post(`/article/edit`, data);
+//文章操作
+export const postOpts = data => {
+  return ajax.post(`/adm/post/opts`, data);
 };

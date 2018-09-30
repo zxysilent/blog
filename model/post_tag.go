@@ -30,6 +30,20 @@ func PostTags(pid int) ([]PostTag, error) {
 	return mods, nil
 }
 
+// PostTagIds 文章对应的标签id
+func PostTagIds(pid int) []int {
+	mods := make([]PostTag, 0, 4)
+	DB.Where("post_id = ? ", pid).Find(&mods)
+	if len(mods) > 0 {
+		ids := make([]int, 0, len(mods))
+		for i := range mods {
+			ids = append(ids, mods[i].TagId)
+		}
+		return ids
+	}
+	return nil
+}
+
 // TagPostCount 通过标签查询文章分页总数
 func TagPostCount(tid int) int {
 	var count int
@@ -56,4 +70,18 @@ func TagPostList(tid, pi, ps int) ([]PostTag, error) {
 		}
 	}
 	return mods, err
+}
+
+// TagPostAdds 添加文章标签[]
+func TagPostAdds(mod *[]PostTag) bool {
+	sess := DB.NewSession()
+	defer sess.Close()
+	sess.Begin()
+	affect, _ := sess.InsertOne(mod)
+	if affect < 1 {
+		sess.Rollback()
+		return false
+	}
+	sess.Commit()
+	return true
 }

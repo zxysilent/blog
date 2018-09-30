@@ -43,12 +43,14 @@ func Run(addr string) {
 	adm := app.Group(`/adm`)
 	adm.GET(`/cate/all`, control.CateAll)
 	adm.GET(`/cate/del/:id`, control.CateDel)
+	adm.GET(`/cate/post/:cid`, control.CatePost)
 	adm.POST(`/cate/add`, control.CateAdd)
 	adm.POST(`/cate/edit`, control.CateEdit)
 
 	adm.GET(`/post/get/:id`, control.PostGet)
+	adm.GET(`/post/tag/ids/:id`, control.PostTagIds)
+	adm.POST(`/post/opts`, control.PostOpts)
 
-	adm.GET(`/cate/post/:cid`, control.CatePost)
 	adm.GET(`/page/all`, control.PostPageAll)
 
 	adm.GET(`/tag/all`, control.TagAll)

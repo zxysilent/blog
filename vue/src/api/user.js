@@ -37,24 +37,3 @@ export const userPass = data => {
 export const userEditSelf = data => {
   return ajax.post("/user/edit/self", data);
 };
-
-//所有老师数据
-export const teaAll = () => {
-  return ajax.get("/tea/all/0");
-};
-//所有班主任老师数据
-export const hmtAll = () => {
-  return ajax.get("/hmt/all");
-};
-//学生分页
-export const studentPage = (tid, data) => {
-  return ajax.get(`/student/page/${tid}`, { params: data });
-};
-//添加学生
-export const studentAdd = data => {
-  return ajax.post("/student/add", data);
-};
-//修改学生
-export const studentEdit = data => {
-  return ajax.post("/student/edit", data);
-};

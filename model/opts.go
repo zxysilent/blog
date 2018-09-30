@@ -56,7 +56,7 @@ func OptsEdit(mod *Opts) bool {
 	defer sess.Close()
 	sess.Begin()
 	affect, err := sess.ID(mod.Key).Cols("Value").Update(mod)
-	if affect >= 1 || err == nil {
+	if affect >= 0 && err == nil {
 		sess.Commit()
 		//	initMap()
 		MapOpts.Set(mod.Key, mod.Value)

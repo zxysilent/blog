@@ -1,35 +1,4 @@
 .main {
-  .logo-con {
-    padding: 8px;
-    text-align: center;
-    img {
-      width: 90%;
-      max-width: 120px;
-      border-radius: 50%;
-    }
-  }
-  .header-con {
-    background: #fff;
-    padding: 0 20px;
-    height: 60px;
-    width: 100%;
-    z-index: 10;
-    box-shadow: 0 2px 1px 1px rgba(100, 100, 100, 0.1);
-    .header-bar {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      .custom-content-con {
-        float: right;
-        height: auto;
-        padding-right: 20px;
-        line-height: 64px;
-        & > * {
-          float: right;
-        }
-      }
-    }
-  }
   .main-layout-con {
     height: 100%;
     overflow: hidden;
@@ -52,33 +21,26 @@
       height: 100%;
       width: 200px;
       transition: width 0.3s;
-      .header-avator-con {
-        .switch-theme-con {
-          display: inline-block;
-          width: 40px;
-          height: 100%;
+      .logo-con {
+        padding: 8px 8px 0px 8px;
+        text-align: center;
+        img {
+          width: 90%;
+          max-width: 120px;
+          border-radius: 50%;
         }
-        .message-con {
-          display: inline-block;
-          width: 30px;
-          padding: 12px 0;
-          text-align: center;
-          cursor: pointer;
-          i {
-            vertical-align: middle;
+        .heaser-user {
+          padding: 2px;
+        }
+        .header-top-con {
+          padding: 2px;
+          .ivu-tooltip{
+              cursor: pointer;
           }
+          .ivu-tooltip:hover{
+            color: #ff5722;
         }
-      }
-      .main-user-name {
-        display: inline-block;
-        width: 90px;
-        font-weight: 700;
-        word-break: keep-all;
-        white-space: nowrap;
-        vertical-align: middle;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        text-align: right;
+        }
       }
     }
   }

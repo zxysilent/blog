@@ -131,6 +131,9 @@ func PostGet(id int) (*Post, bool) {
 		Id: id,
 	}
 	has, _ := DB.Get(mod)
+	if has {
+		mod.Summary = ""
+	}
 	return mod, has
 }
 
@@ -156,7 +159,21 @@ func PostExist(ptah string) bool {
 	return has
 }
 
-// PostAdd 添加文章
+// PostEdit 修改文章/页面
+func PostEdit(mod *Post) bool {
+	sess := DB.NewSession()
+	defer sess.Close()
+	sess.Begin()
+	affect, err := sess.ID(mod.Id).Cols("Cate_id", "Status", "Title", "Summary", "Markdown_Content", "Content", "allow_comment", "Create_Time", "Comment_Num", "update_time").Update(mod)
+	if affect >= 0 && err == nil {
+		sess.Commit()
+		return true
+	}
+	sess.Rollback()
+	return false
+}
+
+// PostAdd 添加文章/页面
 func PostAdd(mod *Post) bool {
 	sess := DB.NewSession()
 	defer sess.Close()

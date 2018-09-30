@@ -1,5 +1,4 @@
 <style lang="less">
-    @import '../../../styles/common.less';
     @import './image-editor.less';
 </style>
 

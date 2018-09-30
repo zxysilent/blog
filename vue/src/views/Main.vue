@@ -7,8 +7,8 @@
             <div class="sidebar-menu-con">
                 <div class="logo-con">
                     <img src="../images/logo.png" alt="" srcset="">
-                    <div>{{ user.name }}</div>
-                    <div class="header-avator-con">
+                    <div class="heaser-user">{{ user.name }}</div>
+                    <div class="header-top-con">
                         <Tooltip content="主页" placement="bottom">
                             <router-link to="/home" tag="span">
                                 <Icon type="ios-home-outline" size="20" />
@@ -21,7 +21,9 @@
                             </router-link>
                         </Tooltip>
                         <Divider type="vertical" />
-                        <message-tip v-model="mesCount"></message-tip>
+                        <Tooltip content="退出登陆" placement="bottom">
+                            <Icon type="ios-log-out" size="20" @click="logout" />
+                        </Tooltip>
                     </div>
                 </div>
                 <Menu :active-name="$route.name" :open-names="$route.name.split('-')" width="auto" accordion>
@@ -85,27 +87,11 @@
             </div>
         </Sider>
         <Layout>
-            <Header class="header-con">
-                <div class="header-bar">
-                    <div class="custom-content-con">
-                        <Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
-                            <a href="javascript:void(0)">
-                                <span class="main-user-name">{{ user.name }}</span>
-                                <Icon type="md-arrow-dropdown"></Icon>
-                            </a>
-                            <DropdownMenu slot="list">
-                                <DropdownItem name="self">个人中心</DropdownItem>
-                                <DropdownItem name="loginout" divided>退出登录</DropdownItem>
-                            </DropdownMenu>
-                        </Dropdown>
-                    </div>
-                </div>
-            </Header>
             <Content class="main-content-con">
                 <Layout class="main-layout-con">
                     <Content class="content-wrapper">
                         <!-- <keep-alive> -->
-                            <router-view />
+                        <router-view :key="rkey" />
                         <!-- </keep-alive> -->
                     </Content>
                 </Layout>
@@ -123,32 +109,16 @@ export default {
   },
   data() {
     return {
-      collapsed: false,
+      rkey: 6655,
       user: {
         name: "--",
-        num: "--",
-      },
-      shrink: false,
-      userName: "",
-      isFullScreen: false,
-      openedSubmenuArr: this.$store.state.app.openedSubmenuArr
+        num: "--"
+      }
     };
   },
   computed: {
-    menuitemClasses: function() {
-      return ["menu-item", this.isCollapsed ? "collapsed-menu" : ""];
-    },
-    menuList() {
-      return this.$store.state.app.menuList;
-    },
-    avatorPath() {
-      return localStorage.avatorImgPath;
-    },
     cachePage() {
       return this.$store.state.app.cachePage;
-    },
-    menuTheme() {
-      return this.$store.state.app.menuTheme;
     },
     mesCount() {
       return this.$store.state.app.messageCount;
@@ -161,51 +131,32 @@ export default {
           this.user = resp.data;
         }
       });
-      this.$store.commit("updateMenulist");
-      let messageCount = 3;
-      this.messageCount = messageCount.toString();
-      this.$store.commit("setMessageCount", 3);
     },
-    toggleClick() {
-      this.shrink = !this.shrink;
-    },
-    handleClickUserDropdown(name) {
-      if (name === "self") {
-        this.$router.push({
-          name: "self"
-        });
-      } else if (name === "loginout") {
-        // 退出登录
-        this.$store.commit("logout", this);
-        this.$store.commit("clearOpenedSubmenu");
-        this.$router.push({
-          name: "login"
-        });
-      }
-    },
-    handleSubmenuChange(val) {
-      // console.log(val)
-    },
-    beforePush(name) {
-      // if (name === 'accesstest_index') {
-      //     return false;
-      // } else {
-      //     return true;
-      // }
-      return true;
-    },
-    fullscreenChange(isFullScreen) {
-      // console.log(isFullScreen);
+    logout() {
+      this.$store.commit("logout", this);
+      this.$router.push({
+        name: "login"
+      });
     }
   },
   watch: {
-    $route(to) {
+    $route(to, from) {
+      //   console.log("to.name=>", to.name);
+      // 强制 触发生命周期
+      if (
+        to.name == "post-edit" ||
+        to.name == "post-add" ||
+        to.name == "page-edit" ||
+        to.name == "page-add"
+      ) {
+        this.rkey = new Date().getTime();
+      } else {
+        this.rkey = 6655;
+      }
     }
   },
   created() {
     this.init();
-    // 显示打开的页面的列表
-    this.$store.commit("setOpenedList");
   }
 };
 </script>
