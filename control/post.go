@@ -108,7 +108,31 @@ func PostOpts(ctx echo.Context) error {
 		if model.PostEdit(&ipt.Post) {
 			if ipt.Type == 0 {
 				// 处理变动标签
-
+				old := model.PostTagIds(ipt.Post.Id)
+				new := ipt.Tags
+				add := make([]int, 0)
+				del := make([]int, 0)
+				for _, itm := range old {
+					if !inOf(itm, new) {
+						del = append(del, itm)
+					}
+				}
+				for _, itm := range new {
+					if !inOf(itm, old) {
+						add = append(add, itm)
+					}
+				}
+				tagAdds := make([]model.PostTag, 0, len(add))
+				for _, itm := range add {
+					tagAdds = append(tagAdds, model.PostTag{
+						TagId:  itm,
+						PostId: ipt.Post.Id,
+					})
+				}
+				// 删除标签
+				model.PostTagDels(ipt.Post.Id, del)
+				// 添加标签
+				model.TagPostAdds(&tagAdds)
 				return ctx.Res(util.NewSucc(`文章修改成功`))
 			}
 			return ctx.Res(util.NewSucc(`页面修改成功`))

@@ -42,3 +42,11 @@ func ArchivesView(ctx echo.Context) error {
 		"Posts": mods,
 	})
 }
+func inOf(goal int, arr []int) bool {
+	for idx := range arr {
+		if goal == arr[idx] {
+			return true
+		}
+	}
+	return false
+}
