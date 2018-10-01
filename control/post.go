@@ -100,7 +100,7 @@ func PostOpts(ctx echo.Context) error {
 	}
 	// 生成目录
 	if ipt.Type == 0 {
-		ipt.Post.Content = getTocHtml(ipt.Post.Content)
+		ipt.Post.Content = getTocHTML(ipt.Post.Content)
 	}
 	// 编辑 文章/页面
 	if ipt.Edit {
@@ -179,7 +179,9 @@ func similar(a, b string) int {
 	}
 	return -1
 }
-func getTocHtml(html string) string {
+
+// 生成目录并替换内容
+func getTocHTML(html string) string {
 	html = strings.Replace(html, `id="`, `id="toc_`, -1)
 	regToc := regexp.MustCompile("<h[1-6]>.*?</h[1-6]>")
 	regH := regexp.MustCompile(`<h[1-6]><a id="(.*?)"></a>(.*?)</h[1-6]>`)
