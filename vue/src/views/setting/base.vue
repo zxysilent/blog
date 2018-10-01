@@ -10,7 +10,8 @@
                     <Input v-model="base.title" search enter-button="确    定" @on-search="cmtSave('title')"></Input>
                 </FormItem>
                 <FormItem label="Logo" prop="logo_url">
-                    <Input v-model="base.logo_url" search enter-button="确    定" @on-search="cmtSave('logo_url')"></Input>
+                    <Input v-model="base.logo_url" readonly search enter-button="编    辑" @on-search="clkLogo"></Input>
+                    尺寸最好为 140x140px。
                 </FormItem>
                 <FormItem label="站点描述" prop="description">
                     <Input v-model="base.description" search enter-button="确    定" @on-search="cmtSave('description')" ></Input>
@@ -39,6 +40,11 @@
                 </FormItem>
             </Form>
         </div>
+        <Drawer title="编辑图片" placement="right" v-model="showLogoEdit">
+            <p>Some contents...</p>
+            <p>Some contents...</p>
+            <p>Some contents...</p>
+        </Drawer>
     </Card>
 </template>
 <script>
@@ -48,6 +54,7 @@ export default {
     return {
       page_size: 2,
       base: {},
+      showLogoEdit:false,
       saveLoading: false
     };
   },
@@ -101,6 +108,9 @@ export default {
           this.base = {};
         }
       });
+    },
+    clkLogo() {
+        this.showLogoEdit=true;
     }
   },
   mounted() {

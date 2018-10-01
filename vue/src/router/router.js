@@ -83,7 +83,6 @@ export const appRouter = [
       },
       {
         path: "add",
-
         name: "post-add",
         meta: {
           title: "添加文章"
@@ -92,7 +91,6 @@ export const appRouter = [
       },
       {
         path: "edit/:id(\\d+)",
-
         name: "post-edit",
         meta: {
           title: "编辑文章"
@@ -187,18 +185,6 @@ export const appRouter = [
       }
     ]
   },
-  // {
-  //     path: '/charts',
-  //     icon: 'ios-bus',
-  //     name: 'charts',
-  //     title: '图表',
-  //     component: Main,
-  //     children: [
-  //         { path: 'pie', title: '饼状图', name: 'pie', icon: 'ios-pie', component: resolve => { require('@/views/access/access.vue') },
-  //         { path: 'histogram', title: '柱状图', name: 'histogram', icon: 'stats-bars', component: resolve => { require('@/views/access/access.vue') }
-
-  //     ]
-  // },
   {
     path: "/setting",
     name: "setting",
@@ -215,6 +201,14 @@ export const appRouter = [
         },
         name: "setting-base",
         component: () => import("@/views/setting/base.vue")
+      },
+      {
+        path: "/test",
+        meta: {
+          title: "基本设置"
+        },
+        name: "test",
+        component: () => import("@/views/my-components/image-editor/image-editor.vue")
       },
       {
         path: "comment",
