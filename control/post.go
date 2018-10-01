@@ -98,6 +98,10 @@ func PostOpts(ctx echo.Context) error {
 	if strings.Contains(ipt.Post.Content, "<!--more-->") {
 		ipt.Post.Summary = strings.Split(ipt.Post.Content, "<!--more-->")[0]
 	}
+	// 生成目录
+	if ipt.Type == 0 {
+		ipt.Post.Content = getTocHtml(ipt.Post.Content)
+	}
 	// 编辑 文章/页面
 	if ipt.Edit {
 		// 修改日期在发布日期之前
@@ -165,4 +169,51 @@ func PostOpts(ctx echo.Context) error {
 		return ctx.Res(util.NewFail(`文章添加失败,请重试`))
 	}
 	return ctx.Res(util.NewFail(`页面添加失败,请重试`))
+}
+func similar(a, b string) int {
+	if a[:4] == b[:4] {
+		return 0
+	}
+	if a[:4] < b[:4] {
+		return 1
+	}
+	return -1
+}
+func getTocHtml(html string) string {
+	html = strings.Replace(html, `id="`, `id="toc_`, -1)
+	regToc := regexp.MustCompile("<h[1-6]>.*?</h[1-6]>")
+	regH := regexp.MustCompile(`<h[1-6]><a id="(.*?)"></a>(.*?)</h[1-6]>`)
+	hs := regToc.FindAllString(html, -1)
+
+	sb := strings.Builder{}
+	sb.WriteString(`<div class="toc"><ul>`)
+	level := 0
+	for i := 0; i < len(hs)-1; i++ {
+		fg := similar(hs[i], hs[i+1])
+		if fg == 0 {
+			sb.WriteString(regH.ReplaceAllString(hs[i], `<li><a href="#$1">$2</a></li>`))
+		} else if fg == 1 {
+			level++
+			sb.WriteString(regH.ReplaceAllString(hs[i], `<li><a href="#$1">$2</a><ul>`))
+		} else {
+			level--
+			sb.WriteString(regH.ReplaceAllString(hs[i], `<li><a href="#$1">$2</a></li></ul></li>`))
+		}
+	}
+	fg := similar(hs[len(hs)-2], hs[len(hs)-1])
+	if fg == 0 {
+		sb.WriteString(regH.ReplaceAllString(hs[len(hs)-1], `<li><a href="#$1">$2</a></li>`))
+	} else if fg == 1 {
+		level++
+		sb.WriteString(regH.ReplaceAllString(hs[len(hs)-1], `<li><a href="#$1">$2</a><ul>`))
+	} else {
+		level--
+		sb.WriteString(regH.ReplaceAllString(hs[len(hs)-1], `<li><a href="#$1">$2</a></li></ul></li>`))
+	}
+	for level > 0 {
+		sb.WriteString(`</ul></li>`)
+		level--
+	}
+	sb.WriteString(`</ul></div>`)
+	return sb.String() + html
 }

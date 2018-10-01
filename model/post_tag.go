@@ -77,7 +77,7 @@ func TagPostAdds(mod *[]PostTag) bool {
 	sess := DB.NewSession()
 	defer sess.Close()
 	sess.Begin()
-	affect, _ := sess.InsertOne(mod)
+	affect, _ := sess.Insert(mod)
 	if affect < 1 {
 		sess.Rollback()
 		return false
