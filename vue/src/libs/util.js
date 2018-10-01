@@ -1,10 +1,23 @@
 import { Base64 } from "js-base64";
-
+import env from "../../build/env";
 let util = {};
 util.title = function(title) {
   title = title || "blog";
   window.document.title = title;
 };
+//dev prod
+util.cfgSvrURL =
+  env === "development" ? "http://127.0.0.1:88" : "http://127.0.0.1:88";
+
+//文件上传地址
+//dev prod
+util.cfgUpload =
+  env === "development"
+    ? "http://127.0.0.1:88/upload"
+    : "http://127.0.0.1:88/upload";
+
+// 登陆失效默认页面
+util.defURL = "/#/login";
 util.checkUpdate = function(vm) {};
 //保存数据
 util.setData = (k, v) => {
@@ -28,13 +41,13 @@ util.getAuth = () => {
     let token = Base64.decode(localStorage.getItem("bearer").split(".")[1]);
     let auth = JSON.parse(token);
     if (!auth.hasOwnProperty("id")) {
-      //   localStorage.removeItem("bearer");
-      //   location.href = "/#/login";
+      localStorage.removeItem("bearer");
+      location.href = util.defURL;
     }
     return auth;
   } catch (e) {
     localStorage.removeItem("bearer");
-    // location.href = "/#/login";
+    location.href = util.defURL;
   }
 };
 util.Role = {

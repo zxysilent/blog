@@ -117,12 +117,12 @@ func PostOpts(ctx echo.Context) error {
 				add := make([]int, 0)
 				del := make([]int, 0)
 				for _, itm := range old {
-					if !inOf(itm, new) {
+					if !util.InOf(itm, new) {
 						del = append(del, itm)
 					}
 				}
 				for _, itm := range new {
-					if !inOf(itm, old) {
+					if !util.InOf(itm, old) {
 						add = append(add, itm)
 					}
 				}

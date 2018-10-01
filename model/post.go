@@ -110,11 +110,10 @@ func PostPath(path string) (*Post, *Naver, bool) {
 //PostSingle 单页面 page
 func PostSingle(path string) (*Post, bool) {
 	mod := &Post{
-		Path:     path,
-		Type:     1,
-		IsPublic: true,
+		Path: path,
+		Type: 1,
 	}
-	has, _ := DB.UseBool("is_public").Get(mod)
+	has, _ := DB.Get(mod)
 	return mod, has
 }
 
@@ -164,7 +163,7 @@ func PostEdit(mod *Post) bool {
 	sess := DB.NewSession()
 	defer sess.Close()
 	sess.Begin()
-	affect, err := sess.ID(mod.Id).Cols("Cate_id", "Status", "Title", "Summary", "Markdown_Content", "Content", "allow_comment", "Create_Time", "Comment_Num", "update_time").Update(mod)
+	affect, err := sess.ID(mod.Id).Cols("Cate_id", "Status", "Title", "Summary", "Markdown_Content", "Content", "allow_comment", "Create_Time", "Comment_Num", "update_time", "is_public").Update(mod)
 	if affect >= 0 && err == nil {
 		sess.Commit()
 		return true

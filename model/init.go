@@ -90,14 +90,3 @@ type Naver struct {
 	Prev string
 	Next string
 }
-
-// common
-
-func inOf(goal int, arr []int) bool {
-	for idx := range arr {
-		if goal == arr[idx] {
-			return true
-		}
-	}
-	return false
-}

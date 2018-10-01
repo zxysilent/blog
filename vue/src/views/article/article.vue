@@ -29,7 +29,7 @@
                 </Form>
                 <div style="min-height: 600px;height: calc(100vh - 145px);">
                     <button ref="diy" type="button" @click="diyMore" class="op-icon ivu-icon ivu-icon-md-code" aria-hidden="true" title="更多"></button>
-                    <mavon-editor ref="md" :boxShadow="false" @change="change" :toolbars="toolbars" v-model="dataForm.markdown_content" style="height:100%">
+                    <mavon-editor ref="md" @imgAdd="imgAdd" :boxShadow="false" @change="change" :toolbars="toolbars" v-model="dataForm.markdown_content" style="height:100%">
                     </mavon-editor>
                 </div>
                 </Col>
@@ -46,7 +46,7 @@
                             </RadioGroup>
                         </FormItem>
                         <FormItem label="权限" prop="is_public">
-                            <i-switch :value="dataForm.is_public"><span slot="open">公开</span>
+                            <i-switch v-model="dataForm.is_public"><span slot="open">公开</span>
                                 <span slot="close">私密</span></i-switch>
                         </FormItem>
                         <FormItem label="评论" prop="allow_comment">
@@ -77,6 +77,7 @@ import "mavon-editor/dist/css/index.css";
 import toolbars from "./toolbars";
 import { cateAll } from "@/api/cate";
 import { tagAll } from "@/api/tag";
+import util from "@/libs/util";
 import { postGet, postOpts, postTagIds } from "@/api/post";
 // 通用 文章/页面 + 添加/修改
 // 减少js体积
@@ -197,6 +198,29 @@ export default {
         subfix: "",
         str: "<!--more-->"
       });
+    },
+    imgAdd(pos, $file) {
+      let formData = new FormData();
+      let xhr = new XMLHttpRequest();
+      xhr.withCredentials = false;
+      xhr.open("POST", util.cfgUpload);
+      xhr.onload = () => {
+        var json;
+        if (xhr.status < 200 || xhr.status >= 300) {
+          this.$Message.warning("图片上传失败,HTTP Error: " + xhr.status);
+          return;
+        }
+        json = JSON.parse(xhr.responseText);
+        if (!json || json.code != 200) {
+          this.$Message.warning("图片上传失败");
+          return;
+        }
+        this.$refs.md.$img2Url(pos, util.cfgSvrURL + json.data);
+      };
+
+      formData.append("token", util.getToken());
+      formData.append("file", $file);
+      xhr.send(formData);
     },
     // 存草稿
     cmtDraft() {
@@ -332,7 +356,6 @@ export default {
       this.dataForm.create_time = new Date();
     }
     this.init();
-    console.log("init");
   }
 };
 </script>

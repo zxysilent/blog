@@ -61,9 +61,12 @@ func CateAll(ctx echo.Context) error {
 // @Param ps query int true "分页大小ps" default(6)
 // @Success 200 {object} util.Result "成功数据"
 func CatePost(ctx echo.Context) error {
-	cid := util.Atoi(ctx.Param("cid"))
+	cid, err := strconv.Atoi(ctx.Param("cid"))
+	if err != nil {
+		return ctx.Res(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+	}
 	ipt := &model.Page{}
-	err := ctx.Bind(ipt)
+	err = ctx.Bind(ipt)
 	if err != nil {
 		return ctx.Res(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}

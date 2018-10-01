@@ -190,8 +190,7 @@ func UserPass(ctx echo.Context) error {
 	if err != nil {
 		return ctx.Res(util.NewFail(`输入数据有误`, err.Error()))
 	}
-	auth := ctx.Get("auth").(*model.JwtClaims)
-	mod, has := model.UserGet(auth.Id)
+	mod, has := model.UserGet(ctx.Get("uid").(int))
 	if !has {
 		return ctx.Res(util.NewFail(`输入数据有误,请重试`))
 	}

@@ -1,17 +1,10 @@
-import env from "../../build/env";
+import util from "../libs/util";
 import axios from "axios";
 import iView from "iview";
-const ajaxUrl =
-  env === "development"
-    ? "http://127.0.0.1:88"
-    : env === "production"
-      ? "http://127.0.0.1:88"
-      : "http://127.0.0.1:88";
 
-const loginUrl = "/#/login";
 
 const ajax = axios.create({
-  baseURL: ajaxUrl,
+  baseURL: util.cfgSvrURL,
   timeout: 30000
 });
 //添加一个请求拦截器
@@ -53,7 +46,7 @@ ajax.interceptors.response.use(
           localStorage.removeItem("bearer");
           //没有登陆信息默认跳转到登陆页面
           // location.reload();
-          location.href = loginUrl;
+          location.href = util.defURL;
         }
       });
       return new Promise(() => {});

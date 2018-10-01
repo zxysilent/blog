@@ -37,6 +37,7 @@ func Run(addr string) {
 
 	app := engine.Group(``, midJwt)
 	app.GET(`/auth`, control.UserAuth)
+	app.POST(`/upload`, control.Upload)
 	app.POST(`/user/edit/self`, control.UserEditSelf)
 	app.POST(`/user/pass`, control.UserPass)
 

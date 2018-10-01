@@ -16,7 +16,7 @@ func AboutView(ctx echo.Context) error {
 	mod.Content = reg.ReplaceAllString(mod.Content, `<img class="lazy-load" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="$1" alt="$2">`)
 	return ctx.Render(http.StatusOK, "page.html", map[string]interface{}{
 		"Page": mod,
-		"Show": mod.IsPublic && mod.Type == 3,
+		"Show": mod.IsPublic && mod.Status == 3,
 	})
 }
 
@@ -29,7 +29,7 @@ func LinksView(ctx echo.Context) error {
 	mod.Content = reg.ReplaceAllString(mod.Content, `<img class="lazy-load" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="$1" alt="$2">`)
 	return ctx.Render(http.StatusOK, "page.html", map[string]interface{}{
 		"Page": mod,
-		"Show": mod.IsPublic && mod.Type == 3,
+		"Show": mod.IsPublic && mod.Status == 3,
 	})
 }
 
@@ -42,6 +42,6 @@ func PageView(ctx echo.Context) error {
 	mod.Content = reg.ReplaceAllString(mod.Content, `<img class="lazy-load" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="$1" alt="$2">`)
 	return ctx.Render(http.StatusOK, "page.html", map[string]interface{}{
 		"Page": mod,
-		"Show": mod.IsPublic && mod.Type == 3,
+		"Show": mod.IsPublic && mod.Status == 3,
 	})
 }

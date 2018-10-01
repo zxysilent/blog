@@ -105,6 +105,7 @@ func midJwt(next echo.HandlerFunc) echo.HandlerFunc {
 		})
 		if err == nil && jwt.Valid {
 			ctx.Set("auth", jwtAuth)
+			ctx.Set("uid", jwtAuth.Id)
 		} else {
 			return ctx.Res(util.NewErrJwt(`对不起，请重新登陆^_^!","jwt验证失败`))
 		}
