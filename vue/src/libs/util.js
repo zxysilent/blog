@@ -18,7 +18,6 @@ util.cfgUpload =
 
 // 登陆失效默认页面
 util.defURL = "/#/login";
-util.checkUpdate = function(vm) {};
 //保存数据
 util.setData = (k, v) => {
   localStorage.setItem(k, v);

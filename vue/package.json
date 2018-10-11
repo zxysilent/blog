@@ -16,7 +16,7 @@
   "dependencies": {
     "axios": "^0.17.1",
     "cropperjs": "^1.2.2",
-    "iview": "^3.1.2",
+    "iview": "^3.1.3",
     "js-base64": "^2.4.9",
     "js-md5": "^0.7.3",
     "mavon-editor": "^2.6.17",
@@ -68,7 +68,6 @@
     "vue-template-compiler": "^2.5.13",
     "webpack": "^3.10.0",
     "webpack-dev-server": "^2.10.1",
-    "webpack-merge": "^4.1.1",
-    "webpack-uglify-parallel": "^0.1.4"
+    "webpack-merge": "^4.1.1"
   }
 }

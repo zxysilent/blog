@@ -69,8 +69,7 @@ export default {
                 content: "登陆成功",
                 onClose: () => {
                   util.setToken(res.data);
-                  this.$store.commit("updateMenulist");
-                  that.$router.push({ name: "home_index" });
+                  that.$router.push({ name: "home" });
                 }
               });
             } else {

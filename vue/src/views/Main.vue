@@ -7,28 +7,26 @@
             <div class="sidebar-menu-con">
                 <div class="logo-con">
                     <img src="../images/logo.png" alt="" srcset="">
-                    <div class="heaser-user">{{ user.name }}</div>
+                    <div class="header-user">{{ user.name }}</div>
                     <div class="header-top-con">
-                        <Tooltip content="主页" placement="bottom">
-                            <router-link to="/home" tag="span">
-                                <Icon type="ios-home-outline" size="20" />
-                            </router-link>
+                        <Tooltip content="前台主页" placement="bottom">
+                           <a href="/" target="_blank"><Icon type="md-paper-plane" size="20" /></a>
                         </Tooltip>
                         <Divider type="vertical" />
                         <Tooltip content="个人中心" placement="bottom">
                             <router-link to="/self" tag="span">
-                                <Icon type="ios-person-outline" size="20" />
+                                <Icon type="ios-person" size="20" />
                             </router-link>
                         </Tooltip>
                         <Divider type="vertical" />
                         <Tooltip content="退出登陆" placement="bottom">
-                            <Icon type="ios-log-out" size="20" @click="logout" />
+                            <Icon type="md-log-out" size="20" @click="logout" />
                         </Tooltip>
                     </div>
                 </div>
-                <Menu :active-name="$route.name" :open-names="$route.name.split('-')" width="auto" accordion>
-                    <!-- <MenuItem name="home"  to="/home">
-                    <Icon type="ios-home-outline" /> 主页</MenuItem> -->
+                <Menu :active-name="$route.name" :open-names="$route.name.split('-')" theme="dark" width="auto" accordion>
+                    <MenuItem name="home" to="/home">
+                    <Icon type="ios-home-outline" /> 管理主页</MenuItem>
                     <Submenu name="post">
                         <template slot="title">
                             <Icon type="ios-megaphone-outline" />
@@ -36,7 +34,7 @@
                         </template>
                         <MenuItem name="post-list" to="/post/list">
                         <Icon type="ios-list-box-outline" />文章列表</MenuItem>
-                        <MenuItem name="post-add"  to="/post/add">
+                        <MenuItem name="post-add" to="/post/add">
                         <Icon type="ios-add-circle-outline" />添加文章</MenuItem>
                     </Submenu>
                     <Submenu name="page">
@@ -44,7 +42,7 @@
                             <Icon type="ios-map-outline" />
                             页面管理
                         </template>
-                        <MenuItem name="page-list"  to="/page/list">
+                        <MenuItem name="page-list" to="/page/list">
                         <Icon type="ios-list-box-outline" />页面列表</MenuItem>
                         <MenuItem name="page-add" to="/page/add">
                         <Icon type="ios-add-circle-outline" />添加页面</MenuItem>
@@ -66,7 +64,7 @@
                         </template>
                         <MenuItem name="tag-list" to="/tag/list">
                         <Icon type="ios-list-box-outline" />标签列表</MenuItem>
-                        <MenuItem name="tag-add"  to="/tag/add">
+                        <MenuItem name="tag-add" to="/tag/add">
                         <Icon type="ios-add-circle-outline" />添加标签</MenuItem>
                     </Submenu>
                     <Submenu name="setting">

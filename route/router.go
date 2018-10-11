@@ -29,7 +29,7 @@ func Run(addr string) {
 	engine.GET(`/post/*`, control.PostView)
 	engine.GET(`/page/*`, control.PageView)
 	engine.File(`/favicon.ico`, "favicon.ico")
-	engine.File(`/login`, "res/index.html")
+	engine.File(`/core`, "res/dist/index.html")
 
 	engine.GET(`/user/exist/:num`, control.UserExist)
 	engine.POST(`/login`, control.UserLogin)

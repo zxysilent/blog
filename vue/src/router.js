@@ -1,7 +1,7 @@
 import Main from "@/views/Main.vue";
 
 // 不作为Main组件的子页面展示的页面单独写，如下
-export const loginRouter = {
+const loginRouter = {
   path: "/login",
   name: "login",
   meta: {
@@ -10,7 +10,7 @@ export const loginRouter = {
   component: () => import("@/views/login.vue")
 };
 
-export const page404 = {
+const page404 = {
   path: "/*",
   name: "error-404",
   meta: {
@@ -19,7 +19,7 @@ export const page404 = {
   component: () => import("@/views/error/404.vue")
 };
 
-export const page40x = {
+const page40x = {
   path: "/40x",
   meta: {
     title: "登陆失效"
@@ -28,7 +28,7 @@ export const page40x = {
   component: () => import("@/views/error/40x.vue")
 };
 
-export const page50x = {
+const page50x = {
   path: "/50x",
   meta: {
     title: "50x-服务端错误"
@@ -38,7 +38,7 @@ export const page50x = {
 };
 
 // 作为Main组件的子页面展示但是不在左侧菜单显示的路由写在otherRouter里
-export const otherRouter = {
+const otherRouter = {
   path: "/",
   name: "otherRouter",
   redirect: "/home",
@@ -47,9 +47,9 @@ export const otherRouter = {
     {
       path: "home",
       meta: {
-        title: "主页"
+        title: "管理主页"
       },
-      name: "home_index",
+      name: "home",
       component: () => import("@/views/home/home.vue")
     },
     {
@@ -64,7 +64,7 @@ export const otherRouter = {
 };
 
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
-export const appRouter = [
+const appRouter = [
   {
     path: "/post",
     name: "component",
@@ -208,7 +208,8 @@ export const appRouter = [
           title: "基本设置"
         },
         name: "test",
-        component: () => import("@/views/my-components/image-editor/image-editor.vue")
+        component: () =>
+          import("@/views/my-components/image-editor/image-editor.vue")
       },
       {
         path: "comment",
@@ -261,7 +262,7 @@ export const appRouter = [
 ];
 
 // 所有上面定义的路由都要写在下面的routers里
-export const routers = [
+const routers = [
   loginRouter,
   otherRouter,
   ...appRouter,
@@ -269,3 +270,4 @@ export const routers = [
   page40x,
   page404
 ];
+export default routers;
