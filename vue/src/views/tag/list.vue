@@ -90,7 +90,7 @@ export default {
 								on: {
 									click: () => {
 										this.showEdit = true;
-										this.pageId = data.row;
+										this.editForm = data.row;
 									}
 								}
 							}),
