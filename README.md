@@ -27,3 +27,15 @@
     - 开发运行 ``` npm run dev ```
     - 浏览器打开 [http://127.0.0.1:8080/](http://127.0.0.1:8080/)
     - 发布 ```npm run build ``` 会自动发布到 ```res/dist```目录下面
+### 效果展示
+### 前台
+![image](./data/imgs/front-0.png)
+![image](./data/imgs/front-1.png)
+![image](./data/imgs/front-2.png)
+### 后台
+![image](./data/imgs/backend-0.png)
+![image](./data/imgs/backend-1.png)
+![image](./data/imgs/backend-2.png)
+![image](./data/imgs/backend-3.png)
+![image](./data/imgs/backend-4.png)
+![image](./data/imgs/backend-5.png)
