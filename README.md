@@ -21,9 +21,11 @@
 git clone https://github.com/zxysilent/blog.git
 ```
 主要若要部署，请修改关键信息[jwt、用户名、密码等]
+数据库自带文章内容请在部署前删除
 ####  运行服务
 - 配置```conf.json```数据库信息
 - 还原 ```data```目录下 ```z_blog.sql``` 数据库
+数据库自带文章内容请在部署前删除
 - 安装依赖
 - ```go run```  
 ####  运行后台
