@@ -16,9 +16,9 @@ import (
 func UserExist(ctx echo.Context) error {
 	num := ctx.Param("num")
 	if !model.UserExist(num) {
-		return ctx.Res(util.NewErrOpt(`当前账号不存在`))
+		return ctx.JSON(util.NewErrOpt(`当前账号不存在`))
 	}
-	return ctx.Res(util.NewSucc(`当前账号存在`))
+	return ctx.JSON(util.NewSucc(`当前账号存在`))
 }
 
 // UserAdd doc
@@ -35,11 +35,11 @@ func UserExist(ctx echo.Context) error {
 // 	}{}
 // 	err := ctx.Bind(ipt)
 // 	if err != nil {
-// 		return ctx.Res(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+// 		return ctx.JSON(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 // 	}
 
 // 	if len(ipt.Roles) == 0 {
-// 		return ctx.Res(util.NewErrIpt(`请至少选择一个权限`))
+// 		return ctx.JSON(util.NewErrIpt(`请至少选择一个权限`))
 // 	}
 // 	ipt.Ctime = time.Now()
 // 	role := model.UserBaseRole()
@@ -49,9 +49,9 @@ func UserExist(ctx echo.Context) error {
 // 	ipt.User.Role = role
 // 	ipt.User.Pass = ipt.Pass
 // 	if !model.UserAdd(&ipt.User) {
-// 		return ctx.Res(util.NewFail(`用户信息添加失败`))
+// 		return ctx.JSON(util.NewFail(`用户信息添加失败`))
 // 	}
-// 	return ctx.Res(util.NewSucc(`用户信息添加成功`))
+// 	return ctx.JSON(util.NewSucc(`用户信息添加成功`))
 // }
 
 // UserPage doc
@@ -67,25 +67,25 @@ func UserExist(ctx echo.Context) error {
 // 	auth := ctx.Get("auth").(*model.JwtClaims)
 // 	rl, err := ctx.ParamInt("rl")
 // 	if err != nil {
-// 		return ctx.Res(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+// 		return ctx.JSON(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 // 	}
 // 	if rl > 29 || rl < 27 {
-// 		return ctx.Res(util.NewErrIpt(`数据输入错误,请重试`, "范围27-29"))
+// 		return ctx.JSON(util.NewErrIpt(`数据输入错误,请重试`, "范围27-29"))
 // 	}
 // 	ipt := &model.Page{}
 // 	err = ctx.Bind(ipt)
 // 	if err != nil {
-// 		return ctx.Res(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+// 		return ctx.JSON(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 // 	}
 // 	count := model.UserCount(rl, auth.Role)
 // 	if count == 0 {
-// 		return ctx.Res(util.NewErrOpt(`未查询到用户信息,请重试`))
+// 		return ctx.JSON(util.NewErrOpt(`未查询到用户信息,请重试`))
 // 	}
 // 	mods, err := model.UserPage(rl, auth.Role, ipt.Pi, ipt.Ps)
 // 	if err != nil {
-// 		return ctx.Res(util.NewErrOpt(`未查询到用户信息,请重试`, err.Error()))
+// 		return ctx.JSON(util.NewErrOpt(`未查询到用户信息,请重试`, err.Error()))
 // 	}
-// 	return ctx.Res(util.NewPage(`用户信息`, mods, count))
+// 	return ctx.JSON(util.NewPage(`用户信息`, mods, count))
 // }
 
 // UserChgatv doc
@@ -98,13 +98,13 @@ func UserExist(ctx echo.Context) error {
 // func UserChgatv(ctx echo.Context) error {
 // 	id, err := ctx.ParamInt("id")
 // 	if err != nil {
-// 		return ctx.Res(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+// 		return ctx.JSON(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 // 	}
 // 	auth := ctx.Get("auth").(*model.JwtClaims)
 // 	if model.UserChgatv(id, auth.Role) {
-// 		return ctx.Res(util.NewSucc("用户状态更新成功"))
+// 		return ctx.JSON(util.NewSucc("用户状态更新成功"))
 // 	}
-// 	return ctx.Res(util.NewFail("用户状态更新失败"))
+// 	return ctx.JSON(util.NewFail("用户状态更新失败"))
 // }
 
 // UserResetPass doc
@@ -117,13 +117,13 @@ func UserExist(ctx echo.Context) error {
 // func UserResetPass(ctx echo.Context) error {
 // 	id, err := ctx.ParamInt("id")
 // 	if err != nil {
-// 		return ctx.Res(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+// 		return ctx.JSON(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 // 	}
 // 	auth := ctx.Get("auth").(*model.JwtClaims)
 // 	if model.UserPass(id, "33d7be2196ff70efaf6913fc8bdcab", auth.Role) {
-// 		return ctx.Res(util.NewSucc("用户密码重置成功"))
+// 		return ctx.JSON(util.NewSucc("用户密码重置成功"))
 // 	}
-// 	return ctx.Res(util.NewFail("用户密码重置失败"))
+// 	return ctx.JSON(util.NewFail("用户密码重置失败"))
 // }
 
 // UserEdit doc
@@ -139,11 +139,11 @@ func UserEdit(ctx echo.Context) error {
 	}{}
 	err := ctx.Bind(ipt)
 	if err != nil {
-		return ctx.Res(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 
 	if len(ipt.Roles) == 0 {
-		return ctx.Res(util.NewErrIpt(`请至少选择一个权限`))
+		return ctx.JSON(util.NewErrIpt(`请至少选择一个权限`))
 	}
 	role := model.UserBaseRole()
 	for idx := range ipt.Roles {
@@ -152,9 +152,9 @@ func UserEdit(ctx echo.Context) error {
 	//ipt.User.Role = role
 	//auth := ctx.Get("auth").(*model.JwtClaims)
 	// if !model.UserEdit(&ipt.User, auth.Role, "Name", "Phone", "Email", "Desc", "Role") {
-	// 	return ctx.Res(util.NewFail(`用户信息修改失败`))
+	// 	return ctx.JSON(util.NewFail(`用户信息修改失败`))
 	// }
-	return ctx.Res(util.NewSucc(`用户信息修改成功`))
+	return ctx.JSON(util.NewSucc(`用户信息修改成功`))
 }
 
 // UserDel doc
@@ -167,13 +167,13 @@ func UserEdit(ctx echo.Context) error {
 // func UserDel(ctx echo.Context) error {
 // 	id, err := ctx.ParamInt("id")
 // 	if err != nil {
-// 		return ctx.Res(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+// 		return ctx.JSON(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 // 	}
 // 	auth := ctx.Get("auth").(*model.JwtClaims)
 // 	if !model.UserDel(id, auth.Role) {
-// 		return ctx.Res(util.NewFail(`用户信息删除失败,请重试`))
+// 		return ctx.JSON(util.NewFail(`用户信息删除失败,请重试`))
 // 	}
-// 	return ctx.Res(util.NewSucc(`用户信息删除成功`))
+// 	return ctx.JSON(util.NewSucc(`用户信息删除成功`))
 // }
 
 // UserPass 修改自己的密码
@@ -188,19 +188,19 @@ func UserPass(ctx echo.Context) error {
 	}{}
 	err := ctx.Bind(&ipt)
 	if err != nil {
-		return ctx.Res(util.NewFail(`输入数据有误`, err.Error()))
+		return ctx.JSON(util.NewFail(`输入数据有误`, err.Error()))
 	}
 	mod, has := model.UserGet(ctx.Get("uid").(int))
 	if !has {
-		return ctx.Res(util.NewFail(`输入数据有误,请重试`))
+		return ctx.JSON(util.NewFail(`输入数据有误,请重试`))
 	}
 	if mod.Pass != ipt.Opass {
-		return ctx.Res(util.NewFail(`原始密码输入错误,请重试`))
+		return ctx.JSON(util.NewFail(`原始密码输入错误,请重试`))
 	}
 	if !model.UserPass(mod.Id, ipt.Npass) {
-		return ctx.Res(util.NewFail(`密码修改失败`))
+		return ctx.JSON(util.NewFail(`密码修改失败`))
 	}
-	return ctx.Res(util.NewSucc(`密码修改成功`))
+	return ctx.JSON(util.NewSucc(`密码修改成功`))
 }
 
 // UserEditSelf 修改个人信息
@@ -208,10 +208,10 @@ func UserEditSelf(ctx echo.Context) error {
 	mod := &model.User{}
 	err := ctx.Bind(mod)
 	if err != nil {
-		return ctx.Res(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.UserEdit(mod, 0, "Name", "Email") {
-		return ctx.Res(util.NewFail(`用户信息修改失败`))
+		return ctx.JSON(util.NewFail(`用户信息修改失败`))
 	}
-	return ctx.Res(util.NewSucc(`用户信息修改成功`))
+	return ctx.JSON(util.NewSucc(`用户信息修改成功`))
 }

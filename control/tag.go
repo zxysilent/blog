@@ -58,12 +58,12 @@ func TagPostView(ctx echo.Context) error {
 func TagAll(ctx echo.Context) error {
 	mods, err := model.TagAll()
 	if err != nil {
-		return ctx.Res(util.NewErrOpt(`未查询到标签信息`, err.Error()))
+		return ctx.JSON(util.NewErrOpt(`未查询到标签信息`, err.Error()))
 	}
 	if len(mods) < 1 {
-		return ctx.Res(util.NewErrOpt(`未查询到标签信息`, "len"))
+		return ctx.JSON(util.NewErrOpt(`未查询到标签信息`, "len"))
 	}
-	return ctx.Res(util.NewSucc(`分类信息`, mods))
+	return ctx.JSON(util.NewSucc(`分类信息`, mods))
 }
 
 // TagAdd 添加标签
@@ -71,12 +71,12 @@ func TagAdd(ctx echo.Context) error {
 	ipt := &model.Tag{}
 	err := ctx.Bind(ipt)
 	if err != nil {
-		return ctx.Res(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.TagAdd(ipt) {
-		return ctx.Res(util.NewFail(`添加标签失败,请重试`))
+		return ctx.JSON(util.NewFail(`添加标签失败,请重试`))
 	}
-	return ctx.Res(util.NewSucc(`添加标签成功`))
+	return ctx.JSON(util.NewSucc(`添加标签成功`))
 }
 
 // TagEdit 修改标签
@@ -84,23 +84,23 @@ func TagEdit(ctx echo.Context) error {
 	ipt := &model.Tag{}
 	err := ctx.Bind(ipt)
 	if err != nil {
-		return ctx.Res(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.TagEdit(ipt) {
-		return ctx.Res(util.NewFail(`标签修改失败`))
+		return ctx.JSON(util.NewFail(`标签修改失败`))
 	}
-	return ctx.Res(util.NewSucc(`标签修改成功`))
+	return ctx.JSON(util.NewSucc(`标签修改成功`))
 }
 
 // TagDel  删除标签
 func TagDel(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
-		return ctx.Res(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.TagDel(id) {
-		return ctx.Res(util.NewFail(`标签删除失败,请重试`))
+		return ctx.JSON(util.NewFail(`标签删除失败,请重试`))
 	}
 	model.TagPostDels(id)
-	return ctx.Res(util.NewSucc(`标签删除成功`))
+	return ctx.JSON(util.NewSucc(`标签删除成功`))
 }

@@ -22,21 +22,21 @@ func UserLogin(ctx echo.Context) error {
 	}{}
 	err := ctx.Bind(&ipt)
 	if err != nil {
-		return ctx.Res(util.NewErrIpt(`请输入用户名和密码`, err.Error()))
+		return ctx.JSON(util.NewErrIpt(`请输入用户名和密码`, err.Error()))
 	}
 	fmt.Println(ipt)
 	if ipt.Num == "" && len(ipt.Num) > 18 {
-		return ctx.Res(util.NewErrIpt(`请输入正确的用户名`))
+		return ctx.JSON(util.NewErrIpt(`请输入正确的用户名`))
 	}
 	mod, has := model.UserByNum(ipt.Num)
 	if !has {
-		return ctx.Res(util.NewErrOpt(`用户名输入错误`))
+		return ctx.JSON(util.NewErrOpt(`用户名输入错误`))
 	}
 	if !mod.Role.IsAtv() {
-		return ctx.Res(util.NewFail(`当前账号已被禁用`))
+		return ctx.JSON(util.NewFail(`当前账号已被禁用`))
 	}
 	if mod.Pass != ipt.Pass {
-		return ctx.Res(util.NewFail(`密码输入错误`))
+		return ctx.JSON(util.NewFail(`密码输入错误`))
 	}
 	claims := model.JwtClaims{
 		Id:   mod.Id,
@@ -52,10 +52,10 @@ func UserLogin(ctx echo.Context) error {
 	// Generate encoded token and send it as response.
 	jwtStr, err := token.SignedString([]byte("zxy.sil.ent"))
 	if err != nil {
-		return ctx.Res(util.NewFail(`凭证生成失败,请重试`, err.Error()))
+		return ctx.JSON(util.NewFail(`凭证生成失败,请重试`, err.Error()))
 	}
 	model.UserEditLogin(mod.Id, ctx.RealIP())
-	return ctx.Res(util.NewSucc(`登陆成功`, jwtStr))
+	return ctx.JSON(util.NewSucc(`登陆成功`, jwtStr))
 }
 
 // UserLogout doc
@@ -70,18 +70,18 @@ func UserLogout(ctx echo.Context) error {
 // UserAuth 登陆信息
 func UserAuth(ctx echo.Context) error {
 	mod, _ := model.UserGet(ctx.Get("uid").(int))
-	return ctx.Res(util.NewSucc(`信息`, mod))
+	return ctx.JSON(util.NewSucc(`信息`, mod))
 }
 
 // Upload 上传文件
 func Upload(ctx echo.Context) error {
 	file, err := ctx.FormFile("file")
 	if err != nil {
-		return ctx.Res(util.NewErrIpt(`未发现文件,请重试`, err.Error()))
+		return ctx.JSON(util.NewErrIpt(`未发现文件,请重试`, err.Error()))
 	}
 	src, err := file.Open()
 	if err != nil {
-		return ctx.Res(util.NewErrIpt(`文件打开失败,请重试`, err.Error()))
+		return ctx.JSON(util.NewErrIpt(`文件打开失败,请重试`, err.Error()))
 	}
 	defer src.Close()
 	basePath := "res/upimg/" + time.Now().Format(util.FmtyyyyMMdd) + "/"
@@ -91,11 +91,11 @@ func Upload(ctx echo.Context) error {
 	filePathName := basePath + fileName
 	dst, err := os.Create(filePathName)
 	if err != nil {
-		return ctx.Res(util.NewErrIpt(`目标文件创建失败,请重试`, err.Error()))
+		return ctx.JSON(util.NewErrIpt(`目标文件创建失败,请重试`, err.Error()))
 	}
 	defer dst.Close()
 	if _, err = io.Copy(dst, src); err != nil {
-		return ctx.Res(util.NewErrIpt(`文件写入失败,请重试`, err.Error()))
+		return ctx.JSON(util.NewErrIpt(`文件写入失败,请重试`, err.Error()))
 	}
-	return ctx.Res(util.NewSucc(`文件上传成功`, "/"+filePathName))
+	return ctx.JSON(util.NewSucc(`文件上传成功`, "/"+filePathName))
 }

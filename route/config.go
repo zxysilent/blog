@@ -16,7 +16,7 @@ import (
 
 // HTTPErrorHandler 全局错误捕捉
 func HTTPErrorHandler(err error, ctx echo.Context) {
-	ctx.JSON(200, util.NewErrSvr(err.Error()))
+	ctx.JSON(util.NewErrSvr(err.Error()))
 }
 
 // 日志格式配置
@@ -93,7 +93,7 @@ func midJwt(next echo.HandlerFunc) echo.HandlerFunc {
 			// header 查找token
 			tokenString = ctx.Request().Header.Get(echo.HeaderAuthorization)
 			if tokenString == "" {
-				ctx.Res(util.NewErrJwt(`未发现jwt认证信息`))
+				ctx.JSON(util.NewErrJwt(`未发现jwt认证信息`))
 				return nil
 			}
 			// Bearer token
@@ -107,7 +107,7 @@ func midJwt(next echo.HandlerFunc) echo.HandlerFunc {
 			ctx.Set("auth", jwtAuth)
 			ctx.Set("uid", jwtAuth.Id)
 		} else {
-			return ctx.Res(util.NewErrJwt(`对不起，请重新登陆^_^!","jwt验证失败`))
+			return ctx.JSON(util.NewErrJwt(`对不起，请重新登陆^_^!","jwt验证失败`))
 		}
 		ctx.Response().Header().Set(echo.HeaderServer, "dev ")
 		return next(ctx)
@@ -124,6 +124,6 @@ func midJwt(next echo.HandlerFunc) echo.HandlerFunc {
 // 		if auth.Role.Gte(27) { //大于等于某个权限
 // 			return next(ctx)
 // 		}
-// 		return ctx.Res(util.NewErrDeny(`对不起，你无法进行操作^_^!`, "当前用户无后台管理权限"))
+// 		return ctx.JSON(util.NewErrDeny(`对不起，你无法进行操作^_^!`, "当前用户无后台管理权限"))
 // 	}
 // }

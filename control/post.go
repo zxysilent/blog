@@ -34,7 +34,7 @@ func PostView(ctx echo.Context) error {
 				"HasCate": mod.Cate != nil,
 			})
 		}
-		return ctx.Res(util.NewSucc("", mod))
+		return ctx.JSON(util.NewSucc("", mod))
 	}
 	return nil
 }
@@ -44,38 +44,38 @@ func PostView(ctx echo.Context) error {
 func PostGet(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
-		return ctx.Res(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	mod, has := model.PostGet(id)
 	if !has {
-		return ctx.Res(util.NewErrOpt(`未查询信息`))
+		return ctx.JSON(util.NewErrOpt(`未查询信息`))
 	}
-	return ctx.Res(util.NewSucc(`信息`, mod))
+	return ctx.JSON(util.NewSucc(`信息`, mod))
 }
 
 // PostPageAll 页面列表
 func PostPageAll(ctx echo.Context) error {
 	mods, err := model.PostPageAll()
 	if err != nil {
-		return ctx.Res(util.NewErrOpt(`未查询到页面信息`, err.Error()))
+		return ctx.JSON(util.NewErrOpt(`未查询到页面信息`, err.Error()))
 	}
 	if len(mods) < 1 {
-		return ctx.Res(util.NewErrOpt(`未查询到页面信息`, "len"))
+		return ctx.JSON(util.NewErrOpt(`未查询到页面信息`, "len"))
 	}
-	return ctx.Res(util.NewSucc(`页面信息`, mods))
+	return ctx.JSON(util.NewSucc(`页面信息`, mods))
 }
 
 // PostTagIds 通过文章id 获取 标签ids
 func PostTagIds(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
-		return ctx.Res(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	mods := model.PostTagIds(id)
 	if mods == nil {
-		return ctx.Res(util.NewErrOpt(`未查询到标签信息`))
+		return ctx.JSON(util.NewErrOpt(`未查询到标签信息`))
 	}
-	return ctx.Res(util.NewSucc(`标签ids`, mods))
+	return ctx.JSON(util.NewSucc(`标签ids`, mods))
 }
 
 // PostOpts 文章操作
@@ -88,10 +88,10 @@ func PostOpts(ctx echo.Context) error {
 	}{}
 	err := ctx.Bind(ipt)
 	if err != nil {
-		return ctx.Res(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !ipt.Edit && model.PostExist(ipt.Post.Path) {
-		return ctx.Res(util.NewErrIpt(`当前访问路径已经存在,请重新输入`))
+		return ctx.JSON(util.NewErrIpt(`当前访问路径已经存在,请重新输入`))
 	}
 	// 同步类型
 	ipt.Post.Type = ipt.Type
@@ -137,14 +137,14 @@ func PostOpts(ctx echo.Context) error {
 				model.PostTagDels(ipt.Post.Id, del)
 				// 添加标签
 				model.TagPostAdds(&tagAdds)
-				return ctx.Res(util.NewSucc(`文章修改成功`))
+				return ctx.JSON(util.NewSucc(`文章修改成功`))
 			}
-			return ctx.Res(util.NewSucc(`页面修改成功`))
+			return ctx.JSON(util.NewSucc(`页面修改成功`))
 		}
 		if ipt.Type == 0 {
-			return ctx.Res(util.NewFail(`文章修改失败,请重试`))
+			return ctx.JSON(util.NewFail(`文章修改失败,请重试`))
 		}
-		return ctx.Res(util.NewFail(`页面修改失败,请重试`))
+		return ctx.JSON(util.NewFail(`页面修改失败,请重试`))
 	}
 	// 添加 文章/页面
 	ipt.Post.UpdateTime = time.Now()
@@ -161,14 +161,14 @@ func PostOpts(ctx echo.Context) error {
 				})
 			}
 			model.TagPostAdds(&tagPosts)
-			return ctx.Res(util.NewSucc(`文章添加成功`))
+			return ctx.JSON(util.NewSucc(`文章添加成功`))
 		}
-		return ctx.Res(util.NewSucc(`页面添加成功`))
+		return ctx.JSON(util.NewSucc(`页面添加成功`))
 	}
 	if ipt.Type == 0 {
-		return ctx.Res(util.NewFail(`文章添加失败,请重试`))
+		return ctx.JSON(util.NewFail(`文章添加失败,请重试`))
 	}
-	return ctx.Res(util.NewFail(`页面添加失败,请重试`))
+	return ctx.JSON(util.NewFail(`页面添加失败,请重试`))
 }
 func similar(a, b string) int {
 	if a[:4] == b[:4] {
