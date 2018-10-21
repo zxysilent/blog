@@ -17,7 +17,10 @@
 - [ ] 评论
 - [ ] 待计划
 ### 使用方式
-    下载代码
+```
+git clone https://github.com/zxysilent/blog.git
+```
+主要若要部署，请修改关键信息[jwt、用户名、密码等]
 ####  运行服务
 - 配置```conf.json```数据库信息
 - 还原 ```data```目录下 ```z_blog.sql``` 数据库
