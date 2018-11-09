@@ -17,7 +17,7 @@ util.cfgUpload =
     : "http://127.0.0.1:88/upload";
 
 // 登陆失效默认页面
-util.defURL = "/#/login";
+util.defURL = "/core";
 //保存数据
 util.setData = (k, v) => {
   localStorage.setItem(k, v);
