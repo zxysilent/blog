@@ -10,7 +10,7 @@
                     <Input v-model="base.title" search enter-button="确    定" @on-search="cmtSave('title')"></Input>
                 </FormItem>
                 <FormItem label="Logo" prop="logo_url">
-                    <Input v-model="base.logo_url" readonly search enter-button="编    辑" @on-search="clkLogo"></Input>
+                    <Input v-model="base.logo_url" readonly search enter-button="确    定" @on-search="cmtSave('logo_url')"></Input>
                     尺寸最好为 140x140px。
                 </FormItem>
                 <FormItem label="站点描述" prop="description">
