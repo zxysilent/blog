@@ -18,6 +18,7 @@ func Run(addr string) {
 	engine.HTTPErrorHandler = HTTPErrorHandler
 	engine.Static(`/res`, "res")
 	engine.Static(`/static`, "static")
+	engine.File(`/core/*`, "res/dist/index.html")
 
 	engine.GET(`/`, control.IndexView)
 	engine.GET(`/archives`, control.ArchivesView)
@@ -29,7 +30,6 @@ func Run(addr string) {
 	engine.GET(`/post/*`, control.PostView)
 	engine.GET(`/page/*`, control.PageView)
 	engine.File(`/favicon.ico`, "favicon.ico")
-	engine.File(`/core`, "res/dist/index.html")
 
 	engine.GET(`/user/exist/:num`, control.UserExist)
 	engine.POST(`/login`, control.UserLogin)
@@ -51,6 +51,7 @@ func Run(addr string) {
 	adm.GET(`/post/get/:id`, control.PostGet)
 	adm.GET(`/post/tag/ids/:id`, control.PostTagIds)
 	adm.POST(`/post/opts`, control.PostOpts)
+	adm.GET(`/post/del/:id`, control.PostDel)
 
 	adm.GET(`/page/all`, control.PostPageAll)
 

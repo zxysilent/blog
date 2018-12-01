@@ -219,3 +219,16 @@ func getTocHTML(html string) string {
 	sb.WriteString(`</ul></div>`)
 	return sb.String() + html
 }
+
+// PostDel  删除
+func PostDel(ctx echo.Context) error {
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		return ctx.JSON(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+	}
+	if !model.PostDel(id) {
+		return ctx.JSON(util.NewFail(`删除失败,请重试`))
+	}
+	model.TagPostDels(id)
+	return ctx.JSON(util.NewSucc(`删除成功`))
+}

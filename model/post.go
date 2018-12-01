@@ -185,3 +185,17 @@ func PostAdd(mod *Post) bool {
 	sess.Commit()
 	return true
 }
+
+// PostDel 删除
+func PostDel(id int) bool {
+	sess := DB.NewSession()
+	defer sess.Close()
+	sess.Begin()
+	if affect, err := sess.ID(id).Delete(&Post{}); affect > 0 && err == nil {
+		sess.Commit()
+		DB.ClearCacheBean(&Post{}, string(id))
+		return true
+	}
+	sess.Rollback()
+	return false
+}

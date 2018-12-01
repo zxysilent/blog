@@ -20,7 +20,7 @@
 </template>
 <script>
 import { cateAll } from "@/api/cate";
-import { catePost, postGet, articleDel } from "@/api/post";
+import { catePost, postGet, postDel } from "@/api/post";
 export default {
   data() {
     return {
@@ -177,7 +177,7 @@ export default {
         title: "系统提示",
         content: "你确定要删除吗？",
         onOk: () => {
-          articleDel(data.row.id).then(resp => {
+          postDel(data.row.id).then(resp => {
             if (resp.code == 200) {
               this.$Message.success({
                 content: "删除成功",
