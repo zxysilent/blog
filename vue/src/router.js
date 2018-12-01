@@ -2,7 +2,7 @@ import Main from "@/views/Main.vue";
 
 // 不作为Main组件的子页面展示的页面单独写，如下
 const loginRouter = {
-  path: "/login",
+  path: "/core/login",
   name: "login",
   meta: {
     title: "Login - 登录"
@@ -11,7 +11,7 @@ const loginRouter = {
 };
 
 const page404 = {
-  path: "/*",
+  path: "/core/*",
   name: "error-404",
   meta: {
     title: "页面不存在"
@@ -20,7 +20,7 @@ const page404 = {
 };
 
 const page40x = {
-  path: "/40x",
+  path: "/core/40x",
   meta: {
     title: "登陆失效"
   },
@@ -29,7 +29,7 @@ const page40x = {
 };
 
 const page50x = {
-  path: "/50x",
+  path: "/core/50x",
   meta: {
     title: "50x-服务端错误"
   },
@@ -39,9 +39,9 @@ const page50x = {
 
 // 作为Main组件的子页面展示但是不在左侧菜单显示的路由写在otherRouter里
 const otherRouter = {
-  path: "/",
+  path: "/core/",
   name: "otherRouter",
-  redirect: "/home",
+  redirect: "/core/home",
   component: Main,
   children: [
     {
@@ -66,7 +66,7 @@ const otherRouter = {
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
 const appRouter = [
   {
-    path: "/post",
+    path: "/core/post",
     name: "component",
     meta: {
       title: "文章管理"
@@ -100,7 +100,7 @@ const appRouter = [
     ]
   },
   {
-    path: "/page",
+    path: "/core/page",
     name: "page",
     meta: {
       title: "页面管理"
@@ -134,7 +134,7 @@ const appRouter = [
     ]
   },
   {
-    path: "/cate",
+    path: "/core/cate",
     name: "cate",
     meta: {
       title: "分类管理"
@@ -160,7 +160,7 @@ const appRouter = [
     ]
   },
   {
-    path: "/tag",
+    path: "/core/tag",
     name: "tag",
     meta: {
       title: "标签管理"
@@ -186,7 +186,7 @@ const appRouter = [
     ]
   },
   {
-    path: "/setting",
+    path: "/core/setting",
     name: "setting",
     meta: {
       title: "系统设置",
@@ -203,7 +203,7 @@ const appRouter = [
         component: () => import("@/views/setting/base.vue")
       },
       {
-        path: "/test",
+        path: "/core/test",
         meta: {
           title: "基本设置"
         },
@@ -241,7 +241,7 @@ const appRouter = [
     ]
   },
   {
-    path: "/",
+    path: "/core/",
     icon: "ios-contact-outline",
     meta: {
       title: "个人中心"

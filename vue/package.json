@@ -4,7 +4,7 @@
   "description": "zxysilent blog admin",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server --content-base ./ --open --inline --hot --compress --config build/webpack.dev.config.js",
+    "dev": "webpack-dev-server --content-base ./ --open --inline --hot --compress --history-api-fallback --config build/webpack.dev.config.js",
     "build": "webpack --progress --hide-modules --config build/webpack.prod.config.js"
   },
   "repository": {

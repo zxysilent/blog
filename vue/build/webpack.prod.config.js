@@ -49,10 +49,6 @@ module.exports = merge(webpackBaseConfig, {
     new CopyWebpackPlugin([
       {
         from: "favicon.ico"
-      },
-      {
-        from: "src/styles/fonts",
-        to: "fonts"
       }
     ]),
     new HtmlWebpackPlugin({
