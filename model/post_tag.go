@@ -4,10 +4,10 @@ import "blog/util"
 
 //PostTag 文章标签
 type PostTag struct {
-	Id     int   `xorm:"not null pk autoincr INT(11)"`
-	PostId int   `xorm:"not null unique(post_tag) INT(11)"`
+	Id     int   `xorm:"pk autoincr INT(11)"`
+	PostId int   `xorm:"unique(post_tag) INT(11)"`
 	Post   *Post `xorm:"- <- ->"`
-	TagId  int   `xorm:"not null unique(post_tag) INT(11)"`
+	TagId  int   `xorm:"unique(post_tag) INT(11)"`
 	Tag    *Tag  `xorm:"- <- ->"`
 }
 

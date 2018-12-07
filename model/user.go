@@ -6,17 +6,17 @@ import (
 
 // User 用户
 type User struct {
-	Id         int       `xorm:"not null pk autoincr INT(11)" json:"id" form:"id"`
-	Num        string    `xorm:"not null default '''' unique VARCHAR(255)" json:"num" form:"num"`
-	Name       string    `xorm:"default 'NULL' VARCHAR(255)" json:"name" form:"name"`
-	Pass       string    `xorm:"not null default '''' VARCHAR(255)" json:"pass" form:"pass"`
-	Role       Role      `xorm:"not null default 1 comment('权限角色') INT(11)" json:"role" form:"role"`
-	Email      string    `xorm:"not null default '''' unique VARCHAR(255)" json:"email" form:"email"`
-	CreateTime time.Time `xorm:"not null DATETIME" json:"create_time" form:"create_time"`
-	LoginTime  time.Time `xorm:"not null DATETIME" json:"login_time" form:"login_time"`
-	LoginIp    string    `xorm:"not null default '''' VARCHAR(20)" json:"login_ip" form:"login_ip"`
-	AppKey     string    `xorm:"default 'NULL' VARCHAR(255)" json:"app_key" form:"app_key"`
-	AppSecret  string    `xorm:"default 'NULL' VARCHAR(255)" json:"app_secret" form:"app_secret"`
+	Id         int       `xorm:"pk autoincr INT(11)" json:"id" form:"id"`
+	Num        string    `xorm:"unique VARCHAR(255)" json:"num" form:"num"`
+	Name       string    `xorm:"VARCHAR(255)" json:"name" form:"name"`
+	Pass       string    `xorm:"VARCHAR(255)" json:"pass" form:"pass"`
+	Role       Role      `xorm:"INT(11)" json:"role" form:"role"`
+	Email      string    `xorm:"unique VARCHAR(255)" json:"email" form:"email"`
+	CreateTime time.Time `xorm:"DATETIME" json:"create_time" form:"create_time"`
+	LoginTime  time.Time `xorm:"DATETIME" json:"login_time" form:"login_time"`
+	LoginIp    string    `xorm:"VARCHAR(20)" json:"login_ip" form:"login_ip"`
+	AppKey     string    `xorm:"VARCHAR(255)" json:"app_key" form:"app_key"`
+	AppSecret  string    `xorm:"VARCHAR(255)" json:"app_secret" form:"app_secret"`
 }
 
 // Role 权限角色

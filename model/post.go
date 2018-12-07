@@ -7,23 +7,23 @@ import (
 
 // Post 文章
 type Post struct {
-	Id              int       `xorm:"not null pk autoincr INT(11)" json:"id" form:"id"`
-	UserId          int       `xorm:"not null INT(11)" json:"user_id" form:"user_id"`
-	CateId          int       `xorm:"not null unique(post_cate) INT(11)" json:"cate_id" form:"cate_id"`
+	Id              int       `xorm:"pk autoincr INT(11)" json:"id" form:"id"`
+	UserId          int       `xorm:"INT(11)" json:"user_id" form:"user_id"`
+	CateId          int       `xorm:"INT(11)" json:"cate_id" form:"cate_id"`
 	Cate            *Cate     `xorm:"- <- ->" json:"cate,omitempty" form:"cate"`
-	Type            int       `xorm:"not null default 0 comment('0 为文章，1 为页面') TINYINT(11)" json:"type" form:"type"`
-	Status          int       `xorm:"not null default 0 comment('0 为草稿，1 为待审核，2 为已拒绝，3 为已经发布') TINYINT(11)" json:"status" form:"status"`
-	Title           string    `xorm:"not null VARCHAR(255)" json:"title" form:"title"`
-	Path            string    `xorm:"not null default '''' comment('URL 的 path') VARCHAR(255)" json:"path" form:"path"`
-	Summary         string    `xorm:"not null comment('摘要') LONGTEXT" json:"summary,omitempty" form:"summary"`
-	MarkdownContent string    `xorm:"not null LONGTEXT" json:"markdown_content,omitempty" form:"markdown_content"`
-	Content         string    `xorm:"not null LONGTEXT" json:"content,omitempty" form:"content"`
-	AllowComment    bool      `xorm:"not null default 1 comment('1 为允许， 0 为不允许') TINYINT(4)" json:"allow_comment" form:"allow_comment"`
-	CreateTime      time.Time `xorm:"default 'NULL' index DATETIME" json:"create_time" form:"create_time"`
-	UpdateTime      time.Time `xorm:"not null DATETIME" json:"update_time" form:"update_time"`
-	IsPublic        bool      `xorm:"not null default 1 comment('1 为公开，0 为不公开') TINYINT(4)" json:"is_public" form:"is_public"`
-	CommentNum      int       `xorm:"not null default 0 INT(11)" json:"comment_num" form:"comment_num"`
-	Options         string    `xorm:"default 'NULL' comment('一些选项，JSON 结构') TEXT" json:"options,omitempty" form:"options"`
+	Type            int       `xorm:"TINYINT(11)" json:"type" form:"type"`     //0 为文章，1 为页面
+	Status          int       `xorm:"TINYINT(11)" json:"status" form:"status"` //'0 为草稿，1 为待审核，2 为已拒绝，3 为已经发布
+	Title           string    `xorm:"VARCHAR(255)" json:"title" form:"title"`
+	Path            string    `xorm:"unique VARCHAR(255)" json:"path" form:"path"`
+	Summary         string    `xorm:"LONGTEXT" json:"summary,omitempty" form:"summary"`
+	MarkdownContent string    `xorm:"LONGTEXT" json:"markdown_content,omitempty" form:"markdown_content"`
+	Content         string    `xorm:"LONGTEXT" json:"content,omitempty" form:"content"`
+	AllowComment    bool      `xorm:"TINYINT(4)" json:"allow_comment" form:"allow_comment"`
+	CreateTime      time.Time `xorm:"index DATETIME" json:"create_time" form:"create_time"`
+	UpdateTime      time.Time `xorm:"DATETIME" json:"update_time" form:"update_time"`
+	IsPublic        bool      `xorm:"TINYINT(4)" json:"is_public" form:"is_public"`
+	CommentNum      int       `xorm:"INT(11)" json:"comment_num" form:"comment_num"`
+	Options         string    `xorm:"TEXT" json:"options,omitempty" form:"options"`
 }
 
 // Archive 归档

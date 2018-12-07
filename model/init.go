@@ -71,20 +71,6 @@ type Config struct {
 	Addr  string `json:"addr"`
 }
 
-// Stat 统计信息
-type Stat struct {
-	Course int `xorm:"INT(11)" json:"course" form:"course"` //课程数
-	Period int `xorm:"INT(11)" json:"period" form:"period"` //课时数
-	Lib    int `xorm:"INT(11)" json:"lib" form:"lib"`       //题库数
-}
-
-// SysStat 统计信息
-func SysStat() *Stat {
-	mod := &Stat{}
-	DB.Sql("SELECT * FROM (SELECT COUNT(id) course FROM course)  a JOIN (SELECT COUNT(id) period FROM period ) b JOIN (SELECT COUNT(id) lib FROM lib ) c").Get(mod)
-	return mod
-}
-
 //Naver 上下页
 type Naver struct {
 	Prev string

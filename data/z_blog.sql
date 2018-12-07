@@ -10,7 +10,7 @@ Target Server Type    : MariaDB
 Target Server Version : 100311
 File Encoding         : 65001
 
-Date: 2018-12-07 13:10:24
+Date: 2018-12-07 13:19:09
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -87,6 +87,7 @@ CREATE TABLE `post` (
   `comment_num` int(11) NOT NULL DEFAULT 0,
   `options` text DEFAULT NULL COMMENT '一些选项，JSON 结构',
   PRIMARY KEY (`id`),
+  UNIQUE KEY `path` (`path`),
   KEY `create_time` (`create_time`)
 ) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8mb4;
 

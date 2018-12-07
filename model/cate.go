@@ -2,9 +2,9 @@ package model
 
 // Cate 分类
 type Cate struct {
-	Id    int    `xorm:"not null pk autoincr INT(11)" json:"id" form:"id"`
-	Name  string `xorm:"not null unique VARCHAR(64)" json:"name" form:"name"`
-	Intro string `xorm:"default 'NULL' VARCHAR(64)" json:"intro,omitempty" form:"intro"`
+	Id    int    `xorm:"pk autoincr INT(11)" json:"id" form:"id"`
+	Name  string `xorm:"unique VARCHAR(64)" json:"name" form:"name"`
+	Intro string `xorm:"VARCHAR(64)" json:"intro,omitempty" form:"intro"`
 }
 
 // CateIds 通过id返回新闻类别信息集合
