@@ -17,7 +17,6 @@ func Run(addr string) {
 	engine.HideBanner = true
 	engine.HTTPErrorHandler = HTTPErrorHandler
 	engine.Static(`/res`, "res")
-	engine.Static(`/static`, "static")
 	engine.File(`/core/*`, "res/dist/index.html")
 
 	engine.GET(`/`, control.IndexView)
