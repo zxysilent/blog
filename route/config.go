@@ -39,6 +39,7 @@ type TplRender struct {
 
 // Render renders a template document
 func (t *TplRender) Render(w io.Writer, name string, data interface{}, ctx echo.Context) error {
+	// 获取数据配置项
 	if mp, is := data.(map[string]interface{}); is {
 		mp["title"] = model.MapOpts.MustGet("title")
 		mp["favicon"] = model.MapOpts.MustGet("favicon")
@@ -52,6 +53,9 @@ func (t *TplRender) Render(w io.Writer, name string, data interface{}, ctx echo.
 		mp["github_url"] = model.MapOpts.MustGet("github_url")
 		mp["description"] = model.MapOpts.MustGet("description")
 	}
+	//开发模式
+	//每次强制读取模板
+	//每次强制加载函数
 	if model.Conf.Debug {
 		funcMap := template.FuncMap{"str2html": Str2html, "date": Date, "md5": Md5}
 		t.templates = template.Must(template.New("index.html").Funcs(funcMap).ParseFiles("view/index.html", "view/post.html", "view/page.html", "view/tags.html", "view/tag-post.html", "view/cate-post.html", "view/archive.html", "view/tpl-footer.html", "view/tpl-linker.html", "view/tpl-naver.html"))
@@ -76,6 +80,7 @@ func Md5(str string) string {
 	return hex.EncodeToString(ctx.Sum(nil))
 }
 
+// 初始化模板和函数
 func initRender() *TplRender {
 	funcMap := template.FuncMap{"str2html": Str2html, "date": Date, "md5": Md5}
 	tpl := template.Must(template.New("index.html").Funcs(funcMap).ParseFiles("view/index.html", "view/post.html", "view/page.html", "view/tags.html", "view/tag-post.html", "view/cate-post.html", "view/archive.html", "view/tpl-footer.html", "view/tpl-linker.html", "view/tpl-naver.html"))
@@ -93,7 +98,7 @@ func midJwt(next echo.HandlerFunc) echo.HandlerFunc {
 			// header 查找token
 			tokenString = ctx.Request().Header.Get(echo.HeaderAuthorization)
 			if tokenString == "" {
-				ctx.JSON(util.NewErrJwt(`未发现jwt认证信息`))
+				ctx.JSON(util.NewErrJwt(`请重新登陆`, `未发现jwt`))
 				return nil
 			}
 			// Bearer token
@@ -107,9 +112,10 @@ func midJwt(next echo.HandlerFunc) echo.HandlerFunc {
 			ctx.Set("auth", jwtAuth)
 			ctx.Set("uid", jwtAuth.Id)
 		} else {
-			return ctx.JSON(util.NewErrJwt(`对不起，请重新登陆^_^!","jwt验证失败`))
+			return ctx.JSON(util.NewErrJwt(`请重新登陆","jwt验证失败`))
 		}
-		ctx.Response().Header().Set(echo.HeaderServer, "dev ")
+		// 自定义头
+		ctx.Response().Header().Set(echo.HeaderServer, "dev")
 		return next(ctx)
 	}
 }
