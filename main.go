@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	route.Run(":88")
+	route.Run()
 }

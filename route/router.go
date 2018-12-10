@@ -2,13 +2,14 @@ package route
 
 import (
 	"blog/control"
+	"blog/model"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
 
 // Run 入口
-func Run(addr string) {
+func Run() {
 	engine := echo.New()
 	engine.Renderer = initRender()
 	engine.Use(middleware.Recover())
@@ -63,5 +64,5 @@ func Run(addr string) {
 	adm.GET(`/opts/base`, control.OptsBase)
 	adm.GET(`/opts/:key`, control.OptsGet)
 	adm.POST(`/opts/edit`, control.OptsEdit)
-	engine.Start(addr)
+	engine.Start(model.Conf.Addr)
 }

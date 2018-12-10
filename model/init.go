@@ -15,7 +15,7 @@ import (
 var DB *xorm.Engine
 
 // Conf 配置信息
-var Conf Config
+var Conf config
 
 func init() {
 	conf, err := os.Open("./conf.json")
@@ -64,8 +64,8 @@ type JwtClaims struct {
 	jwt.StandardClaims
 }
 
-// Config config
-type Config struct {
+// config config
+type config struct {
 	Debug bool   `json:"debug"`
 	Conn  string `json:"conn"`
 	Addr  string `json:"addr"`
