@@ -101,6 +101,7 @@ func TagDel(ctx echo.Context) error {
 	if !model.TagDel(id) {
 		return ctx.JSON(util.NewFail(`标签删除失败,请重试`))
 	}
+	// 删除标签相关联的数据
 	model.TagPostDels(id)
 	return ctx.JSON(util.NewSucc(`标签删除成功`))
 }
