@@ -18,6 +18,7 @@ var DB *xorm.Engine
 var Conf config
 
 func init() {
+	// 读取配置文件
 	conf, err := os.Open("./conf.json")
 	if err != nil {
 		log.Fatalln("配置文件读取失败", err.Error())
@@ -27,6 +28,7 @@ func init() {
 	if err != nil {
 		log.Fatalln("配置文件无效", err.Error())
 	}
+	// 初始化数据库操作的 Xorm
 	DB, err = xorm.NewEngine("mysql", Conf.Conn)
 	if err != nil {
 		log.Fatalln("数据库连接失败", err.Error())
@@ -36,7 +38,9 @@ func init() {
 	if err = DB.Ping(); err != nil {
 		log.Fatalln("数据库不能正常工作", err.Error())
 	}
+	// 更加开发环境是否显示sql执行的语句
 	DB.ShowSQL(Conf.Debug)
+	// 设置xorm缓存
 	cacher := xorm.NewLRUCacher(xorm.NewMemoryStore(), 1000)
 	DB.SetDefaultCacher(cacher)
 	// DB.Logger().SetLevel(0)
