@@ -49,7 +49,7 @@ git clone https://github.com/zxysilent/blog.git
 ![image](./data/imgs/backend-4.png)
 
 ## Donation
-If his project help you a lot, you can support us by:
+If this project help you a lot, you can support us by:
 
 AliPay
 
