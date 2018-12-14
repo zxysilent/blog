@@ -34,17 +34,27 @@ git clone https://github.com/zxysilent/blog.git
 - 浏览器打开 [http://127.0.0.1:8080/](http://127.0.0.1:8080/)
 - 发布 ```npm run build ``` 会自动发布到 ```res/dist```目录下面
 - 友链里面第一个为后台登陆地址默认用户名密码已经填写，可自行数据库修改
-### 渲染性能
+
+## 渲染性能
 ![image](./data/imgs/benchmark.png)
-### 效果展示
+## 效果展示
 ### 前台
 ![image](./data/imgs/front-0.png)
 ![image](./data/imgs/front-1.png)
 ![image](./data/imgs/front-2.png)
 ### 后台
-![image](./data/imgs/backend-0.png)
-![image](./data/imgs/backend-1.png)
+![image](./data/imgs/backend-0.png)![image](./data/imgs/backend-1.png)
 ![image](./data/imgs/backend-2.png)
 ![image](./data/imgs/backend-3.png)
 ![image](./data/imgs/backend-4.png)
-![image](./data/imgs/backend-5.png)
+
+## Donation
+If his project help you a lot, you can support us by:
+
+AliPay
+
+![image](./data/imgs/alipay.png)
+
+Wechat Pay
+
+![image](./data/imgs/wechatpay.png)
