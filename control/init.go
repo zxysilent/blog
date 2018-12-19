@@ -21,7 +21,7 @@ func IndexView(ctx echo.Context) error {
 	total := model.PostCount()
 	naver := model.Naver{}
 	if pi > 1 {
-		naver.Prev = "/?page=1"
+		naver.Prev = "/?page=" + strconv.Itoa(pi-1)
 	}
 	if total > (pi * ps) {
 		naver.Next = "/?page=" + strconv.Itoa(pi+1)
