@@ -2,11 +2,11 @@ package control
 
 import (
 	"blog/model"
-	"github.com/zxysilent/util"
 	"net/http"
 	"strconv"
 
 	"github.com/labstack/echo"
+	"github.com/zxysilent/util"
 )
 
 // IndexView 主页面

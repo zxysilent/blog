@@ -2,7 +2,6 @@ package control
 
 import (
 	"blog/model"
-	"github.com/zxysilent/util"
 	"net/http"
 	"regexp"
 	"strconv"
@@ -10,6 +9,7 @@ import (
 	"time"
 
 	"github.com/labstack/echo"
+	"github.com/zxysilent/util"
 )
 
 var reg = regexp.MustCompile(`<img src="([^" ]+)" alt="([^" ]*)"\s?\/?>`)

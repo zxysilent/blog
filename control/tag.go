@@ -5,9 +5,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/zxysilent/util"
-
 	"github.com/labstack/echo"
+	"github.com/zxysilent/util"
 )
 
 // TagsView 标签列表

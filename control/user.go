@@ -3,9 +3,8 @@ package control
 import (
 	"blog/model"
 
-	"github.com/zxysilent/util"
-
 	"github.com/labstack/echo"
+	"github.com/zxysilent/util"
 )
 
 // UserExist doc

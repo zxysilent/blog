@@ -8,10 +8,9 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/zxysilent/util"
-
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
+	"github.com/zxysilent/util"
 )
 
 // UserLogin 登陆

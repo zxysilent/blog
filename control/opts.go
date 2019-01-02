@@ -3,9 +3,8 @@ package control
 import (
 	"blog/model"
 
-	"github.com/zxysilent/util"
-
 	"github.com/labstack/echo"
+	"github.com/zxysilent/util"
 )
 
 // OptsGet 获取某个配置项

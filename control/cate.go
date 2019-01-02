@@ -5,9 +5,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/zxysilent/util"
-
 	"github.com/labstack/echo"
+	"github.com/zxysilent/util"
 )
 
 // CatePostView 标签文章列表
