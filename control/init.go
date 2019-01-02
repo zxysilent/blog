@@ -2,7 +2,7 @@ package control
 
 import (
 	"blog/model"
-	"blog/util"
+	"github.com/zxysilent/util"
 	"net/http"
 	"strconv"
 

@@ -1,6 +1,6 @@
 package model
 
-import "blog/util"
+import "github.com/zxysilent/util"
 
 //PostTag 文章标签
 type PostTag struct {

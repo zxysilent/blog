@@ -1,8 +1,9 @@
 package model
 
 import (
-	"blog/util"
 	"time"
+
+	"github.com/zxysilent/util"
 )
 
 // Post 文章

@@ -2,7 +2,8 @@ package control
 
 import (
 	"blog/model"
-	"blog/util"
+
+	"github.com/zxysilent/util"
 
 	"github.com/labstack/echo"
 )

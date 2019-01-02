@@ -2,12 +2,13 @@ package control
 
 import (
 	"blog/model"
-	"blog/util"
 	"fmt"
 	"io"
 	"os"
 	"path/filepath"
 	"time"
+
+	"github.com/zxysilent/util"
 
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"

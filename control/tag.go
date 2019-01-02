@@ -2,9 +2,10 @@ package control
 
 import (
 	"blog/model"
-	"blog/util"
 	"net/http"
 	"strconv"
+
+	"github.com/zxysilent/util"
 
 	"github.com/labstack/echo"
 )

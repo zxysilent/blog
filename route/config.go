@@ -2,7 +2,7 @@ package route
 
 import (
 	"blog/model"
-	"blog/util"
+	"github.com/zxysilent/util"
 	"crypto/md5"
 	"encoding/hex"
 	"html/template"
