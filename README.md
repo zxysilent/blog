@@ -30,7 +30,7 @@ git clone https://github.com/zxysilent/blog.git
 - ```go run```  
 ####  运行后台
 - 安装依赖 ``` npm install ```
-- 开发运行 ``` npm run dev ```
+- 开发运行 ``` npm run serve ```
 - 浏览器打开 [http://127.0.0.1:8080/](http://127.0.0.1:8080/)
 - 发布 ```npm run build ``` 会自动发布到 ```res/dist```目录下面
 - 友链里面第一个为后台登陆地址默认用户名密码已经填写，可自行数据库修改
