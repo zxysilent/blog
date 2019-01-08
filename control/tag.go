@@ -11,7 +11,7 @@ import (
 
 // TagsView 标签列表
 func TagsView(ctx echo.Context) error {
-	mods, err := model.TagAll()
+	mods, err := model.TagStateAll()
 	if err != nil {
 		return ctx.Redirect(302, "/")
 	}
@@ -102,6 +102,6 @@ func TagDel(ctx echo.Context) error {
 		return ctx.JSON(util.NewFail(`标签删除失败,请重试`))
 	}
 	// 删除标签相关联的数据
-	model.TagPostDels(id)
+	model.TagPostDel(id)
 	return ctx.JSON(util.NewSucc(`标签删除成功`))
 }

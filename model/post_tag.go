@@ -88,8 +88,8 @@ func TagPostAdds(mod *[]PostTag) bool {
 	return true
 }
 
-// TagPostDels 删除标签_文章
-func TagPostDels(tid int) bool {
+// TagPostDel 删除标签对应的标签_文章
+func TagPostDel(tid int) bool {
 	sess := DB.NewSession()
 	defer sess.Close()
 	sess.Begin()
@@ -102,7 +102,7 @@ func TagPostDels(tid int) bool {
 	return false
 }
 
-// PostTagDels 删除文章_标签
+// PostTagDels 删除文章对应的标签_文章 修改的时候 变更
 func PostTagDels(pid int, tids []int) bool {
 	if len(tids) < 1 {
 		return true
@@ -111,6 +111,20 @@ func PostTagDels(pid int, tids []int) bool {
 	defer sess.Close()
 	sess.Begin()
 	if affect, err := sess.Where("post_id = ?", pid).In("tag_id", tids).Delete(&PostTag{}); affect > 0 && err == nil {
+		sess.Commit()
+		DB.ClearCache(new(PostTag)) //清空缓存
+		return true
+	}
+	sess.Rollback()
+	return false
+}
+
+// PostTagDel 删除文章对应的标签_文章删除文章的时候
+func PostTagDel(pid int) bool {
+	sess := DB.NewSession()
+	defer sess.Close()
+	sess.Begin()
+	if affect, err := sess.Where("post_id = ?", pid).Delete(&PostTag{}); affect > 0 && err == nil {
 		sess.Commit()
 		DB.ClearCache(new(PostTag)) //清空缓存
 		return true
