@@ -1,1 +1,1 @@
-cd .\vue\ | npm run dev
+cd .\vue\ | npm run serve

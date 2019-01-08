@@ -99,7 +99,7 @@
 </template>
 <script>
 import messageTip from "./main-components/message-tip.vue";
-import util from "@/libs/util.js";
+import util from "@/util/util.js";
 import { auth } from "@/api/auth";
 export default {
   components: {

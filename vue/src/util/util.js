@@ -1,5 +1,4 @@
 import { Base64 } from "js-base64";
-import env from "../../build/env";
 let util = {};
 util.title = function(title) {
   title = title || "blog";
@@ -7,12 +6,14 @@ util.title = function(title) {
 };
 //dev prod
 util.cfgSvrURL =
-  env === "development" ? "http://127.0.0.1:88" : "http://127.0.0.1:88";
+  process.env.NODE_ENV === "development"
+    ? "http://127.0.0.1:88"
+    : "http://127.0.0.1:88";
 
 //文件上传地址
 //dev prod
 util.cfgUpload =
-  env === "development"
+  process.env.NODE_ENV === "development"
     ? "http://127.0.0.1:88/upload"
     : "http://127.0.0.1:88/upload";
 

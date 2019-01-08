@@ -40,7 +40,7 @@
 <script>
 import md5 from "js-md5";
 import { login } from "@/api/auth";
-import util from "@/libs/util";
+import util from "@/util/util";
 export default {
   data() {
     return {

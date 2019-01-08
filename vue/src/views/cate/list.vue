@@ -24,155 +24,155 @@
 <script>
 import { cateAll, cateEdit, cateDel } from "@/api/cate";
 export default {
-	data() {
-		return {
-			showEdit: false,
-			editLoading: false,
-			colCate: [
-				{
-					type: "index",
-					minWidth: 60,
-					maxWidth: 100,
-					align: "center"
-				},
-				{
-					title: "分类名",
-					minWidth: 100,
-					maxWidth: 300,
-					key: "name"
-				},
-				{
-					title: "分类介绍",
-					minWidth: 100,
-					maxWidth: 300,
-					key: "intro"
-				},
-				{
-					title: "Action",
-					minWidth: 100,
-					align: "left",
-					render: (h, data) => {
-						return h("a", [
-							h("Icon", {
-								props: {
-									type: "md-create",
-									size: "20",
-									color: "#FFB800"
-								},
-								attrs: {
-									title: "修改"
-								},
-								style: {
-									marginRight: "15px"
-								},
-								on: {
-									click: () => {
-										this.showEdit = true;
-										this.editForm = data.row;
-									}
-								}
-							}),
-							h("Icon", {
-								props: {
-									type: "ios-trash",
-									size: "20",
-									color: "#FF5722"
-								},
-								attrs: {
-									title: "删除"
-								},
-								on: {
-									click: () => {
-										this.delete(data);
-									}
-								}
-							})
-						]);
-					}
-				}
-			],
-			dataCate: [],
-			editForm: {
-				name: "",
-				intro: ""
-			},
-			editRules: {
-				name: [
-					{
-						required: true,
-						message: "请填写分类名",
-						trigger: "blur",
-						max: 64
-					}
-				],
-				intro: [
-					{
-						required: true,
-						message: "请填写分类介绍",
-						trigger: "blur",
-						max: 64
-					}
-				]
-			}
-		};
-	},
-	methods: {
-		init() {
-			cateAll().then(resp => {
-				if (resp.code == 200) {
-					this.dataCate = resp.data;
-				} else {
-					this.dataCate = [];
-					this.$Message.warning("未查询到分类信息,请重试！");
-				}
-			});
-		},
-		cmtEdit() {
-			this.$refs["editForm"].validate(valid => {
-				if (valid) {
-					this.editLoading = true;
-					cateEdit(this.editForm).then(resp => {
-						this.editLoading = false;
-						if (resp.code == 200) {
-							this.$Message.success({
-								content: "分类信息修改成功",
-								onClose: () => {
-									this.showEdit = false;
-								}
-							});
-						} else {
-							this.$Message.error({
-								content: `分类信息修改失败,请重试`,
-								duration: 3
-							});
-						}
-					});
-				}
-			});
-		},
-		delete(data) {
-			this.$Modal.confirm({
-				title: "系统提示",
-				content: "你确定要删除吗？",
-				onOk: () => {
-					cateDel(data.row.id).then(resp => {
-						if (resp.code == 200) {
-							this.$Message.success({
-								content: "删除成功",
-								onClose: () => {
-									this.dataCate.splice(data.index, 1);
-								}
-							});
-						} else {
-							this.$Message.error("删除失败,请重试！");
-						}
-					});
-				}
-			});
-		}
-	},
-	created() {
-		this.init();
-	}
+  data() {
+    return {
+      showEdit: false,
+      editLoading: false,
+      colCate: [
+        {
+          type: "index",
+          minWidth: 60,
+          maxWidth: 100,
+          align: "center"
+        },
+        {
+          title: "分类名",
+          minWidth: 100,
+          maxWidth: 300,
+          key: "name"
+        },
+        {
+          title: "分类介绍",
+          minWidth: 100,
+          maxWidth: 300,
+          key: "intro"
+        },
+        {
+          title: "Action",
+          minWidth: 100,
+          align: "left",
+          render: (h, data) => {
+            return h("a", [
+              h("Icon", {
+                props: {
+                  type: "md-create",
+                  size: "20",
+                  color: "#FFB800"
+                },
+                attrs: {
+                  title: "修改"
+                },
+                style: {
+                  marginRight: "15px"
+                },
+                on: {
+                  click: () => {
+                    this.showEdit = true;
+                    this.editForm = data.row;
+                  }
+                }
+              }),
+              h("Icon", {
+                props: {
+                  type: "ios-trash",
+                  size: "20",
+                  color: "#FF5722"
+                },
+                attrs: {
+                  title: "删除"
+                },
+                on: {
+                  click: () => {
+                    this.delete(data);
+                  }
+                }
+              })
+            ]);
+          }
+        }
+      ],
+      dataCate: [],
+      editForm: {
+        name: "",
+        intro: ""
+      },
+      editRules: {
+        name: [
+          {
+            required: true,
+            message: "请填写分类名",
+            trigger: "blur",
+            max: 64
+          }
+        ],
+        intro: [
+          {
+            required: true,
+            message: "请填写分类介绍",
+            trigger: "blur",
+            max: 64
+          }
+        ]
+      }
+    };
+  },
+  methods: {
+    init() {
+      cateAll().then(resp => {
+        if (resp.code == 200) {
+          this.dataCate = resp.data;
+        } else {
+          this.dataCate = [];
+          this.$Message.warning("未查询到分类信息,请重试！");
+        }
+      });
+    },
+    cmtEdit() {
+      this.$refs["editForm"].validate(valid => {
+        if (valid) {
+          this.editLoading = true;
+          cateEdit(this.editForm).then(resp => {
+            this.editLoading = false;
+            if (resp.code == 200) {
+              this.$Message.success({
+                content: "分类信息修改成功",
+                onClose: () => {
+                  this.showEdit = false;
+                }
+              });
+            } else {
+              this.$Message.error({
+                content: `分类信息修改失败,请重试`,
+                duration: 3
+              });
+            }
+          });
+        }
+      });
+    },
+    delete(data) {
+      this.$Modal.confirm({
+        title: "系统提示",
+        content: "你确定要删除吗？",
+        onOk: () => {
+          cateDel(data.row.id).then(resp => {
+            if (resp.code == 200) {
+              this.$Message.success({
+                content: "删除成功",
+                onClose: () => {
+                  this.dataCate.splice(data.index, 1);
+                }
+              });
+            } else {
+              this.$Message.error("删除失败,请重试！");
+            }
+          });
+        }
+      });
+    }
+  },
+  created() {
+    this.init();
+  }
 };
 </script>

@@ -9,21 +9,21 @@
 </template>
 
 <script>
-import util from '@/libs/util.js';
+import util from "@/util/util.js";
 export default {
-    name: 'messageTip',
-    props: {
-        value: {
-            type: Number,
-            default: 0
-        }
-    },
-    methods: {
-        showMessage () {
-            this.$router.push({
-                name: 'message_index'
-            });
-        }
+  name: "messageTip",
+  props: {
+    value: {
+      type: Number,
+      default: 0
     }
+  },
+  methods: {
+    showMessage() {
+      this.$router.push({
+        name: "message_index"
+      });
+    }
+  }
 };
 </script>

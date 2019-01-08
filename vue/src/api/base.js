@@ -1,7 +1,6 @@
-import util from "../libs/util";
+import util from "../util/util";
 import axios from "axios";
 import iView from "iview";
-
 
 const ajax = axios.create({
   baseURL: util.cfgSvrURL,

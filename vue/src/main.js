@@ -3,7 +3,7 @@ import Vuex from "vuex";
 import iView from "iview";
 import App from "./app.vue";
 import Store from "./store.js";
-import Util from "./libs/util.js";
+import Util from "./util/util.js";
 import Routers from "./router.js";
 import VueRouter from "vue-router";
 import "iview/dist/styles/iview.css";
@@ -36,7 +36,7 @@ router.beforeEach((to, from, next) => {
   } else if (localStorage.getItem("bearer") && to.name === "login") {
     // 判断是否已经登录且前往的是登录页
     next({
-      name: "home_index"
+      name: "home"
     });
   } else {
     next();

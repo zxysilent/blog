@@ -20,7 +20,7 @@
                             <Col span="10" style="min-width:250px"> .html&nbsp;<a title="预览" @click="clkPreview">
                                 <Icon type="ios-eye" size="22" /></a></Button>
                             <Button type="info" @click="cmtDraft" :loading="draftLoading">
-                                <Icon type="ios-trash" size="20" />存草稿</Button>
+                                <Icon type="ios-trash" size="20" />存草稿</Button>&nbsp;
                             <Button type="warning" @click="cmtPublish" :loading="publishLoading">
                                 <Icon type="ios-send" size="20" />发 布</Button>
                             </Col>
@@ -77,7 +77,7 @@ import "mavon-editor/dist/css/index.css";
 import toolbars from "./toolbars";
 import { cateAll } from "@/api/cate";
 import { tagAll } from "@/api/tag";
-import util from "@/libs/util";
+import util from "@/util/util";
 import { postGet, postOpts, postTagIds } from "@/api/post";
 // 通用 文章/页面 + 添加/修改
 // 减少js体积

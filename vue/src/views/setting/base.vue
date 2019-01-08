@@ -54,7 +54,7 @@ export default {
     return {
       page_size: 2,
       base: {},
-      showLogoEdit:false,
+      showLogoEdit: false,
       saveLoading: false
     };
   },
@@ -110,7 +110,7 @@ export default {
       });
     },
     clkLogo() {
-        this.showLogoEdit=true;
+      this.showLogoEdit = true;
     }
   },
   mounted() {

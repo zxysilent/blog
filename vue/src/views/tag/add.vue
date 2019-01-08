@@ -22,59 +22,59 @@
 <script>
 import { tagAdd } from "@/api/tag";
 export default {
-	data() {
-		return {
-			dataForm: {
-				name: "",
-				intro: ""
-			},
-			dataRules: {
-				name: [
-					{
-						required: true,
-						message: "请填写标签名",
-						trigger: "blur",
-						max: 64
-					}
-				],
-				intro: [
-					{
-						required: true,
-						message: "请填写标签介绍",
-						trigger: "blur",
-						max: 64
-					}
-				]
-			},
-			saveLoading: false
-		};
-	},
-	methods: {
-		cmtSave() {
-			this.$refs["dataForm"].validate(valid => {
-				if (valid) {
-					this.saveLoading = true;
-					tagAdd(this.dataForm).then(resp => {
-						this.saveLoading = false;
-						if (resp.code == 200) {
-							this.$Message.success({
-								content: "标签信息添加成功",
-								onClose: () => {
-									this.$router.push({
-										name: "tag-list"
-									});
-								}
-							});
-						} else {
-							this.$Message.error({
-								content: `标签信息添加失败,请重试`,
-								duration: 3
-							});
-						}
-					});
-				}
-			});
-		}
-	}
+  data() {
+    return {
+      dataForm: {
+        name: "",
+        intro: ""
+      },
+      dataRules: {
+        name: [
+          {
+            required: true,
+            message: "请填写标签名",
+            trigger: "blur",
+            max: 64
+          }
+        ],
+        intro: [
+          {
+            required: true,
+            message: "请填写标签介绍",
+            trigger: "blur",
+            max: 64
+          }
+        ]
+      },
+      saveLoading: false
+    };
+  },
+  methods: {
+    cmtSave() {
+      this.$refs["dataForm"].validate(valid => {
+        if (valid) {
+          this.saveLoading = true;
+          tagAdd(this.dataForm).then(resp => {
+            this.saveLoading = false;
+            if (resp.code == 200) {
+              this.$Message.success({
+                content: "标签信息添加成功",
+                onClose: () => {
+                  this.$router.push({
+                    name: "tag-list"
+                  });
+                }
+              });
+            } else {
+              this.$Message.error({
+                content: `标签信息添加失败,请重试`,
+                duration: 3
+              });
+            }
+          });
+        }
+      });
+    }
+  }
 };
 </script>
