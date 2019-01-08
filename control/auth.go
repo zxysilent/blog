@@ -67,6 +67,13 @@ func UserLogout(ctx echo.Context) error {
 	return ctx.HTML(200, `hello`)
 }
 
+// Core 重定向
+func Core(ctx echo.Context) error {
+	// 301 永久
+	// 302 临时
+	return ctx.Redirect(301, "/core/")
+}
+
 // UserAuth 登陆信息
 func UserAuth(ctx echo.Context) error {
 	mod, _ := model.UserGet(ctx.Get("uid").(int))

@@ -26,6 +26,7 @@ func Run() {
 	// 静态目录
 	engine.Static(`/res`, "res")
 	// 前后端分离页面
+	engine.GET(`/core`, control.Core)
 	engine.File(`/core/*`, "res/dist/index.html")
 	// 首页
 	engine.GET(`/`, control.IndexView)
