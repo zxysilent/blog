@@ -9,7 +9,11 @@ export const auth = () => {
 export const logoff = data => {
   //   return ajax.post("/auth/login", data);
 };
-//统计
-export const stat = () => {
-  return ajax.get("/stat");
+// 统计状态
+export const collect = () => {
+  return ajax.get("/collect");
+};
+// 服务器信息
+export const sys = () => {
+  return ajax.get("/sys");
 };

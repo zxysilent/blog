@@ -75,8 +75,23 @@ type config struct {
 	Addr  string `json:"addr"`
 }
 
-//Naver 上下页
+// Naver 上下页
 type Naver struct {
 	Prev string
 	Next string
+}
+
+// State 统计信息
+type State struct {
+	Post int `json:"post" form:"post"`
+	Page int `json:"page" form:"page"`
+	Cate int `json:"cate" form:"cate"`
+	Tag  int `json:"tag" form:"tag"`
+}
+
+// Collect 统计信息
+func Collect() (*State, bool) {
+	mod := &State{}
+	has, _ := DB.SQL(`SELECT * FROM(SELECT COUNT(id) as post FROM post WHERE type=0)as a ,(SELECT COUNT(id) as page FROM post WHERE type=1) as b, (SELECT COUNT(id) as cate FROM cate) as c, (SELECT COUNT(id) as tag FROM tag) as d`).Get(mod)
+	return mod, has
 }

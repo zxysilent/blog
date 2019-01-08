@@ -1,62 +1,139 @@
-<style lang="less">
+<style lang="less" scoped>
 @import "./home.less";
 </style>
 <template>
-    <Card dis-hover>
-        <Alert closable>An info prompt</Alert>
-        <Row :gutter="10">
-            <Col :md="24" :lg="8">
-            <Card :bordered="false" dis-hover>
-                <Row type="flex" class="user-infor">
-                    <Col span="8">
-                    <Row class-name="made-child-con-middle" type="flex" align="middle">
-                        <i-circle :percent="100" stroke-color="#5cb85c">
-                            <Icon type="ios-checkmark" size="60" style="color:#5cb85c"></Icon>
-                        </i-circle>
-                    </Row>
-                    </Col>
-                    <Col span="16" style="padding-left:6px;">
-                    <Row class-name="made-child-con-middle" type="flex" align="middle">
-                        <div>
-                            <b class="card-user-infor-name">Admin</b>
-                            <p>super admin</p>
-                        </div>
-                    </Row>
-                    </Col>
-                </Row>
-                <div class="line-gray"></div>
-                <Row class="margin-top-8">
-                    <Col span="8">
-                    <p class="notwrap">上次登录时间:</p>
-                    </Col>
-                    <Col span="16" class="padding-left-8">2017.09.12-13:32:20</Col>
-                </Row>
-                <Row class="margin-top-8">
-                    <Col span="8">
-                    <p class="notwrap">上次登录地点:</p>
-                    </Col>
-                    <Col span="16" class="padding-left-8">北京</Col>
-                </Row>
-
-            </Card>
-            </Col>
-        </Row>
-    </Card>
+	<div class="home">
+		<Row>
+			<Col :md='{span:8}'>
+			<Row>
+				<Col span="12" class="collect">
+				<Card dis-hover>
+					<Row>
+						<Col span="10">
+						<Icon type="ios-megaphone"></Icon>
+						</Col>
+						<Col span="14">
+						<p class="title">文章</p>
+						<h3>{{collect.post}}</h3>
+						</Col>
+					</Row>
+				</Card>
+				</Col>
+				<Col span="12" class="collect">
+				<Card dis-hover>
+					<Row>
+						<Col span="10">
+						<Icon type="ios-map"></Icon>
+						</Col>
+						<Col span="14">
+						<p class="title">页面</p>
+						<h3>{{collect.page}}</h3>
+						</Col>
+					</Row>
+				</Card>
+				</Col>
+				<Col span="12" class="collect">
+				<Card dis-hover>
+					<Row>
+						<Col span="10">
+						<Icon type="ios-school"></Icon>
+						</Col>
+						<Col span="14">
+						<p class="title">分类</p>
+						<h3>{{collect.cate}}</h3>
+						</Col>
+					</Row>
+				</Card>
+				</Col>
+				<Col span="12" class="collect">
+				<Card dis-hover>
+					<Row>
+						<Col span="10">
+						<Icon type="ios-pricetags"></Icon>
+						</Col>
+						<Col span="14">
+						<p class="title">标签</p>
+						<h3>{{collect.tag}}</h3>
+						</Col>
+					</Row>
+				</Card>
+				</Col>
+			</Row>
+			</Col>
+			<Col :md='{span:16}'>
+			<Card dis-hover style="height: 158px">
+				<p slot="title">
+					系统信息
+				</p>
+				<Steps status="finish" :current="4">
+					<Step icon="ios-flash" title="系统架构" :content="sys.arch"></Step>
+					<Step icon="logo-snapchat" title="操作系统" :content="sys.os"></Step>
+					<Step icon="ios-thunderstorm" title="运行环境" :content="sys.version"></Step>
+					<Step icon="ios-flower" title="逻辑处理器" :content="sys.num_cpu+''"></Step>
+				</Steps>
+			</Card>
+			</Col>
+		</Row>
+		<Row>
+			<Col :md='{span:8}'>
+			<Card dis-hover style="height: 320px">
+				<p slot="title">
+					暂时未统计，正在进行
+				</p>
+				<a href="#" slot="extra" @click.prevent="refresh">
+					<Icon type="ios-loop-strong"></Icon>
+				</a>
+				<Steps :current="2" direction="vertical" size="small">
+					<Step title="已完成" content="这里是该步骤的描述信息"></Step>
+					<Step title="已完成" content="这里是该步骤的描述信息"></Step>
+					<Step title="进行中" content="这里是该步骤的描述信息"></Step>
+					<Step title="待进行" content="这里是该步骤的描述信息"></Step>
+				</Steps>
+			</Card>
+			</Col>
+		</Row>
+	</div>
 </template>
-
 <script>
+import { sys, collect } from "@/api/auth";
 export default {
-  data() {
-    return {
-      count: {
-        createUser: 496,
-        visit: 3264,
-        collection: 24389305,
-        transfer: 39503498
-      }
-    };
-  },
-  computed: {},
-  methods: {}
+	name: "index",
+	data() {
+		return {
+			sys: {
+				arch: "--",
+				num_cpu: 0,
+				os: "--",
+				version: "--"
+			},
+			collect: {
+				post: 0,
+				page: 0,
+				cate: 0,
+				tag: 0
+			}
+		};
+	},
+	methods: {
+		init() {
+			sys().then(resp => {
+				if (resp.code == 200) {
+					this.sys = resp.data;
+				} else {
+					this.$Message.warning("未查询到系统信息,请重试！");
+				}
+			});
+			collect().then(resp => {
+				if (resp.code == 200) {
+					this.collect = resp.data;
+				} else {
+					this.$Message.warning("未查询到统计信息,请重试！");
+				}
+			});
+		}
+	},
+	created() {
+		this.init();
+	}
 };
 </script>

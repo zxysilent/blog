@@ -3,9 +3,6 @@ package control
 import (
 	"blog/model"
 	"fmt"
-	"io"
-	"os"
-	"path/filepath"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -67,42 +64,8 @@ func UserLogout(ctx echo.Context) error {
 	return ctx.HTML(200, `hello`)
 }
 
-// Core 重定向
-func Core(ctx echo.Context) error {
-	// 301 永久
-	// 302 临时
-	return ctx.Redirect(301, "/core/")
-}
-
 // UserAuth 登陆信息
 func UserAuth(ctx echo.Context) error {
 	mod, _ := model.UserGet(ctx.Get("uid").(int))
 	return ctx.JSON(util.NewSucc(`信息`, mod))
-}
-
-// Upload 上传文件
-func Upload(ctx echo.Context) error {
-	file, err := ctx.FormFile("file")
-	if err != nil {
-		return ctx.JSON(util.NewErrIpt(`未发现文件,请重试`, err.Error()))
-	}
-	src, err := file.Open()
-	if err != nil {
-		return ctx.JSON(util.NewErrIpt(`文件打开失败,请重试`, err.Error()))
-	}
-	defer src.Close()
-	basePath := "res/upimg/" + time.Now().Format(util.FmtyyyyMMdd) + "/"
-	//确保文件夹存在
-	os.MkdirAll(basePath, 0777)
-	fileName := util.RandStr(16) + filepath.Ext(file.Filename)
-	filePathName := basePath + fileName
-	dst, err := os.Create(filePathName)
-	if err != nil {
-		return ctx.JSON(util.NewErrIpt(`目标文件创建失败,请重试`, err.Error()))
-	}
-	defer dst.Close()
-	if _, err = io.Copy(dst, src); err != nil {
-		return ctx.JSON(util.NewErrIpt(`文件写入失败,请重试`, err.Error()))
-	}
-	return ctx.JSON(util.NewSucc(`文件上传成功`, "/"+filePathName))
 }

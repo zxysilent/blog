@@ -57,6 +57,10 @@ func Run() {
 
 	// 需要登陆才能访问
 	app := engine.Group(``, midJwt)
+	// 服务器信息
+	app.GET(`/sys`, control.Sys)
+	// 统计信息
+	app.GET(`/collect`, control.Collect)
 	// 获取当前登陆信息
 	app.GET(`/auth`, control.UserAuth)
 	// 图片上传

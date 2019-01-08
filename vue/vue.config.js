@@ -9,7 +9,7 @@ module.exports = {
   // 运行时生成的生产环境构建文件的目录(默认''dist''，构建之前会被清除)
   outputDir: "../res/dist",
   // 放置生成的静态资源(s、css、img、fonts)的(相对于 outputDir 的)目录(默认'')
-  assetsDir: "res",
+  assetsDir: "",
   // 指定生成的 index.html 的输出路径(相对于 outputDir)也可以是一个绝对路径。
   indexPath: "index.html",
   // 生成的静态资源在它们的文件名中包含了 hash 以便更好的控制缓存
