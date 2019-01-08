@@ -1,4 +1,5 @@
 const path = require("path");
+const TerserPlugin = require("terser-webpack-plugin");
 const resolve = dir => {
   return path.join(__dirname, dir);
 };
@@ -56,8 +57,24 @@ module.exports = {
   // 通过 webpack-merge 合并到最终的配置中
   // https://cli.vuejs.org/zh/config/#configurewebpack
   configureWebpack: {
+    // https://webpack.js.org/configuration/performance/
     performance: {
       hints: false // 取消打包文件过大的警告
+    },
+    optimization: {
+      //https://webpack.js.org/configuration/optimization/#optimization-minimize
+      minimizer: [
+        new TerserPlugin({
+          cache: true,
+          terserOptions: {
+            compress: {
+              warnings: false,
+              drop_console: true,
+              drop_debugger: true
+            }
+          }
+        })
+      ]
     }
   },
   // 允许对内部的 webpack 配置进行更细粒度的修改
