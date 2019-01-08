@@ -9,7 +9,7 @@ type User struct {
 	Id         int       `xorm:"pk autoincr INT(11)" json:"id" form:"id"`
 	Num        string    `xorm:"unique VARCHAR(255)" json:"num" form:"num"`
 	Name       string    `xorm:"VARCHAR(255)" json:"name" form:"name"`
-	Pass       string    `xorm:"VARCHAR(255)" json:"pass" form:"pass"`
+	Pass       string    `xorm:"VARCHAR(255)" json:"-" form:"-"`
 	Role       Role      `xorm:"INT(11)" json:"role" form:"role"`
 	Email      string    `xorm:"unique VARCHAR(255)" json:"email" form:"email"`
 	CreateTime time.Time `xorm:"DATETIME" json:"create_time" form:"create_time"`
