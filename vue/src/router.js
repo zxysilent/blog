@@ -28,14 +28,6 @@ const initRouter = [
         },
         name: "home",
         component: () => import("@/views/home/home.vue")
-      },
-      {
-        path: "message",
-        meta: {
-          title: "消息"
-        },
-        name: "message_index",
-        component: () => import("@/views/message/message.vue")
       }
     ]
   }
@@ -205,14 +197,6 @@ const appRouter = [
         },
         name: "setting-base",
         component: () => import("@/views/setting/base.vue")
-      },
-      {
-        path: "/core/test",
-        meta: {
-          title: "基本设置"
-        },
-        name: "test",
-        component: () => import("@/views/my-components/image-editor/image-editor.vue")
       },
       {
         path: "comment",

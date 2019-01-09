@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "cropperjs": "^1.4.3",
     "iview": "^3.2.1",
     "js-base64": "^2.5.0",
     "js-md5": "^0.7.3",
