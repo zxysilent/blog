@@ -1,16 +1,22 @@
 import Vue from "vue";
-import Vuex from "vuex";
+// 移除 vuex
+// import Vuex from "vuex";
 import iView from "iview";
 import App from "./app.vue";
-import Store from "./store.js";
+// 移除 vuex
+// import Store from "./store.js";
 import Util from "./util/util.js";
 import Routers from "./router.js";
 import VueRouter from "vue-router";
 import "iview/dist/styles/iview.css";
 
-Vue.use(Vuex);
-//状态管理
-const store = new Vuex.Store(Store);
+//设置为 false 以阻止 vue 在启动时生成生产提示
+Vue.config.productionTip = false;
+
+// 移除 vuex
+// 状态管理
+// Vue.use(Vuex);
+// const store = new Vuex.Store(Store);
 Vue.use(iView, {
   transfer: true
   // size: "large"
@@ -52,9 +58,7 @@ router.afterEach(to => {
 new Vue({
   el: "#app",
   router: router,
-  store: store,
-  render: h => h(App),
-  data: {},
-  mounted() {},
-  created() {}
+  // 移除 vuex
+  //store: store,
+  render: h => h(App)
 });
