@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	jwt "github.com/dgrijalva/jwt-go"
+	// 数据库驱动
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
 )
