@@ -21,7 +21,7 @@ func IndexView(ctx echo.Context) error {
 	if pi == 0 {
 		pi = 1
 	}
-	ps := util.Atoi(model.MapOpts.MustGet("page_size"), 6)
+	ps, _ := util.Atoi(model.MapOpts.MustGet("page_size"), 6)
 	mods, _ := model.PostPage(pi, ps)
 	total := model.PostCount()
 	naver := model.Naver{}
