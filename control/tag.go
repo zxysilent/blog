@@ -34,7 +34,7 @@ func TagPostView(ctx echo.Context) error {
 	if pi == 0 {
 		pi = 1
 	}
-	ps := util.Atoi(model.MapOpts.MustGet("page_size"), 6)
+	ps, _ := util.Atoi(model.MapOpts.MustGet("page_size"), 6)
 	mods, err := model.TagPostList(mod.Id, pi, ps)
 	if err != nil || len(mods) < 1 {
 		return ctx.Redirect(302, "/tags")
