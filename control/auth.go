@@ -2,7 +2,6 @@ package control
 
 import (
 	"blog/model"
-	"fmt"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -15,13 +14,11 @@ func UserLogin(ctx echo.Context) error {
 	ipt := struct {
 		Num  string `json:"num" form:"num"`
 		Pass string `json:"pass" form:"pass"`
-		Isu  bool   `json:"isu" form:"isu"`
 	}{}
 	err := ctx.Bind(&ipt)
 	if err != nil {
 		return ctx.JSON(util.NewErrIpt(`请输入用户名和密码`, err.Error()))
 	}
-	fmt.Println(ipt)
 	if ipt.Num == "" && len(ipt.Num) > 18 {
 		return ctx.JSON(util.NewErrIpt(`请输入正确的用户名`))
 	}
