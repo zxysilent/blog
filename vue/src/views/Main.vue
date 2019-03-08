@@ -93,7 +93,7 @@
 	</Layout>
 </template>
 <script>
-import util from "@/util/util.js";
+import util from "@/init/util.js";
 import { auth } from "@/api/auth";
 export default {
 	data() {

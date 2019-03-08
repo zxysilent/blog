@@ -5,7 +5,7 @@ import iView from "iview";
 import App from "./app.vue";
 // 移除 vuex
 // import Store from "./store.js";
-import Util from "./util/util.js";
+import Util from "./init/util.js";
 import Routers from "./router.js";
 import VueRouter from "vue-router";
 import "iview/dist/styles/iview.css";

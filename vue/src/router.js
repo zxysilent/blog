@@ -32,33 +32,41 @@ const initRouter = [
 		]
 	}
 ];
-
-const errorRouter = [
+export const errorRouter = [
 	{
-		path: "/core/*",
-		name: "error-404",
+		path: "/core/jwt",
+		name: "errjwt",
 		meta: {
-			title: "页面不存在"
+			title: "jwt"
 		},
-		component: () => import("@/views/error/404.vue")
+		component: () => import("@/views/errors/jwt.vue")
 	},
 	{
-		path: "/core/40x",
+		path: "/core/401",
+		name: "err401",
 		meta: {
-			title: "登陆失效"
+			title: "401"
 		},
-		name: "error-403",
-		component: () => import("@/views/error/40x.vue")
+		component: () => import("@/views/errors/401.vue")
 	},
 	{
 		path: "/core/50x",
+		name: "err50x",
 		meta: {
-			title: "50x-服务端错误"
+			title: "50x"
 		},
-		name: "error-50x",
-		component: () => import("@/views/error/50x.vue")
+		component: () => import("@/views/errors/50x.vue")
+	},
+	{
+		path: "/*",
+		name: "err404",
+		meta: {
+			title: "404"
+		},
+		component: () => import("@/views/errors/404.vue")
 	}
 ];
+
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
 const appRouter = [
 	{
@@ -228,7 +236,7 @@ const appRouter = [
 		]
 	},
 	{
-		path: "/core/",
+		path: "/core",
 		icon: "ios-contact-outline",
 		meta: {
 			title: "个人中心"
