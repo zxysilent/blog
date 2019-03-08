@@ -1,13 +1,15 @@
 package route
 
 import (
+	"blog/conf"
 	"blog/model"
-	"github.com/zxysilent/util"
 	"crypto/md5"
 	"encoding/hex"
 	"html/template"
 	"io"
 	"time"
+
+	"github.com/zxysilent/util"
 
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
@@ -56,7 +58,7 @@ func (t *TplRender) Render(w io.Writer, name string, data interface{}, ctx echo.
 	//开发模式
 	//每次强制读取模板
 	//每次强制加载函数
-	if model.Conf.Debug {
+	if conf.Debug {
 		funcMap := template.FuncMap{"str2html": Str2html, "date": Date, "md5": Md5}
 		t.templates = template.Must(template.New("index.html").Funcs(funcMap).ParseFiles("view/index.html", "view/post.html", "view/page.html", "view/tags.html", "view/tag-post.html", "view/cate-post.html", "view/archive.html", "view/tpl-footer.html", "view/tpl-linker.html", "view/tpl-naver.html"))
 	}

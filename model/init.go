@@ -1,9 +1,8 @@
 package model
 
 import (
-	"encoding/json"
+	"blog/conf"
 	"log"
-	"os"
 	"strings"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -15,36 +14,25 @@ import (
 // DB 数据库操作句柄
 var DB *xorm.Engine
 
-// Conf 配置信息
-var Conf config
-
 func init() {
-	// 读取配置文件
-	conf, err := os.Open("./conf.json")
-	if err != nil {
-		log.Fatalln("配置文件读取失败", err.Error())
-	}
-	decoder := json.NewDecoder(conf)
-	err = decoder.Decode(&Conf)
-	if err != nil {
-		log.Fatalln("配置文件无效", err.Error())
-	}
+	var err error
 	// 初始化数据库操作的 Xorm
-	DB, err = xorm.NewEngine("mysql", Conf.Conn)
+	DB, err = xorm.NewEngine("mysql", conf.Conn)
 	if err != nil {
 		log.Fatalln("数据库连接失败", err.Error())
 	}
-	DB.SetMaxIdleConns(100)
-	DB.SetMaxOpenConns(200)
+	DB.SetMaxIdleConns(conf.MaxIdle)
+	DB.SetMaxOpenConns(conf.MaxOpen)
 	if err = DB.Ping(); err != nil {
 		log.Fatalln("数据库不能正常工作", err.Error())
 	}
-	// 更加开发环境是否显示sql执行的语句
-	DB.ShowSQL(Conf.Debug)
-	// 设置xorm缓存
-	cacher := xorm.NewLRUCacher(xorm.NewMemoryStore(), 1000)
-	DB.SetDefaultCacher(cacher)
-	// DB.Logger().SetLevel(0)
+	//是否显示sql执行的语句
+	DB.ShowSQL(conf.ShowSQLl)
+	if conf.UseCache {
+		// 设置xorm缓存
+		cacher := xorm.NewLRUCacher(xorm.NewMemoryStore(), conf.CacheCount)
+		DB.SetDefaultCacher(cacher)
+	}
 }
 
 // Page 分页基本数据
@@ -67,13 +55,6 @@ type JwtClaims struct {
 	Num  string `json:"num"`
 	Role Role   `json:"role"`
 	jwt.StandardClaims
-}
-
-// config config
-type config struct {
-	Debug bool   `json:"debug"`
-	Conn  string `json:"conn"`
-	Addr  string `json:"addr"`
 }
 
 // Naver 上下页

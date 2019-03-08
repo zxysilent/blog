@@ -1,8 +1,8 @@
 package route
 
 import (
+	"blog/conf"
 	"blog/control"
-	"blog/model"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
@@ -104,5 +104,5 @@ func Run() {
 	adm.GET(`/opts/:key`, control.OptsGet)
 	// 编辑配置项
 	adm.POST(`/opts/edit`, control.OptsEdit)
-	engine.Start(model.Conf.Addr)
+	engine.Start(conf.Addr)
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config author="zxysilent" site="https://zxysilent.github.io">
+    <name>blog</name>
+    <depict>zxysilent blog</depict>
+    <debug>true</debug>
+    <conn comment="连接字符串">root:root@tcp(127.0.0.1:3306)/blog?charset=utf8&amp;parseTime=true</conn>
+    <max-idle comment="MaxIdleConns">10</max-idle>
+    <max-open comment="MaxOpenConns">20</max-open>
+    <use-cache>false</use-cache>
+    <cache-count comment="LRU">1000</cache-count>
+    <show-sql>true</show-sql>
+    <addr comment="监听">:88</addr>
+</config>
