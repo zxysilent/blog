@@ -1,10 +1,10 @@
-<style lang="less">
+<style lang="less" scoped>
 @import "./login.less";
 </style>
 
 <template>
 	<div class="login" @keydown.enter="handleSubmit">
-		<div class="login-con">
+		<div class="login-ctn">
 			<Card shadow>
 				<p slot="title">
 					<Icon type="md-log-in" />
@@ -23,7 +23,7 @@
 						<Button @click="handleSubmit" type="primary" long>登 录</Button>
 					</FormItem>
 				</Form>
-				<p class="login-tip">首页
+				<p class="login-ctn-tip">首页
 					<a href="/" title="首页">
 						<Icon type="ios-send-outline" size="20" />
 					</a>
@@ -32,7 +32,6 @@
 		</div>
 	</div>
 </template>
-
 <script>
 import md5 from "js-md5";
 import { login } from "@/api/auth";
@@ -45,12 +44,8 @@ export default {
 				pass: "zxyslt"
 			},
 			rules: {
-				num: [
-					{ required: true, message: "账号不能为空", trigger: "blur" }
-				],
-				pass: [
-					{ required: true, message: "密码不能为空", trigger: "blur" }
-				]
+				num: [{ required: true, message: "账号不能为空", trigger: "blur" }],
+				pass: [{ required: true, message: "密码不能为空", trigger: "blur" }]
 			}
 		};
 	},

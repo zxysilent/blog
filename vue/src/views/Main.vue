@@ -1,14 +1,14 @@
-<style lang="less">
+<style lang="less" scoped>
 @import "./main.less";
 </style>
 <template>
-	<Layout style="height: 100%" class="main">
-		<Sider hide-trigger :width="200" class="left-sider" :style="{overflow: 'hidden'}">
-			<div class="sidebar-menu-con">
-				<div class="logo-con">
-					<img src="../images/logo.png" alt="" srcset="">
+	<Layout class="main">
+		<Sider hide-trigger :width="200" class="main-sider" :style="{overflow: 'hidden'}">
+			<div class="sider-container">
+				<div class="sider-header ">
+					<img src="../assets/logo.png" alt="" srcset="">
 					<div class="header-user">{{ user.name }}</div>
-					<div class="header-top-con">
+					<div class="header-menu">
 						<Tooltip content="前台主页" placement="bottom">
 							<a href="/" target="_blank">
 								<Icon type="md-paper-plane" size="20" /></a>
@@ -85,17 +85,11 @@
 				</Menu>
 			</div>
 		</Sider>
-		<Layout>
-			<Content class="main-content-con">
-				<Layout class="main-layout-con">
-					<Content class="content-wrapper">
-						<!-- <keep-alive> -->
-						<router-view :key="rkey" />
-						<!-- </keep-alive> -->
-					</Content>
-				</Layout>
-			</Content>
-		</Layout>
+		<Content class="main-content">
+			<!-- <keep-alive> -->
+			<router-view :key="rkey" />
+			<!-- </keep-alive> -->
+		</Content>
 	</Layout>
 </template>
 <script>
@@ -125,8 +119,8 @@ export default {
 			});
 		},
 		logout() {
-            // this.$store.commit("logout", this);
-            // 移除 vuex
+			// this.$store.commit("logout", this);
+			// 移除 vuex
 			localStorage.removeItem("bearer");
 			localStorage.clear();
 			this.$router.push({
@@ -147,12 +141,7 @@ export default {
 		$route(to, from) {
 			// console.log("to.name=>", to.name);
 			// 强制 触发生命周期
-			if (
-				to.name == "post-edit" ||
-				to.name == "post-add" ||
-				to.name == "page-edit" ||
-				to.name == "page-add"
-			) {
+			if (to.name == "post-edit" || to.name == "post-add" || to.name == "page-edit" || to.name == "page-add") {
 				this.rkey = new Date().getTime();
 			} else {
 				this.rkey = 6655;
