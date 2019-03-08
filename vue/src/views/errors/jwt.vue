@@ -23,6 +23,7 @@ export default {
 	},
 	methods: {
 		goLogin() {
+			localStorage.clear();
 			this.$router.replace({
 				name: "login"
 			});

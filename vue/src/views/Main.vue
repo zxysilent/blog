@@ -121,7 +121,6 @@ export default {
 		logout() {
 			// this.$store.commit("logout", this);
 			// 移除 vuex
-			localStorage.removeItem("bearer");
 			localStorage.clear();
 			this.$router.push({
 				name: "login"
