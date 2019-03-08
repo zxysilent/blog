@@ -4,7 +4,7 @@
 <template>
 	<div class="home">
 		<Row>
-			<Col :md='{span:8}'>
+			<Col :md='{span:10}'>
 			<Row>
 				<Col span="12" class="collect">
 				<Card dis-hover>
@@ -60,7 +60,7 @@
 				</Col>
 			</Row>
 			</Col>
-			<Col :md='{span:16}'>
+			<Col :md='{span:14}'>
 			<Card dis-hover style="height: 158px">
 				<p slot="title">
 					系统信息
