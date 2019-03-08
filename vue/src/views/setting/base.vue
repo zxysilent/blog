@@ -102,7 +102,6 @@ export default {
       optsBase().then(resp => {
         if (resp.code == 200) {
           this.page_size = Number(resp.data["page_size"], 10);
-          console.log(resp.data);
           this.base = resp.data;
         } else {
           this.base = {};
