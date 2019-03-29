@@ -122,6 +122,7 @@ export default {
 			// this.$store.commit("logout", this);
 			// 移除 vuex
 			localStorage.clear();
+			sessionStorage.clear();
 			this.$router.push({
 				name: "login"
 			});

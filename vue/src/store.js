@@ -5,8 +5,8 @@ const store = {
   },
   mutations: {
     // logout(state) {
-    //   localStorage.removeItem("bearer");
-    //   localStorage.clear();
+    //   util.removeItem("bearer");
+    //   util.clear();
     // }
   }//,
   // actions: {},

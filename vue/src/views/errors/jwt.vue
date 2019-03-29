@@ -24,6 +24,7 @@ export default {
 	methods: {
 		goLogin() {
 			localStorage.clear();
+			sessionStorage.clear();
 			this.$router.replace({
 				name: "login"
 			});

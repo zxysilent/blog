@@ -11,6 +11,7 @@
 			</div>
 			<div class="btn-group">
 				<Button size="large" type="success" @click="backHome">返回首页</Button>&nbsp;&nbsp;
+				<Button size="large" type="info" @click="backLogin">&nbsp;&nbsp;去登陆&nbsp;&nbsp;</Button>&nbsp;&nbsp;
 				<Button size="large" type="warning" @click="backPrev">返回上一页({{ second }}s)</Button>
 			</div>
 		</div>
@@ -34,6 +35,13 @@ export default {
 		backHome() {
 			this.$router.replace({
 				name: "home"
+			});
+		},
+		backLogin() {
+			localStorage.clear();
+			sessionStorage.clear();
+			this.$router.replace({
+				name: "login"
 			});
 		},
 		backPrev() {

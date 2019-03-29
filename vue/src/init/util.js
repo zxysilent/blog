@@ -1,5 +1,7 @@
 import { Base64 } from "js-base64";
-import { urlLogin } from "@/init/config";
+import { urlLogin } from "@/init/conf";
+const storage = process.env.NODE_ENV === "development" ? localStorage : sessionStorage;
+
 let util = {};
 util.title = function(title) {
 	title = title || "blog";
@@ -7,33 +9,36 @@ util.title = function(title) {
 };
 
 //保存数据
-util.setData = (k, v) => {
-	localStorage.setItem(k, v);
+util.setItem = (k, v) => {
+	storage.setItem(k, v);
 };
-util.getData = k => {
-	return localStorage.getItem(k);
+util.getItem = k => {
+	return storage.getItem(k);
 };
-util.clearData = k => {
-	localStorage.removeItem(k);
+util.clearItem = k => {
+	storage.removeItem(k);
+};
+util.clearData = () => {
+	storage.clear();
 };
 util.setToken = token => {
-	util.setData("bearer", token);
+	util.setItem("bearer", token);
 };
 util.getToken = () => {
-	return util.getData("bearer");
+	return util.getItem("bearer");
 };
 // 获取保存的用户信息
 util.getAuth = () => {
 	try {
-		let token = Base64.decode(localStorage.getItem("bearer").split(".")[1]);
+		let token = Base64.decode(util.getItem("bearer").split(".")[1]);
 		let auth = JSON.parse(token);
 		if (!auth.hasOwnProperty("id")) {
-			localStorage.removeItem("bearer");
+			util.removeItem("bearer");
 			location.href = urlLogin;
 		}
 		return auth;
 	} catch (e) {
-		localStorage.removeItem("bearer");
+		util.removeItem("bearer");
 		location.href = urlLogin;
 	}
 };

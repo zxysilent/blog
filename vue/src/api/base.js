@@ -1,6 +1,7 @@
-import { urlServer, url401,urlJwt,url50x } from "@/init/config";
+import util from "@/init/util";
 import axios from "axios";
 import iView from "iview";
+import { urlServer, url401, urlJwt, url50x } from "@/init/conf";
 
 const ajax = axios.create({
 	baseURL: urlServer,
@@ -13,7 +14,7 @@ ajax.interceptors.request.use(
 		//在请求发出之前进行一些操作
 		console.log("send");
 		if (config.url.indexOf("/login") == -1) {
-			config.headers.Authorization = "Bearer " + localStorage.getItem("bearer"); //Bearer
+			config.headers.Authorization = "Bearer " + util.getItem("bearer"); //Bearer
 		}
 		return config;
 	},
@@ -49,7 +50,7 @@ ajax.interceptors.response.use(
 			// 	}
 			// });
 			// return new Promise(() => {});
-            location.href = urlJwt;
+			location.href = urlJwt;
 		}
 		if (res.data.code == 350) {
 			// iView.Notice.error({
@@ -58,7 +59,7 @@ ajax.interceptors.response.use(
 			// 	desc: "服务端发生错误,请重试"
 			// });
 			// return new Promise(() => {});
-              location.href = url50x;
+			location.href = url50x;
 		}
 		return res.data;
 	},

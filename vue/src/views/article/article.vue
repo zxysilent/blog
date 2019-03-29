@@ -78,7 +78,7 @@ import toolbars from "./toolbars";
 import { cateAll } from "@/api/cate";
 import { tagAll } from "@/api/tag";
 import util from "@/init/util";
-import { urlServer, urlUpload } from "@/init/config";
+import { urlServer, urlUpload } from "@/init/conf";
 import { postGet, postOpts, postTagIds } from "@/api/post";
 // 通用 文章/页面 + 添加/修改
 // 减少js体积

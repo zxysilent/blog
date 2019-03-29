@@ -34,12 +34,12 @@ router.beforeEach((to, from, next) => {
 	iView.LoadingBar.start();
 	Util.title(to.meta.title);
 	// 没有登陆并且不是跳转到登陆页面
-	if (!localStorage.getItem("bearer") && to.name !== "login") {
+	if (!Util.getItem("bearer") && to.name !== "login") {
 		Util.title("登陆");
 		next({
 			name: "login"
 		});
-	} else if (localStorage.getItem("bearer") && to.name === "login") {
+	} else if (Util.getItem("bearer") && to.name === "login") {
 		// 判断是否已经登录且前往的是登录页
 		next({
 			name: "home"
