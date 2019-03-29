@@ -16,7 +16,8 @@ func Run() {
 	// 恢复
 	engine.Use(middleware.Recover())
 	// 日志记录
-	engine.Use(middleware.LoggerWithConfig(logConfig))
+	// engine.Use(middleware.LoggerWithConfig(logConfig))
+	engine.Use(midLog)
 	// 跨域设置
 	engine.Use(middleware.CORSWithConfig(crosConfig)) //允许跨域
 	// 不显示横幅

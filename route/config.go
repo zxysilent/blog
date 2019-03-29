@@ -3,18 +3,56 @@ package route
 import (
 	"blog/conf"
 	"blog/model"
+	"bytes"
 	"crypto/md5"
 	"encoding/hex"
 	"html/template"
 	"io"
+	"os"
+	"sync"
 	"time"
 
-	"github.com/zxysilent/util"
-
+	"github.com/astaxie/beego/logs"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	"github.com/zxysilent/util"
 )
+
+var pool *sync.Pool
+var log = logs.NewLogger()
+
+func init() {
+	os.Mkdir("logs/", 0777)
+	log.SetLogger(logs.AdapterFile, `{"filename":"logs/app.log","maxdays":30}`)
+	log.Async(1e3)
+	pool = &sync.Pool{
+		New: func() interface{} {
+			return bytes.NewBuffer(make([]byte, 512))
+		},
+	}
+}
+
+// midLog 中间件-日志记录
+func midLog(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(ctx echo.Context) (err error) {
+		start := time.Now()
+		if err = next(ctx); err != nil {
+			ctx.Error(err)
+		}
+		stop := time.Now()
+		buf := pool.Get().(*bytes.Buffer)
+		buf.Reset()
+		defer pool.Put(buf)
+		buf.WriteString("\tip：" + ctx.RealIP())
+		buf.WriteString("\tmethod：" + ctx.Request().Method)
+		buf.WriteString("\tpath：" + ctx.Request().URL.Path)
+		buf.WriteString("\turi：" + ctx.Request().RequestURI)
+		buf.WriteString("\tspan：" + stop.Sub(start).String())
+		log.Info(buf.String())
+		return
+	}
+}
 
 // HTTPErrorHandler 全局错误捕捉
 func HTTPErrorHandler(err error, ctx echo.Context) {
