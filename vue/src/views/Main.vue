@@ -140,7 +140,7 @@ export default {
 	watch: {
 		$route(to, from) {
 			// console.log("to.name=>", to.name);
-			// 强制 触发生命周期
+			// 强制触发生命周期
 			if (to.name == "post-edit" || to.name == "post-add" || to.name == "page-edit" || to.name == "page-add") {
 				this.rkey = new Date().getTime();
 			} else {
