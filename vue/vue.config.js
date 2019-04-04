@@ -1,5 +1,4 @@
 const path = require("path");
-const webpack = require("webpack");
 const TerserPlugin = require("terser-webpack-plugin");
 const resolve = dir => {
 	return path.join(__dirname, dir);
