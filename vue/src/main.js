@@ -33,16 +33,17 @@ const router = new VueRouter(RouterConfig);
 router.beforeEach((to, from, next) => {
 	iView.LoadingBar.start();
 	Util.title(to.meta.title);
-	// 没有登陆并且不是跳转到登陆页面
-	if (!Util.getItem("bearer") && to.name !== "login") {
+	// 已经登陆 去登陆地方
+	if (Util.getToken() && to.name == "login") {
+		Util.title("主页");
+			next({
+			name: "home"
+		});
+	} else if (!Util.getToken() && !Util.noAuth(to.name)) {
+		// //没有登陆 不是去不需要权限的地方
 		Util.title("登陆");
 		next({
 			name: "login"
-		});
-	} else if (Util.getItem("bearer") && to.name === "login") {
-		// 判断是否已经登录且前往的是登录页
-		next({
-			name: "home"
 		});
 	} else {
 		next();

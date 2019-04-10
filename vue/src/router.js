@@ -37,7 +37,7 @@ export const errorRouter = [
 		path: "/core/jwt",
 		name: "errjwt",
 		meta: {
-			title: "jwt"
+			title: "jwt-重新登录"
 		},
 		component: () => import("@/views/errors/jwt.vue")
 	},
@@ -45,7 +45,7 @@ export const errorRouter = [
 		path: "/core/401",
 		name: "err401",
 		meta: {
-			title: "401"
+			title: "401-没用权限"
 		},
 		component: () => import("@/views/errors/401.vue")
 	},
@@ -53,7 +53,7 @@ export const errorRouter = [
 		path: "/core/50x",
 		name: "err50x",
 		meta: {
-			title: "50x"
+			title: "50x-服务异常"
 		},
 		component: () => import("@/views/errors/50x.vue")
 	},
@@ -61,7 +61,7 @@ export const errorRouter = [
 		path: "/*",
 		name: "err404",
 		meta: {
-			title: "404"
+			title: "404-没发现"
 		},
 		component: () => import("@/views/errors/404.vue")
 	}

@@ -1,10 +1,11 @@
 import { Base64 } from "js-base64";
 import { urlLogin } from "@/init/conf";
+
 const storage = process.env.NODE_ENV === "development" ? localStorage : sessionStorage;
 
 let util = {};
 util.title = function(title) {
-	title = title || "blog";
+	title = title || "zadmin";
 	window.document.title = title;
 };
 
@@ -42,6 +43,10 @@ util.getAuth = () => {
 		location.href = urlLogin;
 	}
 };
+// 不需要也可登录页面集合
+util.noAuth = r => {
+	return ["login", "errjwt", "err401", "err50x", "err404"].indexOf(r) > -1;
+};
 util.Role = {
 	RSup: 30, //超级管理员
 	RAtv: 20, //启用/禁用
@@ -60,7 +65,7 @@ util.Role.isSup = rl => {
 util.Role.isAtv = rl => {
 	return util.Role.getRole(rl, util.Role.RAtv);
 };
-
+// 权限路由相关
 util.Role.allow = (role, arr) => {
 	for (let i = 0; i < arr.length; i++) {
 		if (util.Role.getRole(role, arr[i])) {
