@@ -45,7 +45,7 @@ export const errorRouter = [
 		path: "/core/401",
 		name: "err401",
 		meta: {
-			title: "401-没用权限"
+			title: "401-没有权限"
 		},
 		component: () => import("@/views/errors/401.vue")
 	},
