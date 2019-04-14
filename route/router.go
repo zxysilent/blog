@@ -104,5 +104,6 @@ func Run() {
 	api.GET(`/opts/:key`, control.OptsGet)
 	// 编辑配置项
 	api.POST(`/opts/edit`, control.OptsEdit)
+	engine.Debug = conf.Debug
 	engine.Start(conf.Addr)
 }

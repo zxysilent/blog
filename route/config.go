@@ -49,6 +49,11 @@ func midLog(next echo.HandlerFunc) echo.HandlerFunc {
 		buf.WriteString("\tpath：" + ctx.Request().URL.Path)
 		buf.WriteString("\turi：" + ctx.Request().RequestURI)
 		buf.WriteString("\tspan：" + stop.Sub(start).String())
+		// 开发模式直接输出到控制台
+		if conf.Debug {
+			os.Stdout.Write(buf.Bytes())
+			return
+		}
 		log.Info(buf.String())
 		return
 	}
