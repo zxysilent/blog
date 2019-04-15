@@ -19,7 +19,7 @@ func Run() {
 	// engine.Use(middleware.LoggerWithConfig(logConfig))
 	engine.Use(midLog)
 	// 跨域设置
-	engine.Use(middleware.CORSWithConfig(crosConfig)) //允许跨域
+	engine.Use(middleware.CORSWithConfig(crosConfig))
 	// 不显示横幅
 	engine.HideBanner = true
 	// 自定义错误处理
