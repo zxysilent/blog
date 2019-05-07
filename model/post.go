@@ -36,7 +36,7 @@ type Archive struct {
 // PostPage 分页
 func PostPage(pi, ps int) ([]Post, error) {
 	mods := make([]Post, 0, ps)
-	err := DB.Cols("id", "title", "path", "create_time", "summary", "comment_num", "options").Where("Type = 0 and Is_Public = 1 and Status = 3 ").Desc("create_time").Limit(ps, (pi-1)*ps).Find(&mods)
+	err := Db.Cols("id", "title", "path", "create_time", "summary", "comment_num", "options").Where("Type = 0 and Is_Public = 1 and Status = 3 ").Desc("create_time").Limit(ps, (pi-1)*ps).Find(&mods)
 	return mods, err
 }
 
@@ -46,14 +46,14 @@ func PostCount() int {
 		Type:     0,
 		IsPublic: true,
 	}
-	count, _ := DB.UseBool("is_public").Count(mod)
+	count, _ := Db.UseBool("is_public").Count(mod)
 	return int(count)
 }
 
 // PostArchive 归档
 func PostArchive() ([]Archive, error) {
 	posts := make([]Post, 0, 8)
-	err := DB.Cols("id", "title", "path", "create_time").Where("Type = 0 and Is_Public = 1 and Status = 3 ").Desc("create_time").Find(&posts)
+	err := Db.Cols("id", "title", "path", "create_time").Where("Type = 0 and Is_Public = 1 and Status = 3 ").Desc("create_time").Find(&posts)
 	if err != nil {
 		return nil, err
 	}
@@ -87,18 +87,18 @@ func PostPath(path string) (*Post, *Naver, bool) {
 		Type:     0,
 		IsPublic: true,
 	}
-	has, _ := DB.UseBool("is_public").Get(mod)
+	has, _ := Db.UseBool("is_public").Get(mod)
 	if has {
 		mod.Cate, _ = CateGet(mod.CateId)
 		naver := &Naver{}
 		p := Post{}
-		b, _ := DB.Where("Type = 0 and Is_Public = 1 and Status = 3 and Create_Time <?", mod.CreateTime.Format(util.FormatDateTime)).Desc("Create_Time").Get(&p)
+		b, _ := Db.Where("Type = 0 and Is_Public = 1 and Status = 3 and Create_Time <?", mod.CreateTime.Format(util.FormatDateTime)).Desc("Create_Time").Get(&p)
 		if b {
 			// <a href="{{.Naver.Prev}}" class="prev">&laquo; 上一页</a>
 			naver.Prev = `<a href="/post/` + p.Path + `.html" class="prev">&laquo; ` + p.Title + `</a>`
 		}
 		n := Post{}
-		b1, _ := DB.Where("Type = 0 and Is_Public = 1 and Status = 3 and Create_Time >?", mod.CreateTime.Format(util.FormatDateTime)).Asc("Create_Time").Get(&n)
+		b1, _ := Db.Where("Type = 0 and Is_Public = 1 and Status = 3 and Create_Time >?", mod.CreateTime.Format(util.FormatDateTime)).Asc("Create_Time").Get(&n)
 		if b1 {
 			//<a href="{{.Naver.Next}}" class="next">下一页 &raquo;</a>
 			naver.Next = `<a href="/post/` + n.Path + `.html" class="next"> ` + n.Title + ` &raquo;</a>`
@@ -114,14 +114,14 @@ func PostSingle(path string) (*Post, bool) {
 		Path: path,
 		Type: 1,
 	}
-	has, _ := DB.Get(mod)
+	has, _ := Db.Get(mod)
 	return mod, has
 }
 
 // PostPageAll 所有页面
 func PostPageAll() ([]Post, error) {
 	mods := make([]Post, 0, 4)
-	err := DB.Cols("id", "title", "path", "create_time", "summary", "comment_num", "options", "update_time").Where("Type = 1").Desc("create_time").Find(&mods)
+	err := Db.Cols("id", "title", "path", "create_time", "summary", "comment_num", "options", "update_time").Where("Type = 1").Desc("create_time").Find(&mods)
 	return mods, err
 }
 
@@ -130,7 +130,7 @@ func PostGet(id int) (*Post, bool) {
 	mod := &Post{
 		Id: id,
 	}
-	has, _ := DB.Get(mod)
+	has, _ := Db.Get(mod)
 	if has {
 		mod.Summary = ""
 	}
@@ -140,7 +140,7 @@ func PostGet(id int) (*Post, bool) {
 // postIds 通过id返回文章集合
 func postIds(ids []int) map[int]*Post {
 	mods := make([]Post, 0, 6)
-	DB.Cols("id", "title", "path", "cate_id", "create_time", "summary", "comment_num", "options").In("id", ids).Find(&mods)
+	Db.Cols("id", "title", "path", "cate_id", "create_time", "summary", "comment_num", "options").In("id", ids).Find(&mods)
 	if len(mods) > 0 {
 		mapSet := make(map[int]*Post, len(mods))
 		for idx := range mods {
@@ -153,7 +153,7 @@ func postIds(ids []int) map[int]*Post {
 
 //PostExist 判断是否存在
 func PostExist(ptah string) bool {
-	has, _ := DB.Exist(&Post{
+	has, _ := Db.Exist(&Post{
 		Path: ptah,
 	})
 	return has
@@ -161,7 +161,7 @@ func PostExist(ptah string) bool {
 
 // PostEdit 修改文章/页面
 func PostEdit(mod *Post) bool {
-	sess := DB.NewSession()
+	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	affect, err := sess.ID(mod.Id).Cols("Cate_id", "Status", "Title", "Summary", "Markdown_Content", "Content", "allow_comment", "Create_Time", "Comment_Num", "update_time", "is_public").Update(mod)
@@ -175,7 +175,7 @@ func PostEdit(mod *Post) bool {
 
 // PostAdd 添加文章/页面
 func PostAdd(mod *Post) bool {
-	sess := DB.NewSession()
+	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	affect, _ := sess.InsertOne(mod)
@@ -189,12 +189,12 @@ func PostAdd(mod *Post) bool {
 
 // PostDel 删除
 func PostDel(id int) bool {
-	sess := DB.NewSession()
+	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	if affect, err := sess.ID(id).Delete(&Post{}); affect > 0 && err == nil {
 		sess.Commit()
-		DB.ClearCacheBean(&Post{}, string(id))
+		Db.ClearCacheBean(&Post{}, string(id))
 		return true
 	}
 	sess.Rollback()

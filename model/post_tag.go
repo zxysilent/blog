@@ -14,7 +14,7 @@ type PostTag struct {
 // PostTags 文章对应的标签
 func PostTags(pid int) ([]PostTag, error) {
 	mods := make([]PostTag, 0, 4)
-	err := DB.Where("post_id = ? ", pid).Find(&mods)
+	err := Db.Where("post_id = ? ", pid).Find(&mods)
 	if err == nil {
 		ids := make([]int, 0, len(mods))
 		for idx := range mods {
@@ -35,7 +35,7 @@ func PostTags(pid int) ([]PostTag, error) {
 // PostTagIds 文章对应的标签id
 func PostTagIds(pid int) []int {
 	mods := make([]PostTag, 0, 4)
-	DB.Where("post_id = ? ", pid).Find(&mods)
+	Db.Where("post_id = ? ", pid).Find(&mods)
 	if len(mods) > 0 {
 		ids := make([]int, 0, len(mods))
 		for i := range mods {
@@ -49,14 +49,14 @@ func PostTagIds(pid int) []int {
 // TagPostCount 通过标签查询文章分页总数
 func TagPostCount(tid int) int {
 	var count int
-	DB.SQL(`SELECT count(post_id) as count FROM post_tag LEFT JOIN post ON post_id=post.id WHERE is_public=1 and tag_id=?`, tid).Get(&count)
+	Db.SQL(`SELECT count(post_id) as count FROM post_tag LEFT JOIN post ON post_id=post.id WHERE is_public=1 and tag_id=?`, tid).Get(&count)
 	return count
 }
 
 // TagPostList 通过标签查询文章分页
 func TagPostList(tid, pi, ps int) ([]PostTag, error) {
 	mods := make([]PostTag, 0, ps)
-	err := DB.SQL(`SELECT post.id id,post_id,tag_id FROM post_tag LEFT JOIN post ON post_id=post.id WHERE is_public=1 and tag_id=? limit ?,? `, tid, (pi-1)*ps, ps).Find(&mods)
+	err := Db.SQL(`SELECT post.id id,post_id,tag_id FROM post_tag LEFT JOIN post ON post_id=post.id WHERE is_public=1 and tag_id=? limit ?,? `, tid, (pi-1)*ps, ps).Find(&mods)
 	if len(mods) > 0 {
 		ids := make([]int, 0, len(mods))
 		for idx := range mods {
@@ -76,7 +76,7 @@ func TagPostList(tid, pi, ps int) ([]PostTag, error) {
 
 // TagPostAdds 添加文章标签[]
 func TagPostAdds(mod *[]PostTag) bool {
-	sess := DB.NewSession()
+	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	affect, _ := sess.Insert(mod)
@@ -90,12 +90,12 @@ func TagPostAdds(mod *[]PostTag) bool {
 
 // TagPostDel 删除标签对应的标签_文章
 func TagPostDel(tid int) bool {
-	sess := DB.NewSession()
+	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	if affect, err := sess.Where("tag_id = ?", tid).Delete(&PostTag{}); affect > 0 && err == nil {
 		sess.Commit()
-		DB.ClearCache(new(PostTag)) //清空缓存
+		Db.ClearCache(new(PostTag)) //清空缓存
 		return true
 	}
 	sess.Rollback()
@@ -107,12 +107,12 @@ func PostTagDels(pid int, tids []int) bool {
 	if len(tids) < 1 {
 		return true
 	}
-	sess := DB.NewSession()
+	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	if affect, err := sess.Where("post_id = ?", pid).In("tag_id", tids).Delete(&PostTag{}); affect > 0 && err == nil {
 		sess.Commit()
-		DB.ClearCache(new(PostTag)) //清空缓存
+		Db.ClearCache(new(PostTag)) //清空缓存
 		return true
 	}
 	sess.Rollback()
@@ -121,12 +121,12 @@ func PostTagDels(pid int, tids []int) bool {
 
 // PostTagDel 删除文章对应的标签_文章删除文章的时候
 func PostTagDel(pid int) bool {
-	sess := DB.NewSession()
+	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	if affect, err := sess.Where("post_id = ?", pid).Delete(&PostTag{}); affect > 0 && err == nil {
 		sess.Commit()
-		DB.ClearCache(new(PostTag)) //清空缓存
+		Db.ClearCache(new(PostTag)) //清空缓存
 		return true
 	}
 	sess.Rollback()

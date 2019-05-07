@@ -11,30 +11,30 @@ import (
 	"github.com/go-xorm/xorm"
 )
 
-// DB 数据库操作句柄
-var DB *xorm.Engine
+// Db 数据库操作句柄
+var Db *xorm.Engine
 
 func init() {
 	var err error
 	// 初始化数据库操作的 Xorm
-	DB, err = xorm.NewEngine("mysql", conf.Conn)
+	Db, err = xorm.NewEngine("mysql", conf.Conn)
 	if err != nil {
 		log.Fatalln("数据库连接失败", err.Error())
 	}
-	DB.SetMaxIdleConns(conf.MaxIdle)
-	DB.SetMaxOpenConns(conf.MaxOpen)
-	if err = DB.Ping(); err != nil {
+	Db.SetMaxIdleConns(conf.MaxIdle)
+	Db.SetMaxOpenConns(conf.MaxOpen)
+	if err = Db.Ping(); err != nil {
 		log.Fatalln("数据库不能正常工作", err.Error())
 	}
 	// 是否显示sql执行的语句
-	DB.ShowSQL(conf.ShowSQLl)
+	Db.ShowSQL(conf.ShowSQLl)
 	if conf.UseCache {
 		// 设置xorm缓存
 		cacher := xorm.NewLRUCacher(xorm.NewMemoryStore(), conf.CacheCount)
-		DB.SetDefaultCacher(cacher)
+		Db.SetDefaultCacher(cacher)
 	}
 	// 同步表
-	DB.Sync2(new(User))
+	Db.Sync2(new(User))
 }
 
 // Page 分页基本数据
@@ -76,6 +76,6 @@ type State struct {
 // Collect 统计信息
 func Collect() (*State, bool) {
 	mod := &State{}
-	has, _ := DB.SQL(`SELECT * FROM(SELECT COUNT(id) as post FROM post WHERE type=0)as a ,(SELECT COUNT(id) as page FROM post WHERE type=1) as b, (SELECT COUNT(id) as cate FROM cate) as c, (SELECT COUNT(id) as tag FROM tag) as d`).Get(mod)
+	has, _ := Db.SQL(`SELECT * FROM(SELECT COUNT(id) as post FROM post WHERE type=0)as a ,(SELECT COUNT(id) as page FROM post WHERE type=1) as b, (SELECT COUNT(id) as cate FROM cate) as c, (SELECT COUNT(id) as tag FROM tag) as d`).Get(mod)
 	return mod, has
 }

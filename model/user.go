@@ -55,13 +55,13 @@ func (rl Role) IsAtv() bool {
 //UserByNum 通过账号获取用户信息
 func UserByNum(num string) (*User, bool) {
 	mod := &User{}
-	has, _ := DB.Where("num=?", num).Get(mod)
+	has, _ := Db.Where("num=?", num).Get(mod)
 	return mod, has
 }
 
 //UserExist 判断是否存在当前账号
 func UserExist(num string) bool {
-	has, _ := DB.Exist(&User{
+	has, _ := Db.Exist(&User{
 		Num: num,
 	})
 	return has
@@ -70,13 +70,13 @@ func UserExist(num string) bool {
 //UserGet 查询一条用户信息
 func UserGet(id int) (*User, bool) {
 	mod := &User{}
-	has, _ := DB.ID(id).Get(mod)
+	has, _ := Db.ID(id).Get(mod)
 	return mod, has
 }
 
 //UserEditLogin 更新用户登陆信息
 func UserEditLogin(mod *User, cols ...string) bool {
-	sess := DB.NewSession()
+	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	if _, err := sess.ID(mod.Id).Cols(cols...).Update(mod); err == nil {
@@ -89,7 +89,7 @@ func UserEditLogin(mod *User, cols ...string) bool {
 
 // UserAdd 添加用户信息
 func UserAdd(mod *User) bool {
-	sess := DB.NewSession()
+	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	if _, err := sess.InsertOne(mod); err == nil {
@@ -103,7 +103,7 @@ func UserAdd(mod *User) bool {
 // UserPage 通过用户类型和分页信息返回用户信息
 func UserPage(rl int, lmtRl Role, pi int, ps int) ([]User, error) {
 	mods := make([]User, 0, ps)
-	sess := DB.NewSession()
+	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Where("Uid < 1 and role < ?", lmtRl)
 	sess.Where("role < ?", 1<<uint32(rl+1))
@@ -114,7 +114,7 @@ func UserPage(rl int, lmtRl Role, pi int, ps int) ([]User, error) {
 // UserCount 通过用户类型返回用户信息总数
 func UserCount(rl int, lmtRl Role) int {
 	mod := &User{}
-	sess := DB.NewSession()
+	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Where("Uid < 1 and role < ?", lmtRl)
 	sess.Where("role < ?", 1<<uint32(rl+1))
@@ -125,11 +125,11 @@ func UserCount(rl int, lmtRl Role) int {
 //UserChgatv 更新用户状态
 func UserChgatv(id int, rl ...Role) bool {
 	mod := new(User)
-	if has, _ := DB.ID(id).Get(mod); !has {
+	if has, _ := Db.ID(id).Get(mod); !has {
 		return false
 	}
 	//mod.Role = mod.Role ^ (1 << RAtv)
-	sess := DB.NewSession()
+	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	if len(rl) > 0 {
@@ -146,7 +146,7 @@ func UserChgatv(id int, rl ...Role) bool {
 //UserPass 修改密码
 func UserPass(id int, pass string, rl ...Role) bool {
 	mod := &User{Pass: pass}
-	sess := DB.NewSession()
+	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	sess.ID(id)
@@ -164,7 +164,7 @@ func UserPass(id int, pass string, rl ...Role) bool {
 
 //UserEdit 修改用户信息 不包括密码
 func UserEdit(mod *User, rl Role, cols ...string) bool {
-	sess := DB.NewSession()
+	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	if rl > 0 {
@@ -180,14 +180,14 @@ func UserEdit(mod *User, rl Role, cols ...string) bool {
 
 // UserDel 删除用户信息
 func UserDel(id int, rl Role) bool {
-	sess := DB.NewSession()
+	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	if rl > 0 {
 		sess.Where("role < ?", rl)
 	}
 	if _, err := sess.ID(id).Delete(&User{}); err == nil {
-		DB.ClearCacheBean(&User{}, string(id))
+		Db.ClearCacheBean(&User{}, string(id))
 		sess.Commit()
 		return true
 	}

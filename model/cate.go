@@ -10,7 +10,7 @@ type Cate struct {
 // CateIds 通过id返回新闻类别信息集合
 func cateIds(ids []int) map[int]*Cate {
 	mods := make([]Cate, 0, 6)
-	DB.In("id", ids).Find(&mods)
+	Db.In("id", ids).Find(&mods)
 	if len(mods) > 0 {
 		mapSet := make(map[int]*Cate, len(mods))
 		for idx := range mods {
@@ -27,7 +27,7 @@ func CateGet(id int) (*Cate, bool) {
 	mod := &Cate{
 		Id: id,
 	}
-	has, _ := DB.Get(mod)
+	has, _ := Db.Get(mod)
 	return mod, has
 }
 
@@ -36,20 +36,20 @@ func CateName(nam string) (*Cate, bool) {
 	mod := &Cate{
 		Name: nam,
 	}
-	has, _ := DB.Get(mod)
+	has, _ := Db.Get(mod)
 	return mod, has
 }
 
 // CateAll 所有分类
 func CateAll() ([]Cate, error) {
 	mods := make([]Cate, 0, 4)
-	err := DB.Asc("id").Find(&mods)
+	err := Db.Asc("id").Find(&mods)
 	return mods, err
 }
 
 // CateAdd 添加分类
 func CateAdd(mod *Cate) bool {
-	sess := DB.NewSession()
+	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	affect, _ := sess.InsertOne(mod)
@@ -63,7 +63,7 @@ func CateAdd(mod *Cate) bool {
 
 // CateEdit 修改分类
 func CateEdit(mod *Cate) bool {
-	sess := DB.NewSession()
+	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	affect, err := sess.ID(mod.Id).Cols("Name", "Intro").Update(mod)
@@ -77,12 +77,12 @@ func CateEdit(mod *Cate) bool {
 
 // CateDel 删除分类
 func CateDel(id int) bool {
-	sess := DB.NewSession()
+	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	if affect, err := sess.ID(id).Delete(&Cate{}); affect > 0 && err == nil {
 		sess.Commit()
-		DB.ClearCacheBean(&Cate{}, string(id))
+		Db.ClearCacheBean(&Cate{}, string(id))
 		return true
 	}
 	sess.Rollback()
@@ -92,7 +92,7 @@ func CateDel(id int) bool {
 // CatePostCount 通过标签查询文章分页总数
 // lmt 是否前台限制
 func CatePostCount(cid int, lmt bool) int {
-	sess := DB.NewSession()
+	sess := Db.NewSession()
 	defer sess.Close()
 	if cid > 0 {
 		sess.Where("Cate_id = ?  ", cid)
@@ -110,7 +110,7 @@ func CatePostCount(cid int, lmt bool) int {
 // lmt 是否前台限制
 func CatePostList(cid, pi, ps int, lmt bool) ([]Post, error) {
 	mods := make([]Post, 0, ps)
-	sess := DB.NewSession()
+	sess := Db.NewSession()
 	defer sess.Close()
 	if cid > 0 {
 		sess.Where("Cate_id = ? ", cid)

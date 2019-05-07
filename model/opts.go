@@ -28,7 +28,7 @@ var MapOpts mapOpts
 
 func initMap() {
 	mods := make([]Opts, 0, 8)
-	DB.Find(&mods)
+	Db.Find(&mods)
 	m := make(map[string]string, len(mods))
 	for _, v := range mods {
 		m[v.Key] = v.Value
@@ -52,7 +52,7 @@ func OptsMustGet(key string) string {
 
 // OptsEdit 编辑配置
 func OptsEdit(mod *Opts) bool {
-	sess := DB.NewSession()
+	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	affect, err := sess.ID(mod.Key).Cols("Value").Update(mod)
