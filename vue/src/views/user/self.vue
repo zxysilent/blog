@@ -14,6 +14,9 @@
 					<FormItem label="用户姓名：" prop="name">
 						<Input v-model="userForm.name"></Input>
 					</FormItem>
+                    <FormItem label="电话：" prop="phone">
+                        <Input v-model="userForm.phone"></Input>
+					</FormItem>
 					<FormItem label="邮箱地址：" prop="email">
 						<Input v-model="userForm.email"></Input>
 					</FormItem>
@@ -21,13 +24,10 @@
 						<Button type="text" size="small" @click="showModel">修改密码</Button>
 					</FormItem>
 					<FormItem label="创建时间：">
-						<span>{{ userForm.create_time.replace(/T|\+08:00/g, " ") }}</span>
+						<span>{{ userForm.ctime.replace(/T|\+08:00|Z/g, " ") }}</span>
 					</FormItem>
-					<FormItem label="App Key：" prop="app_key">
-						<span>{{userForm.app_key}}</span>
-					</FormItem>
-					<FormItem label="App Secret：" prop="app_secret">
-						<span>{{userForm.app_secret}}</span>
+					<FormItem label="备注信息：" prop="remark">
+						<span>{{userForm.remark}}</span>
 					</FormItem>
 					<FormItem>
 						<Button type="warning" :loading="loadingSaveInfo" @click="saveUser">提交保存</Button>
@@ -78,9 +78,9 @@ export default {
 				num: "",
 				name: "",
 				email: "",
-				app_key: "",
-				app_secret: "",
-				create_time: ""
+				phone: "",
+				remark: "",
+				ctime: ""
 			},
 			loadingSaveInfo: false,
 			showPasswordModal: false, // 修改密码模态框显示

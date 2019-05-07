@@ -39,10 +39,7 @@ import util from "@/init/util";
 export default {
 	data() {
 		return {
-			user: {
-				num: "zxysilent",
-				pass: "zxyslt"
-			},
+			user: { num: "zxysilent", pass: "zxyslt" },
 			rules: {
 				num: [{ required: true, message: "账号不能为空", trigger: "blur" }],
 				pass: [{ required: true, message: "密码不能为空", trigger: "blur" }]
