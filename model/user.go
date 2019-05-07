@@ -4,19 +4,22 @@ import (
 	"time"
 )
 
+// tips int(11)、tinyint(4)、smallint(6)、mediumint(9)、bigint(20)
+
 // User 用户
 type User struct {
-	Id         int       `xorm:"pk autoincr INT(11)" json:"id" form:"id"`
-	Num        string    `xorm:"unique VARCHAR(255)" json:"num" form:"num"`
-	Name       string    `xorm:"VARCHAR(255)" json:"name" form:"name"`
-	Pass       string    `xorm:"VARCHAR(255)" json:"-" form:"-"`
-	Role       Role      `xorm:"INT(11)" json:"role" form:"role"`
-	Email      string    `xorm:"unique VARCHAR(255)" json:"email" form:"email"`
-	CreateTime time.Time `xorm:"DATETIME" json:"create_time" form:"create_time"`
-	LoginTime  time.Time `xorm:"DATETIME" json:"login_time" form:"login_time"`
-	LoginIp    string    `xorm:"VARCHAR(20)" json:"login_ip" form:"login_ip"`
-	AppKey     string    `xorm:"VARCHAR(255)" json:"app_key" form:"app_key"`
-	AppSecret  string    `xorm:"VARCHAR(255)" json:"app_secret" form:"app_secret"`
+	Id     int       `xorm:"pk autoincr INT(11) not null" json:"id" form:"id"`              //主键
+	Num    string    `xorm:"unique VARCHAR(32) default('') not null" json:"num" form:"num"` //账号
+	Name   string    `xorm:"VARCHAR(32) default('') not null" json:"name" form:"name"`      //名称
+	Pass   string    `xorm:"VARCHAR(32) default('') not null" json:"-" form:"-"`            //密码
+	Role   Role      `xorm:"INT(11) default(0) not null" json:"role" form:"role"`           //权限
+	Phone  string    `xorm:"VARCHAR(32) default('') not null" json:"phone" form:"phone"`    //手机
+	Email  string    `xorm:"VARCHAR(255)  default('') not null" json:"email" form:"email"`  //邮箱
+	Ip     string    `xorm:"VARCHAR(32)  default('') not null" json:"ip" form:"ip"`         //登录ip
+	Remark string    `xorm:"VARCHAR(255) default('') not null" json:"remark" form:"remark"` //备注
+	Ecount int8      `xorm:"TINYINT default(0) not null" json:"ecount" form:"ecount"`       //登录错误次数
+	Ltime  time.Time `xorm:"DATETIME null" json:"ltime" form:"ltime"`                       //上次登录时间
+	Ctime  time.Time `xorm:"DATETIME null" json:"ctime" form:"ctime"`                       //创建时间
 }
 
 // Role 权限角色
@@ -71,18 +74,12 @@ func UserGet(id int) (*User, bool) {
 	return mod, has
 }
 
-//UserEditLogin 更新用户登陆信息ip count
-func UserEditLogin(id int, ip string) bool {
-	mod := new(User)
-	if has, _ := DB.ID(id).Get(mod); !has {
-		return false
-	}
-	mod.LoginIp = ip
-	mod.LoginTime = time.Now()
+//UserEditLogin 更新用户登陆信息
+func UserEditLogin(mod *User, cols ...string) bool {
 	sess := DB.NewSession()
 	defer sess.Close()
 	sess.Begin()
-	if affect, err := sess.ID(id).Cols("Login_Time", "Login_Ip").Update(mod); affect >= 1 && err == nil {
+	if _, err := sess.ID(mod.Id).Cols(cols...).Update(mod); err == nil {
 		sess.Commit()
 		return true
 	}
@@ -95,13 +92,12 @@ func UserAdd(mod *User) bool {
 	sess := DB.NewSession()
 	defer sess.Close()
 	sess.Begin()
-	affect, _ := sess.InsertOne(mod)
-	if affect != 1 {
-		sess.Rollback()
-		return false
+	if _, err := sess.InsertOne(mod); err == nil {
+		sess.Commit()
+		return true
 	}
-	sess.Commit()
-	return true
+	sess.Rollback()
+	return false
 }
 
 // UserPage 通过用户类型和分页信息返回用户信息
@@ -139,8 +135,7 @@ func UserChgatv(id int, rl ...Role) bool {
 	if len(rl) > 0 {
 		sess.Where("role < ?", rl[0])
 	}
-	affect, err := sess.ID(id).Cols("Role").Update(mod)
-	if affect >= 1 && err == nil {
+	if _, err := sess.ID(id).Cols("Role").Update(mod); err == nil {
 		sess.Commit()
 		return true
 	}
@@ -175,8 +170,7 @@ func UserEdit(mod *User, rl Role, cols ...string) bool {
 	if rl > 0 {
 		sess.Where("role < ?", rl)
 	}
-	affect, err := sess.ID(mod.Id).Cols(cols...).Update(mod)
-	if affect >= 0 && err == nil {
+	if _, err := sess.ID(mod.Id).Cols(cols...).Update(mod); err == nil {
 		sess.Commit()
 		return true
 	}
@@ -192,7 +186,7 @@ func UserDel(id int, rl Role) bool {
 	if rl > 0 {
 		sess.Where("role < ?", rl)
 	}
-	if affect, err := sess.ID(id).Delete(&User{}); affect >= 0 && err == nil {
+	if _, err := sess.ID(id).Delete(&User{}); err == nil {
 		DB.ClearCacheBean(&User{}, string(id))
 		sess.Commit()
 		return true

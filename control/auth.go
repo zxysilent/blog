@@ -2,6 +2,7 @@ package control
 
 import (
 	"blog/model"
+	"strconv"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -26,11 +27,31 @@ func UserLogin(ctx echo.Context) error {
 	if !has {
 		return ctx.JSON(util.NewErrOpt(`用户名输入错误`))
 	}
-	if !mod.Role.IsAtv() {
-		return ctx.JSON(util.NewFail(`当前账号已被禁用`))
+	now := time.Now()
+	// 禁止登陆证 5 分钟
+	if mod.Ecount == -1 {
+		// 登录时间差
+		span := 5 - int(now.Sub(mod.Ltime).Minutes())
+		if span >= 1 { //「」
+			return ctx.JSON(util.NewFail(`请「` + strconv.Itoa(span) + `」分钟后登录`))
+		}
+		mod.Ecount = 0
 	}
 	if mod.Pass != ipt.Pass {
-		return ctx.JSON(util.NewFail(`密码输入错误`))
+		mod.Ltime = now
+		mod.Ecount++
+		// 错误次数大于 3 锁定
+		if mod.Ecount >= 3 {
+			mod.Ecount = -1
+			model.UserEditLogin(mod, "Ltime", "Ecount")
+			return ctx.JSON(util.NewFail(`登录锁定请「5」分钟后登录`))
+		}
+		// 小于3 提示剩余次数
+		model.UserEditLogin(mod, "Ltime", "Ecount")
+		return ctx.JSON(util.NewFail(`密码错误,剩于登录次数：` + strconv.Itoa(int(3-mod.Ecount))))
+	}
+	if !mod.Role.IsAtv() {
+		return ctx.JSON(util.NewFail(`当前账号已被禁用`))
 	}
 	claims := model.JwtClaims{
 		Id:   mod.Id,
@@ -48,7 +69,9 @@ func UserLogin(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(util.NewFail(`凭证生成失败,请重试`, err.Error()))
 	}
-	model.UserEditLogin(mod.Id, ctx.RealIP())
+	mod.Ltime = now
+	mod.Ip = ctx.RealIP()
+	model.UserEditLogin(mod, "Ltime", "Ip", "Ecount")
 	return ctx.JSON(util.NewSucc(`登陆成功`, jwtStr))
 }
 

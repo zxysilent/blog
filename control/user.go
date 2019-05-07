@@ -210,7 +210,7 @@ func UserEditSelf(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(util.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
-	if !model.UserEdit(mod, 0, "Name", "Email") {
+	if !model.UserEdit(mod, 0, "Name", "Phone", "Email") {
 		return ctx.JSON(util.NewFail(`用户信息修改失败`))
 	}
 	return ctx.JSON(util.NewSucc(`用户信息修改成功`))
