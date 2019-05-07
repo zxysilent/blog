@@ -44,7 +44,7 @@ func midLog(next echo.HandlerFunc) echo.HandlerFunc {
 		buf := pool.Get().(*bytes.Buffer)
 		buf.Reset()
 		defer pool.Put(buf)
-		buf.WriteString("\tip：" + ctx.RealIP())
+		buf.WriteString("ip：" + ctx.RealIP())
 		buf.WriteString("\tmethod：" + ctx.Request().Method)
 		buf.WriteString("\tpath：" + ctx.Request().URL.Path)
 		buf.WriteString("\turi：" + ctx.Request().RequestURI)
