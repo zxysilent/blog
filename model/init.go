@@ -26,13 +26,15 @@ func init() {
 	if err = DB.Ping(); err != nil {
 		log.Fatalln("数据库不能正常工作", err.Error())
 	}
-	//是否显示sql执行的语句
+	// 是否显示sql执行的语句
 	DB.ShowSQL(conf.ShowSQLl)
 	if conf.UseCache {
 		// 设置xorm缓存
 		cacher := xorm.NewLRUCacher(xorm.NewMemoryStore(), conf.CacheCount)
 		DB.SetDefaultCacher(cacher)
 	}
+	// 同步表
+	DB.Sync2(new(User))
 }
 
 // Page 分页基本数据
