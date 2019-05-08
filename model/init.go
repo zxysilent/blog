@@ -34,7 +34,7 @@ func init() {
 		Db.SetDefaultCacher(cacher)
 	}
 	// 同步表
-	Db.Sync2(new(User))
+	Db.Sync2(new(User), new(Cate), new(Tag))
 }
 
 // Page 分页基本数据
