@@ -105,3 +105,16 @@ func Collect(ctx echo.Context) error {
 	}
 	return ctx.JSON(util.NewFail(`未查询到统计信息`))
 }
+
+// Models doc
+// @Tags doc
+// @Summary 所有定义的数据结构体
+// @Param body body model.Page true "Page struct"
+// @Param body body model.Cate true "Cate struct"
+// @Param body body model.Opts true "Opts struct"
+// @Param body body model.PostTag true "PostTag struct"
+// @Param body body model.Post true "Post struct"
+// @Param body body model.Tag true "Tag struct"
+// @Param body body model.User true "User struct"
+func Models() {
+}

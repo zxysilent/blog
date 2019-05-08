@@ -3,9 +3,11 @@ package route
 import (
 	"blog/conf"
 	"blog/control"
+	_ "blog/docs"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
 // Run 入口
@@ -24,6 +26,10 @@ func Run() {
 	engine.HideBanner = true
 	// 自定义错误处理
 	engine.HTTPErrorHandler = HTTPErrorHandler
+	engine.Debug = conf.Debug
+	if engine.Debug {
+		engine.GET("/swagger/*", echoSwagger.WrapHandler)
+	}
 	// 静态目录
 	engine.Static(`/res`, "res")
 	// 前后端分离页面
@@ -104,6 +110,5 @@ func Run() {
 	api.GET(`/opts/:key`, control.OptsGet)
 	// 编辑配置项
 	api.POST(`/opts/edit`, control.OptsEdit)
-	engine.Debug = conf.Debug
 	engine.Start(conf.Addr)
 }

@@ -8,18 +8,18 @@ import (
 
 // User 用户
 type User struct {
-	Id     int       `xorm:"pk autoincr INT(11) not null" json:"id" form:"id"`              //主键
-	Num    string    `xorm:"unique VARCHAR(32) default('') not null" json:"num" form:"num"` //账号
-	Name   string    `xorm:"VARCHAR(32) default('') not null" json:"name" form:"name"`      //名称
-	Pass   string    `xorm:"VARCHAR(32) default('') not null" json:"-" form:"-"`            //密码
-	Role   Role      `xorm:"INT(11) default(0) not null" json:"role" form:"role"`           //权限
-	Phone  string    `xorm:"VARCHAR(32) default('') not null" json:"phone" form:"phone"`    //手机
-	Email  string    `xorm:"VARCHAR(255)  default('') not null" json:"email" form:"email"`  //邮箱
-	Ip     string    `xorm:"VARCHAR(32)  default('') not null" json:"ip" form:"ip"`         //登录ip
-	Remark string    `xorm:"VARCHAR(255) default('') not null" json:"remark" form:"remark"` //备注
-	Ecount int8      `xorm:"TINYINT default(0) not null" json:"ecount" form:"ecount"`       //登录错误次数
-	Ltime  time.Time `xorm:"DATETIME null" json:"ltime" form:"ltime"`                       //上次登录时间
-	Ctime  time.Time `xorm:"DATETIME null" json:"ctime" form:"ctime"`                       //创建时间
+	Id     int       `xorm:"pk autoincr INT(11) not null" json:"id" form:"id"`                //主键
+	Num    string    `xorm:"unique VARCHAR(32) default('''') not null" json:"num" form:"num"` //账号
+	Name   string    `xorm:"VARCHAR(32) default('''') not null" json:"name" form:"name"`      //名称
+	Pass   string    `xorm:"VARCHAR(32) default('''') not null" json:"-" form:"-"`            //密码
+	Role   Role      `xorm:"INT(11) default(0) not null" json:"role" form:"role"`             //权限
+	Phone  string    `xorm:"VARCHAR(32) default('''') not null" json:"phone" form:"phone"`    //手机
+	Email  string    `xorm:"VARCHAR(255) default('''') not null" json:"email" form:"email"`   //邮箱
+	Ip     string    `xorm:"VARCHAR(32)  default(''''') not null" json:"ip" form:"ip"`        //登录ip
+	Remark string    `xorm:"VARCHAR(255) default('''') not null" json:"remark" form:"remark"` //备注
+	Ecount int8      `xorm:"TINYINT default(0) not null" json:"ecount" form:"ecount"`         //登录错误次数
+	Ltime  time.Time `xorm:"DATETIME null default('NULL')" json:"ltime" form:"ltime"`         //上次登录时间
+	Ctime  time.Time `xorm:"DATETIME null default('NULL')" json:"ctime" form:"ctime"`         //创建时间
 }
 
 // Role 权限角色

@@ -12,7 +12,7 @@ import (
 // @Summary 判断当前用户账号是否存在
 // @Param num path string true "用户账号"" default('')
 // @Success 200 {object} util.Result "成功数据"
-// @Router /user/exist/{num} [get]
+// @Router /api/user/exist/{num} [get]
 func UserExist(ctx echo.Context) error {
 	num := ctx.Param("num")
 	if !model.UserExist(num) {
@@ -127,11 +127,6 @@ func UserExist(ctx echo.Context) error {
 // }
 
 // UserEdit doc
-// @Tags 用户
-// @Summary 修改用户信息
-// @Accept mpfd
-// @Param mod formData {object} true "用户信息mod"
-// @Router /user/edit [post]
 func UserEdit(ctx echo.Context) error {
 	ipt := &struct {
 		model.User
@@ -176,11 +171,14 @@ func UserEdit(ctx echo.Context) error {
 // 	return ctx.JSON(util.NewSucc(`用户信息删除成功`))
 // }
 
+// UserPass doc
+// @Tags 用户
 // UserPass 修改自己的密码
+// @Param id formData int false "id-自动获取" default(0)
 // @Param opass formData string true "旧密码" default('')
 // @Param npass formData string true "新密码" default('')
 // @Success 200 {object} util.Result "成功数据"
-// @Router /user/pass [post]
+// @Router /api/user/pass [post]
 func UserPass(ctx echo.Context) error {
 	ipt := struct {
 		Opass string `json:"opass" form:"opass"`
@@ -203,7 +201,16 @@ func UserPass(ctx echo.Context) error {
 	return ctx.JSON(util.NewSucc(`密码修改成功`))
 }
 
-// UserEditSelf 修改个人信息
+// UserEditSelf doc
+// @Tags 用户
+// @Summary 修改个人信息
+// @Accept json
+// @Produce  json
+// @Param id formData int false "id-自动获取" default(0)
+// @Param name formData string true "名称" default('')
+// @Param phone formData string true "号码" default('')
+// @Param email formData string true "邮箱" default('')
+// @Router /api/user/edit/self [post]
 func UserEditSelf(ctx echo.Context) error {
 	mod := &model.User{}
 	err := ctx.Bind(mod)
