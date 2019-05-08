@@ -62,11 +62,7 @@ export default {
 						}
 					}
 				},
-				{
-					title: "点击量",
-					width: 80,
-					key: "hits"
-				},
+				{ title: "点击量", width: 80, key: "hits" },
 				{
 					title: "日期",
 					width: 150,
@@ -94,15 +90,23 @@ export default {
 									}
 								}
 							}),
-							h("Icon", {
-								props: { type: "ios-trash", size: "20", color: "#FF5722" },
-								attrs: { title: "删除" },
-								on: {
-									click: () => {
-										this.delete(data);
+							h(
+								"Poptip",
+								{
+									props: { confirm: true, title: "确定要删除吗？" },
+									on: {
+										"on-ok": () => {
+											this.delete(data);
+										}
 									}
-								}
-							})
+								},
+								[
+									h("Icon", {
+										props: { type: "ios-trash", size: "20", color: "#FF5722" },
+										attrs: { title: "删除" }
+									})
+								]
+							)
 						]);
 					}
 				}
@@ -152,22 +156,16 @@ export default {
 		},
 		//删除
 		delete(data) {
-			this.$Modal.confirm({
-				title: "系统提示",
-				content: "你确定要删除吗？",
-				onOk: () => {
-					postDel(data.row.id).then(resp => {
-						if (resp.code == 200) {
-							this.$Message.success({
-								content: "删除成功",
-								onClose: () => {
-									this.dataPost.splice(data.index, 1);
-								}
-							});
-						} else {
-							this.$Message.error("删除失败,请重试！");
+			postDel(data.row.id).then(resp => {
+				if (resp.code == 200) {
+					this.$Message.success({
+						content: "删除成功",
+						onClose: () => {
+							this.dataPost.splice(data.index, 1);
 						}
 					});
+				} else {
+					this.$Message.error("删除失败,请重试！");
 				}
 			});
 		}

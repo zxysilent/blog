@@ -57,15 +57,23 @@ export default {
 									}
 								}
 							}),
-							h("Icon", {
-								props: { type: "ios-trash", size: "20", color: "#FF5722" },
-								attrs: { title: "删除" },
-								on: {
-									click: () => {
-										this.delete(data);
+							h(
+								"Poptip",
+								{
+									props: { confirm: true, title: "确定要删除吗？" },
+									on: {
+										"on-ok": () => {
+											this.delete(data);
+										}
 									}
-								}
-							})
+								},
+								[
+									h("Icon", {
+										props: { type: "ios-trash", size: "20", color: "#FF5722" },
+										attrs: { title: "删除" }
+									})
+								]
+							)
 						]);
 					}
 				}
@@ -108,22 +116,16 @@ export default {
 			});
 		},
 		delete(data) {
-			this.$Modal.confirm({
-				title: "系统提示",
-				content: "你确定要删除吗？",
-				onOk: () => {
-					tagDel(data.row.id).then(resp => {
-						if (resp.code == 200) {
-							this.$Message.success({
-								content: "删除成功",
-								onClose: () => {
-									this.dataTag.splice(data.index, 1);
-								}
-							});
-						} else {
-							this.$Message.error("删除失败,请重试！");
+			tagDel(data.row.id).then(resp => {
+				if (resp.code == 200) {
+					this.$Message.success({
+						content: "删除成功",
+						onClose: () => {
+							this.dataTag.splice(data.index, 1);
 						}
 					});
+				} else {
+					this.$Message.error("删除失败,请重试！");
 				}
 			});
 		}
