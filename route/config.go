@@ -62,7 +62,9 @@ func midLog(next echo.HandlerFunc) echo.HandlerFunc {
 
 // HTTPErrorHandler 全局错误捕捉
 func HTTPErrorHandler(err error, ctx echo.Context) {
-	ctx.JSON(util.NewErrSvr(err.Error()))
+	if !ctx.Response().Committed {
+		ctx.JSON(util.NewErrSvr(err.Error()))
+	}
 }
 
 // 日志格式配置
