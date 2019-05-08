@@ -2,9 +2,9 @@ package model
 
 // Tag 标签
 type Tag struct {
-	Id    int    `xorm:"pk autoincr INT(11)" json:"id" form:"id"`
-	Name  string `xorm:"unique VARCHAR(64)" json:"name" form:"name"`
-	Intro string `xorm:"VARCHAR(64)" json:"intro" form:"intro"`
+	Id    int    `xorm:"pk autoincr INT(11) not null" json:"id" form:"id"`
+	Name  string `xorm:"unique VARCHAR(64) default('''') not null" json:"name" form:"name"`
+	Intro string `xorm:"VARCHAR(64) default('''') not null" json:"intro,omitempty" form:"intro"`
 }
 
 // TagState 统计
