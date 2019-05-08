@@ -43,7 +43,12 @@ func CatePostView(ctx echo.Context) error {
 	})
 }
 
-// CateAll 所有分类
+// CateAll doc
+// @Tags 分类
+// @Summary 所有分类
+// @Param token query string true "凭证jwt" default(jwt)
+// @Success 200 {object} util.Result "成功数据"
+// @Router /api/cate/all [get]
 func CateAll(ctx echo.Context) error {
 	mods, err := model.CateAll()
 	if err != nil {
@@ -55,11 +60,15 @@ func CateAll(ctx echo.Context) error {
 	return ctx.JSON(util.NewSucc(`分类信息`, mods))
 }
 
-// CatePost 分类文章列表
+// CatePost doc
+// @Tags 分类
+// @Summary 分类文章列表
 // @Param cid path int true "分类id" default(1)
 // @Param pi query int true "分页页数pi" default(1)
 // @Param ps query int true "分页大小ps" default(6)
+// @Param token query string true "凭证jwt" default(jwt)
 // @Success 200 {object} util.Result "成功数据"
+// @Router /api/cate/post/{cid} [get]
 func CatePost(ctx echo.Context) error {
 	cid, err := strconv.Atoi(ctx.Param("cid"))
 	if err != nil {
@@ -81,7 +90,13 @@ func CatePost(ctx echo.Context) error {
 	return ctx.JSON(util.NewPage(`文章信息`, mods, count))
 }
 
-// CateAdd 添加分类
+// CateAdd doc
+// @Tags 分类
+// @Summary 添加分类
+// @Param body body model.Cate true "分类 struct"
+// @Param token query string true "凭证jwt" default(jwt)
+// @Success 200 {object} util.Result "成功数据"
+// @Router /api/cate/add [post]
 func CateAdd(ctx echo.Context) error {
 	ipt := &model.Cate{}
 	err := ctx.Bind(ipt)
@@ -94,7 +109,13 @@ func CateAdd(ctx echo.Context) error {
 	return ctx.JSON(util.NewSucc(`添加分类成功`))
 }
 
-// CateEdit 修改分类
+// CateEdit doc
+// @Tags 分类
+// @Summary 修改分类
+// @Param body body model.Cate true "分类 struct"
+// @Param token query string true "凭证jwt" default(jwt)
+// @Success 200 {object} util.Result "成功数据"
+// @Router /api/cate/edit [post]
 func CateEdit(ctx echo.Context) error {
 	ipt := &model.Cate{}
 	err := ctx.Bind(ipt)
@@ -107,7 +128,13 @@ func CateEdit(ctx echo.Context) error {
 	return ctx.JSON(util.NewSucc(`分类修改成功`))
 }
 
-// CateDel  删除分类
+// CateDel doc
+// @Tags 分类
+// @Summary 删除分类
+// @Param id path int true "id-分类" default(0)
+// @Param token query string true "凭证jwt" default(jwt)
+// @Success 200 {object} util.Result "成功数据"
+// @Router /api/cate/del/{id} [get]
 func CateDel(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {

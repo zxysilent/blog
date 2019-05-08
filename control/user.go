@@ -12,7 +12,7 @@ import (
 // @Summary 判断当前用户账号是否存在
 // @Param num path string true "用户账号"" default('')
 // @Success 200 {object} util.Result "成功数据"
-// @Router /api/user/exist/{num} [get]
+// @Router /user/exist/{num} [get]
 func UserExist(ctx echo.Context) error {
 	num := ctx.Param("num")
 	if !model.UserExist(num) {
@@ -173,7 +173,7 @@ func UserEdit(ctx echo.Context) error {
 
 // UserPass doc
 // @Tags 用户
-// UserPass 修改自己的密码
+// @Summary 修改自己的密码
 // @Param id formData int false "id-自动获取" default(0)
 // @Param opass formData string true "旧密码" default('')
 // @Param npass formData string true "新密码" default('')

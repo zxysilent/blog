@@ -13,8 +13,6 @@ import (
 // UserLogin doc
 // @Tags auth
 // @Summary 登陆
-// @Accept mpfd
-// @Produce  json
 // @Param num formData string true "账号" default(super)
 // @Param pass formData string true "密码" default(123654)
 // @Success 200 {object} util.Result "成功数据"
@@ -86,7 +84,6 @@ func UserLogin(ctx echo.Context) error {
 // UserLogout doc
 // @Tags auth
 // @Summary 注销
-// @Produce  json
 // @Success 200 {object} util.Result "成功数据"
 // @Router /logout [post]
 func UserLogout(ctx echo.Context) error {
@@ -96,8 +93,7 @@ func UserLogout(ctx echo.Context) error {
 // UserAuth doc
 // @Tags auth
 // @Summary 获取登录信息
-// @Produce  json
-// @Param token query string true "凭证jwt" default(jwt-bearer)
+// @Param token query string true "凭证jwt" default(jwt)
 // @Success 200 {object} util.Result "成功数据"
 // @Router /api/auth [get]
 func UserAuth(ctx echo.Context) error {
