@@ -13,6 +13,7 @@ import (
 // UserLogin doc
 // @Tags auth
 // @Summary 登陆
+// @Accept mpfd
 // @Param num formData string true "账号" default(super)
 // @Param pass formData string true "密码" default(123654)
 // @Success 200 {object} util.Result "成功数据"
