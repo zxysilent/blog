@@ -121,7 +121,7 @@ func PostSingle(path string) (*Post, bool) {
 // PostPageAll 所有页面
 func PostPageAll() ([]Post, error) {
 	mods := make([]Post, 0, 4)
-	err := Db.Cols("id", "title", "path", "create_time", "summary", "comment_num", "options", "update_time").Where("Type = 1").Desc("create_time").Find(&mods)
+	err := Db.Cols("id", "title", "path", "create_time", "summary", "comment_num", "options", "update_time", "is_public").Where("Type = 1").Desc("create_time").Find(&mods)
 	return mods, err
 }
 
