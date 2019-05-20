@@ -161,7 +161,7 @@ export default {
 								content: "密码修改成功,请重新登陆",
 								onClose: () => {
 									// 退出登录
-									this.$store.commit("logout", this);
+									// this.$store.commit("logout", this);
 									this.$router.push({
 										name: "login"
 									});
