@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/labstack/echo"
-	"github.com/zxysilent/util"
+	"github.com/zxysilent/xutil"
 )
 
 // IndexView 主页面
@@ -21,7 +21,7 @@ func IndexView(ctx echo.Context) error {
 	if pi == 0 {
 		pi = 1
 	}
-	ps, _ := util.Atoi(model.MapOpts.MustGet("page_size"), 6)
+	ps, _ := xutil.Atoi(model.MapOpts.MustGet("page_size"), 6)
 	mods, _ := model.PostPage(pi, ps)
 	total := model.PostCount()
 	naver := model.Naver{}
@@ -52,27 +52,27 @@ func ArchivesView(ctx echo.Context) error {
 func Upload(ctx echo.Context) error {
 	file, err := ctx.FormFile("file")
 	if err != nil {
-		return ctx.JSON(util.NewErrIpt(`未发现文件,请重试`, err.Error()))
+		return ctx.JSON(xutil.NewErrIpt(`未发现文件,请重试`, err.Error()))
 	}
 	src, err := file.Open()
 	if err != nil {
-		return ctx.JSON(util.NewErrIpt(`文件打开失败,请重试`, err.Error()))
+		return ctx.JSON(xutil.NewErrIpt(`文件打开失败,请重试`, err.Error()))
 	}
 	defer src.Close()
-	basePath := "res/upimg/" + time.Now().Format(util.FmtyyyyMMdd) + "/"
+	basePath := "res/upimg/" + time.Now().Format(xutil.FmtyyyyMMdd) + "/"
 	//确保文件夹存在
 	os.MkdirAll(basePath, 0777)
-	fileName := util.RandStr(16) + filepath.Ext(file.Filename)
+	fileName := xutil.RandStr(16) + filepath.Ext(file.Filename)
 	filePathName := basePath + fileName
 	dst, err := os.Create(filePathName)
 	if err != nil {
-		return ctx.JSON(util.NewErrIpt(`目标文件创建失败,请重试`, err.Error()))
+		return ctx.JSON(xutil.NewErrIpt(`目标文件创建失败,请重试`, err.Error()))
 	}
 	defer dst.Close()
 	if _, err = io.Copy(dst, src); err != nil {
-		return ctx.JSON(util.NewErrIpt(`文件写入失败,请重试`, err.Error()))
+		return ctx.JSON(xutil.NewErrIpt(`文件写入失败,请重试`, err.Error()))
 	}
-	return ctx.JSON(util.NewSucc(`文件上传成功`, "/"+filePathName))
+	return ctx.JSON(xutil.NewSucc(`文件上传成功`, "/"+filePathName))
 }
 
 // Core 重定向
@@ -95,15 +95,15 @@ func Sys(ctx echo.Context) error {
 		Version: runtime.Version(),
 		NumCPU:  runtime.NumCPU(),
 	}
-	return ctx.JSON(util.NewSucc(`系统信息`, info))
+	return ctx.JSON(xutil.NewSucc(`系统信息`, info))
 }
 
 // Collect 统计信息
 func Collect(ctx echo.Context) error {
 	if mod, has := model.Collect(); has {
-		return ctx.JSON(util.NewSucc(`统计信息`, mod))
+		return ctx.JSON(xutil.NewSucc(`统计信息`, mod))
 	}
-	return ctx.JSON(util.NewFail(`未查询到统计信息`))
+	return ctx.JSON(xutil.NewFail(`未查询到统计信息`))
 }
 
 // Models doc

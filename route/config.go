@@ -16,7 +16,7 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	"github.com/zxysilent/util"
+	"github.com/zxysilent/xutil"
 )
 
 var pool *sync.Pool
@@ -63,7 +63,7 @@ func midLog(next echo.HandlerFunc) echo.HandlerFunc {
 // HTTPErrorHandler 全局错误捕捉
 func HTTPErrorHandler(err error, ctx echo.Context) {
 	if !ctx.Response().Committed {
-		ctx.JSON(util.NewErrSvr(err.Error()))
+		ctx.JSON(xutil.NewErrSvr(err.Error()))
 	}
 }
 
@@ -146,7 +146,7 @@ func midJwt(next echo.HandlerFunc) echo.HandlerFunc {
 			// header 查找token
 			tokenString = ctx.Request().Header.Get(echo.HeaderAuthorization)
 			if tokenString == "" {
-				ctx.JSON(util.NewErrJwt(`请重新登陆`, `未发现jwt`))
+				ctx.JSON(xutil.NewErrJwt(`请重新登陆`, `未发现jwt`))
 				return nil
 			}
 			// Bearer token
@@ -160,7 +160,7 @@ func midJwt(next echo.HandlerFunc) echo.HandlerFunc {
 			ctx.Set("auth", jwtAuth)
 			ctx.Set("uid", jwtAuth.Id)
 		} else {
-			return ctx.JSON(util.NewErrJwt(`请重新登陆","jwt验证失败`))
+			return ctx.JSON(xutil.NewErrJwt(`请重新登陆","jwt验证失败`))
 		}
 		// 自定义头
 		ctx.Response().Header().Set(echo.HeaderServer, "dev")
@@ -178,6 +178,6 @@ func midJwt(next echo.HandlerFunc) echo.HandlerFunc {
 // 		if auth.Role.Gte(27) { //大于等于某个权限
 // 			return next(ctx)
 // 		}
-// 		return ctx.JSON(util.NewErrDeny(`对不起，你无法进行操作^_^!`, "当前用户无后台管理权限"))
+// 		return ctx.JSON(xutil.NewErrDeny(`对不起，你无法进行操作^_^!`, "当前用户无后台管理权限"))
 // 	}
 // }
