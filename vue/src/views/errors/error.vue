@@ -12,7 +12,7 @@
 			<div class="btn-group">
 				<Button size="large" type="success" @click="backHome">返回首页</Button>&nbsp;&nbsp;
 				<Button size="large" type="info" @click="backLogin">&nbsp;&nbsp;去登陆&nbsp;&nbsp;</Button>&nbsp;&nbsp;
-				<Button size="large" type="warning" @click="backPrev">返回上一页({{ second }}s)</Button>
+				<Button size="large" type="warning" @click="backPrev">返回上一页</Button>
 			</div>
 		</div>
 	</div>
@@ -49,13 +49,13 @@ export default {
 		}
 	},
 	mounted() {
-		this.timer = setInterval(() => {
-			if (this.second === 0) this.backPrev();
-			else this.second--;
-		}, 1000);
+		// this.timer = setInterval(() => {
+		// 	if (this.second === 0) this.backPrev();
+		// 	else this.second--;
+		// }, 1000);
 	},
 	beforeDestroy() {
-		clearInterval(this.timer);
+		// clearInterval(this.timer);
 	}
 };
 </script>
