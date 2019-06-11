@@ -1,6 +1,6 @@
 package model
 
-import "github.com/zxysilent/xutil"
+import "github.com/zxysilent/utils"
 
 //PostTag 文章标签
 type PostTag struct {
@@ -18,7 +18,7 @@ func PostTags(pid int) ([]PostTag, error) {
 	if err == nil {
 		ids := make([]int, 0, len(mods))
 		for idx := range mods {
-			if !xutil.InOf(mods[idx].TagId, ids) {
+			if !utils.InOf(mods[idx].TagId, ids) {
 				ids = append(ids, mods[idx].TagId)
 			}
 		}
@@ -60,7 +60,7 @@ func TagPostList(tid, pi, ps int) ([]PostTag, error) {
 	if len(mods) > 0 {
 		ids := make([]int, 0, len(mods))
 		for idx := range mods {
-			if !xutil.InOf(mods[idx].PostId, ids) {
+			if !utils.InOf(mods[idx].PostId, ids) {
 				ids = append(ids, mods[idx].PostId)
 			}
 		}

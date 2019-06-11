@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/labstack/echo"
-	"github.com/zxysilent/xutil"
+	"github.com/zxysilent/utils"
 )
 
 // CatePostView 标签文章列表
@@ -23,7 +23,7 @@ func CatePostView(ctx echo.Context) error {
 	if pi == 0 {
 		pi = 1
 	}
-	ps, _ := xutil.Atoi(model.MapOpts.MustGet("page_size"), 6)
+	ps, _ := utils.Atoi(model.MapOpts.MustGet("page_size"), 6)
 	mods, err := model.CatePostList(mod.Id, pi, ps, true)
 	if err != nil || len(mods) < 1 {
 		return ctx.Redirect(302, "/")
@@ -47,17 +47,17 @@ func CatePostView(ctx echo.Context) error {
 // @Tags 分类
 // @Summary 所有分类
 // @Param token query string true "凭证jwt" default(jwt)
-// @Success 200 {object} xutil.Result "成功数据"
+// @Success 200 {object} utils.Result "成功数据"
 // @Router /api/cate/all [get]
 func CateAll(ctx echo.Context) error {
 	mods, err := model.CateAll()
 	if err != nil {
-		return ctx.JSON(xutil.NewErrOpt(`未查询到分类信息`, err.Error()))
+		return ctx.JSON(utils.NewErrOpt(`未查询到分类信息`, err.Error()))
 	}
 	if len(mods) < 1 {
-		return ctx.JSON(xutil.NewErrOpt(`未查询到分类信息`, "len"))
+		return ctx.JSON(utils.NewErrOpt(`未查询到分类信息`, "len"))
 	}
-	return ctx.JSON(xutil.NewSucc(`分类信息`, mods))
+	return ctx.JSON(utils.NewSucc(`分类信息`, mods))
 }
 
 // CatePost doc
@@ -67,27 +67,27 @@ func CateAll(ctx echo.Context) error {
 // @Param pi query int true "分页页数pi" default(1)
 // @Param ps query int true "分页大小ps" default(6)
 // @Param token query string true "凭证jwt" default(jwt)
-// @Success 200 {object} xutil.Result "成功数据"
+// @Success 200 {object} utils.Result "成功数据"
 // @Router /api/cate/post/{cid} [get]
 func CatePost(ctx echo.Context) error {
 	cid, err := strconv.Atoi(ctx.Param("cid"))
 	if err != nil {
-		return ctx.JSON(xutil.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	ipt := &model.Page{}
 	err = ctx.Bind(ipt)
 	if err != nil {
-		return ctx.JSON(xutil.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	count := model.CatePostCount(cid, false)
 	if count == 0 {
-		return ctx.JSON(xutil.NewErrOpt(`未查询到文章信息,请重试`))
+		return ctx.JSON(utils.NewErrOpt(`未查询到文章信息,请重试`))
 	}
 	mods, err := model.CatePostList(cid, ipt.Pi, ipt.Ps, false)
 	if err != nil {
-		return ctx.JSON(xutil.NewErrOpt(`未查询到文章信息,请重试`, err.Error()))
+		return ctx.JSON(utils.NewErrOpt(`未查询到文章信息,请重试`, err.Error()))
 	}
-	return ctx.JSON(xutil.NewPage(`文章信息`, mods, count))
+	return ctx.JSON(utils.NewPage(`文章信息`, mods, count))
 }
 
 // CateAdd doc
@@ -95,18 +95,18 @@ func CatePost(ctx echo.Context) error {
 // @Summary 添加分类
 // @Param body body model.Cate true "分类 struct"
 // @Param token query string true "凭证jwt" default(jwt)
-// @Success 200 {object} xutil.Result "成功数据"
+// @Success 200 {object} utils.Result "成功数据"
 // @Router /api/cate/add [post]
 func CateAdd(ctx echo.Context) error {
 	ipt := &model.Cate{}
 	err := ctx.Bind(ipt)
 	if err != nil {
-		return ctx.JSON(xutil.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.CateAdd(ipt) {
-		return ctx.JSON(xutil.NewFail(`添加分类失败,请重试`))
+		return ctx.JSON(utils.NewFail(`添加分类失败,请重试`))
 	}
-	return ctx.JSON(xutil.NewSucc(`添加分类成功`))
+	return ctx.JSON(utils.NewSucc(`添加分类成功`))
 }
 
 // CateEdit doc
@@ -114,18 +114,18 @@ func CateAdd(ctx echo.Context) error {
 // @Summary 修改分类
 // @Param body body model.Cate true "分类 struct"
 // @Param token query string true "凭证jwt" default(jwt)
-// @Success 200 {object} xutil.Result "成功数据"
+// @Success 200 {object} utils.Result "成功数据"
 // @Router /api/cate/edit [post]
 func CateEdit(ctx echo.Context) error {
 	ipt := &model.Cate{}
 	err := ctx.Bind(ipt)
 	if err != nil {
-		return ctx.JSON(xutil.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.CateEdit(ipt) {
-		return ctx.JSON(xutil.NewFail(`分类修改失败`))
+		return ctx.JSON(utils.NewFail(`分类修改失败`))
 	}
-	return ctx.JSON(xutil.NewSucc(`分类修改成功`))
+	return ctx.JSON(utils.NewSucc(`分类修改成功`))
 }
 
 // CateDel doc
@@ -133,15 +133,15 @@ func CateEdit(ctx echo.Context) error {
 // @Summary 删除分类
 // @Param id path int true "id-分类" default(0)
 // @Param token query string true "凭证jwt" default(jwt)
-// @Success 200 {object} xutil.Result "成功数据"
+// @Success 200 {object} utils.Result "成功数据"
 // @Router /api/cate/del/{id} [get]
 func CateDel(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
-		return ctx.JSON(xutil.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.CateDel(id) {
-		return ctx.JSON(xutil.NewFail(`分类删除失败,请重试`))
+		return ctx.JSON(utils.NewFail(`分类删除失败,请重试`))
 	}
-	return ctx.JSON(xutil.NewSucc(`分类删除成功`))
+	return ctx.JSON(utils.NewSucc(`分类删除成功`))
 }

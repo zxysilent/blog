@@ -3,7 +3,7 @@ package model
 import (
 	"time"
 
-	"github.com/zxysilent/xutil"
+	"github.com/zxysilent/utils"
 )
 
 // Post 文章
@@ -92,13 +92,13 @@ func PostPath(path string) (*Post, *Naver, bool) {
 		mod.Cate, _ = CateGet(mod.CateId)
 		naver := &Naver{}
 		p := Post{}
-		b, _ := Db.Where("Type = 0 and Is_Public = 1 and Status = 3 and Create_Time <?", mod.CreateTime.Format(xutil.FormatDateTime)).Desc("Create_Time").Get(&p)
+		b, _ := Db.Where("Type = 0 and Is_Public = 1 and Status = 3 and Create_Time <?", mod.CreateTime.Format(utils.FormatDateTime)).Desc("Create_Time").Get(&p)
 		if b {
 			// <a href="{{.Naver.Prev}}" class="prev">&laquo; 上一页</a>
 			naver.Prev = `<a href="/post/` + p.Path + `.html" class="prev">&laquo; ` + p.Title + `</a>`
 		}
 		n := Post{}
-		b1, _ := Db.Where("Type = 0 and Is_Public = 1 and Status = 3 and Create_Time >?", mod.CreateTime.Format(xutil.FormatDateTime)).Asc("Create_Time").Get(&n)
+		b1, _ := Db.Where("Type = 0 and Is_Public = 1 and Status = 3 and Create_Time >?", mod.CreateTime.Format(utils.FormatDateTime)).Asc("Create_Time").Get(&n)
 		if b1 {
 			//<a href="{{.Naver.Next}}" class="next">下一页 &raquo;</a>
 			naver.Next = `<a href="/post/` + n.Path + `.html" class="next"> ` + n.Title + ` &raquo;</a>`

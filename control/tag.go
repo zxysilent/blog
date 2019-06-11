@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/labstack/echo"
-	"github.com/zxysilent/xutil"
+	"github.com/zxysilent/utils"
 )
 
 // TagsView 标签列表
@@ -34,7 +34,7 @@ func TagPostView(ctx echo.Context) error {
 	if pi == 0 {
 		pi = 1
 	}
-	ps, _ := xutil.Atoi(model.MapOpts.MustGet("page_size"), 6)
+	ps, _ := utils.Atoi(model.MapOpts.MustGet("page_size"), 6)
 	mods, err := model.TagPostList(mod.Id, pi, ps)
 	if err != nil || len(mods) < 1 {
 		return ctx.Redirect(302, "/tags")
@@ -58,12 +58,12 @@ func TagPostView(ctx echo.Context) error {
 func TagAll(ctx echo.Context) error {
 	mods, err := model.TagAll()
 	if err != nil {
-		return ctx.JSON(xutil.NewErrOpt(`未查询到标签信息`, err.Error()))
+		return ctx.JSON(utils.NewErrOpt(`未查询到标签信息`, err.Error()))
 	}
 	if len(mods) < 1 {
-		return ctx.JSON(xutil.NewErrOpt(`未查询到标签信息`, "len"))
+		return ctx.JSON(utils.NewErrOpt(`未查询到标签信息`, "len"))
 	}
-	return ctx.JSON(xutil.NewSucc(`分类信息`, mods))
+	return ctx.JSON(utils.NewSucc(`分类信息`, mods))
 }
 
 // TagAdd 添加标签
@@ -71,12 +71,12 @@ func TagAdd(ctx echo.Context) error {
 	ipt := &model.Tag{}
 	err := ctx.Bind(ipt)
 	if err != nil {
-		return ctx.JSON(xutil.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.TagAdd(ipt) {
-		return ctx.JSON(xutil.NewFail(`添加标签失败,请重试`))
+		return ctx.JSON(utils.NewFail(`添加标签失败,请重试`))
 	}
-	return ctx.JSON(xutil.NewSucc(`添加标签成功`))
+	return ctx.JSON(utils.NewSucc(`添加标签成功`))
 }
 
 // TagEdit 修改标签
@@ -84,24 +84,24 @@ func TagEdit(ctx echo.Context) error {
 	ipt := &model.Tag{}
 	err := ctx.Bind(ipt)
 	if err != nil {
-		return ctx.JSON(xutil.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.TagEdit(ipt) {
-		return ctx.JSON(xutil.NewFail(`标签修改失败`))
+		return ctx.JSON(utils.NewFail(`标签修改失败`))
 	}
-	return ctx.JSON(xutil.NewSucc(`标签修改成功`))
+	return ctx.JSON(utils.NewSucc(`标签修改成功`))
 }
 
 // TagDel  删除标签
 func TagDel(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
-		return ctx.JSON(xutil.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.TagDel(id) {
-		return ctx.JSON(xutil.NewFail(`标签删除失败,请重试`))
+		return ctx.JSON(utils.NewFail(`标签删除失败,请重试`))
 	}
 	// 删除标签相关联的数据
 	model.TagPostDel(id)
-	return ctx.JSON(xutil.NewSucc(`标签删除成功`))
+	return ctx.JSON(utils.NewSucc(`标签删除成功`))
 }
