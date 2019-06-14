@@ -16,7 +16,7 @@ import (
 // @Accept mpfd
 // @Param num formData string true "账号" default(super)
 // @Param pass formData string true "密码" default(123654)
-// @Success 200 {object} utils.Result "成功数据"
+// @Success 200 {object} utils.Reply "成功数据"
 // @Router /login [post]
 func UserLogin(ctx echo.Context) error {
 	ipt := struct {
@@ -85,7 +85,7 @@ func UserLogin(ctx echo.Context) error {
 // UserLogout doc
 // @Tags auth
 // @Summary 注销
-// @Success 200 {object} utils.Result "成功数据"
+// @Success 200 {object} utils.Reply "成功数据"
 // @Router /logout [post]
 func UserLogout(ctx echo.Context) error {
 	return ctx.HTML(200, `hello`)
@@ -95,7 +95,7 @@ func UserLogout(ctx echo.Context) error {
 // @Tags auth
 // @Summary 获取登录信息
 // @Param token query string true "凭证jwt" default(jwt)
-// @Success 200 {object} utils.Result "成功数据"
+// @Success 200 {object} utils.Reply "成功数据"
 // @Router /api/auth [get]
 func UserAuth(ctx echo.Context) error {
 	mod, _ := model.UserGet(ctx.Get("uid").(int))
