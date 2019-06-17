@@ -1,7 +1,7 @@
 package main
 
 import (
-	"blog/route"
+	"blog/router"
 )
 
 // @Title Blog’s Api文档
@@ -11,5 +11,5 @@ import (
 // @Host 127.0.0.1:88
 // @BasePath /
 func main() {
-	route.Run()
+	router.Run()
 }

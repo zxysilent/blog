@@ -1,6 +1,6 @@
 // +build prod
 
-package route
+package router
 
 import "github.com/labstack/echo"
 
