@@ -3,11 +3,9 @@ package route
 import (
 	"blog/conf"
 	"blog/control"
-	_ "blog/docs"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
 // Run 入口
@@ -27,9 +25,8 @@ func Run() {
 	// 自定义错误处理
 	engine.HTTPErrorHandler = HTTPErrorHandler
 	engine.Debug = conf.Debug
-	if engine.Debug {
-		engine.GET("/swagger/*", echoSwagger.WrapHandler)
-	}
+	// 注册文档
+	RegDocs(engine)
 	// 静态目录
 	engine.Static(`/res`, "res")
 	// 前后端分离页面
