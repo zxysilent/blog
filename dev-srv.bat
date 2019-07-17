@@ -1,0 +1,2 @@
+swag init
+bee run
