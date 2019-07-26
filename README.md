@@ -28,7 +28,7 @@ git clone https://github.com/zxysilent/blog.git
 数据库自带文章内容请在部署前删除
 - 安装依赖
 - 安装 swag   
-    ```go install github.com/swaggo/swag```
+    ```go get -u github.com/swaggo/swag/cmd/swag```
 - 运行```swag init ```生成api文档
 - 运行后台 ```go run```  
 ####  运行后台
