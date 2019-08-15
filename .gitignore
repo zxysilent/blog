@@ -1,5 +1,5 @@
 *.exe
 *.exe~
-res/dist/*
+static/dist/*
 logs/*
 docs/*

@@ -28,10 +28,9 @@ func Run() {
 	// 注册文档
 	RegDocs(engine)
 	// 静态目录
-	engine.Static(`/res`, "res")
+	engine.Static(`/res`, "static")
 	// 前后端分离页面
-	engine.GET(`/core`, control.Core)
-	engine.File(`/core/*`, "res/dist/index.html")
+	engine.File("/dashboard/*", "static/dist/index.html")
 	// 首页
 	engine.GET(`/`, control.IndexView)
 	// 归档
