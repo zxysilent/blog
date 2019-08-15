@@ -5,10 +5,10 @@ const initRouter = [
 		// 跳转到默认页面
 		path: "/",
 		name: "index",
-		redirect: "/core/login"
+		redirect: "/login"
 	},
 	{
-		path: "/core/login",
+		path: "/login",
 		name: "login",
 		meta: {
 			title: "登录"
@@ -16,9 +16,9 @@ const initRouter = [
 		component: () => import("@/views/login.vue")
 	},
 	{
-		path: "/core/",
+		path: "/",
 		name: "core",
-		redirect: "/core/home",
+		redirect: "/home",
 		component: Main,
 		children: [
 			{
@@ -34,7 +34,7 @@ const initRouter = [
 ];
 export const errorRouter = [
 	{
-		path: "/core/jwt",
+		path: "/jwt",
 		name: "errjwt",
 		meta: {
 			title: "jwt-重新登录"
@@ -42,7 +42,7 @@ export const errorRouter = [
 		component: () => import("@/views/errors/jwt.vue")
 	},
 	{
-		path: "/core/401",
+		path: "/401",
 		name: "err401",
 		meta: {
 			title: "401-没有权限"
@@ -50,7 +50,7 @@ export const errorRouter = [
 		component: () => import("@/views/errors/401.vue")
 	},
 	{
-		path: "/core/50x",
+		path: "/50x",
 		name: "err50x",
 		meta: {
 			title: "50x-服务异常"
@@ -70,7 +70,7 @@ export const errorRouter = [
 // 作为Main组件的子页面展示并且在左侧菜单显示的路由写在appRouter里
 const appRouter = [
 	{
-		path: "/core/post",
+		path: "/post",
 		name: "post",
 		meta: {
 			title: "文章管理"
@@ -104,7 +104,7 @@ const appRouter = [
 		]
 	},
 	{
-		path: "/core/page",
+		path: "/page",
 		name: "page",
 		meta: {
 			title: "页面管理"
@@ -138,7 +138,7 @@ const appRouter = [
 		]
 	},
 	{
-		path: "/core/cate",
+		path: "/cate",
 		name: "cate",
 		meta: {
 			title: "分类管理"
@@ -164,7 +164,7 @@ const appRouter = [
 		]
 	},
 	{
-		path: "/core/tag",
+		path: "/tag",
 		name: "tag",
 		meta: {
 			title: "标签管理"
@@ -190,7 +190,7 @@ const appRouter = [
 		]
 	},
 	{
-		path: "/core/setting",
+		path: "/setting",
 		name: "setting",
 		meta: {
 			title: "系统设置",
@@ -236,7 +236,7 @@ const appRouter = [
 		]
 	},
 	{
-		path: "/core",
+		path: "",
 		icon: "ios-contact-outline",
 		meta: {
 			title: "个人中心"

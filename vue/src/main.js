@@ -25,7 +25,7 @@ Vue.use(iView, {
 Vue.use(VueRouter);
 // 路由配置
 const RouterConfig = {
-	mode: "history",
+	mode: "hash",//history
 	routes: Routers
 };
 
