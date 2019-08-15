@@ -28,7 +28,7 @@ func Run() {
 	// 注册文档
 	RegDocs(engine)
 	// 静态目录
-	engine.Static(`/res`, "static")
+	engine.Static(`/static`, "static")
 	// 前后端分离页面
 	engine.File("/dashboard/*", "static/dist/index.html")
 	// 首页
