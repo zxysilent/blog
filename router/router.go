@@ -8,23 +8,20 @@ import (
 	"github.com/labstack/echo/middleware"
 )
 
-// Run 入口
-func Run() {
+// RunApp 入口
+func RunApp() {
 	engine := echo.New()
 	// 初始渲染引擎
 	engine.Renderer = initRender()
-	// 恢复
-	engine.Use(middleware.Recover())
-	// 日志记录
-	// engine.Use(middleware.LoggerWithConfig(logConfig))
-	engine.Use(midLog)
+	// 恢复 日志记录
+	engine.Use(midRecover, midLogger)
 	// 跨域设置
 	engine.Use(middleware.CORSWithConfig(crosConfig))
 	// 不显示横幅
 	engine.HideBanner = true
 	// 自定义错误处理
 	engine.HTTPErrorHandler = HTTPErrorHandler
-	engine.Debug = conf.Debug
+	engine.Debug = conf.App.IsDev()
 	// 注册文档
 	RegDocs(engine)
 	// 静态目录
@@ -106,5 +103,5 @@ func Run() {
 	api.GET(`/opts/:key`, control.OptsGet)
 	// 编辑配置项
 	api.POST(`/opts/edit`, control.OptsEdit)
-	engine.Start(conf.Addr)
+	engine.Start(conf.App.Addr)
 }

@@ -6,9 +6,12 @@ import (
 	"bytes"
 	"crypto/md5"
 	"encoding/hex"
+	"fmt"
 	"html/template"
 	"io"
 	"os"
+	"runtime"
+	"strings"
 	"sync"
 	"time"
 
@@ -33,8 +36,8 @@ func init() {
 	}
 }
 
-// midLog 中间件-日志记录
-func midLog(next echo.HandlerFunc) echo.HandlerFunc {
+// midLogrer 中间件-日志记录
+func midLogger(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(ctx echo.Context) (err error) {
 		start := time.Now()
 		if err = next(ctx); err != nil {
@@ -44,14 +47,15 @@ func midLog(next echo.HandlerFunc) echo.HandlerFunc {
 		buf := pool.Get().(*bytes.Buffer)
 		buf.Reset()
 		defer pool.Put(buf)
-		buf.WriteString("ip：" + ctx.RealIP())
+		buf.WriteString("[" + start.Format("2006-01-02 15:04:05") + "] ")
+		buf.WriteString("\tip：" + ctx.RealIP())
 		buf.WriteString("\tmethod：" + ctx.Request().Method)
 		buf.WriteString("\tpath：" + ctx.Request().URL.Path)
 		buf.WriteString("\turi：" + ctx.Request().RequestURI)
 		buf.WriteString("\tspan：" + stop.Sub(start).String())
 		buf.WriteString("\n")
 		// 开发模式直接输出到控制台
-		if conf.Debug {
+		if conf.App.IsDev() {
 			os.Stdout.Write(buf.Bytes())
 			return
 		}
@@ -59,19 +63,36 @@ func midLog(next echo.HandlerFunc) echo.HandlerFunc {
 		return
 	}
 }
+func midRecover(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(ctx echo.Context) error {
+		defer func() {
+			if r := recover(); r != nil {
+				err, ok := r.(error)
+				if !ok {
+					err = fmt.Errorf("%v", r)
+				}
+				stack := make([]byte, 1<<10)
+				length := runtime.Stack(stack, false)
+				// stdlog.Println(string(stack[:length]))
+				os.Stdout.Write(stack[:length])
+				ctx.Error(err)
+			}
+		}()
+		return next(ctx)
+	}
+}
 
 // HTTPErrorHandler 全局错误捕捉
 func HTTPErrorHandler(err error, ctx echo.Context) {
 	if !ctx.Response().Committed {
-		ctx.JSON(utils.NewErrSvr(err.Error()))
+		if strings.Contains(err.Error(), "404") {
+			ctx.NoContent(404)
+			//ctx.HTML(404, "Not Found")
+			// ctx.Redirect(302, "/404.html")
+		} else {
+			ctx.JSON(utils.NewErrSvr(err.Error()))
+		}
 	}
-}
-
-// 日志格式配置
-var logConfig = middleware.LoggerConfig{
-	//Format: "time:${time_custom},	ip:${remote_ip},	method:${method},	url:${path},	status:${status},	span:${latency_human} \n",
-	Format:           "[echo] ${time_custom}\t${remote_ip}\t${method}\t${path}\tspan:${latency_human} \n",
-	CustomTimeFormat: "2006-01-02 15:04:05",
 }
 
 // 跨越配置
@@ -104,7 +125,7 @@ func (t *TplRender) Render(w io.Writer, name string, data interface{}, ctx echo.
 	//开发模式
 	//每次强制读取模板
 	//每次强制加载函数
-	if conf.Debug {
+	if conf.App.IsDev() {
 		funcMap := template.FuncMap{"str2html": Str2html, "date": Date, "md5": Md5}
 		t.templates = utils.LoadTmpl("./view", funcMap)
 	}

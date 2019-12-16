@@ -36,10 +36,6 @@ func initMap() {
 	MapOpts = m
 }
 
-func init() {
-	initMap()
-}
-
 // OptsGet 获取某个 配置
 func OptsGet(key string) (string, bool) {
 	return MapOpts.Get(key)
