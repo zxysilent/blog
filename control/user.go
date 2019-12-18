@@ -152,20 +152,20 @@ func UserEdit(ctx echo.Context) error {
 	return ctx.JSON(utils.NewSucc(`用户信息修改成功`))
 }
 
-// UserDel doc
+// UserDrop doc
 // @Tags 用户
 // @Summary 删除用户
 // @Description
 // @Param id path int true "用户id" default(1)
 // @Success 200 {object} utils.Reply "成功数据"
-// @Router /user/del/{id} [get]
-// func UserDel(ctx echo.Context) error {
+// @Router /user/drop/{id} [get]
+// func UserDrop(ctx echo.Context) error {
 // 	id, err := ctx.ParamInt("id")
 // 	if err != nil {
 // 		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 // 	}
 // 	auth := ctx.Get("auth").(*model.JwtClaims)
-// 	if !model.UserDel(id, auth.Role) {
+// 	if !model.UserDrop(id, auth.Role) {
 // 		return ctx.JSON(utils.NewFail(`用户信息删除失败,请重试`))
 // 	}
 // 	return ctx.JSON(utils.NewSucc(`用户信息删除成功`))

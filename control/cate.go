@@ -2,46 +2,11 @@ package control
 
 import (
 	"blog/model"
-	"net/http"
 	"strconv"
 
 	"github.com/labstack/echo"
 	"github.com/zxysilent/utils"
 )
-
-// CatePostView 标签文章列表
-func CatePostView(ctx echo.Context) error {
-	cate := ctx.Param("cate")
-	if cate == "" {
-		return ctx.Redirect(302, "/")
-	}
-	mod, has := model.CateName(cate)
-	if !has {
-		return ctx.Redirect(302, "/")
-	}
-	pi, _ := strconv.Atoi(ctx.FormValue("page"))
-	if pi == 0 {
-		pi = 1
-	}
-	ps, _ := utils.Atoi(model.MapOpts.MustGet("page_size"), 6)
-	mods, err := model.CatePostList(mod.Id, pi, ps, true)
-	if err != nil || len(mods) < 1 {
-		return ctx.Redirect(302, "/")
-	}
-	total := model.CatePostCount(mod.Id, true)
-	naver := model.Naver{}
-	if pi > 1 {
-		naver.Prev = "/cate/" + mod.Name + "?page=1"
-	}
-	if total > (pi * ps) {
-		naver.Next = "/cate/" + mod.Name + "?page=" + strconv.Itoa(pi+1)
-	}
-	return ctx.Render(http.StatusOK, "cate-post.html", map[string]interface{}{
-		"Cate":      mod,
-		"CatePosts": mods,
-		"Naver":     naver,
-	})
-}
 
 // CateAll doc
 // @Tags 分类
@@ -128,19 +93,19 @@ func CateEdit(ctx echo.Context) error {
 	return ctx.JSON(utils.NewSucc(`分类修改成功`))
 }
 
-// CateDel doc
+// CateDrop doc
 // @Tags 分类
 // @Summary 删除分类
 // @Param id path int true "id-分类" default(0)
 // @Param token query string true "凭证jwt" default(jwt)
 // @Success 200 {object} utils.Reply "成功数据"
-// @Router /api/cate/del/{id} [get]
-func CateDel(ctx echo.Context) error {
+// @Router /api/cate/drop/{id} [get]
+func CateDrop(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
-	if !model.CateDel(id) {
+	if !model.CateDrop(id) {
 		return ctx.JSON(utils.NewFail(`分类删除失败,请重试`))
 	}
 	return ctx.JSON(utils.NewSucc(`分类删除成功`))

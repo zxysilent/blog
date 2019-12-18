@@ -4,8 +4,7 @@
 	</Card>
 </template>
 <script>
-import { cateAll } from "@/api/cate";
-import { pageAll, postDel } from "@/api/post";
+import { apiPageAll, admPostDrop } from "@/api/post";
 export default {
 	data() {
 		return {
@@ -95,7 +94,7 @@ export default {
 	},
 	methods: {
 		init() {
-			pageAll().then(resp => {
+			apiPageAll().then(resp => {
 				if (resp.code == 200) {
 					this.dataPage = resp.data;
 				} else {
@@ -106,7 +105,7 @@ export default {
 		},
 		//删除
 		delete(data) {
-			postDel(data.row.id).then(resp => {
+			admPostDrop(data.row.id).then(resp => {
 				if (resp.code == 200) {
 					this.$Message.success({
 						content: "删除成功",

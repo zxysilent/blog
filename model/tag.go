@@ -78,8 +78,8 @@ func TagEdit(mod *Tag) bool {
 	return false
 }
 
-// TagDel 删除标签
-func TagDel(id int) bool {
+// TagDrop 删除标签
+func TagDrop(id int) bool {
 	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()

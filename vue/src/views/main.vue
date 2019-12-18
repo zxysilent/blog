@@ -94,15 +94,12 @@
 </template>
 <script>
 import util from "@/init/util.js";
-import { auth } from "@/api/auth";
+import { admAuth } from "@/api/auth";
 export default {
 	data() {
 		return {
 			rkey: 6655,
-			user: {
-				name: "--",
-				num: "--"
-			}
+			user: { name: "--", num: "--" }
 		};
 	},
 	computed: {
@@ -112,7 +109,7 @@ export default {
 	},
 	methods: {
 		init() {
-			auth().then(resp => {
+			admAuth().then(resp => {
 				if (resp.code == 200) {
 					this.user = resp.data;
 				}
@@ -123,9 +120,7 @@ export default {
 			// 移除 vuex
 			localStorage.clear();
 			sessionStorage.clear();
-			this.$router.push({
-				name: "login"
-			});
+			this.$router.push({ name: "login" });
 		}
 	},
 	updated() {

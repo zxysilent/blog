@@ -2,8 +2,6 @@ package control
 
 import (
 	"blog/model"
-	"net/http"
-	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -11,33 +9,6 @@ import (
 	"github.com/labstack/echo"
 	"github.com/zxysilent/utils"
 )
-
-var reg = regexp.MustCompile(`<img src="([^" ]+)" alt="([^" ]*)"\s?\/?>`)
-
-// PostView 文章页面
-func PostView(ctx echo.Context) error {
-	//return ctx.HTML(200, `<html><head><meta charset="UTF-8"><title>文档</title></head><body><a href="/swagger/index.html">doc</a></body></html>`)
-	paths := strings.Split(ctx.Param("*"), ".")
-	if len(paths) == 2 {
-		mod, naver, has := model.PostPath(paths[0])
-		if !has {
-			return ctx.Redirect(302, "/")
-		}
-		if paths[1] == "html" {
-			mod.Content = reg.ReplaceAllString(mod.Content, `<img class="lazy-load" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="$1" alt="$2">`)
-			tags, _ := model.PostTags(mod.Id)
-			return ctx.Render(http.StatusOK, "post.html", map[string]interface{}{
-				"Post":    mod,
-				"Naver":   naver,
-				"Tags":    tags,
-				"HasTag":  len(tags) > 0,
-				"HasCate": mod.Cate != nil,
-			})
-		}
-		return ctx.JSON(utils.NewSucc("", mod))
-	}
-	return nil
-}
 
 // PostGet 一个
 // id int
@@ -65,13 +36,13 @@ func PostPageAll(ctx echo.Context) error {
 	return ctx.JSON(utils.NewSucc(`页面信息`, mods))
 }
 
-// PostTagIds 通过文章id 获取 标签ids
-func PostTagIds(ctx echo.Context) error {
+// PostTagGet 通过文章id 获取 标签ids
+func PostTagGet(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
-	mods := model.PostTagIds(id)
+	mods := model.PostTagGet(id)
 	if mods == nil {
 		return ctx.JSON(utils.NewErrOpt(`未查询到标签信息`))
 	}
@@ -112,7 +83,7 @@ func PostOpts(ctx echo.Context) error {
 		if model.PostEdit(&ipt.Post) {
 			if ipt.Type == 0 {
 				// 处理变动标签
-				old := model.PostTagIds(ipt.Post.Id)
+				old := model.PostTagGet(ipt.Post.Id)
 				new := ipt.Tags
 				add := make([]int, 0)
 				del := make([]int, 0)
@@ -134,7 +105,7 @@ func PostOpts(ctx echo.Context) error {
 					})
 				}
 				// 删除标签
-				model.PostTagDels(ipt.Post.Id, del)
+				model.PostTagDrops(ipt.Post.Id, del)
 				// 添加标签
 				model.TagPostAdds(&tagAdds)
 				return ctx.JSON(utils.NewSucc(`文章修改成功`))
@@ -180,58 +151,16 @@ func similar(a, b string) int {
 	return -1
 }
 
-// 生成目录并替换内容
-func getTocHTML(html string) string {
-	html = strings.Replace(html, `id="`, `id="toc_`, -1)
-	regToc := regexp.MustCompile("<h[1-6]>.*?</h[1-6]>")
-	regH := regexp.MustCompile(`<h[1-6]><a id="(.*?)"></a>(.*?)</h[1-6]>`)
-	hs := regToc.FindAllString(html, -1)
-	if len(hs) > 1 {
-		sb := strings.Builder{}
-		sb.WriteString(`<div class="toc"><ul>`)
-		level := 0
-		for i := 0; i < len(hs)-1; i++ {
-			fg := similar(hs[i], hs[i+1])
-			if fg == 0 {
-				sb.WriteString(regH.ReplaceAllString(hs[i], `<li><a href="#$1">$2</a></li>`))
-			} else if fg == 1 {
-				level++
-				sb.WriteString(regH.ReplaceAllString(hs[i], `<li><a href="#$1">$2</a><ul>`))
-			} else {
-				level--
-				sb.WriteString(regH.ReplaceAllString(hs[i], `<li><a href="#$1">$2</a></li></ul></li>`))
-			}
-		}
-		fg := similar(hs[len(hs)-2], hs[len(hs)-1])
-		if fg == 0 {
-			sb.WriteString(regH.ReplaceAllString(hs[len(hs)-1], `<li><a href="#$1">$2</a></li>`))
-		} else if fg == 1 {
-			level++
-			sb.WriteString(regH.ReplaceAllString(hs[len(hs)-1], `<li><a href="#$1">$2</a><ul>`))
-		} else {
-			level--
-			sb.WriteString(regH.ReplaceAllString(hs[len(hs)-1], `<li><a href="#$1">$2</a></li></ul></li>`))
-		}
-		for level > 0 {
-			sb.WriteString(`</ul></li>`)
-			level--
-		}
-		sb.WriteString(`</ul></div>`)
-		return sb.String() + html
-	}
-	return ""
-}
-
-// PostDel  删除
-func PostDel(ctx echo.Context) error {
+// PostDrop  删除
+func PostDrop(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
-	if !model.PostDel(id) {
+	if !model.PostDrop(id) {
 		return ctx.JSON(utils.NewFail(`删除失败,请重试`))
 	}
 	// 删除 文章对应的标签信息
-	model.PostTagDel(id)
+	model.PostTagDrop(id)
 	return ctx.JSON(utils.NewSucc(`删除成功`))
 }

@@ -20,14 +20,11 @@
 	</Card>
 </template>
 <script>
-import { cateAdd } from "@/api/cate";
+import { admCateAdd } from "@/api/cate";
 export default {
 	data() {
 		return {
-			dataForm: {
-				name: "",
-				intro: ""
-			},
+			dataForm: { name: "", intro: "" },
 			dataRules: {
 				name: [{ required: true, message: "请填写分类名", trigger: "blur", max: 64 }],
 				intro: [{ required: true, message: "请填写分类介绍", trigger: "blur", max: 64 }]
@@ -40,7 +37,7 @@ export default {
 			this.$refs["dataForm"].validate(valid => {
 				if (valid) {
 					this.saveLoading = true;
-					cateAdd(this.dataForm).then(resp => {
+					admCateAdd(this.dataForm).then(resp => {
 						this.saveLoading = false;
 						if (resp.code == 200) {
 							this.$Message.success({
@@ -52,10 +49,7 @@ export default {
 								}
 							});
 						} else {
-							this.$Message.error({
-								content: `分类信息添加失败,请重试`,
-								duration: 3
-							});
+							this.$Message.error({ content: `分类信息添加失败,请重试`, duration: 3 });
 						}
 					});
 				}

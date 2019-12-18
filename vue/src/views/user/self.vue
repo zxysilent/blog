@@ -14,8 +14,8 @@
 					<FormItem label="用户姓名：" prop="name">
 						<Input v-model="userForm.name"></Input>
 					</FormItem>
-                    <FormItem label="电话：" prop="phone">
-                        <Input v-model="userForm.phone"></Input>
+					<FormItem label="电话：" prop="phone">
+						<Input v-model="userForm.phone"></Input>
 					</FormItem>
 					<FormItem label="邮箱地址：" prop="email">
 						<Input v-model="userForm.email"></Input>
@@ -61,8 +61,8 @@
 <script>
 import md5 from "js-md5";
 import util from "@/init/util";
-import { auth } from "@/api/auth";
-import { userPass, userEditSelf } from "@/api/user";
+import { admAuth } from "@/api/auth";
+import { admUserPass, admUserEditSelf } from "@/api/user";
 export default {
 	data() {
 		const valideRePassword = (rule, value, callback) => {
@@ -73,28 +73,15 @@ export default {
 			}
 		};
 		return {
-			userForm: {
-				id: 0,
-				num: "",
-				name: "",
-				email: "",
-				phone: "",
-				remark: "",
-				ctime: ""
-			},
+			userForm: { id: 0, num: "", name: "", email: "", phone: "", remark: "", ctime: "" },
 			loadingSaveInfo: false,
 			showPasswordModal: false, // 修改密码模态框显示
 			loadingSavePass: false,
-
 			oldPassError: "",
 			userRules: {
 				name: [{ required: true, message: "请输入姓名", trigger: "blur" }]
 			},
-			passForm: {
-				oldPass: "",
-				newPass: "",
-				rePass: ""
-			},
+			passForm: { oldPass: "", newPass: "", rePass: "" },
 			passRules: {
 				oldPass: [{ required: true, message: "请输入原密码", trigger: "blur" }],
 				newPass: [
@@ -123,7 +110,7 @@ export default {
 			this.$refs["userForm"].validate(valid => {
 				if (valid) {
 					this.loadingSaveInfo = true;
-					userEditSelf(this.userForm).then(res => {
+					admUserEditSelf(this.userForm).then(res => {
 						this.loadingSaveInfo = false;
 						if (res.code == 200) {
 							this.$Message.success({
@@ -133,10 +120,7 @@ export default {
 								}
 							});
 						} else {
-							this.$Message.error({
-								content: `信息修改失败,请重试`,
-								duration: 3
-							});
+							this.$Message.error({ content: `信息修改失败,请重试`, duration: 3 });
 						}
 					});
 				}
@@ -154,7 +138,7 @@ export default {
 						opass: md5(this.passForm.oldPass).substr(1, 30),
 						npass: md5(this.passForm.newPass).substr(1, 30)
 					};
-					userPass(passObj).then(res => {
+					admUserPass(passObj).then(res => {
 						this.loadingSavePass = false;
 						if (res.code == 200) {
 							this.$Message.success({
@@ -168,24 +152,18 @@ export default {
 								}
 							});
 						} else {
-							this.$Message.error({
-								content: `密码修改失败`,
-								duration: 2
-							});
+							this.$Message.error({ content: `密码修改失败`, duration: 2 });
 						}
 					});
 				}
 			});
 		},
 		init() {
-			auth().then(res => {
+			admAuth().then(res => {
 				if (res.code == 200) {
 					this.userForm = res.data;
 				} else {
-					this.$Message.error({
-						content: `未查询到数据，请重试`,
-						duration: 3
-					});
+					this.$Message.error({ content: `未查询到数据，请重试`, duration: 3 });
 				}
 			});
 		}

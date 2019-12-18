@@ -13,7 +13,7 @@ ajax.interceptors.request.use(
 		iView.LoadingBar.start();
 		//在请求发出之前进行一些操作
 		console.log("send");
-		if (config.url.indexOf("/login") == -1) {
+		if (config.url.indexOf("/api/login") == -1) {
 			config.headers.Authorization = "Bearer " + util.getItem("bearer"); //Bearer
 		}
 		return config;

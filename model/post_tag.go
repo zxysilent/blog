@@ -32,8 +32,8 @@ func PostTags(pid int) ([]PostTag, error) {
 	return mods, nil
 }
 
-// PostTagIds 文章对应的标签id
-func PostTagIds(pid int) []int {
+// PostTagGet 文章对应的标签id
+func PostTagGet(pid int) []int {
 	mods := make([]PostTag, 0, 4)
 	Db.Where("post_id = ? ", pid).Find(&mods)
 	if len(mods) > 0 {
@@ -88,8 +88,8 @@ func TagPostAdds(mod *[]PostTag) bool {
 	return true
 }
 
-// TagPostDel 删除标签对应的标签_文章
-func TagPostDel(tid int) bool {
+// TagPostDrop 删除标签对应的标签_文章
+func TagPostDrop(tid int) bool {
 	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
@@ -102,8 +102,8 @@ func TagPostDel(tid int) bool {
 	return false
 }
 
-// PostTagDels 删除文章对应的标签_文章 修改的时候 变更
-func PostTagDels(pid int, tids []int) bool {
+// PostTagDrops 删除文章对应的标签_文章 修改的时候 变更
+func PostTagDrops(pid int, tids []int) bool {
 	if len(tids) < 1 {
 		return true
 	}
@@ -119,8 +119,8 @@ func PostTagDels(pid int, tids []int) bool {
 	return false
 }
 
-// PostTagDel 删除文章对应的标签_文章删除文章的时候
-func PostTagDel(pid int) bool {
+// PostTagDrop 删除文章对应的标签_文章删除文章的时候
+func PostTagDrop(pid int) bool {
 	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()

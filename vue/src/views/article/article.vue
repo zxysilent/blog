@@ -75,11 +75,11 @@
 import { mavonEditor } from "mavon-editor";
 import "mavon-editor/dist/css/index.css";
 import toolbars from "./toolbars";
-import { cateAll } from "@/api/cate";
-import { tagAll } from "@/api/tag";
+import { apiCateAll } from "@/api/cate";
+import { apiTagAll } from "@/api/tag";
 import util from "@/init/util";
 import { urlServer, urlUpload } from "@/init/conf";
-import { postGet, postOpts, postTagIds } from "@/api/post";
+import { apiPostGet, admPostOpts, apiPostTagGet } from "@/api/post";
 // 通用 文章/页面 + 添加/修改
 // 减少js体积
 export default {
@@ -108,20 +108,8 @@ export default {
 			tags: [],
 			toolbars: toolbars,
 			dataRules: {
-				title: [
-					{
-						required: true,
-						message: " ",
-						trigger: "blur"
-					}
-				],
-				path: [
-					{
-						required: true,
-						message: " ",
-						trigger: "blur"
-					}
-				]
+				title: [{ required: true, message: " ", trigger: "blur" }],
+				path: [{ required: true, message: " ", trigger: "blur" }]
 			}
 		};
 	},
@@ -135,7 +123,7 @@ export default {
 				this.getOne();
 			}
 			if (this.isPost && this.isEdit) {
-				postTagIds(this.dataId).then(resp => {
+				apiPostTagGet(this.dataId).then(resp => {
 					if (resp.code == 200) {
 						this.tags = resp.data;
 					}
@@ -143,7 +131,7 @@ export default {
 			}
 		},
 		getCate() {
-			cateAll().then(resp => {
+			apiCateAll().then(resp => {
 				if (resp.code == 200) {
 					this.cateAll = resp.data;
 					if (this.isAdd) {
@@ -156,7 +144,7 @@ export default {
 			});
 		},
 		getTag() {
-			tagAll().then(resp => {
+			apiTagAll().then(resp => {
 				if (resp.code == 200) {
 					this.tagAll = resp.data;
 				} else {
@@ -166,7 +154,7 @@ export default {
 			});
 		},
 		getOne() {
-			postGet(this.dataId).then(resp => {
+			apiPostGet(this.dataId).then(resp => {
 				if (resp.code == 200) {
 					this.dataForm = resp.data;
 				} else {
@@ -234,7 +222,7 @@ export default {
 					console.log(this.dataForm);
 					this.dataForm.status = 0; //草稿
 					this.draftLoading = true;
-					postOpts({
+					admPostOpts({
 						post: this.dataForm,
 						edit: this.isEdit,
 						type: this.isPost ? 0 : 1,
@@ -268,7 +256,7 @@ export default {
 					}
 					this.dataForm.status = 3; //发布
 					this.publishLoading = true;
-					postOpts({
+					admPostOpts({
 						post: this.dataForm,
 						edit: this.isEdit,
 						type: this.isPost ? 0 : 1,

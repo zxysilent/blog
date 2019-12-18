@@ -54,7 +54,7 @@
 </template>
 <script>
 import md5 from "js-md5";
-import { login } from "@/api/auth";
+import { apiLogin } from "@/api/auth";
 import util from "@/init/util";
 export default {
 	data() {
@@ -75,7 +75,7 @@ export default {
 						num: that.user.num,
 						pass: md5(that.user.pass).substr(1, 30)
 					};
-					login(data).then(res => {
+					apiLogin(data).then(res => {
 						if (res.code == 200) {
 							this.$Message.success({
 								content: "登陆成功",

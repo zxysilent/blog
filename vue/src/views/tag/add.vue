@@ -20,14 +20,11 @@
 	</Card>
 </template>
 <script>
-import { tagAdd } from "@/api/tag";
+import { admTagAdd } from "@/api/tag";
 export default {
 	data() {
 		return {
-			dataForm: {
-				name: "",
-				intro: ""
-			},
+			dataForm: { name: "", intro: "" },
 			dataRules: {
 				name: [{ required: true, message: "请填写标签名", trigger: "blur", max: 64 }],
 				intro: [{ required: true, message: "请填写标签介绍", trigger: "blur", max: 64 }]
@@ -40,7 +37,7 @@ export default {
 			this.$refs["dataForm"].validate(valid => {
 				if (valid) {
 					this.saveLoading = true;
-					tagAdd(this.dataForm).then(resp => {
+					admTagAdd(this.dataForm).then(resp => {
 						this.saveLoading = false;
 						if (resp.code == 200) {
 							this.$Message.success({
@@ -52,10 +49,7 @@ export default {
 								}
 							});
 						} else {
-							this.$Message.error({
-								content: `标签信息添加失败,请重试`,
-								duration: 3
-							});
+							this.$Message.error({ content: `标签信息添加失败,请重试`, duration: 3 });
 						}
 					});
 				}

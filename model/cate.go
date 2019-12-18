@@ -75,8 +75,8 @@ func CateEdit(mod *Cate) bool {
 	return false
 }
 
-// CateDel 删除分类
-func CateDel(id int) bool {
+// CateDrop 删除分类
+func CateDrop(id int) bool {
 	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()

@@ -187,8 +187,8 @@ func PostAdd(mod *Post) bool {
 	return true
 }
 
-// PostDel 删除
-func PostDel(id int) bool {
+// PostDrop 删除
+func PostDrop(id int) bool {
 	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()

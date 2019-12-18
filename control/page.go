@@ -20,7 +20,7 @@ func AboutView(ctx echo.Context) error {
 	})
 }
 
-// LinksView 关于
+// LinksView 友链
 func LinksView(ctx echo.Context) error {
 	mod, has := model.PostSingle("links")
 	if !has {

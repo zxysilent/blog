@@ -19,8 +19,8 @@
 	</Card>
 </template>
 <script>
-import { cateAll } from "@/api/cate";
-import { catePost, postGet, postDel } from "@/api/post";
+import { apiCateAll } from "@/api/cate";
+import { apiCatePost, apiPostGet, admPostDrop } from "@/api/post";
 export default {
 	data() {
 		return {
@@ -116,13 +116,9 @@ export default {
 	},
 	methods: {
 		init_() {
-			cateAll().then(resp => {
+			apiCateAll().then(resp => {
 				if (resp.code == 200) {
-					resp.data.unshift({
-						id: 0,
-						name: " all ",
-						intro: "全部分类"
-					});
+					resp.data.unshift({ id: 0, name: " all ", intro: "全部分类" });
 					this.cateAll = resp.data;
 				} else {
 					this.cateAll = [];
@@ -131,7 +127,7 @@ export default {
 			});
 		},
 		init() {
-			catePost(this.cate_id, this.page).then(resp => {
+			apiCatePost(this.cate_id, this.page).then(resp => {
 				if (resp.code == 200) {
 					this.dataPost = resp.data.items;
 					this.total = resp.data.count;
@@ -156,7 +152,7 @@ export default {
 		},
 		//删除
 		delete(data) {
-			postDel(data.row.id).then(resp => {
+			admPostDrop(data.row.id).then(resp => {
 				if (resp.code == 200) {
 					this.$Message.success({
 						content: "删除成功",

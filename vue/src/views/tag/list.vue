@@ -22,16 +22,13 @@
 	</div>
 </template>
 <script>
-import { tagAll, tagEdit, tagDel } from "@/api/tag";
+import { apiTagAll, admTagEdit, admTagDrop } from "@/api/tag";
 export default {
 	data() {
 		return {
 			showEdit: false,
 			editLoading: false,
-			editForm: {
-				name: "",
-				intro: ""
-			},
+			editForm: { name: "", intro: "" },
 			editRules: {
 				name: [{ required: true, message: "请填写标签名", trigger: "blur", max: 64 }],
 				intro: [{ required: true, message: "请填写标签介绍", trigger: "blur", max: 64 }]
@@ -83,7 +80,7 @@ export default {
 	},
 	methods: {
 		init() {
-			tagAll().then(resp => {
+			apiTagAll().then(resp => {
 				if (resp.code == 200) {
 					this.dataTag = resp.data;
 				} else {
@@ -96,7 +93,7 @@ export default {
 			this.$refs["editForm"].validate(valid => {
 				if (valid) {
 					this.editLoading = true;
-					tagEdit(this.editForm).then(resp => {
+					admTagEdit(this.editForm).then(resp => {
 						this.editLoading = false;
 						if (resp.code == 200) {
 							this.$Message.success({
@@ -106,17 +103,14 @@ export default {
 								}
 							});
 						} else {
-							this.$Message.error({
-								content: `标签信息修改失败,请重试`,
-								duration: 3
-							});
+							this.$Message.error({ content: `标签信息修改失败,请重试`, duration: 3 });
 						}
 					});
 				}
 			});
 		},
 		delete(data) {
-			tagDel(data.row.id).then(resp => {
+			admTagDrop(data.row.id).then(resp => {
 				if (resp.code == 200) {
 					this.$Message.success({
 						content: "删除成功",

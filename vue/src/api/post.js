@@ -1,25 +1,25 @@
 import ajax from "./base";
 // 分类文章列表
-export const catePost = (cls, data) => {
-  return ajax.get(`/api/cate/post/${cls}`, { params: data });
+export const apiCatePost = (cls, data) => {
+	return ajax.get(`/api/cate/post/${cls}`, { params: data });
 };
 // 页面信息
-export const pageAll = () => {
-  return ajax.get("/api/page/all");
+export const apiPageAll = () => {
+	return ajax.get("/api/page/all");
 };
 // 一条信息
-export const postGet = id => {
-  return ajax.get(`/api/post/get/${id}`);
+export const apiPostGet = id => {
+	return ajax.get(`/api/post/get/${id}`);
 };
 // 一条文章的tag信息列表
-export const postTagIds = id => {
-  return ajax.get(`/api/post/tag/ids/${id}`);
+export const apiPostTagGet = id => {
+	return ajax.get(`/api/post/tag/get/${id}`);
 };
 //删除
-export const postDel = id => {
-  return ajax.get(`/api/post/del/${id}`);
+export const admPostDrop = id => {
+	return ajax.get(`/adm/post/drop/${id}`);
 };
 //文章操作
-export const postOpts = data => {
-  return ajax.post(`/api/post/opts`, data);
+export const admPostOpts = data => {
+	return ajax.post(`/adm/post/opts`, data);
 };

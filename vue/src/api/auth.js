@@ -1,19 +1,19 @@
 import ajax from "./base";
 
-export const login = data => {
-	return ajax.post("/login", data);
+export const apiLogin = data => {
+	return ajax.post("/api/login", data);
 };
-export const auth = () => {
-	return ajax.get("/api/auth");
+export const admAuth = () => {
+	return ajax.get("/adm/auth");
 };
-export const logoff = data => {
+export const apiLogoff = data => {
 	//   return ajax.post("/api/logoff", data);
 };
 // 统计状态
-export const collect = () => {
-	return ajax.get("/api/collect");
+export const admCollect = () => {
+	return ajax.get("/adm/collect");
 };
 // 服务器信息
-export const sys = () => {
-	return ajax.get("/api/sys");
+export const admSys = () => {
+	return ajax.get("/adm/sys");
 };

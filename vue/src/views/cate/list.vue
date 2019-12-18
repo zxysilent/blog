@@ -22,7 +22,7 @@
 	</div>
 </template>
 <script>
-import { cateAll, cateEdit, cateDel } from "@/api/cate";
+import { apiCateAll, admCateEdit, admCateDrop } from "@/api/cate";
 export default {
 	data() {
 		return {
@@ -80,7 +80,7 @@ export default {
 	},
 	methods: {
 		init() {
-			cateAll().then(resp => {
+			apiCateAll().then(resp => {
 				if (resp.code == 200) {
 					this.dataCate = resp.data;
 				} else {
@@ -93,7 +93,7 @@ export default {
 			this.$refs["editForm"].validate(valid => {
 				if (valid) {
 					this.editLoading = true;
-					cateEdit(this.editForm).then(resp => {
+					admCateEdit(this.editForm).then(resp => {
 						this.editLoading = false;
 						if (resp.code == 200) {
 							this.$Message.success({
@@ -113,7 +113,7 @@ export default {
 			});
 		},
 		delete(data) {
-			cateDel(data.row.id).then(resp => {
+			admCateDrop(data.row.id).then(resp => {
 				if (resp.code == 200) {
 					this.$Message.success({
 						content: "删除成功",

@@ -178,8 +178,8 @@ func UserEdit(mod *User, rl Role, cols ...string) bool {
 	return false
 }
 
-// UserDel 删除用户信息
-func UserDel(id int, rl Role) bool {
+// UserDrop 删除用户信息
+func UserDrop(id int, rl Role) bool {
 	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()

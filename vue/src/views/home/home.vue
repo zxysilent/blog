@@ -95,7 +95,7 @@
 	</div>
 </template>
 <script>
-import { sys, collect } from "@/api/auth";
+import { admSys, admCollect } from "@/api/auth";
 export default {
 	name: "index",
 	data() {
@@ -116,14 +116,14 @@ export default {
 	},
 	methods: {
 		init() {
-			sys().then(resp => {
+			admSys().then(resp => {
 				if (resp.code == 200) {
 					this.sys = resp.data;
 				} else {
 					this.$Message.warning("未查询到系统信息,请重试！");
 				}
 			});
-			collect().then(resp => {
+			admCollect().then(resp => {
 				if (resp.code == 200) {
 					this.collect = resp.data;
 				} else {
