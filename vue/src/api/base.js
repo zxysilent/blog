@@ -50,6 +50,7 @@ ajax.interceptors.response.use(
 			// 	}
 			// });
 			// return new Promise(() => {});
+			util.clearData();
 			location.href = urlJwt;
 		}
 		if (res.data.code == 350) {
