@@ -75,10 +75,10 @@ type Naver struct {
 
 // State 统计信息
 type State struct {
-	Post int `json:"post" form:"post"`
-	Page int `json:"page" form:"page"`
-	Cate int `json:"cate" form:"cate"`
-	Tag  int `json:"tag" form:"tag"`
+	Post int `json:"post"`
+	Page int `json:"page"`
+	Cate int `json:"cate"`
+	Tag  int `json:"tag"`
 }
 
 // Collect 统计信息

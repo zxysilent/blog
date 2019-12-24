@@ -4,11 +4,11 @@ import "github.com/zxysilent/utils"
 
 //PostTag 文章标签
 type PostTag struct {
-	Id     int   `xorm:"pk autoincr INT(11)"`
-	PostId int   `xorm:"unique(post_tag) INT(11)"`
-	Post   *Post `xorm:"- <- ->"`
-	TagId  int   `xorm:"unique(post_tag) INT(11)"`
-	Tag    *Tag  `xorm:"- <- ->"`
+	Id     int   `xorm:"not null pk autoincr INT(11)" json:"id"`
+	PostId int   `xorm:"not null unique(post_tag) INT(11)" json:"post_id"`
+	TagId  int   `xorm:"not null unique(post_tag) INT(11)" json:"tag_id"`
+	Post   *Post `xorm:"-" json:"post"`
+	Tag    *Tag  `xorm:"-" json:"tag"`
 }
 
 // PostTags 文章对应的标签

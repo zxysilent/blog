@@ -2,9 +2,9 @@ package model
 
 // Opts 配置
 type Opts struct {
-	Key   string `xorm:"pk unique VARCHAR(64)" json:"key" form:"key"`
-	Value string `xorm:"VARCHAR(1024)" json:"value" form:"value"`
-	Desc  string `xorm:"VARCHAR(255)" json:"desc" form:"desc"`
+	Key   string `xorm:"not null pk default '''' unique VARCHAR(64)"`
+	Value string `xorm:"not null default '''' VARCHAR(2048)"`
+	Intro string `xorm:"not null default '''' VARCHAR(255)"`
 }
 
 type mapOpts map[string]string
