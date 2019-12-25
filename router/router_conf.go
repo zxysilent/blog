@@ -127,7 +127,7 @@ func (t *TplRender) Render(w io.Writer, name string, data interface{}, ctx echo.
 	//每次强制加载函数
 	if conf.App.IsDev() {
 		funcMap := template.FuncMap{"str2html": Str2html, "date": Date, "md5": Md5}
-		t.templates = utils.LoadTmpl("./view", funcMap)
+		t.templates = utils.LoadTmpl("./views", funcMap)
 	}
 	return t.templates.ExecuteTemplate(w, name, data)
 }
@@ -152,7 +152,7 @@ func Md5(str string) string {
 // 初始化模板和函数
 func initRender() *TplRender {
 	funcMap := template.FuncMap{"str2html": Str2html, "date": Date, "md5": Md5}
-	tpl := utils.LoadTmpl("./view", funcMap)
+	tpl := utils.LoadTmpl("./views", funcMap)
 	return &TplRender{
 		templates: tpl,
 	}
