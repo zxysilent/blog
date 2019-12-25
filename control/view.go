@@ -146,7 +146,7 @@ func PostView(ctx echo.Context) error {
 		}
 		return ctx.JSON(utils.NewSucc("", mod))
 	}
-	return nil
+	return ctx.Redirect(302, "/404")
 }
 
 var reg = regexp.MustCompile(`<img src="([^" ]+)" alt="([^" ]*)"\s?\/?>`)
