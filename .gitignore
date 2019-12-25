@@ -3,3 +3,6 @@
 static/dist/*
 logs/*
 docs/*
+blog
+blog.*
+publish*
