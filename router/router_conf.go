@@ -189,23 +189,9 @@ func midJwt(next echo.HandlerFunc) echo.HandlerFunc {
 			return ctx.JSON(utils.NewErrJwt(`请重新登陆","jwt验证失败`))
 		}
 		// 自定义头
-		ctx.Response().Header().Set(echo.HeaderServer, "dev")
+		ctx.Response().Header().Set(echo.HeaderServer, "zxysilent")
 		return next(ctx)
 	}
 }
-
-// // midAdmin 中间件-后台管理权限验证
-// func midAdmin(next echo.HandlerFunc) echo.HandlerFunc {
-// 	return func(ctx echo.Context) error {
-// 		ctx.Response().Header().Set(echo.HeaderServer, "admin")
-// 		authObj := ctx.Get("auth")
-// 		auth := authObj.(*model.JwtClaims)
-// 		//RTea uint32 = 27 //teacher 		教师-课程老师
-// 		if auth.Role.Gte(27) { //大于等于某个权限
-// 			return next(ctx)
-// 		}
-// 		return ctx.JSON(utils.NewErrDeny(`对不起，你无法进行操作^_^!`, "当前用户无后台管理权限"))
-// 	}
-// }
 
 const html404 = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><title>404 Not Found zxysilent</title><style>* { margin: 0; padding: 0; }body { background-color: #f8f8f8; -webkit-font-smoothing: antialiased; }.error { position: absolute; left: 50%; top: 25rem; width: 483px; margin: -300px 0 0 -242px; padding-top: 199px; font-size: 18px; color: #666; text-align: center; background: #f8f8f8 url(/static/imgs/404.jpg) 0 0 no-repeat; }.error .remind { margin: 30px 0; }.error .button { display: inline-block; padding: 0 20px; line-height: 40px; font-size: 14px; color: #fff; background-color: #f8912d; text-decoration: none; }.error .button:hover { opacity: .9; }</style></head><body><div class="error">    <p class="remind">您访问的页面不存在，请返回主页！</p>    <p><a class="button" href="/">返回主页</a></p></div></body></html>`
