@@ -24,7 +24,7 @@ git clone https://github.com/zxysilent/blog.git
 数据库自带文章内容请在部署前删除
 ####  运行服务
 - 配置```conf.xml```数据库信息
-- 还原 ```data```目录下 ```blog.sql``` 数据库
+- 还原 ```data```目录下 ```db.sql``` 数据库
 数据库自带文章内容请在部署前删除
 - 安装依赖
 - 安装 swag   
