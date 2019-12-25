@@ -126,7 +126,7 @@ func (t *TplRender) Render(w io.Writer, name string, data interface{}, ctx echo.
 	//每次强制读取模板
 	//每次强制加载函数
 	if conf.App.IsDev() {
-		funcMap := template.FuncMap{"str2html": Str2html, "date": Date, "md5": Md5}
+		funcMap := template.FuncMap{"str2html": Str2html, "str2js": Str2js, "date": Date, "md5": Md5}
 		t.templates = utils.LoadTmpl("./views", funcMap)
 	}
 	return t.templates.ExecuteTemplate(w, name, data)
@@ -135,6 +135,11 @@ func (t *TplRender) Render(w io.Writer, name string, data interface{}, ctx echo.
 // Str2html Convert string to template.HTML type.
 func Str2html(raw string) template.HTML {
 	return template.HTML(raw)
+}
+
+// Str2js Convert string to template.JS type.
+func Str2js(raw string) template.JS {
+	return template.JS(raw)
 }
 
 // Date Date
@@ -151,7 +156,7 @@ func Md5(str string) string {
 
 // 初始化模板和函数
 func initRender() *TplRender {
-	funcMap := template.FuncMap{"str2html": Str2html, "date": Date, "md5": Md5}
+	funcMap := template.FuncMap{"str2html": Str2html, "str2js": Str2js, "date": Date, "md5": Md5}
 	tpl := utils.LoadTmpl("./views", funcMap)
 	return &TplRender{
 		templates: tpl,
