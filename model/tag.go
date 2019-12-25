@@ -9,8 +9,9 @@ type Tag struct {
 
 // TagState 统计
 type TagState struct {
-	Name  string `xorm:"VARCHAR(64)" json:"name" form:"name"`
-	Count int    `xorm:"INT(11)" json:"count" form:"count"`
+	Name  string `json:"name"`
+	Count int    `json:"count"`
+	Intro string `json:"intro"`
 }
 
 // tagIds 通过id返回标签集合
@@ -46,7 +47,7 @@ func TagAll() ([]Tag, error) {
 // TagStateAll 所有标签统计 当前标签下有文章才显示
 func TagStateAll() ([]TagState, error) {
 	mods := make([]TagState, 0, 8)
-	err := Db.SQL("SELECT `name`,count(tag_id) as count FROM post_tag ,tag WHERE tag.id=tag_id GROUP BY tag_id HAVING count>0").Find(&mods)
+	err := Db.SQL("SELECT `name`,intro,count(tag_id) as count FROM post_tag ,tag WHERE tag.id=tag_id GROUP BY tag_id HAVING count>0").Find(&mods)
 	return mods, err
 }
 
