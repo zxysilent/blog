@@ -45,7 +45,7 @@ func ArchivesView(ctx echo.Context) error {
 	})
 }
 
-// CatePostView 标签文章列表
+// CatePostView 分类文章列表
 func CatePostView(ctx echo.Context) error {
 	cate := ctx.Param("cate")
 	if cate == "" {
