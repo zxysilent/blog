@@ -78,6 +78,10 @@ func PostArchive() ([]Archive, error) {
 	}
 	mods := make([]Archive, 0, 8)
 	for _, v := range posts {
+		v.MarkdownContent = ""
+		v.Content = ""
+		v.Summary = ""
+		v.Options = ""
 		if idx := archInOf(v.CreateTime, mods); idx == -1 { //没有
 			mods = append(mods, Archive{
 				Time:  v.CreateTime,
