@@ -35,8 +35,10 @@ func RunApp() {
 	engine.GET(`/`, control.IndexView)
 	// 归档
 	engine.GET(`/archives`, control.ArchivesView)
+	engine.GET(`/archives.json`, control.ArchivesJson)
 	// 标签
 	engine.GET(`/tags`, control.TagsView)
+	engine.GET(`/tags.json`, control.TagsJson)
 	// 具体某个标签
 	engine.GET(`/tag/:tag`, control.TagPostView)
 	// 分类

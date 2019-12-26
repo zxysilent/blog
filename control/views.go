@@ -44,6 +44,13 @@ func ArchivesView(ctx echo.Context) error {
 		"Posts": mods,
 	})
 }
+func ArchivesJson(ctx echo.Context) error {
+	mods, err := model.PostArchive()
+	if err != nil {
+		return ctx.JSON(utils.Fail("未查询到数据", err))
+	}
+	return ctx.JSON(utils.NewSucc("归档", mods))
+}
 
 // CatePostView 分类文章列表
 func CatePostView(ctx echo.Context) error {
@@ -88,6 +95,13 @@ func TagsView(ctx echo.Context) error {
 	return ctx.Render(http.StatusOK, "tags.html", map[string]interface{}{
 		"Tags": mods,
 	})
+}
+func TagsJson(ctx echo.Context) error {
+	mods, err := model.TagStateAll()
+	if err != nil {
+		return ctx.JSON(utils.Fail("未查询到标签", err))
+	}
+	return ctx.JSON(utils.NewSucc("标签", mods))
 }
 
 // TagPostView 标签文章列表
