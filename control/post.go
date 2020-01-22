@@ -19,7 +19,7 @@ func PostGet(ctx echo.Context) error {
 	}
 	mod, has := model.PostGet(id)
 	if !has {
-		return ctx.JSON(utils.NewErrOpt(`未查询信息`))
+		return ctx.JSON(utils.ErrOpt(`未查询信息`))
 	}
 	return ctx.JSON(utils.Succ(`信息`, mod))
 }
@@ -28,10 +28,10 @@ func PostGet(ctx echo.Context) error {
 func PostPageAll(ctx echo.Context) error {
 	mods, err := model.PostPageAll()
 	if err != nil {
-		return ctx.JSON(utils.NewErrOpt(`未查询到页面信息`, err.Error()))
+		return ctx.JSON(utils.ErrOpt(`未查询到页面信息`, err.Error()))
 	}
 	if len(mods) < 1 {
-		return ctx.JSON(utils.NewErrOpt(`未查询到页面信息`, "len"))
+		return ctx.JSON(utils.ErrOpt(`未查询到页面信息`, "len"))
 	}
 	return ctx.JSON(utils.Succ(`页面信息`, mods))
 }
@@ -44,7 +44,7 @@ func PostTagGet(ctx echo.Context) error {
 	}
 	mods := model.PostTagGet(id)
 	if mods == nil {
-		return ctx.JSON(utils.NewErrOpt(`未查询到标签信息`))
+		return ctx.JSON(utils.ErrOpt(`未查询到标签信息`))
 	}
 	return ctx.JSON(utils.Succ(`标签ids`, mods))
 }

@@ -32,7 +32,7 @@ func UserLogin(ctx echo.Context) error {
 	}
 	mod, has := model.UserByNum(ipt.Num)
 	if !has {
-		return ctx.JSON(utils.NewErrOpt(`用户名输入错误`))
+		return ctx.JSON(utils.ErrOpt(`用户名输入错误`))
 	}
 	now := time.Now()
 	// 禁止登陆证 5 分钟

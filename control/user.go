@@ -16,7 +16,7 @@ import (
 func UserExist(ctx echo.Context) error {
 	num := ctx.Param("num")
 	if !model.UserExist(num) {
-		return ctx.JSON(utils.NewErrOpt(`当前账号不存在`))
+		return ctx.JSON(utils.ErrOpt(`当前账号不存在`))
 	}
 	return ctx.JSON(utils.Succ(`当前账号存在`))
 }
@@ -79,11 +79,11 @@ func UserExist(ctx echo.Context) error {
 // 	}
 // 	count := model.UserCount(rl, auth.Role)
 // 	if count == 0 {
-// 		return ctx.JSON(utils.NewErrOpt(`未查询到用户信息,请重试`))
+// 		return ctx.JSON(utils.ErrOpt(`未查询到用户信息,请重试`))
 // 	}
 // 	mods, err := model.UserPage(rl, auth.Role, ipt.Pi, ipt.Ps)
 // 	if err != nil {
-// 		return ctx.JSON(utils.NewErrOpt(`未查询到用户信息,请重试`, err.Error()))
+// 		return ctx.JSON(utils.ErrOpt(`未查询到用户信息,请重试`, err.Error()))
 // 	}
 // 	return ctx.JSON(utils.NewPage(`用户信息`, mods, count))
 // }

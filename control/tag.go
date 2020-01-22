@@ -12,10 +12,10 @@ import (
 func TagAll(ctx echo.Context) error {
 	mods, err := model.TagAll()
 	if err != nil {
-		return ctx.JSON(utils.NewErrOpt(`未查询到标签信息`, err.Error()))
+		return ctx.JSON(utils.ErrOpt(`未查询到标签信息`, err.Error()))
 	}
 	if len(mods) < 1 {
-		return ctx.JSON(utils.NewErrOpt(`未查询到标签信息`, "len"))
+		return ctx.JSON(utils.ErrOpt(`未查询到标签信息`, "len"))
 	}
 	return ctx.JSON(utils.Succ(`分类信息`, mods))
 }

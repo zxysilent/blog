@@ -17,10 +17,10 @@ import (
 func CateAll(ctx echo.Context) error {
 	mods, err := model.CateAll()
 	if err != nil {
-		return ctx.JSON(utils.NewErrOpt(`未查询到分类信息`, err.Error()))
+		return ctx.JSON(utils.ErrOpt(`未查询到分类信息`, err.Error()))
 	}
 	if len(mods) < 1 {
-		return ctx.JSON(utils.NewErrOpt(`未查询到分类信息`, "len"))
+		return ctx.JSON(utils.ErrOpt(`未查询到分类信息`, "len"))
 	}
 	return ctx.JSON(utils.Succ(`分类信息`, mods))
 }
@@ -46,11 +46,11 @@ func CatePost(ctx echo.Context) error {
 	}
 	count := model.CatePostCount(cid, false)
 	if count == 0 {
-		return ctx.JSON(utils.NewErrOpt(`未查询到文章信息,请重试`))
+		return ctx.JSON(utils.ErrOpt(`未查询到文章信息,请重试`))
 	}
 	mods, err := model.CatePostList(cid, ipt.Pi, ipt.Ps, false)
 	if err != nil {
-		return ctx.JSON(utils.NewErrOpt(`未查询到文章信息,请重试`, err.Error()))
+		return ctx.JSON(utils.ErrOpt(`未查询到文章信息,请重试`, err.Error()))
 	}
 	return ctx.JSON(utils.NewPage(`文章信息`, mods, count))
 }
