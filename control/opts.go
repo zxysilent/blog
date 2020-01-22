@@ -14,7 +14,7 @@ func OptsGet(ctx echo.Context) error {
 		return ctx.JSON(utils.NewErrIpt(`请填写key值`))
 	}
 	if val, ok := model.OptsGet(key); ok {
-		return ctx.JSON(utils.NewSucc(``, val))
+		return ctx.JSON(utils.Succ(``, val))
 	}
 	return ctx.JSON(utils.NewErrIpt(`错误的key值`))
 }
@@ -29,7 +29,7 @@ func OptsEdit(ctx echo.Context) error {
 	if !model.OptsEdit(ipt) {
 		return ctx.JSON(utils.Fail(`配置项修改失败`))
 	}
-	return ctx.JSON(utils.NewSucc(`配置项修改成功`))
+	return ctx.JSON(utils.Succ(`配置项修改成功`))
 }
 
 // OptsBase 基本配置项目
@@ -45,5 +45,5 @@ func OptsBase(ctx echo.Context) error {
 	mp := model.MapOpts
 	// delete(mp, "analytic")
 	// delete(mp, "comment")
-	return ctx.JSON(utils.NewSucc(`基本配置项目`, mp))
+	return ctx.JSON(utils.Succ(`基本配置项目`, mp))
 }

@@ -17,7 +17,7 @@ func TagAll(ctx echo.Context) error {
 	if len(mods) < 1 {
 		return ctx.JSON(utils.NewErrOpt(`未查询到标签信息`, "len"))
 	}
-	return ctx.JSON(utils.NewSucc(`分类信息`, mods))
+	return ctx.JSON(utils.Succ(`分类信息`, mods))
 }
 
 // TagAdd 添加标签
@@ -30,7 +30,7 @@ func TagAdd(ctx echo.Context) error {
 	if !model.TagAdd(ipt) {
 		return ctx.JSON(utils.Fail(`添加标签失败,请重试`))
 	}
-	return ctx.JSON(utils.NewSucc(`添加标签成功`))
+	return ctx.JSON(utils.Succ(`添加标签成功`))
 }
 
 // TagEdit 修改标签
@@ -43,7 +43,7 @@ func TagEdit(ctx echo.Context) error {
 	if !model.TagEdit(ipt) {
 		return ctx.JSON(utils.Fail(`标签修改失败`))
 	}
-	return ctx.JSON(utils.NewSucc(`标签修改成功`))
+	return ctx.JSON(utils.Succ(`标签修改成功`))
 }
 
 // TagDrop  删除标签
@@ -57,5 +57,5 @@ func TagDrop(ctx echo.Context) error {
 	}
 	// 删除标签相关联的数据
 	model.TagPostDrop(id)
-	return ctx.JSON(utils.NewSucc(`标签删除成功`))
+	return ctx.JSON(utils.Succ(`标签删除成功`))
 }

@@ -18,7 +18,7 @@ func UserExist(ctx echo.Context) error {
 	if !model.UserExist(num) {
 		return ctx.JSON(utils.NewErrOpt(`当前账号不存在`))
 	}
-	return ctx.JSON(utils.NewSucc(`当前账号存在`))
+	return ctx.JSON(utils.Succ(`当前账号存在`))
 }
 
 // UserAdd doc
@@ -51,7 +51,7 @@ func UserExist(ctx echo.Context) error {
 // 	if !model.UserAdd(&ipt.User) {
 // 		return ctx.JSON(utils.Fail(`用户信息添加失败`))
 // 	}
-// 	return ctx.JSON(utils.NewSucc(`用户信息添加成功`))
+// 	return ctx.JSON(utils.Succ(`用户信息添加成功`))
 // }
 
 // UserPage doc
@@ -102,7 +102,7 @@ func UserExist(ctx echo.Context) error {
 // 	}
 // 	auth := ctx.Get("auth").(*model.JwtClaims)
 // 	if model.UserChgatv(id, auth.Role) {
-// 		return ctx.JSON(utils.NewSucc("用户状态更新成功"))
+// 		return ctx.JSON(utils.Succ("用户状态更新成功"))
 // 	}
 // 	return ctx.JSON(utils.Fail("用户状态更新失败"))
 // }
@@ -121,7 +121,7 @@ func UserExist(ctx echo.Context) error {
 // 	}
 // 	auth := ctx.Get("auth").(*model.JwtClaims)
 // 	if model.UserPass(id, "33d7be2196ff70efaf6913fc8bdcab", auth.Role) {
-// 		return ctx.JSON(utils.NewSucc("用户密码重置成功"))
+// 		return ctx.JSON(utils.Succ("用户密码重置成功"))
 // 	}
 // 	return ctx.JSON(utils.Fail("用户密码重置失败"))
 // }
@@ -149,7 +149,7 @@ func UserEdit(ctx echo.Context) error {
 	// if !model.UserEdit(&ipt.User, auth.Role, "Name", "Phone", "Email", "Desc", "Role") {
 	// 	return ctx.JSON(utils.Fail(`用户信息修改失败`))
 	// }
-	return ctx.JSON(utils.NewSucc(`用户信息修改成功`))
+	return ctx.JSON(utils.Succ(`用户信息修改成功`))
 }
 
 // UserDrop doc
@@ -168,7 +168,7 @@ func UserEdit(ctx echo.Context) error {
 // 	if !model.UserDrop(id, auth.Role) {
 // 		return ctx.JSON(utils.Fail(`用户信息删除失败,请重试`))
 // 	}
-// 	return ctx.JSON(utils.NewSucc(`用户信息删除成功`))
+// 	return ctx.JSON(utils.Succ(`用户信息删除成功`))
 // }
 
 // UserPass doc
@@ -198,7 +198,7 @@ func UserPass(ctx echo.Context) error {
 	if !model.UserPass(mod.Id, ipt.Npass) {
 		return ctx.JSON(utils.Fail(`密码修改失败`))
 	}
-	return ctx.JSON(utils.NewSucc(`密码修改成功`))
+	return ctx.JSON(utils.Succ(`密码修改成功`))
 }
 
 // UserEditSelf doc
@@ -220,5 +220,5 @@ func UserEditSelf(ctx echo.Context) error {
 	if !model.UserEdit(mod, 0, "Name", "Phone", "Email") {
 		return ctx.JSON(utils.Fail(`用户信息修改失败`))
 	}
-	return ctx.JSON(utils.NewSucc(`用户信息修改成功`))
+	return ctx.JSON(utils.Succ(`用户信息修改成功`))
 }

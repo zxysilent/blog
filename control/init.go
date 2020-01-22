@@ -36,7 +36,7 @@ func Upload(ctx echo.Context) error {
 	if _, err = io.Copy(dst, src); err != nil {
 		return ctx.JSON(utils.NewErrIpt(`文件写入失败,请重试`, err.Error()))
 	}
-	return ctx.JSON(utils.NewSucc(`文件上传成功`, "/"+filePathName))
+	return ctx.JSON(utils.Succ(`文件上传成功`, "/"+filePathName))
 }
 
 // Core 重定向
@@ -59,13 +59,13 @@ func Sys(ctx echo.Context) error {
 		Version: runtime.Version(),
 		NumCPU:  runtime.NumCPU(),
 	}
-	return ctx.JSON(utils.NewSucc(`系统信息`, info))
+	return ctx.JSON(utils.Succ(`系统信息`, info))
 }
 
 // Collect 统计信息
 func Collect(ctx echo.Context) error {
 	if mod, has := model.Collect(); has {
-		return ctx.JSON(utils.NewSucc(`统计信息`, mod))
+		return ctx.JSON(utils.Succ(`统计信息`, mod))
 	}
 	return ctx.JSON(utils.Fail(`未查询到统计信息`))
 }

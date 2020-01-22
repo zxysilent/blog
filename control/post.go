@@ -21,7 +21,7 @@ func PostGet(ctx echo.Context) error {
 	if !has {
 		return ctx.JSON(utils.NewErrOpt(`未查询信息`))
 	}
-	return ctx.JSON(utils.NewSucc(`信息`, mod))
+	return ctx.JSON(utils.Succ(`信息`, mod))
 }
 
 // PostPageAll 页面列表
@@ -33,7 +33,7 @@ func PostPageAll(ctx echo.Context) error {
 	if len(mods) < 1 {
 		return ctx.JSON(utils.NewErrOpt(`未查询到页面信息`, "len"))
 	}
-	return ctx.JSON(utils.NewSucc(`页面信息`, mods))
+	return ctx.JSON(utils.Succ(`页面信息`, mods))
 }
 
 // PostTagGet 通过文章id 获取 标签ids
@@ -46,7 +46,7 @@ func PostTagGet(ctx echo.Context) error {
 	if mods == nil {
 		return ctx.JSON(utils.NewErrOpt(`未查询到标签信息`))
 	}
-	return ctx.JSON(utils.NewSucc(`标签ids`, mods))
+	return ctx.JSON(utils.Succ(`标签ids`, mods))
 }
 
 // PostOpts 文章操作
@@ -108,9 +108,9 @@ func PostOpts(ctx echo.Context) error {
 				model.PostTagDrops(ipt.Post.Id, del)
 				// 添加标签
 				model.TagPostAdds(&tagAdds)
-				return ctx.JSON(utils.NewSucc(`文章修改成功`))
+				return ctx.JSON(utils.Succ(`文章修改成功`))
 			}
-			return ctx.JSON(utils.NewSucc(`页面修改成功`))
+			return ctx.JSON(utils.Succ(`页面修改成功`))
 		}
 		if ipt.Type == 0 {
 			return ctx.JSON(utils.Fail(`文章修改失败,请重试`))
@@ -132,9 +132,9 @@ func PostOpts(ctx echo.Context) error {
 				})
 			}
 			model.TagPostAdds(&tagPosts)
-			return ctx.JSON(utils.NewSucc(`文章添加成功`))
+			return ctx.JSON(utils.Succ(`文章添加成功`))
 		}
-		return ctx.JSON(utils.NewSucc(`页面添加成功`))
+		return ctx.JSON(utils.Succ(`页面添加成功`))
 	}
 	if ipt.Type == 0 {
 		return ctx.JSON(utils.Fail(`文章添加失败,请重试`))
@@ -162,5 +162,5 @@ func PostDrop(ctx echo.Context) error {
 	}
 	// 删除 文章对应的标签信息
 	model.PostTagDrop(id)
-	return ctx.JSON(utils.NewSucc(`删除成功`))
+	return ctx.JSON(utils.Succ(`删除成功`))
 }

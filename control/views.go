@@ -49,7 +49,7 @@ func ArchivesJson(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(utils.Fail("未查询到数据", err))
 	}
-	return ctx.JSON(utils.NewSucc("归档", mods))
+	return ctx.JSON(utils.Succ("归档", mods))
 }
 
 // CatePostView 分类文章列表
@@ -101,7 +101,7 @@ func TagsJson(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(utils.Fail("未查询到标签", err))
 	}
-	return ctx.JSON(utils.NewSucc("标签", mods))
+	return ctx.JSON(utils.Succ("标签", mods))
 }
 
 // TagPostView 标签文章列表
@@ -158,7 +158,7 @@ func PostView(ctx echo.Context) error {
 				"HasCate": mod.Cate != nil,
 			})
 		}
-		return ctx.JSON(utils.NewSucc("", mod))
+		return ctx.JSON(utils.Succ("", mod))
 	}
 	return ctx.Redirect(302, "/404")
 }

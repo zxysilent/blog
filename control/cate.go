@@ -22,7 +22,7 @@ func CateAll(ctx echo.Context) error {
 	if len(mods) < 1 {
 		return ctx.JSON(utils.NewErrOpt(`未查询到分类信息`, "len"))
 	}
-	return ctx.JSON(utils.NewSucc(`分类信息`, mods))
+	return ctx.JSON(utils.Succ(`分类信息`, mods))
 }
 
 // CatePost doc
@@ -71,7 +71,7 @@ func CateAdd(ctx echo.Context) error {
 	if !model.CateAdd(ipt) {
 		return ctx.JSON(utils.Fail(`添加分类失败,请重试`))
 	}
-	return ctx.JSON(utils.NewSucc(`添加分类成功`))
+	return ctx.JSON(utils.Succ(`添加分类成功`))
 }
 
 // CateEdit doc
@@ -90,7 +90,7 @@ func CateEdit(ctx echo.Context) error {
 	if !model.CateEdit(ipt) {
 		return ctx.JSON(utils.Fail(`分类修改失败`))
 	}
-	return ctx.JSON(utils.NewSucc(`分类修改成功`))
+	return ctx.JSON(utils.Succ(`分类修改成功`))
 }
 
 // CateDrop doc
@@ -108,5 +108,5 @@ func CateDrop(ctx echo.Context) error {
 	if !model.CateDrop(id) {
 		return ctx.JSON(utils.Fail(`分类删除失败,请重试`))
 	}
-	return ctx.JSON(utils.NewSucc(`分类删除成功`))
+	return ctx.JSON(utils.Succ(`分类删除成功`))
 }

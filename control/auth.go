@@ -79,7 +79,7 @@ func UserLogin(ctx echo.Context) error {
 	mod.Ltime = now
 	mod.Ip = ctx.RealIP()
 	model.UserEditLogin(mod, "Ltime", "Ip", "Ecount")
-	return ctx.JSON(utils.NewSucc(`登陆成功`, jwtStr))
+	return ctx.JSON(utils.Succ(`登陆成功`, jwtStr))
 }
 
 // UserLogout doc
@@ -99,5 +99,5 @@ func UserLogout(ctx echo.Context) error {
 // @Router /api/auth [get]
 func UserAuth(ctx echo.Context) error {
 	mod, _ := model.UserGet(ctx.Get("uid").(int))
-	return ctx.JSON(utils.NewSucc(`信息`, mod))
+	return ctx.JSON(utils.Succ(`信息`, mod))
 }
