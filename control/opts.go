@@ -27,7 +27,7 @@ func OptsEdit(ctx echo.Context) error {
 		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.OptsEdit(ipt) {
-		return ctx.JSON(utils.NewFail(`配置项修改失败`))
+		return ctx.JSON(utils.Fail(`配置项修改失败`))
 	}
 	return ctx.JSON(utils.NewSucc(`配置项修改成功`))
 }
@@ -40,7 +40,7 @@ func OptsBase(ctx echo.Context) error {
 	// 	return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	// }
 	// if !model.OptsEdit(ipt) {
-	// 	return ctx.JSON(utils.NewFail(`配置项修改失败`))
+	// 	return ctx.JSON(utils.Fail(`配置项修改失败`))
 	// }
 	mp := model.MapOpts
 	// delete(mp, "analytic")

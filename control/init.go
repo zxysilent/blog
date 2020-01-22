@@ -67,7 +67,7 @@ func Collect(ctx echo.Context) error {
 	if mod, has := model.Collect(); has {
 		return ctx.JSON(utils.NewSucc(`统计信息`, mod))
 	}
-	return ctx.JSON(utils.NewFail(`未查询到统计信息`))
+	return ctx.JSON(utils.Fail(`未查询到统计信息`))
 }
 
 // Models doc

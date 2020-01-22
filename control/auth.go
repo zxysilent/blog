@@ -40,7 +40,7 @@ func UserLogin(ctx echo.Context) error {
 		// 登录时间差
 		span := 5 - int(now.Sub(mod.Ltime).Minutes())
 		if span >= 1 { //「」
-			return ctx.JSON(utils.NewFail(`请「` + strconv.Itoa(span) + `」分钟后登录`))
+			return ctx.JSON(utils.Fail(`请「` + strconv.Itoa(span) + `」分钟后登录`))
 		}
 		mod.Ecount = 0
 	}
@@ -51,14 +51,14 @@ func UserLogin(ctx echo.Context) error {
 		if mod.Ecount >= 3 {
 			mod.Ecount = -1
 			model.UserEditLogin(mod, "Ltime", "Ecount")
-			return ctx.JSON(utils.NewFail(`登录锁定请「5」分钟后登录`))
+			return ctx.JSON(utils.Fail(`登录锁定请「5」分钟后登录`))
 		}
 		// 小于3 提示剩余次数
 		model.UserEditLogin(mod, "Ltime", "Ecount")
-		return ctx.JSON(utils.NewFail(`密码错误,剩于登录次数：` + strconv.Itoa(int(3-mod.Ecount))))
+		return ctx.JSON(utils.Fail(`密码错误,剩于登录次数：` + strconv.Itoa(int(3-mod.Ecount))))
 	}
 	if !mod.Role.IsAtv() {
-		return ctx.JSON(utils.NewFail(`当前账号已被禁用`))
+		return ctx.JSON(utils.Fail(`当前账号已被禁用`))
 	}
 	claims := model.JwtClaims{
 		Id:   mod.Id,
@@ -74,7 +74,7 @@ func UserLogin(ctx echo.Context) error {
 	// Generate encoded token and send it as response.
 	jwtStr, err := token.SignedString([]byte("zxy.sil.ent"))
 	if err != nil {
-		return ctx.JSON(utils.NewFail(`凭证生成失败,请重试`, err.Error()))
+		return ctx.JSON(utils.Fail(`凭证生成失败,请重试`, err.Error()))
 	}
 	mod.Ltime = now
 	mod.Ip = ctx.RealIP()

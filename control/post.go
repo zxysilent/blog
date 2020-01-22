@@ -113,9 +113,9 @@ func PostOpts(ctx echo.Context) error {
 			return ctx.JSON(utils.NewSucc(`页面修改成功`))
 		}
 		if ipt.Type == 0 {
-			return ctx.JSON(utils.NewFail(`文章修改失败,请重试`))
+			return ctx.JSON(utils.Fail(`文章修改失败,请重试`))
 		}
-		return ctx.JSON(utils.NewFail(`页面修改失败,请重试`))
+		return ctx.JSON(utils.Fail(`页面修改失败,请重试`))
 	}
 	// 添加 文章/页面
 	ipt.Post.UpdateTime = time.Now()
@@ -137,9 +137,9 @@ func PostOpts(ctx echo.Context) error {
 		return ctx.JSON(utils.NewSucc(`页面添加成功`))
 	}
 	if ipt.Type == 0 {
-		return ctx.JSON(utils.NewFail(`文章添加失败,请重试`))
+		return ctx.JSON(utils.Fail(`文章添加失败,请重试`))
 	}
-	return ctx.JSON(utils.NewFail(`页面添加失败,请重试`))
+	return ctx.JSON(utils.Fail(`页面添加失败,请重试`))
 }
 func similar(a, b string) int {
 	if a[:4] == b[:4] {
@@ -158,7 +158,7 @@ func PostDrop(ctx echo.Context) error {
 		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.PostDrop(id) {
-		return ctx.JSON(utils.NewFail(`删除失败,请重试`))
+		return ctx.JSON(utils.Fail(`删除失败,请重试`))
 	}
 	// 删除 文章对应的标签信息
 	model.PostTagDrop(id)

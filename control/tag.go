@@ -28,7 +28,7 @@ func TagAdd(ctx echo.Context) error {
 		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.TagAdd(ipt) {
-		return ctx.JSON(utils.NewFail(`添加标签失败,请重试`))
+		return ctx.JSON(utils.Fail(`添加标签失败,请重试`))
 	}
 	return ctx.JSON(utils.NewSucc(`添加标签成功`))
 }
@@ -41,7 +41,7 @@ func TagEdit(ctx echo.Context) error {
 		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.TagEdit(ipt) {
-		return ctx.JSON(utils.NewFail(`标签修改失败`))
+		return ctx.JSON(utils.Fail(`标签修改失败`))
 	}
 	return ctx.JSON(utils.NewSucc(`标签修改成功`))
 }
@@ -53,7 +53,7 @@ func TagDrop(ctx echo.Context) error {
 		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.TagDrop(id) {
-		return ctx.JSON(utils.NewFail(`标签删除失败,请重试`))
+		return ctx.JSON(utils.Fail(`标签删除失败,请重试`))
 	}
 	// 删除标签相关联的数据
 	model.TagPostDrop(id)

@@ -69,7 +69,7 @@ func CateAdd(ctx echo.Context) error {
 		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.CateAdd(ipt) {
-		return ctx.JSON(utils.NewFail(`添加分类失败,请重试`))
+		return ctx.JSON(utils.Fail(`添加分类失败,请重试`))
 	}
 	return ctx.JSON(utils.NewSucc(`添加分类成功`))
 }
@@ -88,7 +88,7 @@ func CateEdit(ctx echo.Context) error {
 		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.CateEdit(ipt) {
-		return ctx.JSON(utils.NewFail(`分类修改失败`))
+		return ctx.JSON(utils.Fail(`分类修改失败`))
 	}
 	return ctx.JSON(utils.NewSucc(`分类修改成功`))
 }
@@ -106,7 +106,7 @@ func CateDrop(ctx echo.Context) error {
 		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.CateDrop(id) {
-		return ctx.JSON(utils.NewFail(`分类删除失败,请重试`))
+		return ctx.JSON(utils.Fail(`分类删除失败,请重试`))
 	}
 	return ctx.JSON(utils.NewSucc(`分类删除成功`))
 }

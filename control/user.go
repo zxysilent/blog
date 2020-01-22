@@ -49,7 +49,7 @@ func UserExist(ctx echo.Context) error {
 // 	ipt.User.Role = role
 // 	ipt.User.Pass = ipt.Pass
 // 	if !model.UserAdd(&ipt.User) {
-// 		return ctx.JSON(utils.NewFail(`用户信息添加失败`))
+// 		return ctx.JSON(utils.Fail(`用户信息添加失败`))
 // 	}
 // 	return ctx.JSON(utils.NewSucc(`用户信息添加成功`))
 // }
@@ -104,7 +104,7 @@ func UserExist(ctx echo.Context) error {
 // 	if model.UserChgatv(id, auth.Role) {
 // 		return ctx.JSON(utils.NewSucc("用户状态更新成功"))
 // 	}
-// 	return ctx.JSON(utils.NewFail("用户状态更新失败"))
+// 	return ctx.JSON(utils.Fail("用户状态更新失败"))
 // }
 
 // UserResetPass doc
@@ -123,7 +123,7 @@ func UserExist(ctx echo.Context) error {
 // 	if model.UserPass(id, "33d7be2196ff70efaf6913fc8bdcab", auth.Role) {
 // 		return ctx.JSON(utils.NewSucc("用户密码重置成功"))
 // 	}
-// 	return ctx.JSON(utils.NewFail("用户密码重置失败"))
+// 	return ctx.JSON(utils.Fail("用户密码重置失败"))
 // }
 
 // UserEdit doc
@@ -147,7 +147,7 @@ func UserEdit(ctx echo.Context) error {
 	//ipt.User.Role = role
 	//auth := ctx.Get("auth").(*model.JwtClaims)
 	// if !model.UserEdit(&ipt.User, auth.Role, "Name", "Phone", "Email", "Desc", "Role") {
-	// 	return ctx.JSON(utils.NewFail(`用户信息修改失败`))
+	// 	return ctx.JSON(utils.Fail(`用户信息修改失败`))
 	// }
 	return ctx.JSON(utils.NewSucc(`用户信息修改成功`))
 }
@@ -166,7 +166,7 @@ func UserEdit(ctx echo.Context) error {
 // 	}
 // 	auth := ctx.Get("auth").(*model.JwtClaims)
 // 	if !model.UserDrop(id, auth.Role) {
-// 		return ctx.JSON(utils.NewFail(`用户信息删除失败,请重试`))
+// 		return ctx.JSON(utils.Fail(`用户信息删除失败,请重试`))
 // 	}
 // 	return ctx.JSON(utils.NewSucc(`用户信息删除成功`))
 // }
@@ -186,17 +186,17 @@ func UserPass(ctx echo.Context) error {
 	}{}
 	err := ctx.Bind(&ipt)
 	if err != nil {
-		return ctx.JSON(utils.NewFail(`输入数据有误`, err.Error()))
+		return ctx.JSON(utils.Fail(`输入数据有误`, err.Error()))
 	}
 	mod, has := model.UserGet(ctx.Get("uid").(int))
 	if !has {
-		return ctx.JSON(utils.NewFail(`输入数据有误,请重试`))
+		return ctx.JSON(utils.Fail(`输入数据有误,请重试`))
 	}
 	if mod.Pass != ipt.Opass {
-		return ctx.JSON(utils.NewFail(`原始密码输入错误,请重试`))
+		return ctx.JSON(utils.Fail(`原始密码输入错误,请重试`))
 	}
 	if !model.UserPass(mod.Id, ipt.Npass) {
-		return ctx.JSON(utils.NewFail(`密码修改失败`))
+		return ctx.JSON(utils.Fail(`密码修改失败`))
 	}
 	return ctx.JSON(utils.NewSucc(`密码修改成功`))
 }
@@ -218,7 +218,7 @@ func UserEditSelf(ctx echo.Context) error {
 		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.UserEdit(mod, 0, "Name", "Phone", "Email") {
-		return ctx.JSON(utils.NewFail(`用户信息修改失败`))
+		return ctx.JSON(utils.Fail(`用户信息修改失败`))
 	}
 	return ctx.JSON(utils.NewSucc(`用户信息修改成功`))
 }
