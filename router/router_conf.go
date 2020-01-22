@@ -90,7 +90,7 @@ func HTTPErrorHandler(err error, ctx echo.Context) {
 			ctx.HTML(404, html404)
 			// ctx.Redirect(302, "/404.html")
 		} else {
-			ctx.JSON(utils.NewErrSvr(err.Error()))
+			ctx.JSON(utils.ErrSvr(err.Error()))
 		}
 	}
 }
