@@ -172,7 +172,7 @@ func midJwt(next echo.HandlerFunc) echo.HandlerFunc {
 			// header 查找token
 			tokenString = ctx.Request().Header.Get(echo.HeaderAuthorization)
 			if tokenString == "" {
-				ctx.JSON(utils.NewErrJwt(`请重新登陆`, `未发现jwt`))
+				ctx.JSON(utils.ErrJwt(`请重新登陆`, `未发现jwt`))
 				return nil
 			}
 			// Bearer token
@@ -186,7 +186,7 @@ func midJwt(next echo.HandlerFunc) echo.HandlerFunc {
 			ctx.Set("auth", jwtAuth)
 			ctx.Set("uid", jwtAuth.Id)
 		} else {
-			return ctx.JSON(utils.NewErrJwt(`请重新登陆","jwt验证失败`))
+			return ctx.JSON(utils.ErrJwt(`请重新登陆","jwt验证失败`))
 		}
 		// 自定义头
 		ctx.Response().Header().Set(echo.HeaderServer, "zxysilent")
