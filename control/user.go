@@ -85,7 +85,7 @@ func UserExist(ctx echo.Context) error {
 // 	if err != nil {
 // 		return ctx.JSON(utils.ErrOpt(`未查询到用户信息,请重试`, err.Error()))
 // 	}
-// 	return ctx.JSON(utils.NewPage(`用户信息`, mods, count))
+// 	return ctx.JSON(utils.Page(`用户信息`, mods, count))
 // }
 
 // UserChgatv doc
