@@ -15,7 +15,7 @@ import (
 func PostGet(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
-		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	mod, has := model.PostGet(id)
 	if !has {
@@ -40,7 +40,7 @@ func PostPageAll(ctx echo.Context) error {
 func PostTagGet(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
-		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	mods := model.PostTagGet(id)
 	if mods == nil {
@@ -59,10 +59,10 @@ func PostOpts(ctx echo.Context) error {
 	}{}
 	err := ctx.Bind(ipt)
 	if err != nil {
-		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !ipt.Edit && model.PostExist(ipt.Post.Path) {
-		return ctx.JSON(utils.NewErrIpt(`当前访问路径已经存在,请重新输入`))
+		return ctx.JSON(utils.ErrIpt(`当前访问路径已经存在,请重新输入`))
 	}
 	// 同步类型
 	ipt.Post.Type = ipt.Type
@@ -155,7 +155,7 @@ func similar(a, b string) int {
 func PostDrop(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
-		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.PostDrop(id) {
 		return ctx.JSON(utils.Fail(`删除失败,请重试`))

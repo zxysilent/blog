@@ -11,12 +11,12 @@ import (
 func OptsGet(ctx echo.Context) error {
 	key := ctx.Param("key")
 	if key == "" {
-		return ctx.JSON(utils.NewErrIpt(`请填写key值`))
+		return ctx.JSON(utils.ErrIpt(`请填写key值`))
 	}
 	if val, ok := model.OptsGet(key); ok {
 		return ctx.JSON(utils.Succ(``, val))
 	}
-	return ctx.JSON(utils.NewErrIpt(`错误的key值`))
+	return ctx.JSON(utils.ErrIpt(`错误的key值`))
 }
 
 // OptsEdit 编辑某个配置项
@@ -24,7 +24,7 @@ func OptsEdit(ctx echo.Context) error {
 	ipt := &model.Opts{}
 	err := ctx.Bind(ipt)
 	if err != nil {
-		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.OptsEdit(ipt) {
 		return ctx.JSON(utils.Fail(`配置项修改失败`))
@@ -37,7 +37,7 @@ func OptsBase(ctx echo.Context) error {
 	// ipt := &model.Opts{}
 	// err := ctx.Bind(ipt)
 	// if err != nil {
-	// 	return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+	// 	return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, err.Error()))
 	// }
 	// if !model.OptsEdit(ipt) {
 	// 	return ctx.JSON(utils.Fail(`配置项修改失败`))

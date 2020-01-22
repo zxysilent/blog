@@ -16,11 +16,11 @@ import (
 func Upload(ctx echo.Context) error {
 	file, err := ctx.FormFile("file")
 	if err != nil {
-		return ctx.JSON(utils.NewErrIpt(`未发现文件,请重试`, err.Error()))
+		return ctx.JSON(utils.ErrIpt(`未发现文件,请重试`, err.Error()))
 	}
 	src, err := file.Open()
 	if err != nil {
-		return ctx.JSON(utils.NewErrIpt(`文件打开失败,请重试`, err.Error()))
+		return ctx.JSON(utils.ErrIpt(`文件打开失败,请重试`, err.Error()))
 	}
 	defer src.Close()
 	basePath := "res/upimg/" + time.Now().Format(utils.FmtyyyyMMdd) + "/"
@@ -30,11 +30,11 @@ func Upload(ctx echo.Context) error {
 	filePathName := basePath + fileName
 	dst, err := os.Create(filePathName)
 	if err != nil {
-		return ctx.JSON(utils.NewErrIpt(`目标文件创建失败,请重试`, err.Error()))
+		return ctx.JSON(utils.ErrIpt(`目标文件创建失败,请重试`, err.Error()))
 	}
 	defer dst.Close()
 	if _, err = io.Copy(dst, src); err != nil {
-		return ctx.JSON(utils.NewErrIpt(`文件写入失败,请重试`, err.Error()))
+		return ctx.JSON(utils.ErrIpt(`文件写入失败,请重试`, err.Error()))
 	}
 	return ctx.JSON(utils.Succ(`文件上传成功`, "/"+filePathName))
 }

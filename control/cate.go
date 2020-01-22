@@ -37,12 +37,12 @@ func CateAll(ctx echo.Context) error {
 func CatePost(ctx echo.Context) error {
 	cid, err := strconv.Atoi(ctx.Param("cid"))
 	if err != nil {
-		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	ipt := &model.Page{}
 	err = ctx.Bind(ipt)
 	if err != nil {
-		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	count := model.CatePostCount(cid, false)
 	if count == 0 {
@@ -66,7 +66,7 @@ func CateAdd(ctx echo.Context) error {
 	ipt := &model.Cate{}
 	err := ctx.Bind(ipt)
 	if err != nil {
-		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.CateAdd(ipt) {
 		return ctx.JSON(utils.Fail(`添加分类失败,请重试`))
@@ -85,7 +85,7 @@ func CateEdit(ctx echo.Context) error {
 	ipt := &model.Cate{}
 	err := ctx.Bind(ipt)
 	if err != nil {
-		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.CateEdit(ipt) {
 		return ctx.JSON(utils.Fail(`分类修改失败`))
@@ -103,7 +103,7 @@ func CateEdit(ctx echo.Context) error {
 func CateDrop(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
-		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.CateDrop(id) {
 		return ctx.JSON(utils.Fail(`分类删除失败,请重试`))

@@ -35,11 +35,11 @@ func UserExist(ctx echo.Context) error {
 // 	}{}
 // 	err := ctx.Bind(ipt)
 // 	if err != nil {
-// 		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+// 		return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, err.Error()))
 // 	}
 
 // 	if len(ipt.Roles) == 0 {
-// 		return ctx.JSON(utils.NewErrIpt(`请至少选择一个权限`))
+// 		return ctx.JSON(utils.ErrIpt(`请至少选择一个权限`))
 // 	}
 // 	ipt.Ctime = time.Now()
 // 	role := model.UserBaseRole()
@@ -67,15 +67,15 @@ func UserExist(ctx echo.Context) error {
 // 	auth := ctx.Get("auth").(*model.JwtClaims)
 // 	rl, err := ctx.ParamInt("rl")
 // 	if err != nil {
-// 		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+// 		return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, err.Error()))
 // 	}
 // 	if rl > 29 || rl < 27 {
-// 		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, "范围27-29"))
+// 		return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, "范围27-29"))
 // 	}
 // 	ipt := &model.Page{}
 // 	err = ctx.Bind(ipt)
 // 	if err != nil {
-// 		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+// 		return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, err.Error()))
 // 	}
 // 	count := model.UserCount(rl, auth.Role)
 // 	if count == 0 {
@@ -98,7 +98,7 @@ func UserExist(ctx echo.Context) error {
 // func UserChgatv(ctx echo.Context) error {
 // 	id, err := ctx.ParamInt("id")
 // 	if err != nil {
-// 		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+// 		return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, err.Error()))
 // 	}
 // 	auth := ctx.Get("auth").(*model.JwtClaims)
 // 	if model.UserChgatv(id, auth.Role) {
@@ -117,7 +117,7 @@ func UserExist(ctx echo.Context) error {
 // func UserResetPass(ctx echo.Context) error {
 // 	id, err := ctx.ParamInt("id")
 // 	if err != nil {
-// 		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+// 		return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, err.Error()))
 // 	}
 // 	auth := ctx.Get("auth").(*model.JwtClaims)
 // 	if model.UserPass(id, "33d7be2196ff70efaf6913fc8bdcab", auth.Role) {
@@ -134,11 +134,11 @@ func UserEdit(ctx echo.Context) error {
 	}{}
 	err := ctx.Bind(ipt)
 	if err != nil {
-		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 
 	if len(ipt.Roles) == 0 {
-		return ctx.JSON(utils.NewErrIpt(`请至少选择一个权限`))
+		return ctx.JSON(utils.ErrIpt(`请至少选择一个权限`))
 	}
 	role := model.UserBaseRole()
 	for idx := range ipt.Roles {
@@ -162,7 +162,7 @@ func UserEdit(ctx echo.Context) error {
 // func UserDrop(ctx echo.Context) error {
 // 	id, err := ctx.ParamInt("id")
 // 	if err != nil {
-// 		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+// 		return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, err.Error()))
 // 	}
 // 	auth := ctx.Get("auth").(*model.JwtClaims)
 // 	if !model.UserDrop(id, auth.Role) {
@@ -215,7 +215,7 @@ func UserEditSelf(ctx echo.Context) error {
 	mod := &model.User{}
 	err := ctx.Bind(mod)
 	if err != nil {
-		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.UserEdit(mod, 0, "Name", "Phone", "Email") {
 		return ctx.JSON(utils.Fail(`用户信息修改失败`))

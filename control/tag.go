@@ -25,7 +25,7 @@ func TagAdd(ctx echo.Context) error {
 	ipt := &model.Tag{}
 	err := ctx.Bind(ipt)
 	if err != nil {
-		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.TagAdd(ipt) {
 		return ctx.JSON(utils.Fail(`添加标签失败,请重试`))
@@ -38,7 +38,7 @@ func TagEdit(ctx echo.Context) error {
 	ipt := &model.Tag{}
 	err := ctx.Bind(ipt)
 	if err != nil {
-		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.TagEdit(ipt) {
 		return ctx.JSON(utils.Fail(`标签修改失败`))
@@ -50,7 +50,7 @@ func TagEdit(ctx echo.Context) error {
 func TagDrop(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
-		return ctx.JSON(utils.NewErrIpt(`数据输入错误,请重试`, err.Error()))
+		return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
 	if !model.TagDrop(id) {
 		return ctx.JSON(utils.Fail(`标签删除失败,请重试`))

@@ -25,10 +25,10 @@ func UserLogin(ctx echo.Context) error {
 	}{}
 	err := ctx.Bind(&ipt)
 	if err != nil {
-		return ctx.JSON(utils.NewErrIpt(`请输入用户名和密码`, err.Error()))
+		return ctx.JSON(utils.ErrIpt(`请输入用户名和密码`, err.Error()))
 	}
 	if ipt.Num == "" && len(ipt.Num) > 18 {
-		return ctx.JSON(utils.NewErrIpt(`请输入正确的用户名`))
+		return ctx.JSON(utils.ErrIpt(`请输入正确的用户名`))
 	}
 	mod, has := model.UserByNum(ipt.Num)
 	if !has {
