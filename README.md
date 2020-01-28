@@ -4,9 +4,15 @@
 - vue
 - echo 框架
 - 前台界面目前修改于 https://firekylin.org/
+
+### 预览地址
+
+[https://blog.zxysilent.com/](https://blog.zxysilent.com/)
+
 ### 开发原因 
 - 现在自己使用博客系统不方便管理、部署和二次开发
 - 渲染速度到不到想要的效果
+
 ### 计划功能
 实现```blog```功能和基本```cms```功能,提取快速开发框架和通用后台管理界面
 - [x] 文章管理
@@ -16,12 +22,14 @@
 - [x] 系统设置
 - [x] 管理主页
 - [ ] cms 待计划
+
 ### 使用方式
 ```
 git clone https://github.com/zxysilent/blog.git
 ```
 若要部署，请修改关键信息[jwt、用户名、密码等]
 数据库自带文章内容请在部署前删除
+
 ####  运行服务
 - 配置```conf.xml```数据库信息
 - 还原 ```data```目录下 ```db.sql``` 数据库
@@ -31,6 +39,7 @@ git clone https://github.com/zxysilent/blog.git
     ```go get -u github.com/swaggo/swag/cmd/swag```
 - 运行```swag init ```生成api文档
 - 运行后台 ```go run```  
+
 ####  运行后台
 - 安装依赖 ``` npm install ```
 - 开发运行 ``` npm run serve ```
@@ -40,11 +49,14 @@ git clone https://github.com/zxysilent/blog.git
 
 ## 渲染性能
 ![image](./data/imgs/benchmark.png)
+
 ## 效果展示
+
 ### 前台
 ![image](./data/imgs/front-0.png)
 ![image](./data/imgs/front-1.png)
 ![image](./data/imgs/front-2.png)
+
 ### 后台
 ![image](./data/imgs/backend-0.png)![image](./data/imgs/backend-1.png)
 ![image](./data/imgs/backend-2.png)
