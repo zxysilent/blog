@@ -1,12 +1,14 @@
 package control
 
 import (
-	"blog/model"
 	"strconv"
 	"time"
 
+	"blog/model"
+
 	jwt "github.com/dgrijalva/jwt-go"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
+
 	"github.com/zxysilent/utils"
 )
 

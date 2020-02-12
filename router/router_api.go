@@ -3,7 +3,7 @@ package router
 import (
 	"blog/control"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 // apiRouter 通用访问

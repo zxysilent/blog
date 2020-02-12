@@ -4,7 +4,7 @@ import (
 	"blog/model"
 	"net/http"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 // AboutView 关于

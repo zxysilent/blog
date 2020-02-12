@@ -17,8 +17,8 @@ import (
 
 	"github.com/astaxie/beego/logs"
 	jwt "github.com/dgrijalva/jwt-go"
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/zxysilent/utils"
 )
 

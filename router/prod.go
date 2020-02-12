@@ -2,7 +2,7 @@
 
 package router
 
-import "github.com/labstack/echo"
+import "github.com/labstack/echo/v4"
 
 // RegDocs 注册文档
 // prod[正式] 模式不需要文档
