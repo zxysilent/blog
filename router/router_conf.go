@@ -15,7 +15,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/astaxie/beego/logs"
+	// "github.com/astaxie/beego/logs"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -23,12 +23,13 @@ import (
 )
 
 var pool *sync.Pool
-var log = logs.NewLogger()
+
+// var log = logs.NewLogger()
 
 func init() {
-	os.Mkdir("logs/", 0777)
-	log.SetLogger(logs.AdapterFile, `{"filename":"logs/app.log","maxdays":30}`)
-	log.Async(1e3)
+	// os.Mkdir("logs/", 0777)
+	// log.SetLogger(logs.AdapterFile, `{"filename":"logs/app.log","maxdays":30}`)
+	// log.Async(1e3)
 	pool = &sync.Pool{
 		New: func() interface{} {
 			return bytes.NewBuffer(make([]byte, 512))
@@ -59,7 +60,8 @@ func midLogger(next echo.HandlerFunc) echo.HandlerFunc {
 			os.Stdout.Write(buf.Bytes())
 			return
 		}
-		log.Info(buf.String())
+		//log.Info(buf.String())
+		os.Stdout.Write(buf.Bytes())
 		return
 	}
 }
