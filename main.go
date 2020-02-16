@@ -12,8 +12,7 @@ import (
 
 // @Title Blog’s Api文档
 // @Version 1.0
-// @Version 1.0
-// @Description token传递方式包括 [get/post]token 、[header] Authorization="Bearer xxxx"
+// @Description token传递方式包括 [get/post]token 、[header] Authorization=Bearer xxxx
 // @Description 数据传递方式包括 json、formData 推荐使用 json
 // @Description /api/* 公共访问
 // @Description /adm/* 必须传入 token

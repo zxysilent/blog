@@ -13,5 +13,6 @@ import (
 // RegDocs 注册文档
 // dev[开发] 模式需要文档
 func RegDocs(engine *echo.Echo) {
-	engine.GET("/swagger/*", echoSwagger.WrapHandler)
+	docUrl := echoSwagger.URL("/swagger/doc.json")
+	engine.GET("/swagger/*", echoSwagger.EchoWrapHandler(docUrl))
 }
