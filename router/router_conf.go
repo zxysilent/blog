@@ -23,6 +23,7 @@ import (
 )
 
 var pool *sync.Pool
+var funcMap template.FuncMap
 
 // var log = logs.NewLogger()
 
@@ -35,6 +36,7 @@ func init() {
 			return bytes.NewBuffer(make([]byte, 512))
 		},
 	}
+	funcMap = template.FuncMap{"str2html": Str2html, "str2js": Str2js, "date": Date, "md5": Md5}
 }
 
 // midLogrer 中间件-日志记录
@@ -114,6 +116,7 @@ func (t *TplRender) Render(w io.Writer, name string, data interface{}, ctx echo.
 	if mp, is := data.(map[string]interface{}); is {
 		mp["title"] = model.MapOpts.MustGet("title")
 		mp["favicon"] = model.MapOpts.MustGet("favicon")
+		mp["comment"] = model.MapOpts.MustGet("comment")
 		mp["analytic"] = model.MapOpts.MustGet("analytic")
 		mp["site_url"] = model.MapOpts.MustGet("site_url")
 		mp["logo_url"] = model.MapOpts.MustGet("logo_url")
@@ -128,7 +131,6 @@ func (t *TplRender) Render(w io.Writer, name string, data interface{}, ctx echo.
 	//每次强制读取模板
 	//每次强制加载函数
 	if conf.App.IsDev() {
-		funcMap := template.FuncMap{"str2html": Str2html, "str2js": Str2js, "date": Date, "md5": Md5}
 		t.templates = utils.LoadTmpl("./views", funcMap)
 	}
 	return t.templates.ExecuteTemplate(w, name, data)
@@ -158,7 +160,6 @@ func Md5(str string) string {
 
 // 初始化模板和函数
 func initRender() *TplRender {
-	funcMap := template.FuncMap{"str2html": Str2html, "str2js": Str2js, "date": Date, "md5": Md5}
 	tpl := utils.LoadTmpl("./views", funcMap)
 	return &TplRender{
 		templates: tpl,
