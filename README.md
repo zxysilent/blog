@@ -46,7 +46,9 @@ git clone https://github.com/zxysilent/blog.git
 - 浏览器打开 [http://127.0.0.1:8080/](http://127.0.0.1:8080/)
 - 发布 ```npm run build ``` 会自动发布到 ```static/dist```目录下面
 - 友链里面第一个为后台登陆地址默认用户名```zxysilent```,密码```zxyslt```，可自行数据库修改
-
+### 评论配置
+- 配置项目 opts(表).comment(值) 
+- 配置说明 [https://github.com/gitalk/gitalk](https://github.com/gitalk/gitalk)
 ## 渲染性能
 ![image](./data/imgs/benchmark.png)
 
