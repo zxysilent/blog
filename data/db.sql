@@ -10,7 +10,7 @@ Target Server Type    : MariaDB
 Target Server Version : 100407
 File Encoding         : 65001
 
-Date: 2020-02-17 15:01:01
+Date: 2020-02-17 15:27:13
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -53,7 +53,7 @@ CREATE TABLE `opts` (
 -- ----------------------------
 INSERT INTO `opts` VALUES ('analytic', '<script async src=\"//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js\"></script> ', '统计代码，可以添加百度统计、Google 统计等');
 INSERT INTO `opts` VALUES ('auto_summary', '0', '');
-INSERT INTO `opts` VALUES ('comment', '{\"clientID\": \"2d028c155cbc14d10f53\",\"clientSecret\": \"e503c3d371fb046b2ec9ca99253c10b320be0052\",\"repo\": \"blog\",\"owner\": \"zxysilent\",\"admin\":[\"zxysilent\"],\"distractionFreeMode\":true,\"githubUserName\":\"zxysilent\"}', '评论类型');
+INSERT INTO `opts` VALUES ('comment', '{\"clientID\": \"clientIDValue\",\"clientSecret\": \"clientSecretValue\",\"repo\": \"repoValue\",\"owner\": \"zxysilentValue\",\"admin\":[\"adminValue\"],\"distractionFreeMode\":true,\"githubUserName\":\"githubUserNameValue\",\"使用说明\":\"https://github.com/gitalk/gitalk\"}', '评论类型');
 INSERT INTO `opts` VALUES ('custom_js', 'console.log(\"https://blog.zxysilent.com\")', '自定义js');
 INSERT INTO `opts` VALUES ('introription', 'zxysilent;zxysilent blog;zxyslt;zxyslt blog;', '网站描述');
 INSERT INTO `opts` VALUES ('favicon_url', '/favicon.ico', 'favicon');
