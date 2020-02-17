@@ -77,113 +77,27 @@
       if (!comments) {
         return;
       }
-      var load = function () {
-        var dataType = comments.getAttribute('data-type');
-        if (dataType === 'disqus') {
-          loadDisqusComment();
-        } else if (dataType === 'hypercomments') {
-          loadHyperComments();
-        } else if (dataType === 'changyan') {
-          loadChangyanComment();
-        } else if (dataType === 'gitalk') {
-          loadGitalkComment();
-        }
-      }
-  
       if (location.hash.indexOf('#comments') > -1) {
-        load();
+        loadGitalkComment();
       } else {
         var timer = setInterval(function () {
           var docRect = getDocRect();
           var currentTop = docRect.scrollY + docRect.height;
           var elTop = getRect(comments).top;
           if (Math.abs(elTop - currentTop) < 1000) {
-            load();
+            loadGitalkComment();
             clearInterval(timer);
           }
         }, 300)
       }
     };
-    /**
-     * load disqus comment
-     * @return {[type]} [description]
-     */
-    var loadDisqusComment = function () {
-      var disqus_thread = getById('disqus_thread');
-      if (!disqus_thread) {
-        return;
-      }
-      win.disqus_config = function () {
-        this.page.url = disqus_thread.getAttribute('data-url');
-        this.page.identifier = disqus_thread.getAttribute('data-identifier');
-      }
-      var s = doc.createElement('script');
-      s.src = '//' + disqus_thread.getAttribute('data-name') + '.disqus.com/embed.js';
-      s.setAttribute('data-timestamp', +new Date());
-      (doc.head || doc.body).appendChild(s);
-    };
-  
-    var loadHyperComments = function () {
-      var hyperComments = getById('hypercomments_widget');
-      var appid = hyperComments.getAttribute('data-name');
-  
-      win._hcwp = win._hcwp || [];
-      win._hcwp.push({
-        widget: 'Stream',
-        widget_id: appid
-      });
-  
-      (function () {
-        if ('HC_LOAD_INIT' in win) {
-          return;
-        }
-  
-        var lang = (
-          navigator.language ||
-          navigator.systemLanguage ||
-          navigator.userLanguage ||
-          'en'
-        ).substr(0, 2).toLowerCase();
-        var hcc = document.createElement('script');
-        hcc.type = 'text/javascript';
-        hcc.async = true;
-        hcc.src = ('https:' === document.location.protocol ? 'https' : 'http') + '://w.hypercomments.com/widget/hc/' + appid + '/' + lang + '/widget.js';
-  
-        var s = document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(hcc, s.nextSibling);
-      })();
-    };
-  
-    var loadChangyanComment = function () {
-      var disqus_thread = getById('SOHUCS');
-      if (!disqus_thread) {
-        return;
-      }
-      var appid = disqus_thread.getAttribute('data-name');
-      var conf = disqus_thread.getAttribute('sid');
-      var width = win.innerWidth || doc.documentElement.clientWidth;
-      var s = doc.createElement('script');
-      if (width < 960) {
-        s.id = 'changyan_mobile_js';
-        s.src = '//changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf;
-      } else {
-        s.src = '//changyan.sohu.com/upload/changyan.js';
-        s.onload = function () {
-          win.changyan.api.config({
-            appid: appid,
-            conf: conf
-          });
-        }
-      }
-      (doc.head || doc.body).appendChild(s);
-    }
   
     var loadGitalkComment = function () {
       var gitalk_thread = getById('gitalk-container');
       if (!gitalk_thread) {
         return;
       }
-      var gitalkConfig = gitalk_thread.getAttribute('data-name');
+      var gitalkConfig = gitalk_thread.getAttribute('data-config');
       var dataIdentifier = gitalk_thread.getAttribute('data-identifier');
       if (gitalkConfig) {
         gitalkConfig = JSON.parse(gitalkConfig);
@@ -423,7 +337,7 @@
   
         elem.innerHTML = html;
   
-        hljs.addClass(elem, 'firekylin-code');
+        hljs.addClass(elem, 'app-code');
   
         // 绑定点击高亮行事件
         elem.addEventListener('click', function (event) {

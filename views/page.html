@@ -1,6 +1,4 @@
 <!DOCTYPE html><html lang="zh-CN"><head><title>{{.title}}·{{.Page.Title}}</title><link rel="canonical" href="{{.site_url}}/page/{{.Page.Path}}.html" />{{template "tpl-linker.html" .}}</head><body>{{template "tpl-naver.html" .}}<div id="main"><div id="page-post"><article class="post page"><h1 class="title">{{.Page.Title}}</h1><div class="entry-content">{{if .Show}}{{str2html .Page.Content}}{{else}}<h3>Sorry，主人还在思考 (●ˇ∀ˇ●) ！ <br/> [ =======> 60% ]</h3>{{end}}</div></article>
 {{if .Page.AllowComment}}
-<div id="comments" data-type="gitalk" data-thread-key="{{md5 .Page.Path}}" data-url="{{.site_url}}/post/{{.Page.Path}}.html">
-    <h1 class="title">Comments</h1>
-    <div id="gitalk-container" data-identifier="{{md5 .Page.Path}}" data-name="{&quot;clientID&quot;:&quot;2d028c155cbc14d10f53&quot;,&quot;clientSecret&quot;:&quot;e503c3d371fb046b2ec9ca99253c10b320be0052&quot;,&quot;repo&quot;:&quot;comments&quot;,&quot;owner&quot;:&quot;zxysilent&quot;,&quot;admin&quot;:[&quot;zxysilent&quot;],&quot;distractionFreeMode&quot;:true,&quot;githubUserName&quot;:&quot;zxysilent&quot;}"></div>
-</div>{{end}}</div>{{template "tpl-footer.html" .}}</body></html>
+<div id="comments"><h1 class="title">Comments</h1><div id="gitalk-container" data-identifier="{{md5 .Page.Path}}"  data-config="{{str2js .comment}}"></div></div>{{end}}
+</div>{{template "tpl-footer.html" .}}</body></html>
