@@ -66,9 +66,6 @@
 				</Col>
 			</Row>
 		</Card>
-		<Modal v-model="showPreview" fullscreen footer-hide title="预览文章">
-			<div v-html="dataForm.content"></div>
-		</Modal>
 	</div>
 </template>
 <script>
@@ -92,7 +89,6 @@ export default {
 			tagAll: [],
 			draftLoading: false,
 			publishLoading: false,
-			showPreview: false,
 			dataForm: {
 				title: "",
 				path: "",
@@ -179,7 +175,15 @@ export default {
 			this.dataForm.content = html;
 		},
 		clkPreview() {
-			this.showPreview = true;
+			if (!this.dataForm.id) {
+				this.$Message.warning("添加状态无法预览");
+				return;
+			}
+			let ext = "";
+			if (this.isPost) {
+				ext = ".html";
+			}
+			window.open(this.prefix + this.dataForm.path + ext);
 		},
 		diyMore(val) {
 			this.$refs.md.insertText(this.$refs.md.getTextareaDom(), {
