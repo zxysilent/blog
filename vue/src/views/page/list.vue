@@ -61,7 +61,7 @@ export default {
 								style: { marginRight: "15px" },
 								on: {
 									click: () => {
-										window.open(data.row.path)
+										window.open("/"+data.row.path)
 									}
 								}
 							}),
