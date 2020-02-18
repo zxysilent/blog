@@ -1,4 +1,4 @@
-import Main from "@/views/main.vue";
+import Layout from "@/views/layout.vue";
 // 分小模块单独写路由
 const initRouter = [
 	{
@@ -19,7 +19,7 @@ const initRouter = [
 		path: "/",
 		name: "core",
 		redirect: "/home",
-		component: Main,
+		component: Layout,
 		children: [
 			{
 				path: "home",
@@ -75,7 +75,7 @@ const appRouter = [
 		meta: {
 			title: "文章管理"
 		},
-		component: Main,
+		component: Layout,
 		children: [
 			{
 				path: "list",
@@ -109,7 +109,7 @@ const appRouter = [
 		meta: {
 			title: "页面管理"
 		},
-		component: Main,
+		component: Layout,
 		children: [
 			{
 				path: "list",
@@ -143,7 +143,7 @@ const appRouter = [
 		meta: {
 			title: "分类管理"
 		},
-		component: Main,
+		component: Layout,
 		children: [
 			{
 				path: "list",
@@ -169,7 +169,7 @@ const appRouter = [
 		meta: {
 			title: "标签管理"
 		},
-		component: Main,
+		component: Layout,
 		children: [
 			{
 				path: "list",
@@ -196,7 +196,7 @@ const appRouter = [
 			title: "系统设置",
 			icon: "ios-cog-outline"
 		},
-		component: Main,
+		component: Layout,
 		children: [
 			{
 				path: "base",
@@ -241,7 +241,7 @@ const appRouter = [
 		meta: {
 			title: "个人中心"
 		},
-		component: Main,
+		component: Layout,
 		children: [
 			{
 				path: "self",

@@ -75,7 +75,7 @@ import toolbars from "./toolbars";
 import { apiCateAll } from "@/api/cate";
 import { apiTagAll } from "@/api/tag";
 import util from "@/init/util";
-import { urlServer, urlUpload } from "@/init/conf";
+import { urlUpload } from "@/init/conf";
 import { apiPostGet, admPostOpts, apiPostTagGet } from "@/api/post";
 // 通用 文章/页面 + 添加/修改
 // 减少js体积
@@ -208,7 +208,7 @@ export default {
 					this.$Message.warning("图片上传失败");
 					return;
 				}
-				this.$refs.md.$img2Url(pos, urlServer + json.data);
+				this.$refs.md.$img2Url(pos, process.env.VUE_APP_SRV + json.data);
 			};
 
 			formData.append("token", util.getToken());

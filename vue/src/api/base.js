@@ -1,10 +1,10 @@
 import util from "@/init/util";
 import axios from "axios";
 import iView from "iview";
-import { urlServer, url401, urlJwt, url50x } from "@/init/conf";
+import { url401, urlJwt, url50x } from "@/init/conf";
 
 const ajax = axios.create({
-	baseURL: urlServer,
+	baseURL: process.env.VUE_APP_SRV,
 	timeout: 30000
 });
 //添加一个请求拦截器
