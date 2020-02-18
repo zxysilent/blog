@@ -23,7 +23,7 @@ func Upload(ctx echo.Context) error {
 		return ctx.JSON(utils.ErrIpt(`文件打开失败,请重试`, err.Error()))
 	}
 	defer src.Close()
-	basePath := "res/upimg/" + time.Now().Format(utils.FmtyyyyMMdd) + "/"
+	basePath := "static/upload/" + time.Now().Format(utils.FmtyyyyMMdd) + "/"
 	//确保文件夹存在
 	os.MkdirAll(basePath, 0777)
 	fileName := utils.RandStr(16) + filepath.Ext(file.Filename)

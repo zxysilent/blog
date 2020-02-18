@@ -204,7 +204,7 @@ export default {
 					this.$Message.warning("图片上传失败");
 					return;
 				}
-				this.$refs.md.$img2Url(pos, util.urlServer + json.data);
+				this.$refs.md.$img2Url(pos, urlServer + json.data);
 			};
 
 			formData.append("token", util.getToken());
