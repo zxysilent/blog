@@ -55,7 +55,7 @@
 <script>
 import md5 from "js-md5";
 import { apiLogin } from "@/api/auth";
-import util from "@/init/util";
+import util from "@/utils.js";
 export default {
 	data() {
 		return {

@@ -1,17 +1,17 @@
-import ajax from "./base";
+import fetch from "./fetch";
 // 标签信息
 export const apiTagAll = () => {
-	return ajax.get("/api/tag/all");
+	return fetch.get("/api/tag/all");
 };
 // 添加标签
 export const admTagAdd = data => {
-	return ajax.post(`/adm/tag/add`, data);
+	return fetch.post(`/adm/tag/add`, data);
 };
 // 修改标签
 export const admTagEdit = data => {
-	return ajax.post(`/adm/tag/edit`, data);
+	return fetch.post(`/adm/tag/edit`, data);
 };
 // 删除标签
 export const admTagDrop = id => {
-	return ajax.get(`/adm/tag/drop/${id}`);
+	return fetch.get(`/adm/tag/drop/${id}`);
 };

@@ -256,5 +256,5 @@ const appRouter = [
 	}
 ];
 // 所有定义的路由都要写在下面的routers里
-const routers = [...initRouter, ...appRouter, ...errorRouter];
-export default routers;
+const routes = [...initRouter, ...appRouter, ...errorRouter];
+export default routes;

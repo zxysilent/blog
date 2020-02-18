@@ -60,7 +60,7 @@
 </template>
 <script>
 import md5 from "js-md5";
-import util from "@/init/util";
+import util from "@/utils.js";
 import { admAuth } from "@/api/auth";
 import { admUserPass, admUserEditSelf } from "@/api/user";
 export default {

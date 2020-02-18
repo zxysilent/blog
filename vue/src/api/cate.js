@@ -1,17 +1,17 @@
-import ajax from "./base";
+import fetch from "./fetch";
 // 分类信息
 export const apiCateAll = () => {
-	return ajax.get("/api/cate/all");
+	return fetch.get("/api/cate/all");
 };
 // 添加分类
 export const admCateAdd = data => {
-	return ajax.post(`/adm/cate/add`, data);
+	return fetch.post(`/adm/cate/add`, data);
 };
 // 修改分类
 export const admCateEdit = data => {
-	return ajax.post(`/adm/cate/edit`, data);
+	return fetch.post(`/adm/cate/edit`, data);
 };
 // 删除分类
 export const admCateDrop = id => {
-	return ajax.get(`/adm/cate/drop/${id}`);
+	return fetch.get(`/adm/cate/drop/${id}`);
 };

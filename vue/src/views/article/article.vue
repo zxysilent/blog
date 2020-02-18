@@ -12,7 +12,7 @@
 					</FormItem>
 					<FormItem style="margin-bottom:15px" prop="path">
 						<Row>
-							<Col span="3" style="min-width:175px">
+							<Col span="3" style="min-width:195px">
 							{{prefix}}
 							</Col>
 							<Col span="8"><Input type="text" v-bind:disabled="isEdit" v-model="dataForm.path" placeholder="请输入访问路径"></Input>
@@ -74,8 +74,7 @@ import "mavon-editor/dist/css/index.css";
 import toolbars from "./toolbars";
 import { apiCateAll } from "@/api/cate";
 import { apiTagAll } from "@/api/tag";
-import util from "@/init/util";
-import { urlUpload } from "@/init/conf";
+import util from "@/utils.js";
 import { apiPostGet, admPostOpts, apiPostTagGet } from "@/api/post";
 // 通用 文章/页面 + 添加/修改
 // 减少js体积
@@ -196,7 +195,7 @@ export default {
 			let formData = new FormData();
 			let xhr = new XMLHttpRequest();
 			xhr.withCredentials = false;
-			xhr.open("POST", urlUpload);
+			xhr.open("POST", process.env.VUE_APP_SRV+"/adm/upload");
 			xhr.onload = () => {
 				var json;
 				if (xhr.status < 200 || xhr.status >= 300) {

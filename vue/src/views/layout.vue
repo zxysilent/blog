@@ -93,7 +93,7 @@
 	</Layout>
 </template>
 <script>
-import util from "@/init/util.js";
+import Utils from "@/utils.js";
 import { admAuth } from "@/api/auth";
 export default {
 	data() {
