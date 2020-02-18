@@ -73,10 +73,20 @@ export default {
 				{
 					title: "操作",
 					key: "action",
-					width: 120,
+					width: 150,
 					align: "center",
 					render: (h, data) => {
 						return h("a", [
+                             h("Icon", {
+								props: { type: "md-eye", size: "20", color: "#5FB878" },
+								attrs: { title: "预览" },
+								style: { marginRight: "15px" },
+								on: {
+									click: () => {
+										window.open(data.row.path+".html")
+									}
+								}
+							}),
 							h("Icon", {
 								props: { type: "md-create", size: "20", color: "#FFB800" },
 								attrs: { title: "修改" },
