@@ -320,9 +320,9 @@ export default {
 		// 访问前缀
 		prefix() {
 			if (this.isPost) {
-				return "https://blog.zxysilent.com/post/";
+				return process.env.VUE_APP_SRV+"/post/";
 			}
-			return "https://blog.zxysilent.com/page/";
+			return process.env.VUE_APP_SRV+"/page/";
 		}
 	},
 	mounted() {

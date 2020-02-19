@@ -83,7 +83,7 @@ export default {
 								style: { marginRight: "15px" },
 								on: {
 									click: () => {
-										window.open("/"+data.row.path+".html")
+										window.open(process.env.VUE_APP_SRV+"/post/"+data.row.path+".html")
 									}
 								}
 							}),
