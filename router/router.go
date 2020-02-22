@@ -29,7 +29,7 @@ func RunApp() {
 	// ico
 	engine.File(`/favicon.ico`, "favicon.ico")
 	// 前后端分离页面
-	engine.File("/dashboard/*", "static/dist/index.html")
+	engine.File("/dashboard*", "static/dist/index.html")
 	//--- 页面 -- start
 	// 首页
 	engine.GET(`/`, control.IndexView)
