@@ -3,6 +3,7 @@ package router
 import (
 	"blog/conf"
 	"blog/control"
+	"log"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -58,5 +59,5 @@ func RunApp() {
 	// 需要登陆才能访问
 	adm := engine.Group("/adm", midJwt)
 	admRouter(adm)
-	engine.Start(conf.App.Addr)
+	log.Println(engine.Start(conf.App.Addr))
 }
