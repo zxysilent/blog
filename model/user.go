@@ -9,13 +9,13 @@ import (
 // User 用户
 type User struct {
 	Id     int       `xorm:"not null pk autoincr INT(11)" json:"id"`
-	Name   string    `xorm:"not null default '''' VARCHAR(255)" json:"name"`
-	Num    string    `xorm:"not null default '''' unique VARCHAR(255)" json:"num"`
-	Pass   string    `xorm:"not null default '''' VARCHAR(255)" json:"pass"`
+	Name   string    `xorm:"not null  VARCHAR(255)" json:"name"`
+	Num    string    `xorm:"not null  unique VARCHAR(255)" json:"num"`
+	Pass   string    `xorm:"not null  VARCHAR(255)" json:"pass"`
 	Role   Role      `xorm:"not null default 0 INT(11)" json:"role"`
-	Email  string    `xorm:"not null default '''' unique VARCHAR(255)" json:"email"`
-	Phone  string    `xorm:"not null default '''' VARCHAR(255)" json:"phone"`
-	Ip     string    `xorm:"not null default '''' VARCHAR(32)" json:"ip"`
+	Email  string    `xorm:"not null  unique VARCHAR(255)" json:"email"`
+	Phone  string    `xorm:"not null  VARCHAR(255)" json:"phone"`
+	Ip     string    `xorm:"not null  VARCHAR(32)" json:"ip"`
 	Ecount int       `xorm:"not null default 0 INT(11)" json:"ecount"`
 	Ltime  time.Time `xorm:"not null DATETIME" json:"ltime"`
 	Ctime  time.Time `xorm:"not null DATETIME" json:"ctime"`

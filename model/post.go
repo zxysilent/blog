@@ -34,7 +34,7 @@ type Post struct {
 	Type            int       `xorm:"not null default 0 comment('0 为文章，1 为页面') TINYINT(4)" json:"type"`
 	Status          int       `xorm:"not null default 0 comment('0 为草稿，1 为待审核，2 为已拒绝，3 为已经发布') TINYINT(4)" json:"status"`
 	Title           string    `xorm:"not null VARCHAR(255)" json:"title"`
-	Path            string    `xorm:"not null default '''' comment('URL 的 path') VARCHAR(255)" json:"path"`
+	Path            string    `xorm:"not null  comment('URL 的 path') VARCHAR(255)" json:"path"`
 	Summary         string    `xorm:"not null comment('摘要') LONGTEXT" json:"summary"`
 	MarkdownContent string    `xorm:"not null LONGTEXT" json:"markdown_content"`
 	Content         string    `xorm:"not null LONGTEXT" json:"content"`
@@ -43,7 +43,7 @@ type Post struct {
 	UpdateTime      time.Time `xorm:"not null DATETIME" json:"update_time"`
 	IsPublic        bool      `xorm:"not null default 1 comment('1 为公开，0 为不公开') TINYINT(4)" json:"is_public"`
 	CommentNum      int       `xorm:"not null default 0 INT(11)" json:"comment_num"`
-	Options         string    `xorm:"not null default '''' comment('一些选项，JSON 结构') VARCHAR(4096)" json:"options"`
+	Options         string    `xorm:"not null  comment('一些选项，JSON 结构') VARCHAR(4096)" json:"options"`
 }
 
 // Archive 归档
