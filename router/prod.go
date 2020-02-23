@@ -4,6 +4,9 @@ package router
 
 import "github.com/labstack/echo/v4"
 
+const AppJsUrl = "/static/js/app.min.js"
+const AppCssUrl = "/static/css/app.min.css"
+
 // RegDocs 注册文档
 // prod[正式] 模式不需要文档
 func RegDocs(engine *echo.Echo) {

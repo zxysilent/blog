@@ -114,6 +114,8 @@ type TplRender struct {
 func (t *TplRender) Render(w io.Writer, name string, data interface{}, ctx echo.Context) error {
 	// 获取数据配置项
 	if mp, is := data.(map[string]interface{}); is {
+		mp["appjs"] = AppJsUrl
+		mp["appcss"] = AppCssUrl
 		mp["title"] = model.MapOpts.MustGet("title")
 		mp["favicon"] = model.MapOpts.MustGet("favicon")
 		mp["comment"] = model.MapOpts.MustGet("comment")
