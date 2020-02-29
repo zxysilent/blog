@@ -204,5 +204,12 @@ func getTocHTML(html string) string {
 		sb.WriteString(`</ul></div>`)
 		return sb.String() + html
 	}
-	return ""
+	if len(hs) == 1 {
+		sb := strings.Builder{}
+		sb.WriteString(`<div class="toc"><ul>`)
+		sb.WriteString(regH.ReplaceAllString(hs[0], `<li><a href="#$1">$2</a></li>`))
+		sb.WriteString(`</ul></div>`)
+		return sb.String() + html
+	}
+	return html
 }
