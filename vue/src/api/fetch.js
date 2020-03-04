@@ -35,7 +35,7 @@ fetch.interceptors.response.use(
 			// 	desc: "对不起你没有权限访问"
 			// });
 			// return new Promise(() => {});
-			location.href = url401;//没有权限
+			location.href = "/#/401";//没有权限
 		}
 		if (res.data.code == 340) {
 			// ViewUI.Notice.error({
@@ -50,7 +50,7 @@ fetch.interceptors.response.use(
 			// });
 			// return new Promise(() => {});
 			Util.clearData();
-			location.href = urlJwt;//需要重新登陆
+			location.href = "/#/jwt";//需要重新登陆
 		}
 		if (res.data.code == 350) {
 			// ViewUI.Notice.error({
@@ -59,7 +59,7 @@ fetch.interceptors.response.use(
 			// 	desc: "服务端发生错误,请重试"
 			// });
 			// return new Promise(() => {});
-			location.href = url50x;//服务器异常
+			location.href = "/#/50x";//服务器异常
 		}
 		return res.data;
 	},
