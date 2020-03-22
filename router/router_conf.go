@@ -33,35 +33,6 @@ func init() {
 	}
 	funcMap = template.FuncMap{"str2html": Str2html, "str2js": Str2js, "date": Date, "md5": Md5}
 }
-
-// midLogrer 中间件-日志记录
-func midLogger(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(ctx echo.Context) (err error) {
-		start := time.Now()
-		if err = next(ctx); err != nil {
-			ctx.Error(err)
-		}
-		stop := time.Now()
-		buf := pool.Get().(*bytes.Buffer)
-		buf.Reset()
-		defer pool.Put(buf)
-		buf.WriteString("[" + start.Format("2006-01-02 15:04:05") + "] ")
-		buf.WriteString("\tip：" + ctx.RealIP())
-		buf.WriteString("\tmethod：" + ctx.Request().Method)
-		buf.WriteString("\tpath：" + ctx.Request().URL.Path)
-		buf.WriteString("\turi：" + ctx.Request().RequestURI)
-		buf.WriteString("\tspan：" + stop.Sub(start).String())
-		buf.WriteString("\n")
-		// 开发模式直接输出到控制台
-		if conf.App.IsDev() {
-			os.Stdout.Write(buf.Bytes())
-			return
-		}
-		//log.Info(buf.String())
-		os.Stdout.Write(buf.Bytes())
-		return
-	}
-}
 func midRecover(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(ctx echo.Context) error {
 		defer func() {

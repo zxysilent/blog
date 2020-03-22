@@ -23,8 +23,8 @@ func RegDocs(engine *echo.Echo) {
 
 }
 
-// midLogrer 中间件-日志记录
-func midLogrer(next echo.HandlerFunc) echo.HandlerFunc {
+// midLogger 中间件-日志记录
+func midLogger(next echo.HandlerFunc) echo.HandlerFunc {
 	return next
 }
 
