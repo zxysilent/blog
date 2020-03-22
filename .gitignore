@@ -1,6 +1,7 @@
 *.exe
 *.exe~
 static/dist/*
+dist/*
 logs/*
 docs/*
 blog
