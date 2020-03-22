@@ -1,17 +1,16 @@
 package conf
 
 import (
-	"log"
 	"testing"
 )
 
-func TestLoadConfig(t *testing.T) {
-	defConfig = "./conf.xml"
-	conf, err := initConfig()
+func TestConf(t *testing.T) {
+	defConfig = "./conf.toml"
+	conf, err := initConf()
 	if err != nil {
-		log.Fatalln(err)
+		t.Error(err)
 	} else {
-		log.Println(conf)
-		log.Println(conf.Dsn.Dsn())
+		t.Log(conf)
+		t.Log(conf.Dsn())
 	}
 }

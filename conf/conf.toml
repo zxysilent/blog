@@ -1,0 +1,34 @@
+
+title = "blog"
+explain = "zxysilent个人blog"
+mode = "dev"
+addr = ":88"
+srv = "http://127.0.0.1:8085"
+
+jwtkey = "12345876"
+jwtexp = 8
+
+[author]
+name = "zxysilent"
+website = "https://github.com/zxysilent"
+
+[wechat]
+appid = "appid"
+secret = "secret"
+
+[database]
+host = "127.0.0.1"
+port = 3306
+user = "root"
+passwd = "root"
+dbname = "blog"
+params = "charset=utf8&parseTime=true"
+
+[xorm]
+idle = 10
+open = 20
+show = true
+sync = false
+cache_enable = false
+cache_count = 1000
+
