@@ -26,11 +26,12 @@ func RunApp() {
 	// 注册文档
 	RegDocs(engine)
 	// 静态目录
+	engine.Static(`/dist`, "dist")
 	engine.Static(`/static`, "static")
 	// ico
 	engine.File(`/favicon.ico`, "favicon.ico")
 	// 前后端分离页面
-	engine.File("/dashboard*", "static/dist/index.html")
+	engine.File("/dashboard*", "dist/index.html")
 	//--- 页面 -- start
 	// 首页
 	engine.GET(`/`, control.IndexView)

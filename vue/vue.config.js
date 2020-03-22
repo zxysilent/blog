@@ -5,9 +5,9 @@ const resolve = dir => {
 };
 module.exports = {
 	// 部署应用时的根路径(默认'/'),也可用相对路径
-	publicPath: process.env.NODE_ENV === "development" ? "/" : "/static/dist/", //http://127.0.0.1:88/static/dist/修改为你的URL+/dist/",
+	publicPath: process.env.NODE_ENV === "development" ? "/" : "/dist/", //http://127.0.0.1:88/static/dist/修改为你的URL+/dist/",
 	// 运行时生成的生产环境构建文件的目录(默认''dist''，构建之前会被清除)
-	outputDir: "../static/dist",
+	outputDir: "../dist",
 	// 放置生成的静态资源(s、css、img、fonts)的(相对于 outputDir 的)目录(默认'')
 	assetsDir: "",
 	// 指定生成的 index.html 的输出路径(相对于 outputDir)也可以是一个绝对路径。
