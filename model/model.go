@@ -5,7 +5,6 @@ import (
 	"log"
 	"strings"
 
-	jwt "github.com/dgrijalva/jwt-go"
 	"xorm.io/xorm"
 	"xorm.io/xorm/caches"
 
@@ -56,15 +55,6 @@ type Page struct {
 func (p *Page) Trim() string {
 	p.Mult = strings.TrimSpace(p.Mult)
 	return p.Mult
-}
-
-// JwtClaims jwt
-type JwtClaims struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
-	Num  string `json:"num"`
-	Role Role   `json:"role"`
-	jwt.StandardClaims
 }
 
 // Naver 上下页

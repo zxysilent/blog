@@ -2,6 +2,7 @@ package router
 
 import (
 	"blog/conf"
+	"blog/internal/jwt"
 	"blog/model"
 	"bytes"
 	"crypto/md5"
@@ -15,8 +16,6 @@ import (
 	"sync"
 	"time"
 
-	// "github.com/astaxie/beego/logs"
-	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/zxysilent/utils"
@@ -25,12 +24,8 @@ import (
 var pool *sync.Pool
 var funcMap template.FuncMap
 
-// var log = logs.NewLogger()
-
 func init() {
-	// os.Mkdir("logs/", 0777)
-	// log.SetLogger(logs.AdapterFile, `{"filename":"logs/app.log","maxdays":30}`)
-	// log.Async(1e3)
+
 	pool = &sync.Pool{
 		New: func() interface{} {
 			return bytes.NewBuffer(make([]byte, 512))
@@ -171,30 +166,23 @@ func initRender() *TplRender {
 // midJwt 中间件-jwt验证
 func midJwt(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(ctx echo.Context) error {
-		// query form 查找 token
-		tokenString := ctx.FormValue("token")
-		if tokenString == "" {
-			// header 查找token
-			tokenString = ctx.Request().Header.Get(echo.HeaderAuthorization)
-			if tokenString == "" {
+		tokenRaw := ctx.FormValue("token") // query/form 查找 token
+		if tokenRaw == "" {
+			tokenRaw = ctx.Request().Header.Get(echo.HeaderAuthorization) // header 查找token
+			if tokenRaw == "" {
 				ctx.JSON(utils.ErrJwt(`请重新登陆`, `未发现jwt`))
 				return nil
 			}
-			// Bearer token
-			tokenString = tokenString[7:] //len("Bearer ")
+			tokenRaw = tokenRaw[7:] // Bearer token len("Bearer ")==7
 		}
-		jwtAuth := &model.JwtClaims{}
-		jwt, err := jwt.ParseWithClaims(tokenString, jwtAuth, func(token *jwt.Token) (interface{}, error) {
-			return []byte("zxy.sil.ent"), nil
-		})
-		if err == nil && jwt.Valid {
+		jwtAuth, err := jwt.Verify(tokenRaw, conf.App.Jwtkey)
+		if err == nil {
 			ctx.Set("auth", jwtAuth)
 			ctx.Set("uid", jwtAuth.Id)
 		} else {
 			return ctx.JSON(utils.ErrJwt(`请重新登陆","jwt验证失败`))
 		}
 		// 自定义头
-		ctx.Response().Header().Set(echo.HeaderServer, "zxysilent")
 		return next(ctx)
 	}
 }

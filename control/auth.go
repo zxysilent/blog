@@ -4,9 +4,10 @@ import (
 	"strconv"
 	"time"
 
+	"blog/conf"
+	"blog/internal/jwt"
 	"blog/model"
 
-	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 
 	"github.com/zxysilent/utils"
@@ -62,26 +63,15 @@ func UserLogin(ctx echo.Context) error {
 	if !mod.Role.IsAtv() {
 		return ctx.JSON(utils.Fail(`当前账号已被禁用`))
 	}
-	claims := model.JwtClaims{
-		Id:   mod.Id,
-		Name: mod.Name,
-		Num:  mod.Num,
-		Role: mod.Role,
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour * 2).Unix(),
-		},
-	}
-	// Create token with claims
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	// Generate encoded token and send it as response.
-	jwtStr, err := token.SignedString([]byte("zxy.sil.ent"))
-	if err != nil {
-		return ctx.JSON(utils.Fail(`凭证生成失败,请重试`, err.Error()))
+	auth := jwt.JwtAuth{
+		Id:    mod.Id,
+		Role:  int(mod.Role),
+		ExpAt: time.Now().Add(time.Hour * 2).Unix(),
 	}
 	mod.Ltime = now
 	mod.Ip = ctx.RealIP()
 	model.UserEditLogin(mod, "Ltime", "Ip", "Ecount")
-	return ctx.JSON(utils.Succ(`登陆成功`, jwtStr))
+	return ctx.JSON(utils.Succ(`登陆成功`, auth.Encode(conf.App.Jwtkey)))
 }
 
 // UserLogout doc

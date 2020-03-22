@@ -19,14 +19,13 @@ import (
 // @Host 127.0.0.1:88
 // @BasePath /
 func main() {
-	log.SetFlags(log.Lshortfile | log.Ltime)
-	log.SetPrefix("[blog app] ")
+	log.Println("app initializing")
 	conf.Init()
 	model.Init()
-	go router.RunApp()
-	log.Println("app running")
 	quit := make(chan os.Signal)
-	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT, syscall.SIGKILL)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL)
+	log.Println("app running")
+	go router.RunApp()
 	<-quit
-	log.Println("app quit")
+	log.Println("app quitted")
 }
