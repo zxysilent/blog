@@ -55,12 +55,18 @@ func midRecover(next echo.HandlerFunc) echo.HandlerFunc {
 // HTTPErrorHandler 全局错误捕捉
 func HTTPErrorHandler(err error, ctx echo.Context) {
 	if !ctx.Response().Committed {
-		if strings.Contains(err.Error(), "404") {
-			// ctx.NoContent(404)
-			ctx.HTML(404, html404)
-			// ctx.Redirect(302, "/404.html")
+		if he, ok := err.(*echo.HTTPError); ok {
+			if he.Code == 404 {
+				if strings.HasPrefix(ctx.Request().URL.Path, "/static") || strings.HasPrefix(ctx.Request().URL.Path, "/dist") {
+					ctx.NoContent(404)
+				} else {
+					ctx.HTML(404, html404)
+				}
+			} else {
+				ctx.JSON(utils.NewErrSvr("系统错误", he.Message))
+			}
 		} else {
-			ctx.JSON(utils.ErrSvr(err.Error()))
+			ctx.JSON(utils.NewErrSvr(err.Error()))
 		}
 	}
 }
