@@ -10,5 +10,5 @@ require (
 	github.com/swaggo/echo-swagger v0.0.0-20200314082325-a612f9386b76
 	github.com/swaggo/swag v1.6.5
 	github.com/zxysilent/utils v0.2.0
-	xorm.io/xorm v1.0.0
+	xorm.io/xorm v1.0.1
 )
