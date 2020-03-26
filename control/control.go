@@ -39,27 +39,20 @@ func Upload(ctx echo.Context) error {
 	return ctx.JSON(utils.Succ(`文件上传成功`, "/"+filePathName))
 }
 
-// Core 重定向
-func Core(ctx echo.Context) error {
-	// 301 永久
-	// 302 临时
-	return ctx.Redirect(301, "/core/")
-}
-
 // Sys 系统信息
 func Sys(ctx echo.Context) error {
-	info := struct {
-		ARCH    string `json:"arch" form:"arch"`
-		OS      string `json:"os" form:"os"`
-		Version string `json:"version" form:"version"`
-		NumCPU  int    `json:"num_cpu" form:"num_cpu"`
+	state := struct {
+		ARCH    string `json:"arch"`
+		OS      string `json:"os"`
+		Version string `json:"version"`
+		NumCPU  int    `json:"num_cpu"`
 	}{
 		ARCH:    runtime.GOARCH,
 		OS:      runtime.GOOS,
 		Version: runtime.Version(),
 		NumCPU:  runtime.NumCPU(),
 	}
-	return ctx.JSON(utils.Succ(`系统信息`, info))
+	return ctx.JSON(utils.Succ(`系统信息`, state))
 }
 
 // Collect 统计信息
