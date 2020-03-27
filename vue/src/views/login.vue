@@ -16,11 +16,11 @@
 		</div>
 		<div class="main">
 			<Form ref="loginForm" :model="user" :rules="rules">
-				<FormItem prop="num" label="用户名">
-					<Input size="large" prefix="ios-person-outline" type="text" v-model="user.num" placeholder="请输入用户名">
+				<FormItem prop="num" label="账 号">
+					<Input size="large" prefix="ios-person-outline" type="text" v-model="user.num" placeholder="请输入账号">
 					</Input>
 				</FormItem>
-				<FormItem prop="pass" label="密码">
+				<FormItem prop="pass" label="密 码">
 					<Input size="large" prefix="ios-lock-outline" type="password" v-model="user.pass" placeholder="请输入密码">
 					</Input>
 				</FormItem>

@@ -28,14 +28,14 @@ func UserLogin(ctx echo.Context) error {
 	}{}
 	err := ctx.Bind(&ipt)
 	if err != nil {
-		return ctx.JSON(utils.ErrIpt(`请输入用户名和密码`, err.Error()))
+		return ctx.JSON(utils.ErrIpt(`请输入账号和密码`, err.Error()))
 	}
 	if ipt.Num == "" && len(ipt.Num) > 18 {
-		return ctx.JSON(utils.ErrIpt(`请输入正确的用户名`))
+		return ctx.JSON(utils.ErrIpt(`请输入正确的账号`))
 	}
 	mod, has := model.UserByNum(ipt.Num)
 	if !has {
-		return ctx.JSON(utils.ErrOpt(`用户名输入错误`))
+		return ctx.JSON(utils.ErrOpt(`账号输入错误`))
 	}
 	now := time.Now()
 	// 禁止登陆证 5 分钟
