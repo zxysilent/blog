@@ -1,6 +1,7 @@
 module blog
 
-go 1.13
+// 以下会指定编译版本哦
+go 1.14
 
 require (
 	github.com/BurntSushi/toml v0.3.1
