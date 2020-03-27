@@ -25,8 +25,8 @@ dbname = "blog"
 params = "charset=utf8&parseTime=true"
 
 [xorm]
-idle = 10
-open = 20
+idle = 4
+open = 8
 show = true
 sync = false
 cache_enable = false
