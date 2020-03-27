@@ -176,7 +176,7 @@ export default {
 			});
 		}
 	},
-	created() {
+	mounted() {
 		this.init_();
 		this.init();
 	}

@@ -343,7 +343,7 @@ export default {
 	//       console.log("watch");
 	//     }
 	//   },
-	created() {
+	mounted() {
 		if (this.isAdd) {
 			this.dataForm.create_time = new Date();
 		}
