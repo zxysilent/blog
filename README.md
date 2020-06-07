@@ -21,7 +21,14 @@
 - [x] 标签管理
 - [x] 系统设置
 - [x] 管理主页
-- [ ] cms 待计划
+
+### tips
+
+- 替换markdown 编辑器为富文本编辑器即可作为`CMS`  
+[https://github.com/zxysilent/view-design-admin](https://github.com/zxysilent/view-design-admin)
+
+- 富文本预览地址  
+[http://76.zxysilent.com/demos/view-design-admin/index.html#/pages/editor](http://76.zxysilent.com/demos/view-design-admin/index.html#/pages/editor)
 
 ### 讨论群
 🐧🐧 1059282178
