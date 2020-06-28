@@ -3,6 +3,9 @@ import fetch from "./fetch";
 export const apiLogin = data => {
 	return fetch.post("/api/login", data);
 };
+export const apiVcode = () => {
+	return fetch.get("/api/vcode");
+};
 export const admAuth = () => {
 	return fetch.get("/adm/auth");
 };

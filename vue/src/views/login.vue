@@ -14,15 +14,25 @@
 				github.com/zxysilent/blog
 			</div>
 		</div>
-		<div class="main">
-			<Form ref="loginForm" :model="user" :rules="rules">
+			<div class="main">
+			<Form ref="loginForm" label-position="left" :label-width="65" :model="dataForm" :rules="rules">
 				<FormItem prop="num" label="账 号">
-					<Input size="large" prefix="ios-person-outline" type="text" v-model="user.num" placeholder="请输入账号">
+					<Input size="large" prefix="ios-person-outline" type="text" v-model="dataForm.num" placeholder="请输入账号">
 					</Input>
 				</FormItem>
-				<FormItem prop="pass" label="密 码">
-					<Input size="large" prefix="ios-lock-outline" type="password" v-model="user.pass" placeholder="请输入密码">
+				<FormItem prop="passwd" label="密 码">
+					<Input size="large" prefix="ios-lock-outline" type="password" password v-model="dataForm.passwd" placeholder="请输入密码">
 					</Input>
+				</FormItem>
+				<FormItem prop="vcode" label="验证码">
+					<Row>
+						<Col span="16">
+						<Input size="large" type="text" v-model="dataForm.vcode" placeholder="请输入验证码"> </Input>
+						</Col>
+						<Col span="8">
+						<img src="" ref="vcode" @click="reload" title="点击刷新" alt="点击重新加载" height="40" />
+						</Col>
+					</Row>
 				</FormItem>
 				<FormItem>
 					<Button size="large" @click="submit" type="primary" long>登 录</Button>
@@ -34,9 +44,15 @@
 				</a>
 			</p>
 			<div class="other-login">
-				<span>其他登录方式</span>&nbsp;
-				<a>
-					<Icon type="logo-github" />
+				<span>系统推荐浏览器</span>&nbsp;<br><br>
+				<a href="https://www.microsoft.com/zh-cn/edge" target="_blank" title="微软 Edge">
+					<Icon type="logo-codepen" size="20" />Edge
+				</a>
+				<a href="https://www.google.cn/chrome/" target="_blank" title="谷歌 Chrome">
+					<Icon type="logo-chrome" size="20" />Chrome
+				</a>
+				<a href="http://www.firefox.com.cn/" target="_blank" title="火狐 Firefox">
+					<Icon type="ios-globe" size="20" />Firefox
 				</a>
 			</div>
 		</div>
@@ -54,43 +70,61 @@
 </template>
 <script>
 import md5 from "js-md5";
-import { apiLogin } from "@/api/auth";
-import util from "@/utils.js";
+import { apiLogin, apiVcode } from "@/api/auth";
+import Utils from "@/utils";
 export default {
 	data() {
 		return {
-			user: { num: "", pass: "" },
+			dataForm: { num: "", passwd: "", vcode: "", vreal: "" },
 			rules: {
 				num: [{ required: true, message: "账号不能为空", trigger: "blur" }],
-				pass: [{ required: true, message: "密码不能为空", trigger: "blur" }]
+				passwd: [{ required: true, message: "密码不能为空", trigger: "blur" }],
+				vcode: [{ required: true, message: "验证码不能为空", trigger: "blur" }]
 			}
 		};
 	},
 	methods: {
 		submit() {
-			let that = this;
-			that.$refs.loginForm.validate(valid => {
+			this.$refs.loginForm.validate(valid => {
 				if (valid) {
 					let data = {
-						num: that.user.num,
-						pass: md5(that.user.pass).substr(1, 30)
+						num: this.dataForm.num,
+						vcode: this.dataForm.vcode,
+						vreal: this.dataForm.vreal,
+						passwd: md5(this.dataForm.passwd).substr(1, 30)
 					};
-					apiLogin(data).then(res => {
-						if (res.code == 200) {
+					apiLogin(data).then(resp => {
+						if (resp.code == 200) {
 							this.$Message.success({
 								content: "登陆成功",
 								onClose: () => {
-									util.setToken(res.data);
-									that.$router.push({ name: "home" });
+									Utils.setToken(resp.data);
+									this.$router.push({ name: "home" });
 								}
 							});
 						} else {
-							this.$Message.error(res.msg);
+							this.reload();
+							this.$Message.error(resp.msg);
 						}
 					});
 				}
 			});
+		},
+		reload() {
+			apiVcode().then(resp => {
+				if (resp.code == 200) {
+					this.$refs.vcode.src = "data:image/png;base64," + resp.data.vcode;
+					this.dataForm.vcode = "";
+					this.dataForm.vreal = resp.data.vreal;
+				} else {
+					this.dataForm.vcode = "";
+					this.dataForm.vreal = "";
+				}
+			});
 		}
+	},
+	mounted() {
+		this.reload();
 	}
 };
 </script>
