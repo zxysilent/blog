@@ -2,7 +2,12 @@
 
 package router
 
-import "github.com/labstack/echo/v4"
+import (
+	"log"
+	"os"
+
+	"github.com/labstack/echo/v4"
+)
 
 const AppJsUrl = "/static/js/app.min.js"
 const AppCssUrl = "/static/css/app.min.css"

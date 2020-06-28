@@ -59,6 +59,8 @@ func HTTPErrorHandler(err error, ctx echo.Context) {
 			if he.Code == 404 {
 				if strings.HasPrefix(ctx.Request().URL.Path, "/static") || strings.HasPrefix(ctx.Request().URL.Path, "/dist") {
 					ctx.NoContent(404)
+				} else if strings.HasPrefix(ctx.Request().URL.Path, "/api") || strings.HasPrefix(ctx.Request().URL.Path, "/adm") {
+					ctx.JSON(utils.NewErrSvr("系统错误", he.Message))
 				} else {
 					ctx.HTML(404, html404)
 				}
@@ -66,7 +68,7 @@ func HTTPErrorHandler(err error, ctx echo.Context) {
 				ctx.JSON(utils.NewErrSvr("系统错误", he.Message))
 			}
 		} else {
-			ctx.JSON(utils.NewErrSvr(err.Error()))
+			ctx.JSON(utils.NewErrSvr("系统错误", err.Error()))
 		}
 	}
 }

@@ -77,3 +77,11 @@ func Collect() (*State, bool) {
 	has, _ := Db.SQL(`SELECT * FROM(SELECT COUNT(id) as post FROM post WHERE type=0)as a ,(SELECT COUNT(id) as page FROM post WHERE type=1) as b, (SELECT COUNT(id) as cate FROM cate) as c, (SELECT COUNT(id) as tag FROM tag) as d`).Get(mod)
 	return mod, has
 }
+func inOf(goal int, arr []int) bool {
+	for idx := range arr {
+		if goal == arr[idx] {
+			return true
+		}
+	}
+	return false
+}

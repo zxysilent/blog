@@ -88,12 +88,12 @@ func PostOpts(ctx echo.Context) error {
 				add := make([]int, 0)
 				del := make([]int, 0)
 				for _, itm := range old {
-					if !utils.InOf(itm, new) {
+					if !inOf(itm, new) {
 						del = append(del, itm)
 					}
 				}
 				for _, itm := range new {
-					if !utils.InOf(itm, old) {
+					if !inOf(itm, old) {
 						add = append(add, itm)
 					}
 				}
@@ -163,4 +163,12 @@ func PostDrop(ctx echo.Context) error {
 	// 删除 文章对应的标签信息
 	model.PostTagDrop(id)
 	return ctx.JSON(utils.Succ(`删除成功`))
+}
+func inOf(goal int, arr []int) bool {
+	for idx := range arr {
+		if goal == arr[idx] {
+			return true
+		}
+	}
+	return false
 }
