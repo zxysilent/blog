@@ -195,7 +195,7 @@ export default {
 			let formData = new FormData();
 			let xhr = new XMLHttpRequest();
 			xhr.withCredentials = false;
-			xhr.open("POST", process.env.VUE_APP_SRV+"/adm/upload");
+			xhr.open("POST", process.env.VUE_APP_SRV + "/adm/upload");
 			xhr.onload = () => {
 				var json;
 				if (xhr.status < 200 || xhr.status >= 300) {
@@ -320,9 +320,9 @@ export default {
 		// 访问前缀
 		prefix() {
 			if (this.isPost) {
-				return process.env.VUE_APP_SRV+"/post/";
+				return process.env.VUE_APP_SRV + "/post/";
 			}
-			return process.env.VUE_APP_SRV+"/page/";
+			return process.env.VUE_APP_SRV + "/page/";
 		}
 	},
 	mounted() {
@@ -330,20 +330,18 @@ export default {
 		var toolbar_left = md.$refs.toolbar_left;
 		var diy = this.$refs.diy;
 		toolbar_left.$el.append(diy);
-	},
-	//   beforeRouteUpdate(to, from, next) {
-	//     //参数不同才触发
-	//     console.log("beforeRouteUpdate");
-	//     // don't forget to call
-	//     next();
-	//   },
-	//   watch: {
-	//     $route(to, from) {
-	//       //刷新参数放到这里里面去触发就可以刷新相同界面了
-	//       console.log("watch");
-	//     }
-	//   },
-	mounted() {
+		//   beforeRouteUpdate(to, from, next) {
+		//     //参数不同才触发
+		//     console.log("beforeRouteUpdate");
+		//     // don't forget to call
+		//     next();
+		//   },
+		//   watch: {
+		//     $route(to, from) {
+		//       //刷新参数放到这里里面去触发就可以刷新相同界面了
+		//       console.log("watch");
+		//     }
+		//   },
 		if (this.isAdd) {
 			this.dataForm.create_time = new Date();
 		}
