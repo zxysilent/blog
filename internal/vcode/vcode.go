@@ -6,7 +6,6 @@ import (
 	"image"
 	"image/color"
 	"image/png"
-	"io"
 	"math"
 	"math/rand"
 	"time"
@@ -75,9 +74,9 @@ func (m *Image) getRandomPalette() color.Palette {
 	return p
 }
 
-// encodedPNG encodes an image to PNG and returns
+// EncodedPNG encodes an image to PNG and returns
 // the result as a byte slice.
-func (m *Image) encodedPNG() []byte {
+func (m *Image) EncodedPNG() []byte {
 	var buf bytes.Buffer
 	if err := png.Encode(&buf, m.Paletted); err != nil {
 		panic(err.Error())
@@ -85,13 +84,8 @@ func (m *Image) encodedPNG() []byte {
 	return buf.Bytes()
 }
 
-// WriteTo writes captcha image in PNG format into the given writer.
-func (m *Image) WriteTo(w io.Writer) (int64, error) {
-	n, err := w.Write(m.encodedPNG())
-	return int64(n), err
-}
-func (m *Image) Bs64() string {
-	return base64.RawStdEncoding.EncodeToString(m.encodedPNG())
+func (m *Image) Base64() string {
+	return base64.RawStdEncoding.EncodeToString(m.EncodedPNG())
 }
 
 func (m *Image) calculateSizes(stdWidth, stdHeight, ncount int) {

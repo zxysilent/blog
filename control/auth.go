@@ -117,7 +117,7 @@ func Vcode(ctx echo.Context) error {
 		Vcode string `json:"vcode"`
 		Vreal string `json:"vreal"`
 	}{
-		Vcode: vcode.NewImage(rnd).Bs64(),
+		Vcode: vcode.NewImage(rnd).Base64(),
 		Vreal: hmc(rnd, "v.c.o.d.e"),
 	}
 	return ctx.JSON(utils.Succ("succ", out))
