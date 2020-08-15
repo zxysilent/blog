@@ -1,7 +1,7 @@
 module blog
 
 // 以下会指定编译版本哦
-go 1.14
+go 1.15
 
 require (
 	github.com/BurntSushi/toml v0.3.1
@@ -11,5 +11,5 @@ require (
 	github.com/swaggo/echo-swagger v1.0.0
 	github.com/swaggo/swag v1.6.7
 	github.com/zxysilent/utils v0.2.1
-	xorm.io/xorm v1.0.2
+	xorm.io/xorm v1.0.3
 )
