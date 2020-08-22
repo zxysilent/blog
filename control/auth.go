@@ -1,6 +1,7 @@
 package control
 
 import (
+	"context"
 	"crypto/hmac"
 	"crypto/sha1"
 	"encoding/base64"
@@ -9,6 +10,7 @@ import (
 
 	"blog/conf"
 	"blog/internal/jwt"
+	"blog/internal/rate"
 	"blog/internal/vcode"
 	"blog/model"
 
@@ -16,6 +18,9 @@ import (
 
 	"github.com/zxysilent/utils"
 )
+
+// 防止暴力破解,每秒20次登录限制
+var loginLimiter = rate.NewLimiter(20, 5)
 
 // UserLogin doc
 // @Tags auth
@@ -26,6 +31,11 @@ import (
 // @Success 200 {object} utils.Reply "成功数据"
 // @Router /login [post]
 func UserLogin(ctx echo.Context) error {
+	ct, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := loginLimiter.Wait(ct); err != nil {
+		return ctx.JSON(utils.Fail("当前登录人数过多,请等待", err.Error()))
+	}
 	ipt := struct {
 		Num    string `json:"num" form:"num"`
 		Vcode  string `form:"vcode" json:"vcode"`
