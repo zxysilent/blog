@@ -319,8 +319,8 @@ func (lim *Limiter) SetBurstAt(now time.Time, newBurst int) {
 // maxFutureReserve specifies the maximum reservation wait duration allowed.
 // reserveN returns Reservation, not *Reservation, to avoid allocation in AllowN and WaitN.
 //
-// @param n 要消费的token数量
-// @param maxFutureReserve 愿意等待的最长时间
+// n 要消费的token数量
+// maxFutureReserve 愿意等待的最长时间
 func (lim *Limiter) reserveN(now time.Time, n int, maxFutureReserve time.Duration) Reservation {
 	lim.mu.Lock()
 
@@ -382,10 +382,10 @@ func (lim *Limiter) reserveN(now time.Time, n int, maxFutureReserve time.Duratio
 
 // advance calculates and returns an updated state for lim resulting from the passage of time.
 // lim is not changed.
-// @param now
-// @return newNow 似乎还是这个now，没变
-// @return newLast 如果 last > now, 则last为now
-// @return newTokens 当前桶中应有的数目
+// now
+// newNow 似乎还是这个now，没变
+// newLast 如果 last > now, 则last为now
+// newTokens 当前桶中应有的数目
 func (lim *Limiter) advance(now time.Time) (newNow time.Time, newLast time.Time, newTokens float64) {
 	// last代表上一个取的时候的时间
 	last := lim.last

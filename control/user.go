@@ -11,7 +11,6 @@ import (
 // @Tags 用户
 // @Summary 判断当前用户账号是否存在
 // @Param num path string true "用户账号"" default('')
-// @Success 200 {object} utils.Reply "成功数据"
 // @Router /user/exist/{num} [get]
 func UserExist(ctx echo.Context) error {
 	num := ctx.Param("num")
@@ -61,7 +60,6 @@ func UserExist(ctx echo.Context) error {
 // @Param rl path int true "权限类型" default(27)
 // @Param pi query int true "分页页数pi" default(1)
 // @Param ps query int true "分页大小ps" default(6)
-// @Success 200 {object} utils.Reply "成功数据"
 // @Router /user/page/{rl}?pi={pi}&ps={ps}[get]
 // func UserPage(ctx echo.Context) error {
 // 	auth := ctx.Get("auth").(*model.JwtClaims)
@@ -93,7 +91,6 @@ func UserExist(ctx echo.Context) error {
 // @Summary 更新用户状态
 // @Description
 // @Param id path int true "用户id" default(1)
-// @Success 200 {object} utils.Reply "成功数据"
 // @Router /user/chgatv/{id}[get]
 // func UserChgatv(ctx echo.Context) error {
 // 	id, err := ctx.ParamInt("id")
@@ -112,7 +109,6 @@ func UserExist(ctx echo.Context) error {
 // @Summary 重置密码[123654]
 // @Description
 // @Param id path int true "用户id" default(1)
-// @Success 200 {object} utils.Reply "成功数据"
 // @Router /user/reset/pass/{id}[get]
 // func UserResetPass(ctx echo.Context) error {
 // 	id, err := ctx.ParamInt("id")
@@ -157,7 +153,6 @@ func UserEdit(ctx echo.Context) error {
 // @Summary 删除用户
 // @Description
 // @Param id path int true "用户id" default(1)
-// @Success 200 {object} utils.Reply "成功数据"
 // @Router /user/drop/{id} [get]
 // func UserDrop(ctx echo.Context) error {
 // 	id, err := ctx.ParamInt("id")
@@ -177,7 +172,6 @@ func UserEdit(ctx echo.Context) error {
 // @Param id formData int false "id-自动获取" default(0)
 // @Param opass formData string true "旧密码" default('')
 // @Param npass formData string true "新密码" default('')
-// @Success 200 {object} utils.Reply "成功数据"
 // @Router /api/user/pass [post]
 func UserPass(ctx echo.Context) error {
 	ipt := struct {
