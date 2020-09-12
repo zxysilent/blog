@@ -2,9 +2,9 @@ package conf
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/BurntSushi/toml"
+	"github.com/zxysilent/logs"
 )
 
 type appconf struct {
@@ -63,8 +63,9 @@ func Init() {
 	var err error
 	App, err = initConf()
 	if err != nil {
-		log.Fatalln("config init error : ", err.Error())
+		logs.Fatal("config init error : ", err.Error())
 	}
+	logs.Debug("conf init")
 }
 
 func initConf() (*appconf, error) {

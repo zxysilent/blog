@@ -4,7 +4,6 @@ import (
 	"blog/conf"
 	"blog/internal/jwt"
 	"blog/model"
-	"bytes"
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
@@ -13,7 +12,6 @@ import (
 	"os"
 	"runtime"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -21,16 +19,9 @@ import (
 	"github.com/zxysilent/utils"
 )
 
-var pool *sync.Pool
 var funcMap template.FuncMap
 
 func init() {
-
-	pool = &sync.Pool{
-		New: func() interface{} {
-			return bytes.NewBuffer(make([]byte, 512))
-		},
-	}
 	funcMap = template.FuncMap{"str2html": Str2html, "str2js": Str2js, "date": Date, "md5": Md5}
 }
 func midRecover(next echo.HandlerFunc) echo.HandlerFunc {

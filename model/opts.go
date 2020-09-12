@@ -1,5 +1,7 @@
 package model
 
+import "github.com/zxysilent/logs"
+
 // Opts 配置
 type Opts struct {
 	Key   string `xorm:"not null pk  unique VARCHAR(64)"`
@@ -34,6 +36,7 @@ func initMap() {
 		m[v.Key] = v.Value
 	}
 	MapOpts = m
+	logs.Debug("opts cache")
 }
 
 // OptsGet 获取某个 配置

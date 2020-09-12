@@ -10,6 +10,7 @@ import (
 
 	// 数据库驱动
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/zxysilent/logs"
 )
 
 // Db 数据库操作句柄
@@ -36,12 +37,13 @@ func Init() {
 	if conf.App.Xorm.Sync {
 		err := db.Sync2(new(User), new(Cate), new(Tag), new(Post), new(PostTag), new(Opts))
 		if err != nil {
-			log.Fatalln("数据库 sync:", err.Error())
+			logs.Fatal("数据库 sync:", err.Error())
 		}
 	}
 	Db = db
 	//缓存
 	initMap()
+	logs.Info("model init")
 }
 
 // Page 分页基本数据
