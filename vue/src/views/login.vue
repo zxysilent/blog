@@ -14,7 +14,7 @@
 				github.com/zxysilent/blog
 			</div>
 		</div>
-			<div class="main">
+		<div class="main">
 			<Form ref="loginForm" label-position="left" :label-width="65" :model="dataForm" :rules="rules">
 				<FormItem prop="num" label="账 号">
 					<Input size="large" prefix="ios-person-outline" type="text" v-model="dataForm.num" placeholder="请输入账号">
@@ -30,7 +30,7 @@
 						<Input size="large" type="text" v-model="dataForm.vcode" placeholder="请输入验证码"> </Input>
 						</Col>
 						<Col span="8">
-						<img src="" ref="vcode" @click="reload" title="点击刷新" alt="点击重新加载" height="40" />
+						<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAAAoCAMAAAA/pq9xAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NUQ2MzI1ODVGMEM5MTFFQTg4RjZCRTZDRDI5QTA0MDAiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NUQ2MzI1ODZGMEM5MTFFQTg4RjZCRTZDRDI5QTA0MDAiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo1RDYzMjU4M0YwQzkxMUVBODhGNkJFNkNEMjlBMDQwMCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo1RDYzMjU4NEYwQzkxMUVBODhGNkJFNkNEMjlBMDQwMCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgyTenEAAAAGUExURf///wAAAFXC034AAAABdFJOUwBA5thmAAAAHUlEQVR42uzBAQ0AAADCoPdPbQ43oAAAAIAXE2AAD8gAAUGhJ40AAAAASUVORK5CYII=" ref="vcode" @click="reload" title="点击刷新" alt="点击刷新" height="40" />
 						</Col>
 					</Row>
 				</FormItem>
@@ -85,7 +85,7 @@ export default {
 	},
 	methods: {
 		submit() {
-			this.$refs.loginForm.validate(valid => {
+			this.$refs.loginForm.validate((valid) => {
 				if (valid) {
 					let data = {
 						num: this.dataForm.num,
@@ -93,7 +93,7 @@ export default {
 						vreal: this.dataForm.vreal,
 						passwd: md5(this.dataForm.passwd).substr(1, 30)
 					};
-					apiLogin(data).then(resp => {
+					apiLogin(data).then((resp) => {
 						if (resp.code == 200) {
 							this.$Message.success({
 								content: "登陆成功",
@@ -111,7 +111,7 @@ export default {
 			});
 		},
 		reload() {
-			apiVcode().then(resp => {
+			apiVcode().then((resp) => {
 				if (resp.code == 200) {
 					this.$refs.vcode.src = "data:image/png;base64," + resp.data.vcode;
 					this.dataForm.vcode = "";
