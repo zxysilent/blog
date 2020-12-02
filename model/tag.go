@@ -1,5 +1,7 @@
 package model
 
+import "strconv"
+
 // Tag 标签
 type Tag struct {
 	Id    int    `xorm:"not null pk autoincr INT(11)" json:"id"`
@@ -86,7 +88,7 @@ func TagDrop(id int) bool {
 	sess.Begin()
 	if affect, err := sess.ID(id).Delete(&Tag{}); affect > 0 && err == nil {
 		sess.Commit()
-		Db.ClearCacheBean(&Tag{}, string(id))
+		Db.ClearCacheBean(&Tag{}, strconv.Itoa(id))
 		return true
 	}
 	sess.Rollback()

@@ -1,6 +1,7 @@
 package model
 
 import (
+	"strconv"
 	"time"
 
 	"github.com/zxysilent/utils"
@@ -26,6 +27,8 @@ import (
 // 	CommentNum      int       `xorm:"INT(11)" json:"comment_num" form:"comment_num"`
 // 	Options         string    `xorm:"TEXT" json:"options,omitempty" form:"options"`
 // }
+
+// Post 文章
 type Post struct {
 	Id              int       `xorm:"not null pk autoincr INT(11)" json:"id"`
 	CateId          int       `xorm:"not null default 0 INT(11)" json:"cate_id"`
@@ -144,7 +147,7 @@ func PostSingle(path string) (*Post, bool) {
 // PostPageAll 所有页面
 func PostPageAll() ([]Post, error) {
 	mods := make([]Post, 0, 4)
-	err := Db.Cols("id", "title", "path", "create_time", "summary", "comment_num", "options", "update_time", "is_public").Where("Type = 1").Desc("create_time").Find(&mods)
+	err := Db.Cols("id", "title", "path", "create_time", "summary", "comment_num", "options", "update_time", "is_public", "status").Where("Type = 1").Desc("create_time").Find(&mods)
 	return mods, err
 }
 
@@ -217,7 +220,7 @@ func PostDrop(id int) bool {
 	sess.Begin()
 	if affect, err := sess.ID(id).Delete(&Post{}); affect > 0 && err == nil {
 		sess.Commit()
-		Db.ClearCacheBean(&Post{}, string(id))
+		Db.ClearCacheBean(&Post{}, strconv.Itoa(id))
 		return true
 	}
 	sess.Rollback()

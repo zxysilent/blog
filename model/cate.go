@@ -1,5 +1,7 @@
 package model
 
+import "strconv"
+
 // Cate 分类
 type Cate struct {
 	Id    int    `xorm:"not null pk autoincr INT(11)" json:"id"`
@@ -83,7 +85,7 @@ func CateDrop(id int) bool {
 	sess.Begin()
 	if affect, err := sess.ID(id).Delete(&Cate{}); affect > 0 && err == nil {
 		sess.Commit()
-		Db.ClearCacheBean(&Cate{}, string(id))
+		Db.ClearCacheBean(&Cate{}, strconv.Itoa(id))
 		return true
 	}
 	sess.Rollback()
@@ -120,7 +122,7 @@ func CatePostList(cid, pi, ps int, lmt bool) ([]Post, error) {
 		sess.Where("Is_Public = 1 and Status = 3 ")
 	}
 	sess.Where("Type = 0")
-	err := sess.Cols("id", "title", "path", "create_time", "summary", "comment_num", "options").Desc("create_time").Limit(ps, (pi-1)*ps).Find(&mods)
+	err := sess.Cols("id", "title", "path", "create_time", "summary", "comment_num", "options", "Status", "Is_Public").Desc("create_time").Limit(ps, (pi-1)*ps).Find(&mods)
 	if len(mods) > 0 {
 		for idx := range mods {
 			if !lmt {
