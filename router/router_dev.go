@@ -50,8 +50,7 @@ func midLogger(next echo.HandlerFunc) echo.HandlerFunc {
 		buf.Reset()
 		defer pool.Put(buf)
 		buf.WriteString("\tip：" + ctx.RealIP())
-		buf.WriteString("\tmethod：" + ctx.Request().Method)
-		buf.WriteString("\tpath：" + ctx.Request().RequestURI)
+		buf.WriteString("\t" + ctx.Request().Method + "：" + ctx.Request().RequestURI)
 		buf.WriteString("\tspan：" + stop.Sub(start).String())
 		// 开发模式直接输出
 		// 生产模式中间层会记录
