@@ -1,6 +1,7 @@
 package model
 
 import (
+	"strconv"
 	"time"
 )
 
@@ -186,7 +187,7 @@ func UserDrop(id int, rl Role) bool {
 		sess.Where("role < ?", rl)
 	}
 	if _, err := sess.ID(id).Delete(&User{}); err == nil {
-		Db.ClearCacheBean(&User{}, string(id))
+		Db.ClearCacheBean(&User{}, strconv.Itoa(id))
 		sess.Commit()
 		return true
 	}
