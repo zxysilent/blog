@@ -12,7 +12,7 @@ import (
 // @Tags sysrole
 // @Summary 通过id获取单条角色信息
 // @Param id path int true "pk id" default(1)
-// @Router /api/sysrole/get/{id} [get]
+// @Router /sys/role/get/{id} [get]
 func SysRoleGet(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
@@ -28,7 +28,7 @@ func SysRoleGet(ctx echo.Context) error {
 // SysRoleAll doc
 // @Tags sysrole
 // @Summary 获取所有角色信息
-// @Router /api/sysrole/all [get]
+// @Router /sys/role/all [get]
 func SysRoleAll(ctx echo.Context) error {
 	mods, err := model.SysRoleAll()
 	if err != nil {
@@ -43,7 +43,7 @@ func SysRoleAll(ctx echo.Context) error {
 // @Param cid path int true "分类id" default(1)
 // @Param pi query int true "分页数" default(1)
 // @Param ps query int true "每页条数[5,20]" default(5)
-// @Router /api/sysrole/page/{cid} [get]
+// @Router /sys/role/page/{cid} [get]
 func SysRolePage(ctx echo.Context) error {
 	// cid, err := strconv.Atoi(ctx.Param("cid"))
 	// if err != nil {
@@ -75,7 +75,7 @@ func SysRolePage(ctx echo.Context) error {
 // @Tags sysrole
 // @Summary 添加角色信息
 // @Param token query string true "hmt" default(token)
-// @Router /adm/sysrole/add [post]
+// @Router /sys/role/add [post]
 func SysRoleAdd(ctx echo.Context) error {
 	ipt := &model.SysRole{}
 	err := ctx.Bind(ipt)
@@ -94,7 +94,7 @@ func SysRoleAdd(ctx echo.Context) error {
 // @Tags sysrole
 // @Summary 修改角色信息
 // @Param token query string true "hmt" default(token)
-// @Router /adm/sysrole/edit [post]
+// @Router /sys/role/edit [post]
 func SysRoleEdit(ctx echo.Context) error {
 	ipt := &model.SysRole{}
 	err := ctx.Bind(ipt)
@@ -114,7 +114,7 @@ func SysRoleEdit(ctx echo.Context) error {
 // @Summary 通过id删除单条角色信息
 // @Param id path int true "pk id" default(1)
 // @Param token query string true "hmt" default(token)
-// @Router /adm/sysrole/drop/{id} [get]
+// @Router /sys/role/drop/{id} [get]
 func SysRoleDrop(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {

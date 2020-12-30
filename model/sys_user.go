@@ -20,6 +20,21 @@ type SysUser struct {
 	Menus  []SysMenu `xorm:"-" json:"menus"`                   //菜单导航
 }
 
+//SysUserByNum 通过账号获取用户信息
+func SysUserByNum(num string) (*User, bool) {
+	mod := &User{}
+	has, _ := Db.Where("num=?", num).Get(mod)
+	return mod, has
+}
+
+//SysUserExist 判断是否存在当前账号
+func SysUserExist(num string) bool {
+	has, _ := Db.Exist(&User{
+		Num: num,
+	})
+	return has
+}
+
 // SysUserGet 单条用户信息
 func SysUserGet(id int) (*SysUser, bool) {
 	mod := &SysUser{}

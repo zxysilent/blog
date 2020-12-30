@@ -12,7 +12,7 @@ import (
 // @Tags sysrolemenu
 // @Summary 通过id获取单条角色菜单导航信息
 // @Param id path int true "pk id" default(1)
-// @Router /api/sysrolemenu/get/{id} [get]
+// @Router /sys/rolemenu/get/{id} [get]
 func SysRoleMenuGet(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
@@ -28,7 +28,7 @@ func SysRoleMenuGet(ctx echo.Context) error {
 // SysRoleMenuAll doc
 // @Tags sysrolemenu
 // @Summary 获取所有角色菜单导航信息
-// @Router /api/sysrolemenu/all [get]
+// @Router /sys/rolemenu/all [get]
 func SysRoleMenuAll(ctx echo.Context) error {
 	mods, err := model.SysRoleMenuAll()
 	if err != nil {
@@ -43,7 +43,7 @@ func SysRoleMenuAll(ctx echo.Context) error {
 // @Param cid path int true "分类id" default(1)
 // @Param pi query int true "分页数" default(1)
 // @Param ps query int true "每页条数[5,20]" default(5)
-// @Router /api/sysrolemenu/page/{cid} [get]
+// @Router /sys/rolemenu/page/{cid} [get]
 func SysRoleMenuPage(ctx echo.Context) error {
 	// cid, err := strconv.Atoi(ctx.Param("cid"))
 	// if err != nil {
@@ -75,7 +75,7 @@ func SysRoleMenuPage(ctx echo.Context) error {
 // @Tags sysrolemenu
 // @Summary 添加角色菜单导航信息
 // @Param token query string true "hmt" default(token)
-// @Router /adm/sysrolemenu/add [post]
+// @Router /sys/rolemenu/add [post]
 func SysRoleMenuAdd(ctx echo.Context) error {
 	ipt := &model.SysRoleMenu{}
 	err := ctx.Bind(ipt)
@@ -94,7 +94,7 @@ func SysRoleMenuAdd(ctx echo.Context) error {
 // @Tags sysrolemenu
 // @Summary 修改角色菜单导航信息
 // @Param token query string true "hmt" default(token)
-// @Router /adm/sysrolemenu/edit [post]
+// @Router /sys/rolemenu/edit [post]
 func SysRoleMenuEdit(ctx echo.Context) error {
 	ipt := &model.SysRoleMenu{}
 	err := ctx.Bind(ipt)
@@ -114,7 +114,7 @@ func SysRoleMenuEdit(ctx echo.Context) error {
 // @Summary 通过id删除单条角色菜单导航信息
 // @Param id path int true "pk id" default(1)
 // @Param token query string true "hmt" default(token)
-// @Router /adm/sysrolemenu/drop/{id} [get]
+// @Router /sys/rolemenu/drop/{id} [get]
 func SysRoleMenuDrop(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {

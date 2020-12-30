@@ -10,7 +10,7 @@ import (
 // apiRouter 通用访问
 func apiRouter(api *echo.Group) {
 	api.GET(`/user/exist/:num`, control.UserExist)   // 判断账号是否存在
-	api.POST(`/login`, control.UserLogin)            // 登陆
+	api.POST(`/login`, sysctl.Login)                 // 登陆
 	api.GET("/vcode", control.Vcode)                 // 验证码
 	api.POST(`/logout`, control.UserLogout)          // 注销
 	api.GET(`/cate/all`, control.CateAll)            // 分类列表

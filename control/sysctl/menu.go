@@ -12,7 +12,7 @@ import (
 // @Tags sysmenu
 // @Summary 通过id获取单条菜单导航信息
 // @Param id path int true "pk id" default(1)
-// @Router /api/sysmenu/get/{id} [get]
+// @Router /sys/menu/get/{id} [get]
 func SysMenuGet(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
@@ -28,7 +28,7 @@ func SysMenuGet(ctx echo.Context) error {
 // SysMenuAll doc
 // @Tags sysmenu
 // @Summary 获取所有菜单导航信息
-// @Router /api/sysmenu/all [get]
+// @Router /sys/menu/all [get]
 func SysMenuAll(ctx echo.Context) error {
 	mods, err := model.SysMenuAll()
 	if err != nil {
@@ -43,7 +43,7 @@ func SysMenuAll(ctx echo.Context) error {
 // @Param cid path int true "分类id" default(1)
 // @Param pi query int true "分页数" default(1)
 // @Param ps query int true "每页条数[5,20]" default(5)
-// @Router /api/sysmenu/page/{cid} [get]
+// @Router /sys/menu/page/{cid} [get]
 func SysMenuPage(ctx echo.Context) error {
 	// cid, err := strconv.Atoi(ctx.Param("cid"))
 	// if err != nil {
@@ -75,7 +75,7 @@ func SysMenuPage(ctx echo.Context) error {
 // @Tags sysmenu
 // @Summary 添加菜单导航信息
 // @Param token query string true "hmt" default(token)
-// @Router /adm/sysmenu/add [post]
+// @Router /sys/menu/add [post]
 func SysMenuAdd(ctx echo.Context) error {
 	ipt := &model.SysMenu{}
 	err := ctx.Bind(ipt)
@@ -94,7 +94,7 @@ func SysMenuAdd(ctx echo.Context) error {
 // @Tags sysmenu
 // @Summary 修改菜单导航信息
 // @Param token query string true "hmt" default(token)
-// @Router /adm/sysmenu/edit [post]
+// @Router /sys/menu/edit [post]
 func SysMenuEdit(ctx echo.Context) error {
 	ipt := &model.SysMenu{}
 	err := ctx.Bind(ipt)
@@ -114,7 +114,7 @@ func SysMenuEdit(ctx echo.Context) error {
 // @Summary 通过id删除单条菜单导航信息
 // @Param id path int true "pk id" default(1)
 // @Param token query string true "hmt" default(token)
-// @Router /adm/sysmenu/drop/{id} [get]
+// @Router /sys/menu/drop/{id} [get]
 func SysMenuDrop(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {

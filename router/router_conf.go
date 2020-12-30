@@ -133,26 +133,26 @@ func initRender() *TplRender {
 	}
 }
 
-// midJwt 中间件-jwt验证
-func midJwt(next echo.HandlerFunc) echo.HandlerFunc {
+// midAuth 中间件登录认证
+func midAuth(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(ctx echo.Context) error {
 		tokenRaw := ctx.FormValue("token") // query/form 查找 token
 		if tokenRaw == "" {
 			tokenRaw = ctx.Request().Header.Get(echo.HeaderAuthorization) // header 查找token
 			if tokenRaw == "" {
-				ctx.JSON(utils.ErrJwt(`请重新登陆`, `未发现jwt`))
-				return nil
+				return ctx.JSON(utils.ErrJwt("请重新登陆", "token为空"))
 			}
 			tokenRaw = tokenRaw[7:] // Bearer token len("Bearer ")==7
 		}
 		jwtAuth, err := jwt.Verify(tokenRaw, conf.App.Jwtkey)
-		if err == nil {
+		if err != nil {
+			return ctx.JSON(utils.ErrJwt("请重新登陆", err.Error()))
+		} else {
+			// 验证通过，保存信息
 			ctx.Set("auth", jwtAuth)
 			ctx.Set("uid", jwtAuth.Id)
-		} else {
-			return ctx.JSON(utils.ErrJwt(`请重新登陆","jwt验证失败`))
 		}
-		// 自定义头
+		// 后续流程
 		return next(ctx)
 	}
 }
