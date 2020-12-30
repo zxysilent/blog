@@ -15,4 +15,6 @@ type SysUser struct {
 	Ecount int       `xorm:"not null default 0 INT(11)" json:"ecount"`
 	Ltime  time.Time `xorm:"not null DATETIME" json:"ltime"`
 	Ctime  time.Time `xorm:"not null DATETIME" json:"ctime"`
+	Auths  []SysAuth `xorm:"-"`
+	Menus  []SysMenu `xorm:"-"`
 }
