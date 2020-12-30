@@ -32,7 +32,7 @@ func SysAuthPage(pi int, ps int, cols ...string) ([]SysAuth, error) {
 	if len(cols) > 0 {
 		sess.Cols(cols...)
 	}
-	err := sess.Desc("Utime").Limit(ps, (pi-1)*ps).Find(&mods)
+	err := sess.Limit(ps, (pi-1)*ps).Find(&mods)
 	return mods, err
 }
 

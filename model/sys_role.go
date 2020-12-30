@@ -4,10 +4,10 @@ import "time"
 
 // SysRole 角色表
 type SysRole struct {
-	Id    int       `xorm:"pk autoincr INT(11)"`   //主键
-	Name  string    `xorm:"VARCHAR(255)"`          //名称
-	Intro string    `xorm:"VARCHAR(255)"`          //介绍
-	Ctime time.Time `xorm:"DATETIME" json:"ctime"` //时间
+	Id    int       `xorm:"pk autoincr INT(11)" json:"id"` //主键
+	Name  string    `xorm:"VARCHAR(255)" json:"name"`      //名称
+	Intro string    `xorm:"VARCHAR(255)" json:"intro"`     //介绍
+	Ctime time.Time `xorm:"DATETIME" json:"ctime"`         //时间
 }
 
 // SysRoleGet 单条角色信息

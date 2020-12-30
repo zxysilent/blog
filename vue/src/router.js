@@ -234,6 +234,25 @@ const appRouter = [
 				component: () => import("@/views/setting/custom.vue")
 			}
 		]
+    },
+    {
+		path: "/sysctl",
+		icon: "ios-contact-outline",
+		meta: {
+			title: "个人中心"
+		},
+		component: Layout,
+		children: [
+			{
+				path: "role",
+				meta: {
+					title: "个人中心",
+					icon: "ios-contact-outline"
+				},
+				name: "sysctl-role",
+				component: () => import("@/views/sysctl/role.vue")
+			}
+		]
 	},
 	{
 		path: "",

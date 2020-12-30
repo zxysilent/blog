@@ -2,6 +2,7 @@ package router
 
 import (
 	"blog/control"
+	"blog/control/sysctl"
 
 	"github.com/labstack/echo/v4"
 )
@@ -20,4 +21,6 @@ func apiRouter(api *echo.Group) {
 	api.GET(`/page/all`, control.PostPageAll)        // 页面
 	api.GET(`/tag/all`, control.TagAll)              // 标签列表
 	api.GET(`/opts/base`, control.OptsBase)          // 配置
+	api.GET("/auth/page", sysctl.SysAuthPage)
+	api.GET("/role/all", sysctl.SysRoleAll)
 }

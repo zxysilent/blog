@@ -68,14 +68,14 @@
 						<MenuItem name="tag-add" to="/tag/add">
 						<Icon type="ios-add-circle-outline" />添加标签</MenuItem>
 					</Submenu>
-                    <Submenu name="role">
+                    <Submenu name="sysctl">
 						<template slot="title">
 							<Icon type="ios-switch-outline" />
 							权限管理
 						</template>
-						<MenuItem name="tag-list" to="/tag/list">
+						<MenuItem name="sysctl-role" to="/sysctl/role">
 						<Icon type="ios-list-box-outline" />角色管理</MenuItem>
-						<MenuItem name="tag-add" to="/tag/add">
+						<MenuItem name="sysctl-add" to="/tag/add">
 						<Icon type="ios-add-circle-outline" />授权管理</MenuItem>
 					</Submenu>
 					<Submenu name="setting">

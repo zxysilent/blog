@@ -23,4 +23,6 @@ func admRouter(adm *echo.Group) {
 	adm.POST(`/tag/add`, control.TagAdd)              // 添加标签
 	adm.POST(`/tag/edit`, control.TagEdit)            // 编辑标签
 	adm.POST(`/opts/edit`, control.OptsEdit)          // 编辑配置项
+	//sysctl
+
 }
