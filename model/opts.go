@@ -4,9 +4,9 @@ import "github.com/zxysilent/logs"
 
 // Opts 配置
 type Opts struct {
-	Key   string `xorm:"not null pk  unique VARCHAR(64)"`
-	Value string `xorm:"not null  VARCHAR(2048)"`
-	Intro string `xorm:"not null  VARCHAR(255)"`
+	Key   string `xorm:"pk unique VARCHAR(64)"`
+	Value string `xorm:"VARCHAR(2048)"`
+	Intro string `xorm:"VARCHAR(255)"`
 }
 
 type mapOpts map[string]string

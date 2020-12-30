@@ -2,31 +2,29 @@ package model
 
 import "time"
 
-// SysAuth 认证
-type SysAuth struct {
+// SysApiLog 调用表
+type SysApiLog struct {
 	Id    int       `xorm:"pk autoincr INT(11)"`   //主键
-	Path  string    `xorm:"VARCHAR(255)"`          //路径
-	Intro string    `xorm:"VARCHAR(255)"`          //介绍
 	Ctime time.Time `xorm:"DATETIME" json:"ctime"` //时间
 }
 
-// SysAuthGet 单条认证信息
-func SysAuthGet(id int) (*SysAuth, bool) {
-	mod := &SysAuth{}
+// SysApiLogGet 单条调用信息
+func SysApiLogGet(id int) (*SysApiLog, bool) {
+	mod := &SysApiLog{}
 	has, _ := Db.ID(id).Get(mod)
 	return mod, has
 }
 
-// SysAuthAll 所有认证信息
-func SysAuthAll() ([]SysAuth, error) {
-	mods := make([]SysAuth, 0, 8)
+// SysApiLogAll 所有调用信息
+func SysApiLogAll() ([]SysApiLog, error) {
+	mods := make([]SysApiLog, 0, 8)
 	err := Db.Find(&mods)
 	return mods, err
 }
 
-// SysAuthPage 认证分页信息
-func SysAuthPage(pi int, ps int, cols ...string) ([]SysAuth, error) {
-	mods := make([]SysAuth, 0, ps)
+// SysApiLogPage 调用分页信息
+func SysApiLogPage(pi int, ps int, cols ...string) ([]SysApiLog, error) {
+	mods := make([]SysApiLog, 0, ps)
 	sess := Db.NewSession()
 	defer sess.Close()
 	if len(cols) > 0 {
@@ -36,17 +34,17 @@ func SysAuthPage(pi int, ps int, cols ...string) ([]SysAuth, error) {
 	return mods, err
 }
 
-// SysAuthCount 认证分页信息总数
-func SysAuthCount() int {
-	mod := &SysAuth{}
+// SysApiLogCount 调用分页信息总数
+func SysApiLogCount() int {
+	mod := &SysApiLog{}
 	sess := Db.NewSession()
 	defer sess.Close()
 	count, _ := sess.Count(mod)
 	return int(count)
 }
 
-// SysAuthAdd 添加认证信息
-func SysAuthAdd(mod *SysAuth) error {
+// SysApiLogAdd 添加调用信息
+func SysApiLogAdd(mod *SysApiLog) error {
 	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
@@ -58,8 +56,8 @@ func SysAuthAdd(mod *SysAuth) error {
 	return nil
 }
 
-// SysAuthEdit 编辑认证信息
-func SysAuthEdit(mod *SysAuth, cols ...string) error {
+// SysApiLogEdit 编辑调用信息
+func SysApiLogEdit(mod *SysApiLog, cols ...string) error {
 	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
@@ -71,12 +69,12 @@ func SysAuthEdit(mod *SysAuth, cols ...string) error {
 	return nil
 }
 
-// SysAuthIds 返回认证信息-ids
-func SysAuthIds(ids []int) map[int]*SysAuth {
-	mods := make([]SysAuth, 0, len(ids))
+// SysApiLogIds 返回调用信息-ids
+func SysApiLogIds(ids []int) map[int]*SysApiLog {
+	mods := make([]SysApiLog, 0, len(ids))
 	Db.In("id", ids).Find(&mods)
 	if len(mods) > 0 {
-		mapMods := make(map[int]*SysAuth, len(mods))
+		mapMods := make(map[int]*SysApiLog, len(mods))
 		for idx := range mods {
 			mapMods[mods[idx].Id] = &mods[idx]
 		}
@@ -85,12 +83,12 @@ func SysAuthIds(ids []int) map[int]*SysAuth {
 	return nil
 }
 
-// SysAuthDrop 删除单条认证信息
-func SysAuthDrop(id int) error {
+// SysApiLogDrop 删除单条调用信息
+func SysApiLogDrop(id int) error {
 	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
-	if _, err := sess.ID(id).Delete(&SysAuth{}); err != nil {
+	if _, err := sess.ID(id).Delete(&SysApiLog{}); err != nil {
 		sess.Rollback()
 		return err
 	}

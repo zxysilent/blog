@@ -4,9 +4,9 @@ import "strconv"
 
 // Tag 标签
 type Tag struct {
-	Id    int    `xorm:"not null pk autoincr INT(11)" json:"id"`
-	Name  string `xorm:"not null  unique VARCHAR(255)" json:"name"`
-	Intro string `xorm:"not null  VARCHAR(255)" json:"intro"`
+	Id    int    `xorm:"pk autoincr INT(11)" json:"id"`
+	Name  string `xorm:" unique VARCHAR(255)" json:"name"`
+	Intro string `xorm:" VARCHAR(255)" json:"intro"`
 }
 
 // TagState 统计

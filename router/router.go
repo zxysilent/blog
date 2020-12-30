@@ -23,7 +23,6 @@ func RunApp() {
 	engine.Static(`/static`, "static")                // 静态目录
 	engine.File(`/favicon.ico`, "favicon.ico")        // ico
 	engine.File("/dashboard*", "dist/index.html")     // 前后端分离页面
-
 	//--- 页面 -- start
 	engine.GET(`/`, control.IndexView)                 // 首页
 	engine.GET(`/archives`, control.ArchivesView)      // 归档
@@ -37,7 +36,6 @@ func RunApp() {
 	engine.GET(`/post/*`, control.PostView)            // 具体某个文章
 	engine.GET(`/page/*`, control.PageView)            // 具体某个页面
 	//--- 页面 -- end
-
 	api := engine.Group("/api")         // api/
 	apiRouter(api)                      // 注册分组路由
 	adm := engine.Group("/adm", midJwt) // adm/ 需要登陆才能访问

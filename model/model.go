@@ -35,7 +35,7 @@ func Init() {
 		db.SetDefaultCacher(cacher)
 	}
 	if conf.App.Xorm.Sync {
-		err := db.Sync2(new(User), new(Cate), new(Tag), new(Post), new(PostTag), new(Opts))
+		err := db.Sync2(new(User), new(Cate), new(Tag), new(Post), new(PostTag), new(Opts), new(SysAuth), new(SysRoleAuth), new(SysRole))
 		if err != nil {
 			logs.Fatal("数据库 sync:", err.Error())
 		}

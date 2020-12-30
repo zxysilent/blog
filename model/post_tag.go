@@ -2,9 +2,9 @@ package model
 
 //PostTag 文章标签
 type PostTag struct {
-	Id     int   `xorm:"not null pk autoincr INT(11)" json:"id"`
-	PostId int   `xorm:"not null unique(post_tag) INT(11)" json:"post_id"`
-	TagId  int   `xorm:"not null unique(post_tag) INT(11)" json:"tag_id"`
+	Id     int   `xorm:"pk autoincr INT(11)" json:"id"`
+	PostId int   `xorm:"unique(post_tag) INT(11)" json:"post_id"`
+	TagId  int   `xorm:"unique(post_tag) INT(11)" json:"tag_id"`
 	Post   *Post `xorm:"-" json:"post"`
 	Tag    *Tag  `xorm:"-" json:"tag"`
 }

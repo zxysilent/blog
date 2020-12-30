@@ -30,23 +30,23 @@ import (
 
 // Post 文章
 type Post struct {
-	Id              int       `xorm:"not null pk autoincr INT(11)" json:"id"`
-	CateId          int       `xorm:"not null default 0 INT(11)" json:"cate_id"`
+	Id              int       `xorm:"pk autoincr INT(11)" json:"id"`
+	CateId          int       `xorm:"default 0 INT(11)" json:"cate_id"`
 	Cate            *Cate     `xorm:"-" json:"cate,omitempty" form:"cate"`
-	UserId          int       `xorm:"not null INT(11)" json:"user_id"`
-	Type            int       `xorm:"not null default 0 comment('0 为文章，1 为页面') TINYINT(4)" json:"type"`
-	Status          int       `xorm:"not null default 0 comment('0 为草稿，1 为待审核，2 为已拒绝，3 为已经发布') TINYINT(4)" json:"status"`
-	Title           string    `xorm:"not null VARCHAR(255)" json:"title"`
-	Path            string    `xorm:"not null  comment('URL 的 path') VARCHAR(255)" json:"path"`
-	Summary         string    `xorm:"not null comment('摘要') LONGTEXT" json:"summary"`
-	MarkdownContent string    `xorm:"not null LONGTEXT" json:"markdown_content"`
-	Content         string    `xorm:"not null LONGTEXT" json:"content"`
-	AllowComment    bool      `xorm:"not null default 1 comment('1 为允许， 0 为不允许') TINYINT(4)" json:"allow_comment"`
-	CreateTime      time.Time `xorm:"default 'NULL' index DATETIME" json:"create_time"`
-	UpdateTime      time.Time `xorm:"not null DATETIME" json:"update_time"`
-	IsPublic        bool      `xorm:"not null default 1 comment('1 为公开，0 为不公开') TINYINT(4)" json:"is_public"`
-	CommentNum      int       `xorm:"not null default 0 INT(11)" json:"comment_num"`
-	Options         string    `xorm:"not null  comment('一些选项，JSON 结构') VARCHAR(4096)" json:"options"`
+	UserId          int       `xorm:"INT(11)" json:"user_id"`
+	Type            int       `xorm:"default 0 comment('0 为文章，1 为页面') TINYINT(4)" json:"type"`
+	Status          int       `xorm:"default 0 comment('0 为草稿，1 为待审核，2 为已拒绝，3 为已经发布') TINYINT(4)" json:"status"`
+	Title           string    `xorm:"VARCHAR(255)" json:"title"`
+	Path            string    `xorm:"comment('URL 的 path') VARCHAR(255)" json:"path"`
+	Summary         string    `xorm:"comment('摘要') LONGTEXT" json:"summary"`
+	MarkdownContent string    `xorm:"LONGTEXT" json:"markdown_content"`
+	Content         string    `xorm:"LONGTEXT" json:"content"`
+	AllowComment    bool      `xorm:"default 1 comment('1 为允许， 0 为不允许') TINYINT(4)" json:"allow_comment"`
+	CreateTime      time.Time `xorm:"index DATETIME" json:"create_time"`
+	UpdateTime      time.Time `xorm:"DATETIME" json:"update_time"`
+	IsPublic        bool      `xorm:"default 1 comment('1 为公开，0 为不公开') TINYINT(4)" json:"is_public"`
+	CommentNum      int       `xorm:"default 0 INT(11)" json:"comment_num"`
+	Options         string    `xorm:"comment('一些选项，JSON 结构') VARCHAR(4096)" json:"options"`
 }
 
 // Archive 归档
