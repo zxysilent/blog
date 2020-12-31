@@ -1,4 +1,4 @@
-package control
+package appctl
 
 import (
 	"blog/model"

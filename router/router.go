@@ -2,12 +2,12 @@ package router
 
 import (
 	"blog/conf"
-	"blog/control"
+	"blog/control/appctl"
 	"blog/control/sysctl"
-	"log"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/zxysilent/logs"
 )
 
 // RunApp 入口
@@ -25,17 +25,17 @@ func RunApp() {
 	engine.File(`/favicon.ico`, "favicon.ico")        // ico
 	engine.File("/dashboard*", "dist/index.html")     // 前后端分离页面
 	//--- 页面 -- start
-	engine.GET(`/`, control.IndexView)                 // 首页
-	engine.GET(`/archives`, control.ArchivesView)      // 归档
-	engine.GET(`/archives.json`, control.ArchivesJson) // 归档 json
-	engine.GET(`/tags`, control.TagsView)              // 标签
-	engine.GET(`/tags.json`, control.TagsJson)         // 标签 json
-	engine.GET(`/tag/:tag`, control.TagPostView)       // 具体某个标签
-	engine.GET(`/cate/:cate`, control.CatePostView)    // 分类
-	engine.GET(`/about`, control.AboutView)            // 关于
-	engine.GET(`/links`, control.LinksView)            // 友链
-	engine.GET(`/post/*`, control.PostView)            // 具体某个文章
-	engine.GET(`/page/*`, control.PageView)            // 具体某个页面
+	engine.GET(`/`, appctl.IndexView)                 // 首页
+	engine.GET(`/archives`, appctl.ArchivesView)      // 归档
+	engine.GET(`/archives.json`, appctl.ArchivesJson) // 归档 json
+	engine.GET(`/tags`, appctl.TagsView)              // 标签
+	engine.GET(`/tags.json`, appctl.TagsJson)         // 标签 json
+	engine.GET(`/tag/:tag`, appctl.TagPostView)       // 具体某个标签
+	engine.GET(`/cate/:cate`, appctl.CatePostView)    // 分类
+	engine.GET(`/about`, appctl.AboutView)            // 关于
+	engine.GET(`/links`, appctl.LinksView)            // 友链
+	engine.GET(`/post/*`, appctl.PostView)            // 具体某个文章
+	engine.GET(`/page/*`, appctl.PageView)            // 具体某个页面
 	//--- 页面 -- end
 	api := engine.Group("/api")          // api/
 	apiRouter(api)                       // 注册分组路由
@@ -45,7 +45,7 @@ func RunApp() {
 	sysRouter(sys)                       // 注册分组路由
 	err := engine.Start(conf.App.Addr)
 	if err != nil {
-		log.Fatalln("run error :", err)
+		logs.Fatal("run error :", err.Error())
 	}
 }
 
