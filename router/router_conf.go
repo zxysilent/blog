@@ -2,7 +2,7 @@ package router
 
 import (
 	"blog/conf"
-	"blog/internal/jwt"
+	"blog/internal/hwt"
 	"blog/model"
 	"crypto/md5"
 	"encoding/hex"
@@ -144,13 +144,16 @@ func midAuth(next echo.HandlerFunc) echo.HandlerFunc {
 			}
 			tokenRaw = tokenRaw[7:] // Bearer token len("Bearer ")==7
 		}
-		jwtAuth, err := jwt.Verify(tokenRaw, conf.App.TokenSecret)
+		auth := hwt.Auth{}
+		err := auth.Decode(tokenRaw, conf.App.TokenSecret)
 		if err != nil {
 			return ctx.JSON(utils.ErrJwt("请重新登陆", err.Error()))
 		} else {
 			// 验证通过，保存信息
-			ctx.Set("auth", jwtAuth)
-			ctx.Set("uid", jwtAuth.Id)
+			ctx.Set("auth", auth)
+			ctx.Set("uid", auth.Id)
+			ctx.Set("role", auth.Role)
+			ctx.Set("roleId", auth.RoleId)
 		}
 		// 后续流程
 		return next(ctx)

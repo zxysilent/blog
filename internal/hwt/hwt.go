@@ -1,4 +1,4 @@
-package hmt
+package hwt
 
 import (
 	"crypto/hmac"
@@ -10,18 +10,18 @@ import (
 	"time"
 )
 
-// HmtAuth 凭证载体
-type HmtAuth struct {
-	Id    int    `json:"id"`
-	Num   string `json:"num"`
-	Name  string `json:"name"`
-	Role  int    `json:"role"`
-	ExpAt int64  `json:"exp"`
+// Auth token载体
+type Auth struct {
+	Id     int    `json:"i"`
+	Num    string `json:"n"`
+	Role   int    `json:"r"`
+	RoleId int    `json:"ri"`
+	ExpAt  int64  `json:"e"`
 }
 
 // Encode 生成 token
-func (jc *HmtAuth) Encode(key string) string {
-	data, _ := json.Marshal(jc)
+func (auth *Auth) Encode(key string) string {
+	data, _ := json.Marshal(auth)
 	bStr := base64.RawURLEncoding.EncodeToString(data)
 	hm := hmac.New(md5.New, []byte(key))
 	hm.Write([]byte(bStr))
@@ -30,7 +30,7 @@ func (jc *HmtAuth) Encode(key string) string {
 }
 
 // Decode 生成 token
-func (jc *HmtAuth) Decode(raw string, key string) error {
+func (auth *Auth) Decode(raw string, key string) error {
 	parts := strings.Split(raw, ".")
 	if len(parts) != 2 {
 		return errors.New("非法的token: " + raw)
@@ -45,11 +45,11 @@ func (jc *HmtAuth) Decode(raw string, key string) error {
 	if err != nil {
 		return errors.New("base64解码失败,error: " + err.Error())
 	}
-	err = json.Unmarshal(datab, jc)
+	err = json.Unmarshal(datab, auth)
 	if err != nil {
 		return errors.New("json解码失败,error: " + err.Error())
 	}
-	if time.Now().Unix() > jc.ExpAt {
+	if time.Now().Unix() > auth.ExpAt {
 		return errors.New("toekn 已经过期")
 	}
 	return nil

@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"blog/conf"
-	"blog/internal/jwt"
+	"blog/internal/hwt"
 	"blog/internal/rate"
 	"blog/internal/vcode"
 	"blog/model"
@@ -81,7 +81,7 @@ func UserLogin(ctx echo.Context) error {
 	if !mod.Role.IsAtv() {
 		return ctx.JSON(utils.Fail(`当前账号已被禁用`))
 	}
-	auth := jwt.JwtAuth{
+	auth := hwt.Auth{
 		Id:    mod.Id,
 		Role:  int(mod.Role),
 		ExpAt: time.Now().Add(time.Hour * 2).Unix(),
@@ -103,7 +103,7 @@ func UserLogout(ctx echo.Context) error {
 // UserAuth doc
 // @Tags auth
 // @Summary 获取登录信息
-// @Param token query string true "凭证jwt" default(jwt)
+// @Param token query string true "凭证"
 // @Router /api/auth [get]
 func UserAuth(ctx echo.Context) error {
 	mod, _ := model.UserGet(ctx.Get("uid").(int))
