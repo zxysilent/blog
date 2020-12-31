@@ -21,17 +21,14 @@ func Init() {
 	// 初始化数据库操作的 Xorm
 	db, err := xorm.NewEngine("mysql", conf.App.Dsn())
 	if err != nil {
-		log.Fatalln("数据库 dsn:", err.Error())
-	}
-	if err = db.Ping(); err != nil {
-		log.Fatalln("数据库 ping:", err.Error())
+		logs.Fatal("数据库 dsn:", err.Error())
 	}
 	if conf.App.OrmHijackLog {
 		sl := &xlog.SimpleLogger{
-			DEBUG: log.New(logs.Writer(), "", log.Ldate|log.Lmicroseconds),
-			ERR:   log.New(logs.Writer(), "", log.Ldate|log.Lmicroseconds),
-			INFO:  log.New(logs.Writer(), "", log.Ldate|log.Lmicroseconds),
-			WARN:  log.New(logs.Writer(), "", log.Ldate|log.Lmicroseconds),
+			DEBUG: log.New(logs.Writer(), "", log.Ldate|log.Ltime),
+			ERR:   log.New(logs.Writer(), "", log.Ldate|log.Ltime),
+			INFO:  log.New(logs.Writer(), "", log.Ldate|log.Ltime),
+			WARN:  log.New(logs.Writer(), "", log.Ldate|log.Ltime),
 		}
 		if conf.App.IsDev() {
 			sl.SetLevel(xlog.LOG_DEBUG)
@@ -39,6 +36,9 @@ func Init() {
 			sl.SetLevel(xlog.LOG_WARNING)
 		}
 		db.SetLogger(sl)
+	}
+	if err = db.Ping(); err != nil {
+		logs.Fatal("数据库 ping:", err.Error())
 	}
 	db.SetMaxIdleConns(conf.App.OrmIdle)
 	db.SetMaxOpenConns(conf.App.OrmOpen)
