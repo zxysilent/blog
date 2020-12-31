@@ -11,6 +11,7 @@ import (
 	// 数据库驱动
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/zxysilent/logs"
+	xlog "xorm.io/xorm/log"
 )
 
 // Db 数据库操作句柄
@@ -25,16 +26,30 @@ func Init() {
 	if err = db.Ping(); err != nil {
 		log.Fatalln("数据库 ping:", err.Error())
 	}
-	db.SetMaxIdleConns(conf.App.Xorm.Idle)
-	db.SetMaxOpenConns(conf.App.Xorm.Open)
+	if conf.App.OrmHijackLog {
+		sl := &xlog.SimpleLogger{
+			DEBUG: log.New(logs.Writer(), "", log.Ldate|log.Lmicroseconds),
+			ERR:   log.New(logs.Writer(), "", log.Ldate|log.Lmicroseconds),
+			INFO:  log.New(logs.Writer(), "", log.Ldate|log.Lmicroseconds),
+			WARN:  log.New(logs.Writer(), "", log.Ldate|log.Lmicroseconds),
+		}
+		if conf.App.IsDev() {
+			sl.SetLevel(xlog.LOG_DEBUG)
+		} else {
+			sl.SetLevel(xlog.LOG_WARNING)
+		}
+		db.SetLogger(sl)
+	}
+	db.SetMaxIdleConns(conf.App.OrmIdle)
+	db.SetMaxOpenConns(conf.App.OrmOpen)
 	// 是否显示sql执行的语句
-	db.ShowSQL(conf.App.Xorm.Show)
-	if conf.App.Xorm.CacheEnable {
+	db.ShowSQL(conf.App.OrmShow)
+	if conf.App.OrmCacheUse {
 		// 设置xorm缓存
-		cacher := caches.NewLRUCacher(caches.NewMemoryStore(), conf.App.Xorm.CacheCount)
+		cacher := caches.NewLRUCacher(caches.NewMemoryStore(), conf.App.OrmCacheSize)
 		db.SetDefaultCacher(cacher)
 	}
-	if conf.App.Xorm.Sync {
+	if conf.App.OrmSync {
 		err := db.Sync2(new(User), new(Cate), new(Tag), new(Post), new(PostTag), new(Opts), new(SysAuth), new(SysRoleAuth), new(SysRole))
 		if err != nil {
 			logs.Fatal("数据库 sync:", err.Error())

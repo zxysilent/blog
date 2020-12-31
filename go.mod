@@ -10,7 +10,7 @@ require (
 	github.com/labstack/echo/v4 v4.1.17
 	github.com/swaggo/echo-swagger v1.0.0
 	github.com/swaggo/swag v1.6.9
-	github.com/zxysilent/logs v0.1.4
+	github.com/zxysilent/logs v0.1.5
 	github.com/zxysilent/utils v0.2.1
 	xorm.io/xorm v1.0.5
 )

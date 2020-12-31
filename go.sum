@@ -153,8 +153,8 @@ github.com/valyala/fasttemplate v1.2.1 h1:TVEnxayobAdVkhQfrfes2IzOB6o+z4roRkPF52
 github.com/valyala/fasttemplate v1.2.1/go.mod h1:KHLXt3tVN2HBp8eijSv/kGJopbvo7S+qRAEEKiv+SiQ=
 github.com/yuin/goldmark v1.1.32/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/ziutek/mymysql v1.5.4/go.mod h1:LMSpPZ6DbqWFxNCHW77HeMg9I646SAhApZ/wKdgO/C0=
-github.com/zxysilent/logs v0.1.4 h1:iZPA00egVI/ndzyrQbrWJqvEM8PjXrf6qfsTScDyRhc=
-github.com/zxysilent/logs v0.1.4/go.mod h1:n2QCxPdkVW4haduEpXBg72/sX/bH8y532JVxI0bxXIU=
+github.com/zxysilent/logs v0.1.5 h1:o1ZgveU2UPT75hVdcCo0ILMTPaqHTcsF3aI3RIVV1Ic=
+github.com/zxysilent/logs v0.1.5/go.mod h1:n2QCxPdkVW4haduEpXBg72/sX/bH8y532JVxI0bxXIU=
 github.com/zxysilent/utils v0.2.1 h1:jLjdHZnSNoprSM8DTbP/fokymOvrMBPqdMZipodENuk=
 github.com/zxysilent/utils v0.2.1/go.mod h1:dwlKmnFtb9pVeGf5+/hOGDtmdOFewAaq1N6/jaDQUNA=
 golang.org/x/crypto v0.0.0-20190130090550-b01c7a725664/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=

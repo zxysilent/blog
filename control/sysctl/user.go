@@ -87,7 +87,7 @@ func Login(ctx echo.Context) error {
 	mod.Ltime = now
 	mod.Ip = ctx.RealIP()
 	model.UserEditLogin(mod, "Ltime", "Ip", "Ecount")
-	return ctx.JSON(utils.Succ(`登陆成功`, auth.Encode(conf.App.Jwtkey)))
+	return ctx.JSON(utils.Succ(`登陆成功`, auth.Encode(conf.App.TokenSecret)))
 }
 
 // UserLogout doc

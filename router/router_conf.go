@@ -136,7 +136,7 @@ func initRender() *TplRender {
 // midAuth 中间件登录认证
 func midAuth(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(ctx echo.Context) error {
-		tokenRaw := ctx.FormValue("token") // query/form 查找 token
+		tokenRaw := ctx.FormValue(conf.App.TokenKey) // query/form 查找 token
 		if tokenRaw == "" {
 			tokenRaw = ctx.Request().Header.Get(echo.HeaderAuthorization) // header 查找token
 			if tokenRaw == "" {
@@ -144,7 +144,7 @@ func midAuth(next echo.HandlerFunc) echo.HandlerFunc {
 			}
 			tokenRaw = tokenRaw[7:] // Bearer token len("Bearer ")==7
 		}
-		jwtAuth, err := jwt.Verify(tokenRaw, conf.App.Jwtkey)
+		jwtAuth, err := jwt.Verify(tokenRaw, conf.App.TokenSecret)
 		if err != nil {
 			return ctx.JSON(utils.ErrJwt("请重新登陆", err.Error()))
 		} else {

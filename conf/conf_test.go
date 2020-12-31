@@ -1,6 +1,7 @@
 package conf
 
 import (
+	"os"
 	"testing"
 )
 
@@ -8,9 +9,12 @@ func TestConf(t *testing.T) {
 	defConfig = "./conf.toml"
 	conf, err := initConf()
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	} else {
 		t.Log(conf)
 		t.Log(conf.Dsn())
 	}
+	t.Cleanup(func() {
+		os.RemoveAll("logs")
+	})
 }

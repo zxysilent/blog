@@ -8,14 +8,16 @@ import (
 )
 
 type appconf struct {
-	Title   string `toml:"title"`
-	Explain string `toml:"explain"`
-	Mode    string `toml:"mode"`
-	Addr    string `toml:"addr"`
-	Srv     string `toml:"srv"`
-	Jwtkey  string `toml:"jwtkey"`
-	Jwtexp  int    `toml:"jwtexp"`
-	Author  struct {
+	Title       string `toml:"title"`
+	Intro       string `toml:"intro"`
+	Mode        string `toml:"mode"`
+	Addr        string `toml:"addr"`
+	Srv         string `toml:"srv"`
+	TokenKey    string `toml:"token_key"`
+	TokenExp    int    `toml:"token_exp"`
+	TokenKeep   bool   `toml:"token_keep"`
+	TokenSecret string `toml:"token_secret"`
+	Author      struct {
 		Name    string `toml:"name"`
 		Website string `toml:"website"`
 	} `toml:"author"`
@@ -23,22 +25,24 @@ type appconf struct {
 		Appid  string `toml:"appid"`
 		Secret string `toml:"secret"`
 	} `toml:"wechat"`
-	Database struct {
-		Host   string `toml:"host"`
-		Port   int    `toml:"port"`
-		User   string `toml:"user"`
-		Passwd string `toml:"passwd"`
-		Dbname string `toml:"dbname"`
-		Params string `toml:"params"`
-	} `toml:"database"`
-	Xorm struct {
-		Idle        int  `toml:"idle"`
-		Open        int  `toml:"open"`
-		Show        bool `toml:"show"`
-		Sync        bool `toml:"sync"`
-		CacheEnable bool `toml:"cache_enable"`
-		CacheCount  int  `toml:"cache_count"`
-	} `toml:"xorm"`
+	ImageCut     bool   `toml:"image_cut"`
+	ImageWidth   int    `toml:"image_width"`
+	ImageHeight  int    `toml:"image_height"`
+	PageMin      int    `toml:"page_min"`
+	PageMax      int    `toml:"page_max"`
+	DbHost       string `toml:"db_host"`
+	DbPort       int    `toml:"db_port"`
+	DbUser       string `toml:"db_user"`
+	DbPasswd     string `toml:"db_passwd"`
+	DbName       string `toml:"db_name"`
+	DbParams     string `toml:"db_params"`
+	OrmIdle      int    `toml:"orm_idle"`
+	OrmOpen      int    `toml:"orm_open"`
+	OrmShow      bool   `toml:"orm_show"`
+	OrmSync      bool   `toml:"orm_sync"`
+	OrmCacheUse  bool   `toml:"orm_cache_use"`
+	OrmCacheSize int    `toml:"orm_cache_size"`
+	OrmHijackLog bool   `toml:"orm_hijack_log"`
 }
 
 func (app *appconf) IsProd() bool {
@@ -48,10 +52,12 @@ func (app *appconf) IsDev() bool {
 	return app.Mode == "dev"
 }
 
+//uid:pass@tcp(host:port)/dbname?charset=utf8&parseTime=true
+//用户名:密码@tcp(主机:端口)/数据库名称?charset=utf8&parseTime=true
 const _dsn = "%s:%s@tcp(%s:%d)/%s?%s"
 
 func (app *appconf) Dsn() string {
-	return fmt.Sprintf(_dsn, app.Database.User, app.Database.Passwd, app.Database.Host, app.Database.Port, app.Database.Dbname, app.Database.Params)
+	return fmt.Sprintf(_dsn, app.DbUser, app.DbPasswd, app.DbHost, app.DbPort, app.DbName, app.DbParams)
 }
 
 var (
