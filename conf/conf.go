@@ -8,41 +8,42 @@ import (
 )
 
 type appconf struct {
-	Title       string `toml:"title"`
-	Intro       string `toml:"intro"`
-	Mode        string `toml:"mode"`
-	Addr        string `toml:"addr"`
-	Srv         string `toml:"srv"`
-	TokenKey    string `toml:"token_key"`
-	TokenExp    int    `toml:"token_exp"`
-	TokenKeep   bool   `toml:"token_keep"`
-	TokenSecret string `toml:"token_secret"`
-	Author      struct {
+	Title        string `toml:"title"`          //
+	Intro        string `toml:"intro"`          //
+	Mode         string `toml:"mode"`           //
+	Addr         string `toml:"addr"`           //
+	Srv          string `toml:"srv"`            //
+	TokenKey     string `toml:"token_key"`      //
+	TokenExp     int    `toml:"token_exp"`      //过期时间 h
+	TokenKeep    bool   `toml:"token_keep"`     //保持在线
+	TokenSso     bool   `toml:"token_sso"`      //单点登录
+	TokenSecret  string `toml:"token_secret"`   //加密私钥
+	ImageCut     bool   `toml:"image_cut"`      //图片裁剪
+	ImageWidth   int    `toml:"image_width"`    //
+	ImageHeight  int    `toml:"image_height"`   //
+	PageMin      int    `toml:"page_min"`       //分页
+	PageMax      int    `toml:"page_max"`       //
+	DbHost       string `toml:"db_host"`        //数据库地址
+	DbPort       int    `toml:"db_port"`        //数据库端口
+	DbUser       string `toml:"db_user"`        //数据库账号
+	DbPasswd     string `toml:"db_passwd"`      //数据库密码
+	DbName       string `toml:"db_name"`        //数据库名称
+	DbParams     string `toml:"db_params"`      //数据库参数
+	OrmIdle      int    `toml:"orm_idle"`       //
+	OrmOpen      int    `toml:"orm_open"`       //
+	OrmShow      bool   `toml:"orm_show"`       //显示sql
+	OrmSync      bool   `toml:"orm_sync"`       //同步表结构
+	OrmCacheUse  bool   `toml:"orm_cache_use"`  //是否使用缓存
+	OrmCacheSize int    `toml:"orm_cache_size"` //缓存数量
+	OrmHijackLog bool   `toml:"orm_hijack_log"` //劫持日志
+	Author       struct {
 		Name    string `toml:"name"`
 		Website string `toml:"website"`
 	} `toml:"author"`
 	Wechat struct {
-		Appid  string `toml:"appid"`
-		Secret string `toml:"secret"`
+		XxxAppid   string `toml:"xxx_appid"`
+		Xxx_Secret string `toml:"xxx_secret"`
 	} `toml:"wechat"`
-	ImageCut     bool   `toml:"image_cut"`
-	ImageWidth   int    `toml:"image_width"`
-	ImageHeight  int    `toml:"image_height"`
-	PageMin      int    `toml:"page_min"`
-	PageMax      int    `toml:"page_max"`
-	DbHost       string `toml:"db_host"`
-	DbPort       int    `toml:"db_port"`
-	DbUser       string `toml:"db_user"`
-	DbPasswd     string `toml:"db_passwd"`
-	DbName       string `toml:"db_name"`
-	DbParams     string `toml:"db_params"`
-	OrmIdle      int    `toml:"orm_idle"`
-	OrmOpen      int    `toml:"orm_open"`
-	OrmShow      bool   `toml:"orm_show"`
-	OrmSync      bool   `toml:"orm_sync"`
-	OrmCacheUse  bool   `toml:"orm_cache_use"`
-	OrmCacheSize int    `toml:"orm_cache_size"`
-	OrmHijackLog bool   `toml:"orm_hijack_log"`
 }
 
 func (app *appconf) IsProd() bool {
@@ -61,8 +62,8 @@ func (app *appconf) Dsn() string {
 }
 
 var (
-	App       *appconf
-	defConfig = "./conf/conf.toml"
+	App       *appconf             //运行配置实体
+	defConfig = "./conf/conf.toml" //配置文件路径，方便测试
 )
 
 func Init() {

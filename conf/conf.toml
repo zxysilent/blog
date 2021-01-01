@@ -41,6 +41,7 @@ db_name = "blog"
 db_params = "charset=utf8&parseTime=true&loc=Local"
 
 # orm
+# https://gitea.com/xorm/xorm
 # 推荐cpu核心数
 orm_idle = 4
 # 推荐cpu核心数*2
@@ -49,7 +50,7 @@ orm_open = 8
 orm_show = true 
 # 同步表结构
 orm_sync = false
-#  是否使用orm缓存
+# 是否使用orm缓存
 orm_cache_use = false 
 # orm缓存数量
 orm_cache_size = 1000
@@ -61,7 +62,11 @@ orm_hijack_log = true
 name = "zxysilent"
 website = "https://github.com/zxysilent"
 
-# 微信
+# 微信相关 
+# 移动 网站 https://open.weixin.qq.com/cgi-bin/index
+# 公众号 小程序 https://mp.weixin.qq.com/
 [wechat]
-appid = "appid"
-secret = "secret"
+# 需要适配多个,这里列举一个目标
+# 请同时修改 conf.go
+xxx_appid = "appid"
+xxx_secret = "secret"
