@@ -47,6 +47,7 @@ type Post struct {
 	IsPublic        bool      `xorm:"not null default 1 comment('1 为公开，0 为不公开') TINYINT(4)" json:"is_public"`
 	CommentNum      int       `xorm:"not null default 0 INT(11)" json:"comment_num"`
 	Options         string    `xorm:"not null  comment('一些选项，JSON 结构') VARCHAR(4096)" json:"options"`
+	User *User
 }
 
 // Archive 归档
@@ -58,7 +59,19 @@ type Archive struct {
 // PostPage 分页
 func PostPage(pi, ps int) ([]Post, error) {
 	mods := make([]Post, 0, ps)
-	err := Db.Cols("id", "title", "path", "create_time", "summary", "comment_num", "options").Where("Type = 0 and Is_Public = 1 and Status = 3 ").Desc("create_time").Limit(ps, (pi-1)*ps).Find(&mods)
+	err := Db.Cols("id", "user_id", "title", "path", "create_time", "summary", "comment_num", "options").Where("Type = 0 and Is_Public = 1 and Status = 3 ").Desc("create_time").Limit(ps, (pi-1)*ps).Find(&mods)
+	mp := make(map[int]*User)
+	for i:=0; i<len(mods); i++ {
+		uid := mods[i].UserId
+		if user, ok := mp[uid]; ok {
+			mods[i].User = user
+		} else {
+			var user User
+			Db.Cols("id", "name", "num").Where("id=?", uid).Get(&user)
+			mods[i].User = &user
+			mp[uid] = &user
+		}
+	}
 	return mods, err
 }
 
