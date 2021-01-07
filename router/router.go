@@ -24,6 +24,12 @@ func RunApp() {
 	engine.File(`/favicon.ico`, "favicon.ico")        // ico
 	engine.File("/dashboard*", "dist/index.html")     // 前后端分离页面
 
+	//--- admin --
+	engine.GET("/admin", func(context echo.Context) error {
+		context.Redirect(302, "/dist/index.html")
+		return nil
+	})
+
 	//--- 页面 -- start
 	engine.GET(`/`, control.IndexView)                 // 首页
 	engine.GET(`/archives`, control.ArchivesView)      // 归档
