@@ -47,7 +47,7 @@ type Post struct {
 	IsPublic        bool      `xorm:"not null default 1 comment('1 为公开，0 为不公开') TINYINT(4)" json:"is_public"`
 	CommentNum      int       `xorm:"not null default 0 INT(11)" json:"comment_num"`
 	Options         string    `xorm:"not null  comment('一些选项，JSON 结构') VARCHAR(4096)" json:"options"`
-	User *User
+	User *User 				  `xorm:"-"`
 }
 
 // Archive 归档
@@ -203,7 +203,7 @@ func PostEdit(mod *Post) bool {
 	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
-	affect, err := sess.ID(mod.Id).Cols("Cate_id", "Status", "Title", "Summary", "Markdown_Content", "Content", "allow_comment", "Create_Time", "Comment_Num", "update_time", "is_public").Update(mod)
+	affect, err := sess.ID(mod.Id).Cols("Cate_id", "Status", "Title", "Summary", "Markdown_Content", "Content", "allow_comment", "Create_Time", "Comment_Num", "update_time", "is_public", "user_id").Update(mod)
 	if affect >= 0 && err == nil {
 		sess.Commit()
 		return true
