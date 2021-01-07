@@ -12,7 +12,13 @@ import (
 	"github.com/zxysilent/utils"
 )
 
-// Upload 上传文件
+// Upload doc
+// @Tags init
+// @Summary 文件上传
+// @Accept  mpfd
+// @Param file formData file true "file"
+// @Success 200 {object} model.Reply{data=string} "成功数据"
+// @Router /api/upload/image [post]
 func Upload(ctx echo.Context) error {
 	file, err := ctx.FormFile("file")
 	if err != nil {
