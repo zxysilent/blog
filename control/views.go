@@ -9,6 +9,9 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/zxysilent/utils"
+	"github.com/grokify/html-strip-tags-go"
+	"time"
+	"fmt"
 )
 
 // IndexView 主页面
@@ -163,6 +166,51 @@ func PostView(ctx echo.Context) error {
 	return ctx.Redirect(302, "/404")
 }
 
+// TagsView 标签列表
+func SearchView(ctx echo.Context) error {
+	t1 := time.Now()
+	q := ctx.QueryParam("q")
+
+	pi, _ := strconv.Atoi(ctx.FormValue("page"))
+	if pi == 0 {
+		pi = 1
+	}
+	ps, _ := atoi(model.MapOpts.MustGet("page_size"), 6)
+
+	mods, err := model.PostPageSearch(pi, ps, q)
+	if err != nil {
+		//return ctx.Redirect(302, "/")
+	}
+
+	total := model.PostCountSearch(q)
+	naver := model.Naver{}
+	if pi > 1 {
+		naver.Prev = "/search?q="+q+"&page=" + strconv.Itoa(pi-1)
+	}
+	if total > (pi * ps) {
+		naver.Next = "/search?q="+q+"&page=" + strconv.Itoa(pi+1)
+	}
+
+	re := regexp.MustCompile(`(?i)`+q)
+	for i:=0; i< len(mods); i++ {
+		mods[i].Title = re.ReplaceAllString(mods[i].Title, "<b>"+"$0"+"</b>")
+		mods[i].Summary = re.ReplaceAllString(strip.StripTags(mods[i].Summary), "<b>"+"$0"+"</b>")
+	}
+
+	t2 := time.Now()
+	delta := t2.Sub(t1)
+	duration := fmt.Sprintf("%.3f", delta.Seconds())
+
+	return ctx.Render(http.StatusOK, "search.html", map[string]interface{}{
+		"Q":q,
+		"NotSearch": q == "",
+		"Posts": mods,
+		"Naver":naver,
+		"Total":total,
+		"Duration":duration,
+	})
+}
+
 var reg = regexp.MustCompile(`<img src="([^" ]+)" alt="([^" ]*)"\s?\/?>`)
 
 // 生成目录并替换内容
@@ -173,7 +221,7 @@ func getTocHTML(html string) string {
 	hs := regToc.FindAllString(html, -1)
 	if len(hs) > 1 {
 		sb := strings.Builder{}
-		sb.WriteString(`<div class="toc"><ul>`)
+		sb.WriteString(`<div class="toc"><p><strong>预览目录</strong></p><ul>`)
 		level := 0
 		for i := 0; i < len(hs)-1; i++ {
 			fg := similar(hs[i], hs[i+1])
@@ -206,7 +254,7 @@ func getTocHTML(html string) string {
 	}
 	if len(hs) == 1 {
 		sb := strings.Builder{}
-		sb.WriteString(`<div class="toc"><ul>`)
+		sb.WriteString(`<div class="toc"><p><strong>预览目录</strong></p><ul>`)
 		sb.WriteString(regH.ReplaceAllString(hs[0], `<li><a href="#$1">$2</a></li>`))
 		sb.WriteString(`</ul></div>`)
 		return sb.String() + html

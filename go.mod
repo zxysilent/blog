@@ -11,6 +11,7 @@ require (
 	github.com/go-openapi/spec v0.20.0 // indirect
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gofrs/uuid v3.3.0+incompatible // indirect
+	github.com/grokify/html-strip-tags-go v0.0.1
 	github.com/labstack/echo/v4 v4.1.17
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/swaggo/echo-swagger v1.0.0

@@ -42,6 +42,7 @@ func RunApp() {
 	engine.GET(`/links`, control.LinksView)            // 友链
 	engine.GET(`/post/*`, control.PostView)            // 具体某个文章
 	engine.GET(`/page/*`, control.PageView)            // 具体某个页面
+	engine.GET(`/search`, control.SearchView)              // 搜索
 	//--- 页面 -- end
 
 	api := engine.Group("/api")         // api/

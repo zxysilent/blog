@@ -56,6 +56,34 @@ type Archive struct {
 	Posts []Post    //文章
 }
 
+// PostPage 分页 搜索
+func PostPageSearch(pi, ps int, k string) ([]Post, error) {
+	mods := make([]Post, 0, ps)
+	err := Db.Cols("id", "user_id", "title", "path", "create_time", "summary", "comment_num", "options").Where("Type = 0 and Is_Public = 1 and Status = 3"+" and (title like '%"+k+"%' or content like '%"+k+"%')").Desc("create_time").Limit(ps, (pi-1)*ps).Find(&mods)
+	mp := make(map[int]*User)
+	for i:=0; i<len(mods); i++ {
+		uid := mods[i].UserId
+		if user, ok := mp[uid]; ok {
+			mods[i].User = user
+		} else {
+			var user User
+			Db.Cols("id", "name", "num").Where("id=?", uid).Get(&user)
+			mods[i].User = &user
+			mp[uid] = &user
+		}
+	}
+	return mods, err
+}
+
+func PostCountSearch(k string) int {
+	r, e := Db.QueryString("SELECT count(1) as count FROM `post` WHERE (Type = 0 and Is_Public = 1 and Status = 3 and (title like '%"+k+"%' or content like '%"+k+"%'))")
+	if e != nil {
+		return 0
+	}
+	count, _ := atoi(r[0]["count"], 0)
+	return count
+}
+
 // PostPage 分页
 func PostPage(pi, ps int) ([]Post, error) {
 	mods := make([]Post, 0, ps)
@@ -238,4 +266,12 @@ func PostDrop(id int) bool {
 	}
 	sess.Rollback()
 	return false
+}
+
+func atoi(raw string, def int) (int, error) {
+	out, err := strconv.Atoi(raw)
+	if err != nil {
+		return def, err
+	}
+	return out, nil
 }
