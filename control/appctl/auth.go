@@ -105,7 +105,7 @@ func UserLogout(ctx echo.Context) error {
 // @Tags auth
 // @Summary 获取登录信息
 // @Param token query string true "凭证"
-// @Success 200 {object} model.Reply "成功数据"
+// @Success 200 {object} model.Reply{data=model.SysUser} "成功数据"
 // @Router /api/auth [get]
 func UserAuth(ctx echo.Context) error {
 	mod, _ := model.UserGet(ctx.Get("uid").(int))
