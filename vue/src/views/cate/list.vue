@@ -11,6 +11,9 @@
 				<FormItem label="分类介绍" prop="intro">
 					<Input v-model="editForm.intro" placeholder="请填写分类介绍"></Input>
 				</FormItem>
+				<FormItem label="排序ID" prop="intro">
+					<Input v-model.number="editForm.sort" placeholder="请填写排序ID"></Input>
+				</FormItem>
 			</Form>
 			<div slot="footer">
 				<ButtonGroup>
@@ -32,6 +35,7 @@ export default {
 				{ type: "index", minWidth: 60, maxWidth: 100, align: "center" },
 				{ title: "分类名", minWidth: 100, maxWidth: 300, key: "name" },
 				{ title: "分类介绍", minWidth: 100, maxWidth: 300, key: "intro" },
+				{ title: "排序ID", minWidth: 100, maxWidth: 300, key: "sort" },
 				{
 					title: "Action",
 					minWidth: 100,

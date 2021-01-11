@@ -211,6 +211,20 @@ func SearchView(ctx echo.Context) error {
 	})
 }
 
+func Series(ctx echo.Context)  error {
+	cates, err := model.CateAll()
+	if err != nil {
+		return err
+	}
+	for i:=0; i<len(cates); i++ {
+		posts, _ := model.CatePostAll(cates[i].Id)
+		cates[i].Posts = posts
+	}
+	return ctx.Render(http.StatusOK, "series.html", map[string]interface{}{
+		"Cates":cates,
+	})
+}
+
 var reg = regexp.MustCompile(`<img src="([^" ]+)" alt="([^" ]*)"\s?\/?>`)
 
 // 生成目录并替换内容
