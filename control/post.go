@@ -57,6 +57,7 @@ func PostOpts(ctx echo.Context) error {
 		Tags []int      `json:"tags" form:"tags"` // 标签
 		Edit bool       `json:"edit" form:"edit"` // 是否编辑
 	}{}
+
 	err := ctx.Bind(ipt)
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, err.Error()))
@@ -73,6 +74,9 @@ func PostOpts(ctx echo.Context) error {
 	if ipt.Type == 0 {
 		ipt.Post.Content = getTocHTML(ipt.Post.Content)
 	}
+
+	ipt.Post.UserId = ctx.Get("uid").(int)
+
 	// 编辑 文章/页面
 	if ipt.Edit {
 		// 修改日期在发布日期之前

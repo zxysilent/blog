@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><title>{{.title}}·搜索</title>
+    <link rel="canonical" href="{{.site_url}}/tags"/>{{template "tpl-linker.html" .}}</head>
+<body>{{template "tpl-naver.html" .}}
+<div id="main">
+    <article class="post tags"><h1 class="title">站内搜索</h1>
+        <div class="entry-content">
+            <div id="search">
+                <form action="/search">
+                    <div class="wrapper"><input maxlength="80" placeholder="请输入关键字..." id="keyword" name="q"
+                                                type="search" required="" value="{{.Q}}"></div>
+                    <input class="submit" type="submit" value="搜索"></form>
+            </div>
+            <div id="searchResult">
+            {{if .NotSearch}}
+                <div class="hot-words">热搜词：<a href="?q=Go">Go</a><a href="?q=openssl">openssl</a><a href="?q=glide">glide</a><a
+                        href="?q=docker registry">docker registry</a><a href="?q=let's encrypt">let's encrypt</a><a
+                        href="?q=gdb">gdb</a><a href="?q=mongodb">mongodb</a><a href="?q=dns">dns</a></div>
+                <div class="intro"><p>支持的搜索格式：</p>
+                    <ol>
+                        <li>输入关键词全文搜索：<a href="?q=Let's Encrypt">Let's Encrypt</a>；</li>
+                        <li>指定时间段搜索：<a href="?q=date:2016">date:2016</a>、<a href="?q=date:2016-10">date:2016-10</a>；
+                        </li>
+                        <li>指定标签搜索：<a href="?q=tag:github">tag:github</a>、<a href="?q=tag:HTTPS">tag:HTTPS</a>；</li>
+                        <li>组合搜索：<a href="?q=date:2016 tag:docker">date:2016 tag:docker</a>；</li>
+                    </ol>
+                </div>
+            {{else}}
+                <div class="info">本次搜索共找到结果 {{.Total}} 条 (用时 {{.Duration}} 秒)</div>
+                {{range .Posts}}
+                    <div class="item">
+                        <div class="title"><a href="/post/{{.Path}}.html">{{str2html .Title}}</a></div>
+                        <div class="desc">
+                            <div class="summary">
+                                <span class="date">{{ date .CreateTime "2006-01-02"}}</span> ... {{str2html .Summary}} ...
+                            </div>
+                        </div>
+                    </div>
+                {{end}}
+                <nav class="page-navi">
+                            {{if .Naver.Prev}}
+                    <a href="{{.Naver.Prev}}" class="prev">« 上一页</a>
+                            {{end}}
+                        {{if .Naver.Next}}
+                        <a href="{{.Naver.Next}}" class="next">下一页 »</a></nav>
+                        {{end}}
+            {{end}}
+            </div>
+        </div>
+    </article>{{template "tpl-footer.html" .}}</body>
+<style>
+    article {
+        padding-bottom: 0px;
+    }
+    .page-navi {
+        border-top: 1px solid #ddd;
+        border-bottom: 1px solid #fff;
+        line-height: 20px;
+        overflow: hidden;
+        padding: 20px 0;
+        position: relative;
+        width: 100%;
+        margin-top: 20px;
+    }
+    .page-navi .next {
+        float: right;
+    }
+</style>
+</html>

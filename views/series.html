@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><title>{{.title}}·专题</title>
+    <link rel="canonical" href="{{.site_url}}/tags"/>{{template "tpl-linker.html" .}}</head>
+<body>{{template "tpl-naver.html" .}}
+<div id="main">
+    <article class="post tags"><h1 class="title">专题</h1>
+        <div class="entry-content">
+            <div class="toc">
+                <p><strong>预览目录</strong></p>
+                <ul>
+                {{range .Cates}}
+                    <li><a href="#toc-{{.Id}}">{{.Name}}</a></li>
+                {{end}}
+                </ul>
+            </div>
+
+            <p>这里，记录着我对某件事物、某个新兴技术的学习过程。善于总结，善于收拾。这里可以说是自己资料的回忆录，但更希望的是对需要了解到相关知识的朋友有所帮助。</p>
+
+        {{range .Cates}}
+            <h3 id="toc-{{.Id}}">{{.Name}}</h3>
+
+            <p>{{.Intro}}</p>
+
+            <ul>
+            {{range .Posts}}
+                <li><a href="/post/{{.Path}}.html">{{.Title}}</a> <span class="date">({{date .CreateTime  "2006-01-02" }})</span></li>
+            {{end}}
+            </ul>
+        {{end}}
+        </div>
+    </article>{{template "tpl-footer.html" .}}</body>
+<style>
+    article {
+        padding-bottom: 0px;
+    }
+
+    .page-navi {
+        border-top: 1px solid #ddd;
+        border-bottom: 1px solid #fff;
+        line-height: 20px;
+        overflow: hidden;
+        padding: 20px 0;
+        position: relative;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .page-navi .next {
+        float: right;
+    }
+</style>
+</html>

@@ -1,6 +1,8 @@
 package model
 
-import "strconv"
+import (
+	"strconv"
+)
 
 // Cate 分类
 type Cate struct {
@@ -8,6 +10,8 @@ type Cate struct {
 	Name  string `xorm:"not null unique VARCHAR(255)" json:"name"`
 	Pid   int    `xorm:"not null default 0 INT(11)" json:"pid"`
 	Intro string `xorm:"not null  VARCHAR(255)" json:"intro"`
+	Sort  int	 `xorm:"not null default 0 INT(11)" json:"sort"`
+	Posts []Post `xorm:"-"`
 }
 
 // CateIds 通过id返回新闻类别信息集合
@@ -46,7 +50,7 @@ func CateName(nam string) (*Cate, bool) {
 // CateAll 所有分类
 func CateAll() ([]Cate, error) {
 	mods := make([]Cate, 0, 4)
-	err := Db.Asc("id").Find(&mods)
+	err := Db.Asc("sort", "id").Find(&mods)
 	return mods, err
 }
 
@@ -69,7 +73,7 @@ func CateEdit(mod *Cate) bool {
 	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
-	affect, err := sess.ID(mod.Id).Cols("Name", "Intro").Update(mod)
+	affect, err := sess.ID(mod.Id).Cols("Name", "Intro", "Sort").Update(mod)
 	if affect >= 0 && err == nil {
 		sess.Commit()
 		return true
@@ -133,5 +137,13 @@ func CatePostList(cid, pi, ps int, lmt bool) ([]Post, error) {
 			mods[idx].MarkdownContent = ""
 		}
 	}
+	return mods, err
+}
+
+func CatePostAll(cid int) ([]Post, error){
+	mods := make([]Post, 0)
+	sess := Db.NewSession()
+	defer sess.Close()
+	err := sess.Cols("id", "title", "path", "create_time").Where("cate_id = ?", cid).Desc("sort", "create_time").Find(&mods)
 	return mods, err
 }
