@@ -27,13 +27,13 @@ page_max = 30
 # 数据库
 # https://github.com/go-sql-driver/mysql
 # 数据库地址
-db_host = "127.0.0.1"
+db_host = "106.53.88.104"
 # 数据库端口
-db_port = 3306
+db_port = 13306
 # 数据库账号
 db_user = "root"
 # 数据库密码
-db_passwd = "root"
+db_passwd = "liuyang2021"
 # 数据库名称
 db_name = "blog"
 # 数据库参数
@@ -78,11 +78,11 @@ local-path = "static/upload/"
 
 # qiniu configuration (请自行七牛申请对应的 公钥 私钥 bucket �?域名地址)
 qiniu-zone = "ZoneHuadong"
-qiniu-bucket = "qm-plus-img"
-qiniu-img-path = "http://qmplusimg.henrongyi.top"
+qiniu-bucket = "yourBucket"
+qiniu-img-path = "yourImgPath"
 qiniu-use-https = false
-qiniu-access-key = "25j8dYBZ2wuiy0yhwShytjZDTX662b8xiFguwxzZ"
-qiniu-secret-key = "pgdbqEsf7ooZh7W3xokP833h3dZ_VecFXPDeG5JY"
+qiniu-access-key = "yourAccessKey"
+qiniu-secret-key = "yourSecretKey"
 qiniu-use-cdn-domains = false
 
 # aliyun oss configuration
