@@ -27,13 +27,13 @@ page_max = 30
 # 数据库
 # https://github.com/go-sql-driver/mysql
 # 数据库地址
-db_host = "106.53.88.104"
+db_host = "127.0.0.1"
 # 数据库端口
-db_port = 13306
+db_port = 3306
 # 数据库账号
 db_user = "root"
 # 数据库密码
-db_passwd = "liuyang2021"
+db_passwd = "root"
 # 数据库名称
 db_name = "blog"
 # 数据库参数
