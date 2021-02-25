@@ -44,6 +44,25 @@ type appconf struct {
 		XxxAppid   string `toml:"xxx_appid"`
 		Xxx_Secret string `toml:"xxx_secret"`
 	} `toml:"wechat"`
+
+	Oss struct {
+		OssType   string `toml:"oss-type"`
+		LocalPath string `toml:"local-path"`
+
+		QiniuZone          string `toml:"qiniu-zone"`
+		QiniuBucket        string `toml:"qiniu-bucket"`
+		QiniuImgPath       string `toml:"qiniu-img-path"`
+		QiniuUseHTTPS      bool   `toml:"qiniu-use-https"`
+		QiniuAccessKey     string `toml:"qiniu-access-key"`
+		QiniuSecretKey     string `toml:"qiniu-secret-key"`
+		QiniuUseCdnDomains bool   `toml:"qiniu-use-cdn-domains"`
+
+		AliyunOssEndpoint        string `toml:"aliyun-oss-endpoint"`
+		AliyunOssAccessKeyId     string `toml:"aliyun-oss-access-key-id"`
+		AliyunOssAccessKeySecret string `toml:"aliyun-oss-access-key-secret"`
+		AliyunOssBucketName      string `toml:"aliyun-oss-bucket-name"`
+		AliyunOssBucketUrl       string `toml:"aliyun-oss-bucket-url"`
+	}
 }
 
 func (app *appconf) IsProd() bool {

@@ -2,14 +2,10 @@ package appctl
 
 import (
 	"blog/model"
-	"io"
-	"os"
-	"path/filepath"
-	"runtime"
-	"time"
-
+	"blog/oss/upload"
 	"github.com/labstack/echo/v4"
 	"github.com/zxysilent/utils"
+	"runtime"
 )
 
 // Upload doc
@@ -24,25 +20,14 @@ func Upload(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt(`未发现文件,请重试`, err.Error()))
 	}
-	src, err := file.Open()
+
+	oss := upload.NewOss()
+	filePathName, _, err := oss.UploadFile(file)
+
 	if err != nil {
-		return ctx.JSON(utils.ErrIpt(`文件打开失败,请重试`, err.Error()))
-	}
-	defer src.Close()
-	basePath := "static/upload/" + time.Now().Format(utils.FmtyyyyMMdd) + "/"
-	//确保文件夹存在
-	os.MkdirAll(basePath, 0777)
-	fileName := utils.RandStr(16) + filepath.Ext(file.Filename)
-	filePathName := basePath + fileName
-	dst, err := os.Create(filePathName)
-	if err != nil {
-		return ctx.JSON(utils.ErrIpt(`目标文件创建失败,请重试`, err.Error()))
-	}
-	defer dst.Close()
-	if _, err = io.Copy(dst, src); err != nil {
 		return ctx.JSON(utils.ErrIpt(`文件写入失败,请重试`, err.Error()))
 	}
-	return ctx.JSON(utils.Succ(`文件上传成功`, "/"+filePathName))
+	return ctx.JSON(utils.Succ(`文件上传成功`, filePathName))
 }
 
 // Sys 系统信息

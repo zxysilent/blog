@@ -1,4 +1,3 @@
-
 title = "blog"
 intro = "简单内容管理-blog"
 mode = "dev"
@@ -10,17 +9,17 @@ token_key = "token"
 # 过期时间 h
 token_exp = 8
 # 单点登录
-token_sso =false
+token_sso = false
 # 保持在线
 token_keep = false
 # 加密私钥
-token_secret ="secret"
+token_secret = "secret"
 
 # 系统
 # 图片裁剪
 image_cut = false
 image_width = 800
-image_height =600
+image_height = 600
 # 分页
 page_min = 5
 page_max = 30
@@ -47,11 +46,11 @@ orm_idle = 4
 # 推荐cpu核心数*2
 orm_open = 8
 # 显示sql
-orm_show = true 
+orm_show = true
 # 同步表结构
 orm_sync = false
 # 是否使用orm缓存
-orm_cache_use = false 
+orm_cache_use = false
 # orm缓存数量
 orm_cache_size = 1000
 # orm劫持日志输出
@@ -70,3 +69,25 @@ website = "https://github.com/zxysilent"
 # 请同时修改 conf.go
 xxx_appid = "appid"
 xxx_secret = "secret"
+
+[oss]
+# 控制oss选择走本期还是 七牛等其他仓 自行增加其他oss仓可以在 server/utils/upload/upload.go 中 NewOss函数配置
+oss-type = "local"
+# local configuration
+local-path = "static/upload/"
+
+# qiniu configuration (请自行七牛申请对应的 公钥 私钥 bucket �?域名地址)
+qiniu-zone = "ZoneHuadong"
+qiniu-bucket = "qm-plus-img"
+qiniu-img-path = "http://qmplusimg.henrongyi.top"
+qiniu-use-https = false
+qiniu-access-key = "25j8dYBZ2wuiy0yhwShytjZDTX662b8xiFguwxzZ"
+qiniu-secret-key = "pgdbqEsf7ooZh7W3xokP833h3dZ_VecFXPDeG5JY"
+qiniu-use-cdn-domains = false
+
+# aliyun oss configuration
+aliyun-oss-endpoint = "yourEndpoint"
+aliyun-oss-access-key-id = "yourAccessKeyId"
+aliyun-oss-access-key-secret = "yourAccessKeySecret"
+aliyun-oss-bucket-name = "yourBucketName"
+aliyun-oss-bucket-url = "yourBucketUrl"
