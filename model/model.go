@@ -106,6 +106,6 @@ func inOf(goal int, arr []int) bool {
 // Reply 生成api文档使用
 // 代码里未使用，也不要使用
 type Reply struct {
-	Code int    `json:"code"`
-	Msg  string `json:"msg"`
+	Code int    `json:"code" example:"200"`
+	Msg  string `json:"msg" example:"提示信息"`
 }
