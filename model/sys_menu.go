@@ -19,6 +19,11 @@ type Menu struct {
 	Ctime    time.Time `xorm:"DATETIME comment('时间')" json:"ctime"`
 	Children []Menu    `xorm:"-" json:"children"`
 }
+
+func (Menu) TableName() string {
+	return "sys_menu"
+}
+
 type Meta struct {
 	Title string `json:"title"`
 	Show  bool   `json:"show"`
@@ -41,9 +46,6 @@ type Meta struct {
 // 	caseSensitive?: boolean, // 匹配规则是否大小写敏感？(默认值：false)
 // 	pathToRegexpOptions?: Object // 编译正则的选项
 //}
-func (Menu) TableName() string {
-	return "sys_menu"
-}
 
 // MenuTree 菜单导航树
 func MenuTree() ([]Menu, error) {

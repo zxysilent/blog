@@ -40,15 +40,8 @@ func RunApp() {
 	apiRouter(api)                       // 注册分组路由
 	adm := engine.Group("/adm", midAuth) // adm/ 需要登陆才能访问
 	admRouter(adm)                       // 注册分组路由
-	sys := engine.Group("/sys", midAuth) // sys/ 需要登陆才能访问
-	sysRouter(sys)                       // 注册分组路由
 	err := engine.Start(conf.App.Addr)
 	if err != nil {
 		logs.Fatal("run error :", err.Error())
 	}
-}
-
-// sysRouter RBAC权限
-func sysRouter(sys *echo.Group) {
-
 }

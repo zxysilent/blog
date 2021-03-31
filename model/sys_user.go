@@ -16,7 +16,7 @@ type SysUser struct {
 	Ecount int       `xorm:"default 0 INT(11)" json:"ecount"`  //错误次数
 	Ltime  time.Time `xorm:"DATETIME" json:"ltime"`            //上次登录时间
 	Ctime  time.Time `xorm:"DATETIME" json:"ctime"`            //创建时间
-	Auths  []Auth    `xorm:"-" json:"auths"`                   //权限集合
+	Auths  []Api     `xorm:"-" json:"auths"`                   //权限集合
 	Menus  []Menu    `xorm:"-" json:"menus"`                   //菜单导航
 }
 

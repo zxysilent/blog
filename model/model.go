@@ -57,7 +57,9 @@ func Init() {
 			new(Post),
 			new(PostTag),
 			new(Opts),
-			// new(Role),
+			new(Role),
+			// new(Api),
+			// new(RoleApi),
 			new(Menu),
 			new(RoleMenu),
 		)

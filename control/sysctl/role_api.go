@@ -8,43 +8,43 @@ import (
 	"github.com/zxysilent/utils"
 )
 
-// AuthGet doc
-// @Tags sysauth
-// @Summary 通过id获取单条认证信息
+// RoleApiGet doc
+// @Tags sysroleauth
+// @Summary 通过id获取单条角色接口信息
 // @Param id path int true "pk id" default(1)
-// @Router /sys/auth/get/{id} [get]
-func AuthGet(ctx echo.Context) error {
+// @Router /sys/roleauth/get/{id} [get]
+func RoleApiGet(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt("数据输入错误", err.Error()))
 	}
-	mod, has := model.AuthGet(id)
+	mod, has := model.RoleApiGet(id)
 	if !has {
-		return ctx.JSON(utils.ErrOpt("未查询到认证信息"))
+		return ctx.JSON(utils.ErrOpt("未查询到角色接口信息"))
 	}
 	return ctx.JSON(utils.Succ("succ", mod))
 }
 
-// AuthAll doc
-// @Tags sysauth
-// @Summary 获取所有认证信息
-// @Router /sys/auth/all [get]
-func AuthAll(ctx echo.Context) error {
-	mods, err := model.AuthAll()
+// RoleApiAll doc
+// @Tags sysroleauth
+// @Summary 获取所有角色接口信息
+// @Router /sys/roleauth/all [get]
+func RoleApiAll(ctx echo.Context) error {
+	mods, err := model.RoleApiAll()
 	if err != nil {
-		return ctx.JSON(utils.ErrOpt("未查询到认证信息", err.Error()))
+		return ctx.JSON(utils.ErrOpt("未查询到角色接口信息", err.Error()))
 	}
 	return ctx.JSON(utils.Succ("succ", mods))
 }
 
-// AuthPage doc
-// @Tags sysauth
-// @Summary 获取认证分页信息
+// RoleApiPage doc
+// @Tags sysroleauth
+// @Summary 获取角色接口分页信息
 // @Param cid path int true "分类id" default(1)
 // @Param pi query int true "分页数" default(1)
 // @Param ps query int true "每页条数[5,20]" default(5)
-// @Router /sys/auth/page/{cid} [get]
-func AuthPage(ctx echo.Context) error {
+// @Router /sys/roleauth/page/{cid} [get]
+func RoleApiPage(ctx echo.Context) error {
 	// cid, err := strconv.Atoi(ctx.Param("cid"))
 	// if err != nil {
 	//  return ctx.JSON(utils.ErrIpt("数据输入错误", err.Error()))
@@ -57,11 +57,11 @@ func AuthPage(ctx echo.Context) error {
 	if ipt.Ps > 20 || ipt.Ps < 5 {
 		return ctx.JSON(utils.ErrIpt("分页大小输入错误", ipt.Ps))
 	}
-	count := model.AuthCount()
+	count := model.RoleApiCount()
 	if count < 1 {
 		return ctx.JSON(utils.ErrOpt("未查询到数据", " count < 1"))
 	}
-	mods, err := model.AuthPage(ipt.Pi, ipt.Ps)
+	mods, err := model.RoleApiPage(ipt.Pi, ipt.Ps)
 	if err != nil {
 		return ctx.JSON(utils.ErrOpt("查询数据错误", err.Error()))
 	}
@@ -71,56 +71,56 @@ func AuthPage(ctx echo.Context) error {
 	return ctx.JSON(utils.Page("succ", mods, int(count)))
 }
 
-// AuthAdd doc
-// @Tags sysauth
-// @Summary 添加认证信息
+// RoleApiAdd doc
+// @Tags sysroleauth
+// @Summary 添加角色接口信息
 // @Param token query string true "hmt" default(token)
-// @Router /sys/auth/add [post]
-func AuthAdd(ctx echo.Context) error {
-	ipt := &model.Auth{}
+// @Router /sys/roleauth/add [post]
+func RoleApiAdd(ctx echo.Context) error {
+	ipt := &model.RoleApi{}
 	err := ctx.Bind(ipt)
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
 	// ipt.Utime = time.Now()
-	err = model.AuthAdd(ipt)
+	err = model.RoleApiAdd(ipt)
 	if err != nil {
 		return ctx.JSON(utils.Fail("添加失败", err.Error()))
 	}
 	return ctx.JSON(utils.Succ("succ"))
 }
 
-// AuthEdit doc
-// @Tags sysauth
-// @Summary 修改认证信息
+// RoleApiEdit doc
+// @Tags sysroleauth
+// @Summary 修改角色接口信息
 // @Param token query string true "hmt" default(token)
-// @Router /sys/auth/edit [post]
-func AuthEdit(ctx echo.Context) error {
-	ipt := &model.Auth{}
+// @Router /sys/roleauth/edit [post]
+func RoleApiEdit(ctx echo.Context) error {
+	ipt := &model.RoleApi{}
 	err := ctx.Bind(ipt)
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
 	// ipt.Utime = time.Now()
-	err = model.AuthEdit(ipt)
+	err = model.RoleApiEdit(ipt)
 	if err != nil {
 		return ctx.JSON(utils.Fail("修改失败", err.Error()))
 	}
 	return ctx.JSON(utils.Succ("succ"))
 }
 
-// AuthDrop doc
-// @Tags sysauth
-// @Summary 通过id删除单条认证信息
+// RoleApiDrop doc
+// @Tags sysroleauth
+// @Summary 通过id删除单条角色接口信息
 // @Param id path int true "pk id" default(1)
 // @Param token query string true "hmt" default(token)
-// @Router /sys/auth/drop/{id} [get]
-func AuthDrop(ctx echo.Context) error {
+// @Router /sys/roleauth/drop/{id} [get]
+func RoleApiDrop(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt("数据输入错误", err.Error()))
 	}
-	err = model.AuthDrop(id)
+	err = model.RoleApiDrop(id)
 	if err != nil {
 		return ctx.JSON(utils.ErrOpt("删除失败", err.Error()))
 	}

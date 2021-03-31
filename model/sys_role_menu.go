@@ -4,18 +4,14 @@ import "time"
 
 // RoleMenu 角色菜单导航
 type RoleMenu struct {
-	Id       int        `xorm:"pk autoincr INT(11)"` //主键
-	RoleId   int        `xorm:"default 0 INT(11)"`   //RoleId
-	MenuId   int        `xorm:"default 0 INT(11)"`   //MenuId
-	Add      bool       `xorm:"BOOL default false"`  //添加
-	Edit     bool       `xorm:"BOOL default false"`  //编辑
-	Drop     bool       `xorm:"BOOL default false"`  //删除
-	Fetch    bool       `xorm:"BOOL default false"`  //查询
-	Export   bool       `xorm:"BOOL default false"`  //导出
-	Import   bool       `xorm:"BOOL default false"`  //导入
-	Menu     Menu       `xorm:"-"`
-	Children []RoleMenu `xorm:"-"` //子菜单导航
-	Ctime    time.Time  `xorm:"DATETIME" json:"ctime"`
+	Id     int       `xorm:"pk autoincr INT(11)"` //主键
+	RoleId int       `xorm:"default 0 INT(11)"`   //RoleId
+	MenuId int       `xorm:"default 0 INT(11)"`   //MenuId
+	Ctime  time.Time `xorm:"DATETIME" json:"ctime"`
+}
+
+func (RoleMenu) TableName() string {
+	return "sys_role_menu"
 }
 
 // RoleMenuGet 单条角色菜单导航信息

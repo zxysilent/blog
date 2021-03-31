@@ -2,15 +2,15 @@
 Navicat MariaDB Data Transfer
 
 Source Server         : 127.0.0.1
-Source Server Version : 100412
+Source Server Version : 100505
 Source Host           : 127.0.0.1:3306
 Source Database       : blog
 
 Target Server Type    : MariaDB
-Target Server Version : 100412
+Target Server Version : 100505
 File Encoding         : 65001
 
-Date: 2021-03-31 20:27:05
+Date: 2021-03-31 23:58:18
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -174,28 +174,6 @@ CREATE TABLE `post_tag` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for role_menu
--- ----------------------------
-DROP TABLE IF EXISTS `role_menu`;
-CREATE TABLE `role_menu` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `role_id` int(11) DEFAULT 0,
-  `menu_id` int(11) DEFAULT 0,
-  `add` tinyint(1) DEFAULT 0,
-  `edit` tinyint(1) DEFAULT 0,
-  `drop` tinyint(1) DEFAULT 0,
-  `fetch` tinyint(1) DEFAULT 0,
-  `export` tinyint(1) DEFAULT 0,
-  `import` tinyint(1) DEFAULT 0,
-  `ctime` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of role_menu
--- ----------------------------
-
--- ----------------------------
 -- Table structure for sys_menu
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_menu`;
@@ -212,7 +190,7 @@ CREATE TABLE `sys_menu` (
   `sort` int(11) DEFAULT 1000 COMMENT '排序',
   `ctime` datetime DEFAULT NULL COMMENT '时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -240,6 +218,10 @@ INSERT INTO `sys_menu` VALUES ('20', '17', '统计设置', 'setting-analytic', '
 INSERT INTO `sys_menu` VALUES ('21', '17', '自 定 义', 'setting-custom', '/setting/custom', '', 'ios-code-working', '1', 'views/setting/custom.vue', '1000', '2021-03-31 20:09:05');
 INSERT INTO `sys_menu` VALUES ('22', '0', '个人中心', 'auth', '/auth', '', 'ios-contact-outline', '1', 'layout', '1000', '2021-03-31 20:09:08');
 INSERT INTO `sys_menu` VALUES ('23', '22', '个人中心', 'auth-self', '/auth/self', '', 'ios-contact-outline', '1', 'views/user/self.vue', '1000', '2021-03-31 20:09:11');
+INSERT INTO `sys_menu` VALUES ('25', '0', '菜单管理', 'menu', '/menu', '', 'ios-pricetags-outline', '1', 'layout', '1000', '2021-03-31 23:40:30');
+INSERT INTO `sys_menu` VALUES ('26', '25', '菜单列表', 'menu-list', '/menu/list', '', 'ios-list-box-outline', '1', 'views/menu/list.vue', '1000', '2021-03-31 23:40:33');
+INSERT INTO `sys_menu` VALUES ('27', '25', '添加菜单', 'menu-add', '/menu/add', '', 'ios-add-circle-outline', '1', 'views/menu/add.vue', '1000', '2021-03-31 23:40:36');
+INSERT INTO `sys_menu` VALUES ('28', '25', '编辑菜单', 'menu-edit', '/menu/edit', '', '', '0', 'views/menu/edit.vue', '1000', '2021-03-31 23:40:39');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -249,14 +231,16 @@ CREATE TABLE `sys_role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `intro` varchar(255) DEFAULT NULL,
+  `inner` tinyint(4) DEFAULT 0 COMMENT '内部禁止删除',
   `ctime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
-INSERT INTO `sys_role` VALUES ('1', '管理员', '内置管理员拥有所有权限', '2020-12-30 14:59:13');
+INSERT INTO `sys_role` VALUES ('1', '超级管理员', '内置管理员拥有所有权限', '1', '2020-12-30 14:59:13');
+INSERT INTO `sys_role` VALUES ('2', '管理员', '管理员', '1', '2021-03-31 23:29:21');
 
 -- ----------------------------
 -- Table structure for sys_role_menu
@@ -266,12 +250,6 @@ CREATE TABLE `sys_role_menu` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `role_id` int(11) DEFAULT 0,
   `menu_id` int(11) DEFAULT 0,
-  `add` tinyint(1) DEFAULT 0,
-  `edit` tinyint(1) DEFAULT 0,
-  `drop` tinyint(1) DEFAULT 0,
-  `fetch` tinyint(1) DEFAULT 0,
-  `export` tinyint(1) DEFAULT 0,
-  `import` tinyint(1) DEFAULT 0,
   `ctime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -330,6 +308,7 @@ CREATE TABLE `user` (
   `ecount` int(11) DEFAULT 0,
   `ltime` datetime DEFAULT NULL,
   `ctime` datetime DEFAULT NULL,
+  `role1` int(11) DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UQE_user_num` (`num`),
   UNIQUE KEY `UQE_user_email` (`email`)
@@ -338,4 +317,4 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'zxysilent', 'zxysilent', '3b861abeaa25fba9d03898324463f7', '1074791424', 'zxysilent@foxmail.com', '', '127.0.0.1', '3', '2021-03-31 19:28:28', '2017-04-05 23:28:35');
+INSERT INTO `user` VALUES ('1', 'zxysilent', 'zxysilent', '3b861abeaa25fba9d03898324463f7', '1074791424', 'zxysilent@foxmail.com', '', '127.0.0.1', '0', '2021-03-31 23:45:35', '2017-04-05 23:28:35', '1074791424');

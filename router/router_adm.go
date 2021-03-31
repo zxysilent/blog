@@ -30,20 +30,20 @@ func admRouter(adm *echo.Group) {
 	// adm.GET("/role/drop/:id", sysctl.RoleDrop)          //角色分页
 	// adm.POST("/role/add", sysctl.RoleAdd)               //添加角色
 	// adm.POST("/role/edit", sysctl.RoleEdit)             //编辑角色
-	// adm.GET("/auth/page", sysctl.AuthPage)              //认证分页
-	adm.GET("/auth/all", sysctl.AuthAll)                //所有认证
-	adm.GET("/auth/drop/:id", sysctl.AuthDrop)          //认证分页
-	adm.POST("/auth/add", sysctl.AuthAdd)               //添加认证
-	adm.POST("/auth/edit", sysctl.AuthEdit)             //编辑认证
+	adm.GET("/api/page", sysctl.ApiPage)                //接口分页
+	adm.GET("/api/all", sysctl.ApiAll)                  //所有接口
+	adm.GET("/api/drop/:id", sysctl.ApiDrop)            //接口分页
+	adm.POST("/api/add", sysctl.ApiAdd)                 //添加接口
+	adm.POST("/api/edit", sysctl.ApiEdit)               //编辑接口
 	adm.GET("/menu/all", sysctl.MenuAll)                //所有菜单导航
 	adm.GET("/menu/drop/:id", sysctl.MenuDrop)          //菜单导航分页
 	adm.POST("/menu/add", sysctl.MenuAdd)               //添加菜单导航
 	adm.POST("/menu/edit", sysctl.MenuEdit)             //编辑菜单导航
-	adm.GET("/role/auth/page", sysctl.RoleAuthPage)     //角色认证分页
-	adm.GET("/role/auth/all", sysctl.RoleAuthAll)       //所有角色认证
-	adm.GET("/role/auth/drop/:id", sysctl.RoleAuthDrop) //角色认证分页
-	adm.POST("/role/auth/add", sysctl.RoleAuthAdd)      //添加角色认证
-	adm.POST("/role/auth/edit", sysctl.RoleAuthEdit)    //编辑角色认证
+	adm.GET("/role/api/page", sysctl.RoleApiPage)       //角色接口分页
+	adm.GET("/role/api/all", sysctl.RoleApiAll)         //所有角色接口
+	adm.GET("/role/api/drop/:id", sysctl.RoleApiDrop)   //角色接口分页
+	adm.POST("/role/api/add", sysctl.RoleApiAdd)        //添加角色接口
+	adm.POST("/role/api/edit", sysctl.RoleApiEdit)      //编辑角色接口
 	adm.GET("/role/menu/page", sysctl.RoleMenuPage)     //角色菜单导航分页
 	adm.GET("/role/menu/all", sysctl.RoleMenuAll)       //所有角色菜单导航
 	adm.GET("/role/menu/drop/:id", sysctl.RoleMenuDrop) //角色菜单导航分页

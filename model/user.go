@@ -13,7 +13,7 @@ type User struct {
 	Name   string    `xorm:"VARCHAR(255)" json:"name"`
 	Num    string    `xorm:"unique VARCHAR(255)" json:"num"`
 	Pass   string    `xorm:"VARCHAR(255)" json:"pass"`
-	Role   Role      `xorm:"default 0 INT(11)" json:"role"`
+	Role1  Role1     `xorm:"default 0 INT(11)" json:"role"`
 	Email  string    `xorm:"unique VARCHAR(255)" json:"email"`
 	Phone  string    `xorm:"VARCHAR(255)" json:"phone"`
 	Ip     string    `xorm:"VARCHAR(32)" json:"ip"`
@@ -22,10 +22,10 @@ type User struct {
 	Ctime  time.Time `xorm:"DATETIME" json:"ctime"`
 }
 
-// Role 权限角色
-type Role uint32
+// Role1 权限角色
+type Role1 uint32
 
-// Role 30-0
+// Role1 30-0
 // 30-21 角色
 // 20-0  权限
 const (
@@ -34,8 +34,8 @@ const (
 	RBas uint32 = 10 //base 		基本权限
 )
 
-//Role 返回指定位的权限
-func (rl Role) Role(r uint32) bool {
+//Role1 返回指定位的权限
+func (rl Role1) Role1(r uint32) bool {
 	if rl&(1<<r)>>r == 1 {
 		return true
 	}
@@ -43,13 +43,13 @@ func (rl Role) Role(r uint32) bool {
 }
 
 // UserBaseRole 返回基本权限
-func UserBaseRole() Role {
+func UserBaseRole() Role1 {
 	return (1 << RBas) + (1 << RAtv)
 }
 
 //IsAtv 是否可用
-func (rl Role) IsAtv() bool {
-	return rl.Role(RAtv)
+func (rl Role1) IsAtv() bool {
+	return rl.Role1(RAtv)
 }
 
 //UserByNum 通过账号获取用户信息
@@ -101,7 +101,7 @@ func UserAdd(mod *User) bool {
 }
 
 // UserPage 通过用户类型和分页信息返回用户信息
-func UserPage(rl int, lmtRl Role, pi int, ps int) ([]User, error) {
+func UserPage(rl int, lmtRl Role1, pi int, ps int) ([]User, error) {
 	mods := make([]User, 0, ps)
 	sess := Db.NewSession()
 	defer sess.Close()
@@ -112,7 +112,7 @@ func UserPage(rl int, lmtRl Role, pi int, ps int) ([]User, error) {
 }
 
 // UserCount 通过用户类型返回用户信息总数
-func UserCount(rl int, lmtRl Role) int {
+func UserCount(rl int, lmtRl Role1) int {
 	mod := &User{}
 	sess := Db.NewSession()
 	defer sess.Close()
@@ -123,19 +123,19 @@ func UserCount(rl int, lmtRl Role) int {
 }
 
 //UserChgatv 更新用户状态
-func UserChgatv(id int, rl ...Role) bool {
+func UserChgatv(id int, rl ...Role1) bool {
 	mod := new(User)
 	if has, _ := Db.ID(id).Get(mod); !has {
 		return false
 	}
-	//mod.Role = mod.Role ^ (1 << RAtv)
+	//mod.Role1 = mod.Role1 ^ (1 << RAtv)
 	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	if len(rl) > 0 {
 		sess.Where("role < ?", rl[0])
 	}
-	if _, err := sess.ID(id).Cols("Role").Update(mod); err == nil {
+	if _, err := sess.ID(id).Cols("Role1").Update(mod); err == nil {
 		sess.Commit()
 		return true
 	}
@@ -144,7 +144,7 @@ func UserChgatv(id int, rl ...Role) bool {
 }
 
 //UserPass 修改密码
-func UserPass(id int, pass string, rl ...Role) bool {
+func UserPass(id int, pass string, rl ...Role1) bool {
 	mod := &User{Pass: pass}
 	sess := Db.NewSession()
 	defer sess.Close()
@@ -163,7 +163,7 @@ func UserPass(id int, pass string, rl ...Role) bool {
 }
 
 //UserEdit 修改用户信息 不包括密码
-func UserEdit(mod *User, rl Role, cols ...string) bool {
+func UserEdit(mod *User, rl Role1, cols ...string) bool {
 	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
@@ -179,7 +179,7 @@ func UserEdit(mod *User, rl Role, cols ...string) bool {
 }
 
 // UserDrop 删除用户信息
-func UserDrop(id int, rl Role) bool {
+func UserDrop(id int, rl Role1) bool {
 	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
