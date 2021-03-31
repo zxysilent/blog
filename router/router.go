@@ -3,7 +3,6 @@ package router
 import (
 	"blog/conf"
 	"blog/control/appctl"
-	"blog/control/sysctl"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -51,28 +50,5 @@ func RunApp() {
 
 // sysRouter RBAC权限
 func sysRouter(sys *echo.Group) {
-	sys.GET("/role/page", sysctl.SysRolePage)              //"角色分页"
-	sys.GET("/role/all", sysctl.SysRoleAll)                //"所有角色"
-	sys.GET("/role/drop/:id", sysctl.SysRoleDrop)          //"角色分页"
-	sys.POST("/role/add", sysctl.SysRoleAdd)               //"添加角色"
-	sys.POST("/role/edit", sysctl.SysRoleEdit)             //"编辑角色"
-	sys.GET("/auth/page", sysctl.SysAuthPage)              //"认证分页"
-	sys.GET("/auth/all", sysctl.SysAuthAll)                //"所有认证"
-	sys.GET("/auth/drop/:id", sysctl.SysAuthDrop)          //"认证分页"
-	sys.POST("/auth/add", sysctl.SysAuthAdd)               //"添加认证"
-	sys.POST("/auth/edit", sysctl.SysAuthEdit)             //"编辑认证"
-	sys.GET("/menu/all", sysctl.SysMenuAll)                //"所有菜单导航"
-	sys.GET("/menu/drop/:id", sysctl.SysMenuDrop)          //"菜单导航分页"
-	sys.POST("/menu/add", sysctl.SysMenuAdd)               //"添加菜单导航"
-	sys.POST("/menu/edit", sysctl.SysMenuEdit)             //"编辑菜单导航"
-	sys.GET("/role/auth/page", sysctl.SysRoleAuthPage)     //"角色认证分页"
-	sys.GET("/role/auth/all", sysctl.SysRoleAuthAll)       //"所有角色认证"
-	sys.GET("/role/auth/drop/:id", sysctl.SysRoleAuthDrop) //"角色认证分页"
-	sys.POST("/role/auth/add", sysctl.SysRoleAuthAdd)      //"添加角色认证"
-	sys.POST("/role/auth/edit", sysctl.SysRoleAuthEdit)    //"编辑角色认证"
-	sys.GET("/role/menu/page", sysctl.SysRoleMenuPage)     //"角色菜单导航分页"
-	sys.GET("/role/menu/all", sysctl.SysRoleMenuAll)       //"所有角色菜单导航"
-	sys.GET("/role/menu/drop/:id", sysctl.SysRoleMenuDrop) //"角色菜单导航分页"
-	sys.POST("/role/menu/add", sysctl.SysRoleMenuAdd)      //"添加角色菜单导航"
-	sys.POST("/role/menu/edit", sysctl.SysRoleMenuEdit)    //"编辑角色菜单导航"
+
 }

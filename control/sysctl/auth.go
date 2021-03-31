@@ -8,43 +8,43 @@ import (
 	"github.com/zxysilent/utils"
 )
 
-// SysAuthGet doc
+// AuthGet doc
 // @Tags sysauth
 // @Summary 通过id获取单条认证信息
 // @Param id path int true "pk id" default(1)
 // @Router /sys/auth/get/{id} [get]
-func SysAuthGet(ctx echo.Context) error {
+func AuthGet(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt("数据输入错误", err.Error()))
 	}
-	mod, has := model.SysAuthGet(id)
+	mod, has := model.AuthGet(id)
 	if !has {
 		return ctx.JSON(utils.ErrOpt("未查询到认证信息"))
 	}
 	return ctx.JSON(utils.Succ("succ", mod))
 }
 
-// SysAuthAll doc
+// AuthAll doc
 // @Tags sysauth
 // @Summary 获取所有认证信息
 // @Router /sys/auth/all [get]
-func SysAuthAll(ctx echo.Context) error {
-	mods, err := model.SysAuthAll()
+func AuthAll(ctx echo.Context) error {
+	mods, err := model.AuthAll()
 	if err != nil {
 		return ctx.JSON(utils.ErrOpt("未查询到认证信息", err.Error()))
 	}
 	return ctx.JSON(utils.Succ("succ", mods))
 }
 
-// SysAuthPage doc
+// AuthPage doc
 // @Tags sysauth
 // @Summary 获取认证分页信息
 // @Param cid path int true "分类id" default(1)
 // @Param pi query int true "分页数" default(1)
 // @Param ps query int true "每页条数[5,20]" default(5)
 // @Router /sys/auth/page/{cid} [get]
-func SysAuthPage(ctx echo.Context) error {
+func AuthPage(ctx echo.Context) error {
 	// cid, err := strconv.Atoi(ctx.Param("cid"))
 	// if err != nil {
 	//  return ctx.JSON(utils.ErrIpt("数据输入错误", err.Error()))
@@ -57,11 +57,11 @@ func SysAuthPage(ctx echo.Context) error {
 	if ipt.Ps > 20 || ipt.Ps < 5 {
 		return ctx.JSON(utils.ErrIpt("分页大小输入错误", ipt.Ps))
 	}
-	count := model.SysAuthCount()
+	count := model.AuthCount()
 	if count < 1 {
 		return ctx.JSON(utils.ErrOpt("未查询到数据", " count < 1"))
 	}
-	mods, err := model.SysAuthPage(ipt.Pi, ipt.Ps)
+	mods, err := model.AuthPage(ipt.Pi, ipt.Ps)
 	if err != nil {
 		return ctx.JSON(utils.ErrOpt("查询数据错误", err.Error()))
 	}
@@ -71,56 +71,56 @@ func SysAuthPage(ctx echo.Context) error {
 	return ctx.JSON(utils.Page("succ", mods, int(count)))
 }
 
-// SysAuthAdd doc
+// AuthAdd doc
 // @Tags sysauth
 // @Summary 添加认证信息
 // @Param token query string true "hmt" default(token)
 // @Router /sys/auth/add [post]
-func SysAuthAdd(ctx echo.Context) error {
-	ipt := &model.SysAuth{}
+func AuthAdd(ctx echo.Context) error {
+	ipt := &model.Auth{}
 	err := ctx.Bind(ipt)
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
 	// ipt.Utime = time.Now()
-	err = model.SysAuthAdd(ipt)
+	err = model.AuthAdd(ipt)
 	if err != nil {
 		return ctx.JSON(utils.Fail("添加失败", err.Error()))
 	}
 	return ctx.JSON(utils.Succ("succ"))
 }
 
-// SysAuthEdit doc
+// AuthEdit doc
 // @Tags sysauth
 // @Summary 修改认证信息
 // @Param token query string true "hmt" default(token)
 // @Router /sys/auth/edit [post]
-func SysAuthEdit(ctx echo.Context) error {
-	ipt := &model.SysAuth{}
+func AuthEdit(ctx echo.Context) error {
+	ipt := &model.Auth{}
 	err := ctx.Bind(ipt)
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
 	// ipt.Utime = time.Now()
-	err = model.SysAuthEdit(ipt)
+	err = model.AuthEdit(ipt)
 	if err != nil {
 		return ctx.JSON(utils.Fail("修改失败", err.Error()))
 	}
 	return ctx.JSON(utils.Succ("succ"))
 }
 
-// SysAuthDrop doc
+// AuthDrop doc
 // @Tags sysauth
 // @Summary 通过id删除单条认证信息
 // @Param id path int true "pk id" default(1)
 // @Param token query string true "hmt" default(token)
 // @Router /sys/auth/drop/{id} [get]
-func SysAuthDrop(ctx echo.Context) error {
+func AuthDrop(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt("数据输入错误", err.Error()))
 	}
-	err = model.SysAuthDrop(id)
+	err = model.AuthDrop(id)
 	if err != nil {
 		return ctx.JSON(utils.ErrOpt("删除失败", err.Error()))
 	}

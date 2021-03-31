@@ -11,11 +11,12 @@
 					<div class="header-menu">
 						<Tooltip content="前台主页" placement="bottom">
 							<a href="/" target="_blank">
-								<Icon type="md-paper-plane" size="20" /></a>
+								<Icon type="md-paper-plane" size="20" />
+							</a>
 						</Tooltip>
 						<Divider type="vertical" />
 						<Tooltip content="个人中心" placement="bottom">
-							<router-link to="/self" tag="span">
+							<router-link to="/auth/self" tag="span">
 								<Icon type="ios-person" size="20" />
 							</router-link>
 						</Tooltip>
@@ -26,7 +27,7 @@
 					</div>
 				</div>
 				<Menu ref="menu" :active-name="$route.name" :open-names="$route.name.split('-')" theme="dark" width="auto" accordion>
-					<MenuItem name="home" to="/home">
+					<!-- <MenuItem name="home" to="/home">
 					<Icon type="ios-home-outline" /> 管理主页</MenuItem>
 					<Submenu name="post">
 						<template slot="title">
@@ -68,7 +69,7 @@
 						<MenuItem name="tag-add" to="/tag/add">
 						<Icon type="ios-add-circle-outline" />添加标签</MenuItem>
 					</Submenu>
-                    <Submenu name="sysctl">
+					<Submenu name="sysctl">
 						<template slot="title">
 							<Icon type="ios-switch-outline" />
 							权限管理
@@ -78,7 +79,7 @@
 						<MenuItem name="sysctl-add" to="/tag/add">
 						<Icon type="ios-add-circle-outline" />授权管理</MenuItem>
 					</Submenu>
-					<Submenu name="setting">
+                    <Submenu name="setting">
 						<template slot="title">
 							<Icon type="ios-cog-outline" />
 							系统设置
@@ -91,7 +92,23 @@
 						<Icon type="ios-pulse" /> 统计设置</MenuItem>
 						<MenuItem name="setting-custom" to="/setting/custom">
 						<Icon type="ios-code-working" /> 自 定 义</MenuItem>
-					</Submenu>
+					</Submenu>-->
+					<template v-for="item in getMenus">
+						<Submenu v-if="item.children" :name="item.name" :key="item.name">
+							<template slot="title">
+								<Icon :type="item.icon"></Icon>
+								{{item.title}}
+							</template>
+							<MenuItem :name="itm.name" v-for="itm in item.children" v-if="itm.show" :to="itm.path" :key="itm.name">
+							<Icon :type="itm.icon"></Icon>{{itm.title}}
+							</MenuItem>
+						</Submenu>
+						<MenuItem v-else-if="item.show" :name="item.name" :to="item.path" :key="item.name">
+						<Icon :type="item.icon"></Icon>
+						{{item.title}}
+						</MenuItem>
+					</template>
+
 				</Menu>
 			</div>
 		</Sider>
@@ -104,6 +121,7 @@
 </template>
 <script>
 import Utils from "@/utils.js";
+import { mapGetters, mapMutations } from "vuex";
 import { admAuth } from "@/api/auth";
 export default {
 	data() {
@@ -116,14 +134,18 @@ export default {
 		// cachePage() {
 		// 	return this.$store.state.app.cachePage;
 		// }
+
+		// 使用对象展开运算符将 getter 混入 computed 对象中
+		...mapGetters(["getMenus"])
 	},
 	methods: {
 		init() {
-			admAuth().then(resp => {
+			admAuth().then((resp) => {
 				if (resp.code == 200) {
 					this.user = resp.data;
 				}
 			});
+			console.log(this.getMenus);
 		},
 		logout() {
 			// this.$store.commit("logout", this);

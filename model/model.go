@@ -50,7 +50,17 @@ func Init() {
 		db.SetDefaultCacher(cacher)
 	}
 	if conf.App.OrmSync {
-		err := db.Sync2(new(User), new(Cate), new(Tag), new(Post), new(PostTag), new(Opts), new(SysAuth), new(SysRoleAuth), new(SysRole))
+		err := db.Sync2(
+			new(User),
+			new(Cate),
+			new(Tag),
+			new(Post),
+			new(PostTag),
+			new(Opts),
+			// new(Role),
+			new(Menu),
+			new(RoleMenu),
+		)
 		if err != nil {
 			logs.Fatal("数据库 sync:", err.Error())
 		}
