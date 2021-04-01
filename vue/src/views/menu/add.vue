@@ -6,18 +6,39 @@
 		</p>
 		<div style="max-width:520px">
 			<Form ref="dataForm" :model="dataForm" :label-width="100" label-position="right" :rules="dataRules">
-				<Alert type="warning" closable>保存之后,无法修改</Alert>
+				<!-- <Alert type="warning" closable>保存之后,无法修改</Alert> -->
 				<FormItem label="所属菜单：" prop="pid">
 					<Select v-model="dataForm.pid">
 						<template v-for="item in menuAll">
-							<Option v-if="item.pid==0" style="white-space: pre;" :value="item.id" :key="item.id">{{ item.name+item.title }}</Option>
+							<Option v-if="item.pid==0" style="white-space: pre;" :value="item.id" :key="item.id">{{ item.name+" "+item.title }}</Option>
 						</template>
 					</Select>
+				</FormItem>
+
+				<FormItem label="菜单标题：" prop="title">
+					<Input v-model="dataForm.title"></Input>
 				</FormItem>
 				<FormItem label="菜单名称：" prop="name">
 					<Input v-model="dataForm.name"></Input>
 				</FormItem>
-				<FormItem label="跳转链接：" prop="url">
+				<FormItem label="菜单路由：" prop="ptah">
+					<Input v-model="dataForm.ptah"></Input>
+				</FormItem>
+				<FormItem label="菜单路由：" prop="ptah">
+					<Input v-model="dataForm.ptah"></Input>
+				</FormItem>
+				<FormItem label="菜单图标：">
+					<Select v-model="dataForm.icon" filterable>
+						<Icon :type="dataForm.icon" slot="prefix" size="22" />
+						<Option v-for="item in icons" :value="item" :label="item" :key="item.id">
+							<span>
+								<Icon :type="item" />
+							</span>
+							<span style="margin-left:5px;color:#ccc">{{item}}</span>
+						</Option>
+					</Select>
+				</FormItem>
+				<!-- <FormItem label="跳转链接：" prop="url">
 					<Input v-model="dataForm.url">
 					<Tooltip slot="append" placement="top">
 						<Button>说明</Button>
@@ -28,7 +49,7 @@
 						</div>
 					</Tooltip>
 					</Input>
-				</FormItem>
+				</FormItem> -->
 				<Row>
 					<Col span="8">
 					<FormItem :label-width="100" label="是否使用：" prop="use" title="是否允许添加新闻">
@@ -50,17 +71,8 @@
 					</FormItem>
 					</Col>
 				</Row>
-				<FormItem label="首页模板：" prop="itpl">
-					<Input v-model="dataForm.itpl"></Input>
-				</FormItem>
-				<FormItem label="列表模板：" prop="ltpl">
-					<Input v-model="dataForm.ltpl"></Input>
-				</FormItem>
-				<FormItem label="详细模板：" prop="dtpl">
-					<Input v-model="dataForm.dtpl"></Input>
-				</FormItem>
-				<Alert type="warning" closable>图片操作完成请点击 确认上传</Alert>
-				<FormItem label="封面图片：">
+				<FormItem label="菜单组件：" prop="comp">
+					<Input v-model="dataForm.comp"></Input>
 				</FormItem>
 				<FormItem>
 					<Button type="warning" :loading="loading" @click="submitAdd">提交保存</Button>
@@ -72,10 +84,11 @@
 </template>
 <script>
 import { apiMenuTree, admMenuAdd } from "@/api/menu";
-import { apiUploadImage } from "@/api/fetch";
+import { icons } from "@/utils/icons";
 export default {
 	data() {
 		return {
+			icons: icons,
 			menuAll: [],
 			dataForm: {
 				level: 1,
@@ -85,6 +98,7 @@ export default {
 				use: true,
 				show: true,
 				sort: 1000,
+				icon: "",
 				cover: "",
 				itpl: "subidx.html",
 				ltpl: "list.sml.html",

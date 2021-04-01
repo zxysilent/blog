@@ -11,7 +11,7 @@ type Menu struct {
 	Title    string    `xorm:"VARCHAR(255) comment('菜单')" json:"title"`
 	Name     string    `xorm:"VARCHAR(255) comment('名称')" json:"name"`
 	Path     string    `xorm:"VARCHAR(255) comment('路径')" json:"path"`
-	Intro    string    `xorm:"VARCHAR(255) comment('介绍')" json:"intro"`
+	Use      bool      `xorm:"TINYINT(4) DEFAULT 1 comment('是否使用')" json:"use"`
 	Icon     string    `xorm:"VARCHAR(255) comment('菜单图标')" json:"icon"`
 	Show     bool      `xorm:"TINYINT(4) DEFAULT 1 comment('导航显示')" json:"show"`
 	Comp     string    `xorm:"VARCHAR(255) comment('vue文件路径Component')" json:"comp"`
