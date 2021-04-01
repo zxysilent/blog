@@ -152,8 +152,8 @@ export default {
 			});
 		}
 	},
-	created() {
-		this.init();
+	async created() {
+		// await this.init();
 	}
 };
 </script>

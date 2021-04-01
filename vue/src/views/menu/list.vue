@@ -27,8 +27,7 @@ export default {
 	data() {
 		return {
 			tabCol: [
-				{ key: "level", width: 60, align: "center" },
-				// { title: "标识", width: 80, key: "id" },
+				{ key: "id", width: 60, align: "center" },
 				{ title: "标题", key: "title", width: 150, tree: true },
 				{ title: "名称", key: "name", width: 150 },
 				{ title: "访问路径", key: "path", width: 150 },
@@ -154,8 +153,8 @@ export default {
 			});
 		}
 	},
-	created() {
-		this.load();
+	async created() {
+		await this.load();
 	}
 };
 </script>
