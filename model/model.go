@@ -87,7 +87,7 @@ func (p *Page) Trim() string {
 }
 
 type IptId struct {
-	Id int `json:"id"` //仅包含Id的请求
+	Id int `query:"id" json:"id"` //仅包含Id的请求
 }
 
 // Naver 上下页

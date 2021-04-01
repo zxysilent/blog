@@ -2,7 +2,6 @@ package sysctl
 
 import (
 	"blog/model"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
 	"github.com/zxysilent/utils"
@@ -27,11 +26,12 @@ func MenuTree(ctx echo.Context) error {
 // @Param id path int true "pk id" default(1)
 // @Router /sys/menu/get/{id} [get]
 func MenuGet(ctx echo.Context) error {
-	id, err := strconv.Atoi(ctx.Param("id"))
+	ipt := &model.IptId{}
+	err := ctx.Bind(ipt)
 	if err != nil {
-		return ctx.JSON(utils.ErrIpt("数据输入错误", err.Error()))
+		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
-	mod, has := model.MenuGet(id)
+	mod, has := model.MenuGet(ipt.Id)
 	if !has {
 		return ctx.JSON(utils.ErrOpt("未查询到菜单导航信息"))
 	}

@@ -22,5 +22,7 @@ func apiRouter(api *echo.Group) {
 	api.GET(`/tag/all`, appctl.TagAll)              // 标签列表
 	api.GET(`/opts/base`, appctl.OptsBase)          // 配置
 
+	api.GET(`/menu/get`, sysctl.MenuGet)
 	api.GET(`/menu/tree`, sysctl.MenuTree)
+
 }

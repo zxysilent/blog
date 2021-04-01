@@ -85,6 +85,7 @@
 </template>
 <script>
 import { apiMenuGet, admMenuEdit } from "@/api/menu";
+import { icons } from "@/utils/icons";
 export default {
 	data() {
 		return {
@@ -115,7 +116,7 @@ export default {
 	},
 	methods: {
 		init() {
-			apiMenuGet(this.dataForm.id).then((resp) => {
+			apiMenuGet({ id: this.dataForm.id }).then((resp) => {
 				if (resp.code == 200) {
 					this.dataForm = resp.data;
 				}
@@ -149,6 +150,7 @@ export default {
 		}
 	},
 	created() {
+		console.log(this.$route.params.id);
 		this.dataForm.id = parseInt(this.$route.params.id, 10);
 		this.init();
 	}

@@ -26,8 +26,10 @@ const Store = {
 			if (resp.code == 200) {
 				const routes = resp.data.slice();
 				commit("setMenus", resp.data);
-                dynamicRouter(routes);
+				dynamicRouter(routes);
 				// routes.push(errorRouter);
+				console.log(errorRouter);
+				console.log(routes);
 				commit("setRoutes", routes);
 			}
 			return true;
