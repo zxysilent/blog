@@ -14,20 +14,13 @@
 						</template>
 					</Select>
 				</FormItem>
-
 				<FormItem label="菜单标题：" prop="title">
 					<Input v-model="dataForm.title"></Input>
 				</FormItem>
 				<FormItem label="菜单名称：" prop="name">
 					<Input v-model="dataForm.name"></Input>
 				</FormItem>
-				<FormItem label="菜单路由：" prop="ptah">
-					<Input v-model="dataForm.ptah"></Input>
-				</FormItem>
-				<FormItem label="菜单路由：" prop="ptah">
-					<Input v-model="dataForm.ptah"></Input>
-				</FormItem>
-				<FormItem label="菜单图标：">
+				<FormItem label="菜单图标：" prop="icon">
 					<Select v-model="dataForm.icon" filterable>
 						<Icon :type="dataForm.icon" slot="prefix" size="22" />
 						<Option v-for="item in icons" :value="item" :label="item" :key="item.id">
@@ -38,6 +31,13 @@
 						</Option>
 					</Select>
 				</FormItem>
+				<FormItem label="菜单路径：" prop="path">
+					<Input v-model="dataForm.path"></Input>
+				</FormItem>
+				<!-- <FormItem label="菜单路由：" prop="ptah">
+					<Input v-model="dataForm.ptah"></Input>
+				</FormItem> -->
+
 				<!-- <FormItem label="跳转链接：" prop="url">
 					<Input v-model="dataForm.url">
 					<Tooltip slot="append" placement="top">
@@ -50,6 +50,9 @@
 					</Tooltip>
 					</Input>
 				</FormItem> -->
+				<FormItem label="菜单组件：" prop="comp">
+					<Input v-model="dataForm.comp"></Input>
+				</FormItem>
 				<Row>
 					<Col span="8">
 					<FormItem :label-width="100" label="是否使用：" prop="use" title="是否允许添加新闻">
@@ -71,11 +74,9 @@
 					</FormItem>
 					</Col>
 				</Row>
-				<FormItem label="菜单组件：" prop="comp">
-					<Input v-model="dataForm.comp"></Input>
-				</FormItem>
+
 				<FormItem>
-					<Button type="warning" :loading="loading" @click="submitAdd">提交保存</Button>
+					<Button type="warning" :loading="loading" @click="emitAdd">提交保存</Button>
 					<Button type="success" @click="resetForm()" style="margin-left: 8px">重置填写</Button>
 				</FormItem>
 			</Form>
@@ -91,22 +92,24 @@ export default {
 			icons: icons,
 			menuAll: [],
 			dataForm: {
-				level: 1,
+				id: 1,
 				pid: 0,
+				title: "",
 				name: "",
-				url: "",
 				use: true,
-				show: true,
-				sort: 1000,
 				icon: "",
-				cover: "",
-				itpl: "subidx.html",
-				ltpl: "list.sml.html",
-				dtpl: "detail.html"
+				show: true,
+				comp: "",
+				sort: 1000,
+				inner: false
 			},
 			dataRules: {
 				pid: [{ type: "number", required: true, message: "请选择菜单", trigger: "change", min: 0 }],
-				name: [{ required: true, message: "请填写菜单名称", trigger: "blur", max: 64 }]
+				title: [{ required: true, message: "请填写菜单标题", trigger: "blur", max: 128 }],
+				name: [{ required: true, message: "请填写菜单名称", trigger: "blur", max: 128 }],
+				path: [{ required: true, message: "请填写菜单路径", trigger: "blur", max: 128 }],
+				icon: [{ required: true, message: "请选择菜单图标", trigger: "blur", max: 128 }],
+				comp: [{ required: true, message: "请填写菜单组件", trigger: "blur", max: 128 }]
 			},
 			loading: false
 		};
@@ -119,17 +122,10 @@ export default {
 				}
 			});
 		},
-		// onChange(_, item) {
-		// 	console.log(item);
-		// 	this.dataForm.pid = item[item.length - 1].id;
-		// 	this.dataForm.level = item[item.length - 1].level + 1;
-		// },
 		resetForm() {
 			this.$refs.dataForm.resetFields();
-			this.$refs.upimg.resetCrop();
-			this.defValue = ["所有类别"];
 		},
-		submitAdd() {
+		emitAdd() {
 			this.$refs["dataForm"].validate((valid) => {
 				if (valid) {
 					this.loading = true;

@@ -97,7 +97,6 @@
 <script>
 import { admSys, admCollect } from "@/api/auth";
 export default {
-	name: "home",
 	data() {
 		return {
 			sys: {
