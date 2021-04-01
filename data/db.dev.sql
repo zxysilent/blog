@@ -2,15 +2,15 @@
 Navicat MariaDB Data Transfer
 
 Source Server         : 127.0.0.1
-Source Server Version : 100505
+Source Server Version : 100412
 Source Host           : 127.0.0.1:3306
 Source Database       : blog
 
 Target Server Type    : MariaDB
-Target Server Version : 100505
+Target Server Version : 100412
 File Encoding         : 65001
 
-Date: 2021-03-31 23:58:18
+Date: 2021-04-01 17:14:18
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -183,45 +183,46 @@ CREATE TABLE `sys_menu` (
   `title` varchar(255) DEFAULT NULL COMMENT '菜单',
   `name` varchar(255) DEFAULT NULL COMMENT '名称',
   `path` varchar(255) DEFAULT NULL COMMENT '路径',
-  `intro` varchar(255) DEFAULT NULL COMMENT '介绍',
   `icon` varchar(255) DEFAULT NULL COMMENT '菜单图标',
   `show` tinyint(4) DEFAULT 1 COMMENT '导航显示',
+  `inner` tinyint(4) DEFAULT 0 COMMENT '内部禁止删除',
   `comp` varchar(255) DEFAULT NULL COMMENT 'vue文件路径Component',
   `sort` int(11) DEFAULT 1000 COMMENT '排序',
   `ctime` datetime DEFAULT NULL COMMENT '时间',
+  `use` tinyint(4) DEFAULT 1 COMMENT '是否使用',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
-INSERT INTO `sys_menu` VALUES ('1', '0', '文章管理', 'post', '/post', '', 'ios-megaphone-outline', '1', 'layout', '1000', '2021-03-31 14:18:36');
-INSERT INTO `sys_menu` VALUES ('2', '1', '文章列表', 'post-list', '/post/list', '', 'ios-list-box-outline', '1', 'views/post/list.vue', '1000', '2021-03-31 14:18:39');
-INSERT INTO `sys_menu` VALUES ('3', '1', '添加文章', 'post-add', '/post/add', '', 'ios-add-circle-outline', '1', 'views/article/article.vue', '1000', '2021-03-31 14:18:42');
-INSERT INTO `sys_menu` VALUES ('4', '1', '编辑文章', 'post-edit', '/post/edit/:id(\\\\d+)', '', '', '0', 'views/article/article.vue', '1000', '2021-03-31 14:18:45');
-INSERT INTO `sys_menu` VALUES ('5', '0', '页面管理', 'page', '/page', '', 'ios-map-outline', '1', 'layout', '1000', '2021-03-31 14:20:41');
-INSERT INTO `sys_menu` VALUES ('6', '5', '页面列表', 'page-list', '/page/list', '', 'ios-list-box-outline', '1', 'views/page/list.vue', '1000', '2021-03-31 14:20:44');
-INSERT INTO `sys_menu` VALUES ('7', '5', '添加页面', 'page-add', '/page/add', '', 'ios-add-circle-outline', '1', 'views/article/article.vue', '1000', '2021-03-31 14:20:47');
-INSERT INTO `sys_menu` VALUES ('8', '5', '编辑页面', 'page-edit', '/page/edit/:id(\\\\d+)', '', '', '0', 'views/article/article.vue', '1000', '2021-03-31 14:20:50');
-INSERT INTO `sys_menu` VALUES ('9', '0', '分类管理', 'cate', '/cate', '', 'ios-school-outline', '1', 'layout', '1000', '2021-03-31 14:25:47');
-INSERT INTO `sys_menu` VALUES ('10', '9', '分类列表', 'cate-list', '/cate/list', '', 'ios-list-box-outline', '1', 'views/cate/list.vue', '1000', '2021-03-31 14:25:50');
-INSERT INTO `sys_menu` VALUES ('11', '9', '添加分类', 'cate-add', '/cate/add', '', 'ios-add-circle-outline', '1', 'views/cate/add.vue', '1000', '2021-03-31 14:25:54');
-INSERT INTO `sys_menu` VALUES ('12', '9', '编辑分类', 'cate-edit', '/cate/edit/:id(\\\\d+)', '', '', '0', 'views/cate/edit.vue', '1000', '2021-03-31 14:25:56');
-INSERT INTO `sys_menu` VALUES ('13', '0', '标签管理', 'tag', '/tag', '', 'ios-pricetags-outline', '1', 'layout', '1000', '2021-03-31 14:26:00');
-INSERT INTO `sys_menu` VALUES ('14', '13', '标签列表', 'tag-list', '/tag/list', '', 'ios-list-box-outline', '1', 'views/tag/list.vue', '1000', '2021-03-31 14:26:02');
-INSERT INTO `sys_menu` VALUES ('15', '13', '添加标签', 'tag-add', '/tag/add', '', 'ios-add-circle-outline', '1', 'views/tag/add.vue', '1000', '2021-03-31 14:26:04');
-INSERT INTO `sys_menu` VALUES ('16', '13', '编辑标签', 'tag-edit', '/tag/edit/:id(\\\\d+)', '', '', '0', 'views/tag/edit.vue', '1000', '2021-03-31 14:26:07');
-INSERT INTO `sys_menu` VALUES ('17', '0', '系统设置', 'setting', '/setting', '', 'ios-cog-outline', '1', 'layout', '1000', '2021-03-31 20:08:56');
-INSERT INTO `sys_menu` VALUES ('18', '17', '基本设置', 'setting-base', '/setting/base', '', 'ios-cog-outline', '1', 'views/setting/base.vue', '1000', '2021-03-31 20:08:58');
-INSERT INTO `sys_menu` VALUES ('19', '17', '评论设置', 'setting-comment', '/setting/comment', '', 'ios-text-outline', '1', 'views/setting/comment.vue', '1000', '2021-03-31 20:09:01');
-INSERT INTO `sys_menu` VALUES ('20', '17', '统计设置', 'setting-analytic', '/setting/analytic', '', 'ios-pulse', '1', 'views/setting/analytic.vue', '1000', '2021-03-31 20:09:03');
-INSERT INTO `sys_menu` VALUES ('21', '17', '自 定 义', 'setting-custom', '/setting/custom', '', 'ios-code-working', '1', 'views/setting/custom.vue', '1000', '2021-03-31 20:09:05');
-INSERT INTO `sys_menu` VALUES ('22', '0', '个人中心', 'auth', '/auth', '', 'ios-contact-outline', '1', 'layout', '1000', '2021-03-31 20:09:08');
-INSERT INTO `sys_menu` VALUES ('23', '22', '个人中心', 'auth-self', '/auth/self', '', 'ios-contact-outline', '1', 'views/user/self.vue', '1000', '2021-03-31 20:09:11');
-INSERT INTO `sys_menu` VALUES ('25', '0', '菜单管理', 'menu', '/menu', '', 'ios-pricetags-outline', '1', 'layout', '1000', '2021-03-31 23:40:30');
-INSERT INTO `sys_menu` VALUES ('26', '25', '菜单列表', 'menu-list', '/menu/list', '', 'ios-list-box-outline', '1', 'views/menu/list.vue', '1000', '2021-03-31 23:40:33');
-INSERT INTO `sys_menu` VALUES ('27', '25', '添加菜单', 'menu-add', '/menu/add', '', 'ios-add-circle-outline', '1', 'views/menu/add.vue', '1000', '2021-03-31 23:40:36');
-INSERT INTO `sys_menu` VALUES ('28', '25', '编辑菜单', 'menu-edit', '/menu/edit', '', '', '0', 'views/menu/edit.vue', '1000', '2021-03-31 23:40:39');
+INSERT INTO `sys_menu` VALUES ('1', '0', '文章管理', 'post', '/post', 'ios-megaphone-outline', '1', '1', 'layout', '1000', '2021-03-31 14:18:36', '1');
+INSERT INTO `sys_menu` VALUES ('2', '1', '文章列表', 'post-list', '/post/list', 'ios-list-box-outline', '1', '1', 'views/post/list.vue', '1000', '2021-03-31 14:18:39', '1');
+INSERT INTO `sys_menu` VALUES ('3', '1', '添加文章', 'post-add', '/post/add', 'ios-add-circle-outline', '1', '1', 'views/article/article.vue', '1000', '2021-03-31 14:18:42', '1');
+INSERT INTO `sys_menu` VALUES ('4', '1', '编辑文章', 'post-edit', '/post/edit/:id(\\\\d+)', 'ios-create-outline', '0', '1', 'views/article/article.vue', '1000', '2021-03-31 14:18:45', '1');
+INSERT INTO `sys_menu` VALUES ('5', '0', '页面管理', 'page', '/page', 'ios-map-outline', '1', '1', 'layout', '1000', '2021-03-31 14:20:41', '1');
+INSERT INTO `sys_menu` VALUES ('6', '5', '页面列表', 'page-list', '/page/list', 'ios-list-box-outline', '1', '1', 'views/page/list.vue', '1000', '2021-03-31 14:20:44', '1');
+INSERT INTO `sys_menu` VALUES ('7', '5', '添加页面', 'page-add', '/page/add', 'ios-add-circle-outline', '1', '1', 'views/article/article.vue', '1000', '2021-03-31 14:20:47', '1');
+INSERT INTO `sys_menu` VALUES ('8', '5', '编辑页面', 'page-edit', '/page/edit/:id(\\\\d+)', 'ios-create-outline', '0', '1', 'views/article/article.vue', '1000', '2021-03-31 14:20:50', '1');
+INSERT INTO `sys_menu` VALUES ('9', '0', '分类管理', 'cate', '/cate', 'ios-school-outline', '1', '1', 'layout', '1000', '2021-03-31 14:25:47', '1');
+INSERT INTO `sys_menu` VALUES ('10', '9', '分类列表', 'cate-list', '/cate/list', 'ios-list-box-outline', '1', '1', 'views/cate/list.vue', '1000', '2021-03-31 14:25:50', '1');
+INSERT INTO `sys_menu` VALUES ('11', '9', '添加分类', 'cate-add', '/cate/add', 'ios-add-circle-outline', '1', '1', 'views/cate/add.vue', '1000', '2021-03-31 14:25:54', '1');
+INSERT INTO `sys_menu` VALUES ('12', '9', '编辑分类', 'cate-edit', '/cate/edit/:id(\\\\d+)', 'ios-create-outline', '0', '1', 'views/cate/edit.vue', '1000', '2021-03-31 14:25:56', '1');
+INSERT INTO `sys_menu` VALUES ('13', '0', '标签管理', 'tag', '/tag', 'ios-pricetags-outline', '1', '1', 'layout', '1000', '2021-03-31 14:26:00', '1');
+INSERT INTO `sys_menu` VALUES ('14', '13', '标签列表', 'tag-list', '/tag/list', 'ios-list-box-outline', '1', '1', 'views/tag/list.vue', '1000', '2021-03-31 14:26:02', '1');
+INSERT INTO `sys_menu` VALUES ('15', '13', '添加标签', 'tag-add', '/tag/add', 'ios-add-circle-outline', '1', '1', 'views/tag/add.vue', '1000', '2021-03-31 14:26:04', '1');
+INSERT INTO `sys_menu` VALUES ('16', '13', '编辑标签', 'tag-edit', '/tag/edit/:id(\\\\d+)', 'ios-create-outline', '0', '1', 'views/tag/edit.vue', '1000', '2021-03-31 14:26:07', '1');
+INSERT INTO `sys_menu` VALUES ('17', '0', '系统设置', 'setting', '/setting', 'ios-cog-outline', '1', '1', 'layout', '1000', '2021-03-31 20:08:56', '1');
+INSERT INTO `sys_menu` VALUES ('18', '17', '基本设置', 'setting-base', '/setting/base', 'ios-cog-outline', '1', '1', 'views/setting/base.vue', '1000', '2021-03-31 20:08:58', '1');
+INSERT INTO `sys_menu` VALUES ('19', '17', '评论设置', 'setting-comment', '/setting/comment', 'ios-text-outline', '1', '1', 'views/setting/comment.vue', '1000', '2021-03-31 20:09:01', '1');
+INSERT INTO `sys_menu` VALUES ('20', '17', '统计设置', 'setting-analytic', '/setting/analytic', 'ios-pulse', '1', '1', 'views/setting/analytic.vue', '1000', '2021-03-31 20:09:03', '1');
+INSERT INTO `sys_menu` VALUES ('21', '17', '自 定 义', 'setting-custom', '/setting/custom', 'ios-code-working', '1', '1', 'views/setting/custom.vue', '1000', '2021-03-31 20:09:05', '1');
+INSERT INTO `sys_menu` VALUES ('22', '0', '个人中心', 'auth', '/auth', 'ios-contact-outline', '1', '1', 'layout', '1000', '2021-03-31 20:09:08', '1');
+INSERT INTO `sys_menu` VALUES ('23', '22', '个人中心', 'auth-self', '/auth/self', 'ios-contact-outline', '1', '1', 'views/user/self.vue', '1000', '2021-03-31 20:09:11', '1');
+INSERT INTO `sys_menu` VALUES ('25', '0', '菜单管理', 'menu', '/menu', 'ios-pricetags-outline', '1', '1', 'layout', '1000', '2021-03-31 23:40:30', '1');
+INSERT INTO `sys_menu` VALUES ('26', '25', '菜单列表', 'menu-list', '/menu/list', 'ios-list-box-outline', '1', '1', 'views/menu/list.vue', '1000', '2021-03-31 23:40:33', '1');
+INSERT INTO `sys_menu` VALUES ('27', '25', '添加菜单', 'menu-add', '/menu/add', 'ios-add-circle-outline', '1', '1', 'views/menu/add.vue', '1000', '2021-03-31 23:40:36', '1');
+INSERT INTO `sys_menu` VALUES ('28', '25', '编辑菜单', 'menu-edit', '/menu/edit/:id(\\\\d+)', 'ios-create-outline', '0', '1', 'views/menu/edit.vue', '1000', '2021-03-31 23:40:39', '1');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -317,4 +318,4 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'zxysilent', 'zxysilent', '3b861abeaa25fba9d03898324463f7', '1074791424', 'zxysilent@foxmail.com', '', '127.0.0.1', '0', '2021-03-31 23:45:35', '2017-04-05 23:28:35', '1074791424');
+INSERT INTO `user` VALUES ('1', 'zxysilent', 'zxysilent', '3b861abeaa25fba9d03898324463f7', '1074791424', 'zxysilent@foxmail.com', '', '127.0.0.1', '1', '2021-04-01 14:10:29', '2017-04-05 23:28:35', '1074791424');
