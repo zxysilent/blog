@@ -18,7 +18,10 @@ export const admMenuAdd = data => {
 export const admMenuEdit = data => {
 	return fetch.post("/adm/menu/edit", data);
 };
+export const admMenuEditShow = data => {
+	return fetch.post("/adm/menu/edit/show", data);
+};
 
 export const admMenuDrop = data => {
-	return fetch.get("/adm/menu/drop", { params: data });
+	return fetch.post("/adm/menu/drop", data);
 };

@@ -22,7 +22,7 @@
 	</Card>
 </template>
 <script>
-import { apiMenuTree, admMenuDrop, admMenuChgShow, admMenuReCache } from "@/api/menu";
+import { apiMenuTree, admMenuDrop, admMenuEditShow } from "@/api/menu";
 export default {
 	data() {
 		return {
@@ -44,7 +44,7 @@ export default {
 								props: { value: data.row.show, size: "large" },
 								on: {
 									"on-change": function (val) {
-										admMenuChgShow({ id: data.row.id, flag: val }).then((resp) => {
+										admMenuEditShow({ id: data.row.id, show: val }).then((resp) => {
 											if (resp.code != 200) {
 												that.$Message.error({
 													content: resp.msg,
@@ -68,7 +68,7 @@ export default {
 					title: "图标",
 					width: 80,
 					key: "icon",
-                    align: "center",
+					align: "center",
 					render: (h, data) => {
 						return h("Icon", {
 							props: { type: data.row.icon, size: "24" },
@@ -138,14 +138,9 @@ export default {
 				this.loading = false;
 			});
 		},
-		reCache() {
-			admMenuReCache().then((resp) => {
-				this.load();
-			});
-		},
 		//删除
 		emitDrop(data) {
-			admMenuDrop(data.row.id).then((resp) => {
+			admMenuDrop({ id: data.row.id }).then((resp) => {
 				if (resp.code == 200) {
 					this.$Message.success({
 						content: "删除成功",

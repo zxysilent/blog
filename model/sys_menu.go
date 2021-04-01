@@ -16,6 +16,7 @@ type Menu struct {
 	Show     bool      `xorm:"TINYINT(4) DEFAULT 1 comment('导航显示')" json:"show"`
 	Comp     string    `xorm:"VARCHAR(255) comment('vue文件路径Component')" json:"comp"`
 	Sort     int       `xorm:"INT(11) DEFAULT 1000 comment('排序')" json:"sort"`
+	Inner    bool      `xorm:"TINYINT(4) DEFAULT 0 comment('内部禁止删除')" json:"inner"`
 	Ctime    time.Time `xorm:"DATETIME comment('时间')" json:"ctime"`
 	Children []Menu    `xorm:"-" json:"children"`
 }

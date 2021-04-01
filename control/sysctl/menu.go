@@ -9,7 +9,7 @@ import (
 )
 
 // MenuAll doc
-// @Tags sysmenu
+// @Tags menu
 // @Summary 获取所有菜单导航菜单导航树
 // @Success 200 {object} model.Reply{data=model.Menu} "成功数据"
 // @Router /api/menu/tree [get]
@@ -22,7 +22,7 @@ func MenuTree(ctx echo.Context) error {
 }
 
 // MenuGet doc
-// @Tags sysmenu
+// @Tags menu
 // @Summary 通过id获取单条菜单导航信息
 // @Param id path int true "pk id" default(1)
 // @Router /sys/menu/get/{id} [get]
@@ -39,7 +39,7 @@ func MenuGet(ctx echo.Context) error {
 }
 
 // MenuAll doc
-// @Tags sysmenu
+// @Tags menu
 // @Summary 获取所有菜单导航信息
 // @Router /sys/menu/all [get]
 func MenuAll(ctx echo.Context) error {
@@ -51,7 +51,7 @@ func MenuAll(ctx echo.Context) error {
 }
 
 // MenuPage doc
-// @Tags sysmenu
+// @Tags menu
 // @Summary 获取菜单导航分页信息
 // @Param cid path int true "分类id" default(1)
 // @Param pi query int true "分页数" default(1)
@@ -85,7 +85,7 @@ func MenuPage(ctx echo.Context) error {
 }
 
 // MenuAdd doc
-// @Tags sysmenu
+// @Tags menu
 // @Summary 添加菜单导航信息
 // @Param token query string true "hmt" default(token)
 // @Router /sys/menu/add [post]
@@ -104,7 +104,7 @@ func MenuAdd(ctx echo.Context) error {
 }
 
 // MenuEdit doc
-// @Tags sysmenu
+// @Tags menu
 // @Summary 修改菜单导航信息
 // @Param token query string true "hmt" default(token)
 // @Router /sys/menu/edit [post]
@@ -122,18 +122,51 @@ func MenuEdit(ctx echo.Context) error {
 	return ctx.JSON(utils.Succ("succ"))
 }
 
-// MenuDrop doc
-// @Tags sysmenu
-// @Summary 通过id删除单条菜单导航信息
-// @Param id path int true "pk id" default(1)
-// @Param token query string true "hmt" default(token)
-// @Router /sys/menu/drop/{id} [get]
-func MenuDrop(ctx echo.Context) error {
-	id, err := strconv.Atoi(ctx.Param("id"))
+// ClassChgShow doc
+// @Tags menu
+// @Summary 修改菜单导航显示信息
+// @Param token query string true "token"
+// @Param body body model.Menu true "Req"
+// @Success 200 {object} model.Menu "成功数据"
+// @Router /adm/menu/edit/show [post]
+func MenuEditShow(ctx echo.Context) error {
+	ipt := &struct {
+		Id   int  `json:"id"`
+		Show bool `json:"show"`
+	}{}
+	err := ctx.Bind(ipt)
 	if err != nil {
-		return ctx.JSON(utils.ErrIpt("数据输入错误", err.Error()))
+		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
-	err = model.MenuDrop(id)
+	mod := &model.Menu{Id: ipt.Id, Show: ipt.Show}
+	err = model.MenuEdit(mod, "Show")
+	if err != nil {
+		return ctx.JSON(utils.Fail("修改失败", err.Error()))
+	}
+	return ctx.JSON(utils.Succ("succ"))
+}
+
+// MenuDrop doc
+// @Tags menu
+// @Summary 通过id删除单条菜单导航信息
+// @Param token query string true "token"
+// @Param body body model.IptId true "json"
+// @Success 200 {object} model.Reply{data=string} "成功数据"
+// @Router /adm/menu/drop [post]
+func MenuDrop(ctx echo.Context) error {
+	ipt := &model.IptId{}
+	err := ctx.Bind(ipt)
+	if err != nil {
+		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
+	}
+	mod, has := model.MenuGet(ipt.Id)
+	if !has {
+		return ctx.JSON(utils.ErrOpt("删除失败", "不存在当前数据"))
+	}
+	if mod.Inner {
+		return ctx.JSON(utils.ErrOpt("内置数据无法删除"))
+	}
+	err = model.MenuDrop(ipt.Id)
 	if err != nil {
 		return ctx.JSON(utils.ErrOpt("删除失败", err.Error()))
 	}

@@ -2,20 +2,19 @@
 <template>
 	<Card :bordered="false" dis-hover>
 		<p slot="title">
-			<Icon type="ios-add-circle-outline" /> 添加分类
+			<Icon type="ios-add-circle-outline" /> 添加菜单
 		</p>
 		<div style="max-width:520px">
 			<Form ref="dataForm" :model="dataForm" :label-width="100" label-position="right" :rules="dataRules">
 				<Alert type="warning" closable>保存之后,无法修改</Alert>
-				<FormItem label="所属分类：" prop="pid">
+				<FormItem label="所属菜单：" prop="pid">
 					<Select v-model="dataForm.pid">
 						<template v-for="item in menuAll">
-							<Option v-if="item.use" style="white-space: pre;" :value="item.id" :key="item.id">{{ item.name }}</Option>
-							<Option v-else style="white-space: pre;" :value="item.id" :key="item.id" disabled>{{ item.name }}</Option>
+							<Option v-if="item.pid==0" style="white-space: pre;" :value="item.id" :key="item.id">{{ item.name+item.title }}</Option>
 						</template>
 					</Select>
 				</FormItem>
-				<FormItem label="分类名称：" prop="name">
+				<FormItem label="菜单名称：" prop="name">
 					<Input v-model="dataForm.name"></Input>
 				</FormItem>
 				<FormItem label="跳转链接：" prop="url">
@@ -92,8 +91,8 @@ export default {
 				dtpl: "detail.html"
 			},
 			dataRules: {
-				pid: [{ type: "number", required: true, message: "请选择分类", trigger: "change", min: 0 }],
-				name: [{ required: true, message: "请填写分类名称", trigger: "blur", max: 64 }]
+				pid: [{ type: "number", required: true, message: "请选择菜单", trigger: "change", min: 0 }],
+				name: [{ required: true, message: "请填写菜单名称", trigger: "blur", max: 64 }]
 			},
 			loading: false
 		};

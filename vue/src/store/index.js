@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import { apiMenuTree } from "@/api/menu";
 Vue.use(Vuex);
-import { dynamicRouter } from "@/router";
+import { dynamicRouter, errorRouter } from "@/router";
 
 const Store = {
 	state: {
@@ -24,10 +24,11 @@ const Store = {
 		async FetchMenu({ commit }) {
 			const resp = await apiMenuTree();
 			if (resp.code == 200) {
-				const cp = resp.data.slice();
+				const routes = resp.data.slice();
 				commit("setMenus", resp.data);
-				dynamicRouter(cp);
-				commit("setRoutes", cp);
+                dynamicRouter(routes);
+				// routes.push(errorRouter);
+				commit("setRoutes", routes);
 			}
 			return true;
 		}
