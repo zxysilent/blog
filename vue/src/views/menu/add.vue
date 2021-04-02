@@ -8,20 +8,20 @@
 			<Form ref="dataForm" :model="dataForm" :label-width="100" label-position="right" :rules="dataRules">
 				<!-- <Alert type="warning" closable>保存之后,无法修改</Alert> -->
 				<FormItem label="所属菜单：" prop="pid">
-					<Select v-model="dataForm.pid">
+					<Select v-model="dataForm.pid" placeholder="请选择所属菜单">
 						<template v-for="item in menuAll">
-							<Option v-if="item.pid==0" style="white-space: pre;" :value="item.id" :key="item.id">{{ item.name+" "+item.title }}</Option>
+							<Option v-if="item.pid==0" style="white-space: pre;" :value="item.id" :key="item.id">{{ "「"+item.name+"」"+item.title }}</Option>
 						</template>
 					</Select>
 				</FormItem>
 				<FormItem label="菜单标题：" prop="title">
-					<Input v-model="dataForm.title"></Input>
+					<Input v-model="dataForm.title" placeholder="请填写菜单标题"></Input>
 				</FormItem>
 				<FormItem label="菜单名称：" prop="name">
-					<Input v-model="dataForm.name"></Input>
+					<Input v-model="dataForm.name" placeholder="请填写菜单名称"></Input>
 				</FormItem>
 				<FormItem label="菜单图标：" prop="icon">
-					<Select v-model="dataForm.icon" filterable>
+					<Select v-model="dataForm.icon" placeholder="请选择菜单图标" filterable>
 						<Icon :type="dataForm.icon" slot="prefix" size="22" />
 						<Option v-for="item in icons" :value="item" :label="item" :key="item.id">
 							<span>
@@ -32,7 +32,7 @@
 					</Select>
 				</FormItem>
 				<FormItem label="菜单路径：" prop="path">
-					<Input v-model="dataForm.path"></Input>
+					<Input v-model="dataForm.path" placeholder="请填写菜单路径"></Input>
 				</FormItem>
 				<!-- <FormItem label="菜单路由：" prop="ptah">
 					<Input v-model="dataForm.ptah"></Input>
@@ -51,7 +51,7 @@
 					</Input>
 				</FormItem> -->
 				<FormItem label="菜单组件：" prop="comp">
-					<Input v-model="dataForm.comp"></Input>
+					<Input v-model="dataForm.comp" placeholder="请填写菜单组件"></Input>
 				</FormItem>
 				<Row>
 					<Col span="8">
@@ -77,14 +77,14 @@
 
 				<FormItem>
 					<Button type="warning" :loading="loading" @click="emitAdd">提交保存</Button>
-					<Button type="success" @click="resetForm()" style="margin-left: 8px">重置填写</Button>
+					<Button type="success" @click="emitReset()" style="margin-left: 8px">重置填写</Button>
 				</FormItem>
 			</Form>
 		</div>
 	</Card>
 </template>
 <script>
-import { apiMenuTree, admMenuAdd } from "@/api/menu";
+import { admMenuAdd, admMenuAll } from "@/api/menu";
 import { icons } from "@/utils/icons";
 export default {
 	data() {
@@ -108,21 +108,26 @@ export default {
 				title: [{ required: true, message: "请填写菜单标题", trigger: "blur", max: 128 }],
 				name: [{ required: true, message: "请填写菜单名称", trigger: "blur", max: 128 }],
 				path: [{ required: true, message: "请填写菜单路径", trigger: "blur", max: 128 }],
-				icon: [{ required: true, message: "请选择菜单图标", trigger: "blur", max: 128 }],
+				icon: [{ required: true, message: "请选择菜单图标", trigger: "change", max: 128 }],
 				comp: [{ required: true, message: "请填写菜单组件", trigger: "blur", max: 128 }]
 			},
 			loading: false
 		};
 	},
 	methods: {
-		init() {
-			apiMenuTree({ root: true }).then((resp) => {
+		preinit() {
+			admMenuAll({ root: true, slt: true }).then((resp) => {
 				if (resp.code == 200) {
 					this.menuAll = resp.data;
+				} else {
+					this.$Message.error({
+						content: resp.msg,
+						duration: 3
+					});
 				}
 			});
 		},
-		resetForm() {
+		emitReset() {
 			this.$refs.dataForm.resetFields();
 		},
 		emitAdd() {
@@ -138,7 +143,7 @@ export default {
 									// this.$router.push({
 									// 	name: "menu-list"
 									// });
-									this.resetForm();
+									this.emitReset();
 								}
 							});
 						} else {
@@ -152,8 +157,8 @@ export default {
 			});
 		}
 	},
-	async created() {
-		// await this.init();
+	created() {
+		this.preinit();
 	}
 };
 </script>

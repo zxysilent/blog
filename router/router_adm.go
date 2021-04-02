@@ -30,11 +30,13 @@ func admRouter(adm *echo.Group) {
 	// adm.GET("/role/drop/:id", sysctl.RoleDrop)          //角色分页
 	// adm.POST("/role/add", sysctl.RoleAdd)               //添加角色
 	// adm.POST("/role/edit", sysctl.RoleEdit)             //编辑角色
-	adm.GET("/api/page", sysctl.ApiPage)                //接口分页
-	adm.GET("/api/all", sysctl.ApiAll)                  //所有接口
-	adm.GET("/api/drop/:id", sysctl.ApiDrop)            //接口分页
-	adm.POST("/api/add", sysctl.ApiAdd)                 //添加接口
-	adm.POST("/api/edit", sysctl.ApiEdit)               //编辑接口
+	adm.GET("/api/page", sysctl.ApiPage)     //接口分页
+	adm.GET("/api/all", sysctl.ApiAll)       //所有接口
+	adm.GET("/api/drop/:id", sysctl.ApiDrop) //接口分页
+	adm.POST("/api/add", sysctl.ApiAdd)      //添加接口
+	adm.POST("/api/edit", sysctl.ApiEdit)    //编辑接口
+	adm.GET(`/menu/get`, sysctl.MenuGet)
+	adm.GET(`/menu/tree`, sysctl.MenuTree)
 	adm.GET("/menu/all", sysctl.MenuAll)                //所有菜单导航
 	adm.POST("/menu/drop", sysctl.MenuDrop)             //菜单导航分页
 	adm.POST("/menu/add", sysctl.MenuAdd)               //添加菜单导航

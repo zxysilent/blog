@@ -12,7 +12,7 @@
 				</Select>
 			</FormItem> -->
 			<FormItem>
-				<Button type="info" @click="load" icon="md-refresh" title="刷新数据">刷&nbsp;&nbsp;新</Button>
+				<Button type="info" @click="init" icon="md-refresh" title="刷新数据">刷&nbsp;&nbsp;新</Button>
 			</FormItem>
 			<!-- <FormItem>
 				<Button type="warning" @click="reCache" icon="ios-alert-outline" :title="'重新加载数据库缓存'+'\n'+'适用于直接修改数据库'">重载缓存</Button>
@@ -22,7 +22,7 @@
 	</Card>
 </template>
 <script>
-import { apiMenuTree, admMenuDrop, admMenuEditShow } from "@/api/menu";
+import { admMenuTree, admMenuDrop, admMenuEditShow } from "@/api/menu";
 export default {
 	data() {
 		return {
@@ -48,7 +48,7 @@ export default {
 												that.$Message.error({
 													content: resp.msg,
 													onClose: () => {
-														that.load();
+														that.init();
 													}
 												});
 											}
@@ -126,9 +126,9 @@ export default {
 		};
 	},
 	methods: {
-		load() {
+		init() {
 			this.loading = true;
-			apiMenuTree({ table: true }).then((resp) => {
+			admMenuTree({ table: true }).then((resp) => {
 				if (resp.code == 200) {
 					this.tabData = resp.data;
 				} else {
@@ -153,8 +153,8 @@ export default {
 			});
 		}
 	},
-	async created() {
-		await this.load();
+	created() {
+		this.init();
 	}
 };
 </script>

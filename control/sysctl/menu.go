@@ -10,7 +10,7 @@ import (
 // MenuAll doc
 // @Tags menu
 // @Summary 获取所有菜单导航菜单导航树
-// @Success 200 {object} model.Reply{data=model.Menu} "成功数据"
+// @Success 200 {object} model.Reply{data=[]model.Menu} "成功数据"
 // @Router /api/menu/tree [get]
 func MenuTree(ctx echo.Context) error {
 	mods, err := model.MenuTree()
@@ -24,7 +24,7 @@ func MenuTree(ctx echo.Context) error {
 // @Tags menu
 // @Summary 通过id获取单条菜单导航信息
 // @Param id path int true "pk id" default(1)
-// @Router /sys/menu/get/{id} [get]
+// @Router /adm/menu/get/{id} [get]
 func MenuGet(ctx echo.Context) error {
 	ipt := &model.IptId{}
 	err := ctx.Bind(ipt)
@@ -41,9 +41,18 @@ func MenuGet(ctx echo.Context) error {
 // MenuAll doc
 // @Tags menu
 // @Summary 获取所有菜单导航信息
-// @Router /sys/menu/all [get]
+// @Success 200 {object} model.Reply{data=[]model.Menu} "成功数据"
+// @Router /adm/menu/all [get]
 func MenuAll(ctx echo.Context) error {
-	mods, err := model.MenuAll()
+	ipt := &struct {
+		Slt  bool `query:"slt" json:"slt"`
+		Root bool `query:"root" json:"root"`
+	}{}
+	err := ctx.Bind(ipt)
+	if err != nil {
+		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
+	}
+	mods, err := model.MenuAll(ipt.Root, ipt.Slt)
 	if err != nil {
 		return ctx.JSON(utils.ErrOpt("未查询到菜单导航信息", err.Error()))
 	}
@@ -56,7 +65,7 @@ func MenuAll(ctx echo.Context) error {
 // @Param cid path int true "分类id" default(1)
 // @Param pi query int true "分页数" default(1)
 // @Param ps query int true "每页条数[5,20]" default(5)
-// @Router /sys/menu/page/{cid} [get]
+// @Router /adm/menu/page/{cid} [get]
 func MenuPage(ctx echo.Context) error {
 	// cid, err := strconv.Atoi(ctx.Param("cid"))
 	// if err != nil {
@@ -88,7 +97,7 @@ func MenuPage(ctx echo.Context) error {
 // @Tags menu
 // @Summary 添加菜单导航信息
 // @Param token query string true "hmt" default(token)
-// @Router /sys/menu/add [post]
+// @Router /adm/menu/add [post]
 func MenuAdd(ctx echo.Context) error {
 	ipt := &model.Menu{}
 	err := ctx.Bind(ipt)
@@ -107,7 +116,7 @@ func MenuAdd(ctx echo.Context) error {
 // @Tags menu
 // @Summary 修改菜单导航信息
 // @Param token query string true "hmt" default(token)
-// @Router /sys/menu/edit [post]
+// @Router /adm/menu/edit [post]
 func MenuEdit(ctx echo.Context) error {
 	ipt := &model.Menu{}
 	err := ctx.Bind(ipt)

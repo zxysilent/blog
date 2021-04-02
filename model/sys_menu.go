@@ -83,9 +83,23 @@ func MenuGet(id int) (*Menu, bool) {
 }
 
 // MenuAll 所有菜单导航信息
-func MenuAll() ([]Menu, error) {
+func MenuAll(root bool, slt bool) ([]Menu, error) {
 	mods := make([]Menu, 0, 8)
-	err := Db.Find(&mods)
+	if root {
+		mods = append(mods, Menu{
+			Id:    0,
+			Pid:   0,
+			Name:  "root",
+			Title: "根级菜单",
+			Use:   true,
+		})
+	}
+	sess := Db.NewSession()
+	defer sess.Close()
+	if slt {
+		sess.Where("Pid = 0").Asc("Sort", "Id")
+	}
+	err := sess.Find(&mods)
 	return mods, err
 }
 

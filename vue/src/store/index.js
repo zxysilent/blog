@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { apiMenuTree } from "@/api/menu";
+import { admMenuTree } from "@/api/menu";
 Vue.use(Vuex);
 import { dynamicRouter, errorRouter } from "@/router";
 
@@ -22,7 +22,7 @@ const Store = {
 	actions: {
 		// 从后台获取菜单
 		async FetchMenu({ commit }) {
-			const resp = await apiMenuTree();
+			const resp = await admMenuTree();
 			if (resp.code == 200) {
 				const routes = resp.data.slice();
 				commit("setMenus", resp.data);

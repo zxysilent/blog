@@ -1,14 +1,14 @@
 import fetch from "./fetch";
 
-export const apiMenuAll = () => {
-	return fetch.get("/api/menu/all");
+export const admMenuAll = data => {
+	return fetch.get("/adm/menu/all", { params: data });
 };
-export const apiMenuTree = data => {
-	return fetch.get("/api/menu/tree", { params: data });
+export const admMenuTree = data => {
+	return fetch.get("/adm/menu/tree", { params: data });
 };
 
-export const apiMenuGet = data => {
-	return fetch.get("/api/menu/get", { params: data });
+export const admMenuGet = data => {
+	return fetch.get("/adm/menu/get", { params: data });
 };
 
 export const admMenuAdd = data => {
