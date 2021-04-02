@@ -27,7 +27,7 @@
 							<span>
 								<Icon :type="item" />
 							</span>
-							<span style="margin-left:5px;color:#ccc">{{item}}</span>
+							<span style="margin-left:10px;">{{item}}</span>
 						</Option>
 					</Select>
 				</FormItem>
@@ -170,7 +170,7 @@ export default {
 		console.log(this.$route.params.id);
 		this.dataForm.id = parseInt(this.$route.params.id, 10);
 		this.preinit();
-        console.log(this.$route)
+		console.log(this.$route);
 		this.init();
 	}
 };

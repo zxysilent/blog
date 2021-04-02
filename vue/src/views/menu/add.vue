@@ -27,7 +27,7 @@
 							<span>
 								<Icon :type="item" />
 							</span>
-							<span style="margin-left:5px;color:#ccc">{{item}}</span>
+							<span style="margin-left:10px;">{{item}}</span>
 						</Option>
 					</Select>
 				</FormItem>
