@@ -1,6 +1,14 @@
 <style lang="less" scoped>
-.ivu-form-inline .ivu-form-item {
-	margin-bottom: 10px;
+.drawer-footer {
+	z-index: 10;
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	border-top: 1px solid #e8e8e8;
+	padding: 10px 16px;
+	text-align: left;
+	background: #fff;
 }
 </style>
 <template>
@@ -20,7 +28,23 @@
 		</Form>
 		<Table row-key="id" size="small" :loading="loading" border :columns="tabCol" :data="tabData"></Table>
 		<Drawer title="授权" v-model="drawer" width="520" :mask-closable="false">
-			<Tree :data="menuTree" show-checkbox ></Tree>
+			<!-- <Tree :data="menuTree" show-checkbox></Tree> -->
+			<div :style="{ maxHeight: maxHeight }" class="drawer-content">
+				<div style="position: relative">
+					<Tree ref="tree" :data="menuTree" show-checkbox :render="renderContent" :check-strictly="true"></Tree>
+					<Spin size="large" fix v-if="treeLoading"></Spin>
+				</div>
+			</div>
+			<div class="drawer-footer">
+				<!-- <Button type="primary" :loading="submitPermLoading" @click="submitPermEdit">提交</Button> -->
+				<!-- <Button @click="selectTreeAll">全选/反选</Button> -->
+				<!-- @on-change="changeOpen" -->
+				<Select v-model="openLevel" style="width: 110px" transfer>
+					<Option value="0">展开所有</Option>
+					<Option value="1">收合所有</Option>
+				</Select>
+				<Button type="text" @click="this.drawer=false">取消</Button>
+			</div>
 		</Drawer>
 	</Card>
 </template>
@@ -40,7 +64,7 @@ export default {
 				date: "",
 				desc: ""
 			},
-            menuTree:[],
+			menuTree: [],
 			tabCol: [
 				{ key: "id", width: 60, align: "center" },
 				{ title: "角色名称", key: "name", width: 150 },
@@ -130,6 +154,37 @@ export default {
 				}
 				this.loading = false;
 			});
+		},
+		renderContent(h, { root, node, data }) {
+			return h(
+				"span",
+				{
+					style: {
+						display: "inline-block",
+						cursor: "pointer"
+					},
+					on: {
+						click: () => {
+							data.checked = !data.checked;
+						}
+					}
+				},
+				[
+					h("span", [
+						h("Icon", {
+							props: {
+								type: data.icon,
+								size: "16"
+							},
+							style: {
+								"margin-right": "8px",
+								"margin-bottom": "3px"
+							}
+						}),
+						h("span", data.title)
+					])
+				]
+			);
 		},
 		//删除
 		emitDrop(data) {
