@@ -3,6 +3,7 @@ import fetch from "./fetch";
 export const admMenuAll = data => {
 	return fetch.get("/adm/menu/all", { params: data });
 };
+
 export const admMenuTree = data => {
 	return fetch.get("/adm/menu/tree", { params: data });
 };

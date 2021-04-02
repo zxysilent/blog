@@ -10,6 +10,7 @@ import (
 // MenuAll doc
 // @Tags menu
 // @Summary 获取所有菜单导航菜单导航树
+// @Param token query string true "token"
 // @Success 200 {object} model.Reply{data=[]model.Menu} "成功数据"
 // @Router /api/menu/tree [get]
 func MenuTree(ctx echo.Context) error {
@@ -23,8 +24,10 @@ func MenuTree(ctx echo.Context) error {
 // MenuGet doc
 // @Tags menu
 // @Summary 通过id获取单条菜单导航信息
-// @Param id path int true "pk id" default(1)
-// @Router /adm/menu/get/{id} [get]
+// @Param id query int true "id"
+// @Param token query string true "token"
+// @Success 200 {object} model.Reply{data=model.Menu} "成功数据"
+// @Router /adm/menu/get [get]
 func MenuGet(ctx echo.Context) error {
 	ipt := &model.IptId{}
 	err := ctx.Bind(ipt)
@@ -41,6 +44,8 @@ func MenuGet(ctx echo.Context) error {
 // MenuAll doc
 // @Tags menu
 // @Summary 获取所有菜单导航信息
+// @Param token query string true "token"
+// @Param body body object{slt=bool,show=bool} true "json"
 // @Success 200 {object} model.Reply{data=[]model.Menu} "成功数据"
 // @Router /adm/menu/all [get]
 func MenuAll(ctx echo.Context) error {
@@ -62,15 +67,13 @@ func MenuAll(ctx echo.Context) error {
 // MenuPage doc
 // @Tags menu
 // @Summary 获取菜单导航分页信息
-// @Param cid path int true "分类id" default(1)
 // @Param pi query int true "分页数" default(1)
-// @Param ps query int true "每页条数[5,20]" default(5)
-// @Router /adm/menu/page/{cid} [get]
+// @Param ps query int true "每页条数[5,30]" default(5)
+// @Param token query string true "token"
+// @Success 200 {object} model.Reply{data=[]model.Menu} "成功数据"
+// @Param token query string true "token"
+// @Router /adm/menu/page [get]
 func MenuPage(ctx echo.Context) error {
-	// cid, err := strconv.Atoi(ctx.Param("cid"))
-	// if err != nil {
-	//  return ctx.JSON(utils.ErrIpt("数据输入错误", err.Error()))
-	// }
 	ipt := &model.Page{}
 	err := ctx.Bind(ipt)
 	if err != nil {
@@ -96,7 +99,9 @@ func MenuPage(ctx echo.Context) error {
 // MenuAdd doc
 // @Tags menu
 // @Summary 添加菜单导航信息
-// @Param token query string true "hmt" default(token)
+// @Param token query string true "token"
+// @Param body body model.Menu true "json"
+// @Success 200 {object} model.Reply{data=string} "成功数据"
 // @Router /adm/menu/add [post]
 func MenuAdd(ctx echo.Context) error {
 	ipt := &model.Menu{}
@@ -115,7 +120,9 @@ func MenuAdd(ctx echo.Context) error {
 // MenuEdit doc
 // @Tags menu
 // @Summary 修改菜单导航信息
-// @Param token query string true "hmt" default(token)
+// @Param token query string true "token"
+// @Param body body model.Menu true "json"
+// @Success 200 {object} model.Reply{data=string} "成功数据"
 // @Router /adm/menu/edit [post]
 func MenuEdit(ctx echo.Context) error {
 	ipt := &model.Menu{}
@@ -123,7 +130,7 @@ func MenuEdit(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
-	// ipt.Utime = time.Now()
+	// ipt.Ctime = time.Now()
 	err = model.MenuEdit(ipt)
 	if err != nil {
 		return ctx.JSON(utils.Fail("修改失败", err.Error()))
@@ -135,8 +142,8 @@ func MenuEdit(ctx echo.Context) error {
 // @Tags menu
 // @Summary 修改菜单导航显示信息
 // @Param token query string true "token"
-// @Param body body model.Menu true "Req"
-// @Success 200 {object} model.Menu "成功数据"
+// @Param body body object{id=int,show=bool} true "json"
+// @Success 200 {object} model.Reply{data=string} "成功数据"
 // @Router /adm/menu/edit/show [post]
 func MenuEditShow(ctx echo.Context) error {
 	ipt := &struct {

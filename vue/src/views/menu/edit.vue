@@ -92,7 +92,7 @@ export default {
 			icons: icons,
 			menuAll: [],
 			dataForm: {
-				id: 1,
+				id: 0,
 				pid: 0,
 				title: "",
 				name: "",

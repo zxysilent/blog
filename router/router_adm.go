@@ -24,32 +24,44 @@ func admRouter(adm *echo.Group) {
 	adm.POST(`/tag/add`, appctl.TagAdd)              // 添加标签
 	adm.POST(`/tag/edit`, appctl.TagEdit)            // 编辑标签
 	adm.POST(`/opts/edit`, appctl.OptsEdit)          // 编辑配置项
-	//sysctl
-	// adm.GET("/role/page", sysctl.RolePage)              //角色分页
-	// adm.GET("/role/all", sysctl.RoleAll)                //所有角色
-	// adm.GET("/role/drop/:id", sysctl.RoleDrop)          //角色分页
-	// adm.POST("/role/add", sysctl.RoleAdd)               //添加角色
-	// adm.POST("/role/edit", sysctl.RoleEdit)             //编辑角色
-	adm.GET("/api/page", sysctl.ApiPage)     //接口分页
-	adm.GET("/api/all", sysctl.ApiAll)       //所有接口
-	adm.GET("/api/drop/:id", sysctl.ApiDrop) //接口分页
-	adm.POST("/api/add", sysctl.ApiAdd)      //添加接口
-	adm.POST("/api/edit", sysctl.ApiEdit)    //编辑接口
-	adm.GET(`/menu/get`, sysctl.MenuGet)
-	adm.GET(`/menu/tree`, sysctl.MenuTree)
-	adm.GET("/menu/all", sysctl.MenuAll)                //所有菜单导航
-	adm.POST("/menu/drop", sysctl.MenuDrop)             //菜单导航分页
-	adm.POST("/menu/add", sysctl.MenuAdd)               //添加菜单导航
-	adm.POST("/menu/edit", sysctl.MenuEdit)             //编辑菜单导航
-	adm.POST("/menu/edit/show", sysctl.MenuEditShow)    //编辑菜单导航显隐
-	adm.GET("/role/api/page", sysctl.RoleApiPage)       //角色接口分页
-	adm.GET("/role/api/all", sysctl.RoleApiAll)         //所有角色接口
-	adm.GET("/role/api/drop/:id", sysctl.RoleApiDrop)   //角色接口分页
-	adm.POST("/role/api/add", sysctl.RoleApiAdd)        //添加角色接口
-	adm.POST("/role/api/edit", sysctl.RoleApiEdit)      //编辑角色接口
-	adm.GET("/role/menu/page", sysctl.RoleMenuPage)     //角色菜单导航分页
-	adm.GET("/role/menu/all", sysctl.RoleMenuAll)       //所有角色菜单导航
-	adm.GET("/role/menu/drop/:id", sysctl.RoleMenuDrop) //角色菜单导航分页
-	adm.POST("/role/menu/add", sysctl.RoleMenuAdd)      //添加角色菜单导航
-	adm.POST("/role/menu/edit", sysctl.RoleMenuEdit)    //编辑角色菜单导航
+
+	// sysctl
+
+	{ // role
+		adm.GET(`/role/get`, sysctl.RoleGet)    // 单条角色
+		adm.GET("/role/all", sysctl.RoleAll)    // 所有角色
+		adm.POST("/role/drop", sysctl.RoleDrop) // 角色分页
+		adm.POST("/role/add", sysctl.RoleAdd)   // 添加角色
+		adm.POST("/role/edit", sysctl.RoleEdit) // 编辑角色
+	}
+	{ // menu
+		adm.GET(`/menu/get`, sysctl.MenuGet)             // 单条菜单导航
+		adm.GET(`/menu/tree`, sysctl.MenuTree)           // 菜单导航树
+		adm.GET("/menu/all", sysctl.MenuAll)             // 所有菜单导航
+		adm.POST("/menu/drop", sysctl.MenuDrop)          // 菜单导航分页
+		adm.POST("/menu/add", sysctl.MenuAdd)            // 添加菜单导航
+		adm.POST("/menu/edit", sysctl.MenuEdit)          // 编辑菜单导航
+		adm.POST("/menu/edit/show", sysctl.MenuEditShow) // 编辑菜单导航显隐
+	}
+	{ // api
+		adm.GET("/api/page", sysctl.ApiPage)     // 接口分页
+		adm.GET("/api/all", sysctl.ApiAll)       // 所有接口
+		adm.GET("/api/drop/:id", sysctl.ApiDrop) // 接口分页
+		adm.POST("/api/add", sysctl.ApiAdd)      // 添加接口
+		adm.POST("/api/edit", sysctl.ApiEdit)    // 编辑接口
+	}
+	{ // role-api
+		adm.GET("/role/api/page", sysctl.RoleApiPage)     // 角色接口分页
+		adm.GET("/role/api/all", sysctl.RoleApiAll)       // 所有角色接口
+		adm.GET("/role/api/drop/:id", sysctl.RoleApiDrop) // 角色接口分页
+		adm.POST("/role/api/add", sysctl.RoleApiAdd)      // 添加角色接口
+		adm.POST("/role/api/edit", sysctl.RoleApiEdit)    // 编辑角色接口
+	}
+	{ // role-menu
+		adm.GET("/role/menu/page", sysctl.RoleMenuPage)     // 角色菜单导航分页
+		adm.GET("/role/menu/all", sysctl.RoleMenuAll)       // 所有角色菜单导航
+		adm.GET("/role/menu/drop/:id", sysctl.RoleMenuDrop) // 角色菜单导航分页
+		adm.POST("/role/menu/add", sysctl.RoleMenuAdd)      // 添加角色菜单导航
+		adm.POST("/role/menu/edit", sysctl.RoleMenuEdit)    // 编辑角色菜单导航
+	}
 }
