@@ -9,10 +9,10 @@ import (
 )
 
 // ApiGet doc
-// @Tags sysauth
+// @Tags api
 // @Summary 通过id获取单条接口信息
 // @Param id path int true "pk id" default(1)
-// @Router /sys/auth/get/{id} [get]
+// @Router /adm/api/get/{id} [get]
 func ApiGet(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {
@@ -26,9 +26,9 @@ func ApiGet(ctx echo.Context) error {
 }
 
 // ApiAll doc
-// @Tags sysauth
+// @Tags api
 // @Summary 获取所有接口信息
-// @Router /sys/auth/all [get]
+// @Router /adm/api/all [get]
 func ApiAll(ctx echo.Context) error {
 	mods, err := model.ApiAll()
 	if err != nil {
@@ -38,12 +38,12 @@ func ApiAll(ctx echo.Context) error {
 }
 
 // ApiPage doc
-// @Tags sysauth
+// @Tags api
 // @Summary 获取接口分页信息
 // @Param cid path int true "分类id" default(1)
 // @Param pi query int true "分页数" default(1)
 // @Param ps query int true "每页条数[5,20]" default(5)
-// @Router /sys/auth/page/{cid} [get]
+// @Router /adm/api/page/{cid} [get]
 func ApiPage(ctx echo.Context) error {
 	// cid, err := strconv.Atoi(ctx.Param("cid"))
 	// if err != nil {
@@ -72,10 +72,10 @@ func ApiPage(ctx echo.Context) error {
 }
 
 // ApiAdd doc
-// @Tags sysauth
+// @Tags api
 // @Summary 添加接口信息
 // @Param token query string true "hmt" default(token)
-// @Router /sys/auth/add [post]
+// @Router /adm/api/add [post]
 func ApiAdd(ctx echo.Context) error {
 	ipt := &model.Api{}
 	err := ctx.Bind(ipt)
@@ -91,10 +91,10 @@ func ApiAdd(ctx echo.Context) error {
 }
 
 // ApiEdit doc
-// @Tags sysauth
+// @Tags api
 // @Summary 修改接口信息
 // @Param token query string true "hmt" default(token)
-// @Router /sys/auth/edit [post]
+// @Router /adm/api/edit [post]
 func ApiEdit(ctx echo.Context) error {
 	ipt := &model.Api{}
 	err := ctx.Bind(ipt)
@@ -110,11 +110,11 @@ func ApiEdit(ctx echo.Context) error {
 }
 
 // ApiDrop doc
-// @Tags sysauth
+// @Tags api
 // @Summary 通过id删除单条接口信息
 // @Param id path int true "pk id" default(1)
 // @Param token query string true "hmt" default(token)
-// @Router /sys/auth/drop/{id} [get]
+// @Router /adm/api/drop/{id} [get]
 func ApiDrop(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))
 	if err != nil {

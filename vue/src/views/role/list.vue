@@ -1,4 +1,11 @@
 <style lang="less" scoped>
+.drawer-content {
+	overflow: auto;
+}
+
+.drawer-content::-webkit-scrollbar {
+	display: none;
+}
 .drawer-footer {
 	z-index: 10;
 	width: 100%;
@@ -14,11 +21,6 @@
 <template>
 	<Card dis-hover>
 		<Form inline>
-			<!-- <FormItem>
-				<Select v-model="cid" placeholder="请选择文章类别" style="width:200px">
-					<Option v-for="item in columnAll" :value="item.id" :key="item.id">{{ item.name }}</Option>
-				</Select>
-			</FormItem> -->
 			<FormItem>
 				<Button type="info" @click="init" icon="md-refresh" title="刷新数据">刷&nbsp;&nbsp;新</Button>
 			</FormItem>
@@ -27,43 +29,37 @@
 			</FormItem> -->
 		</Form>
 		<Table row-key="id" size="small" :loading="loading" border :columns="tabCol" :data="tabData"></Table>
-		<Drawer title="授权" v-model="drawer" width="520" :mask-closable="false">
+		<Drawer title="授权" v-model="drawer" width="520">
 			<!-- <Tree :data="menuTree" show-checkbox></Tree> -->
 			<div :style="{ maxHeight: maxHeight }" class="drawer-content">
 				<div style="position: relative">
-					<Tree ref="tree" :data="menuTree" show-checkbox :render="renderContent" :check-strictly="true"></Tree>
+					<Tree ref="tree" :data="menuTree" show-checkbox :check-directly="true" :render="renderContent"></Tree>
 					<Spin size="large" fix v-if="treeLoading"></Spin>
 				</div>
 			</div>
 			<div class="drawer-footer">
-				<!-- <Button type="primary" :loading="submitPermLoading" @click="submitPermEdit">提交</Button> -->
+				<Button type="primary" :loading="roleEditLoading" @click="emitRoleEdit">提交保存</Button>
 				<!-- <Button @click="selectTreeAll">全选/反选</Button> -->
 				<!-- @on-change="changeOpen" -->
-				<Select v-model="openLevel" style="width: 110px" transfer>
+				<!-- <Select v-model="openLevel" style="width: 110px" transfer>
 					<Option value="0">展开所有</Option>
 					<Option value="1">收合所有</Option>
-				</Select>
-				<Button type="text" @click="this.drawer=false">取消</Button>
+				</Select> -->
+				<Button type="text" @click="drawer=false">取消</Button>
 			</div>
 		</Drawer>
 	</Card>
 </template>
 <script>
 import { admMenuTree } from "@/api/menu";
-import { admRoleAll, admRoleDrop } from "@/api/role";
+import { admRoleAll, admRoleDrop, admRoleMenuAll, adadmRoleMenuEdit } from "@/api/role";
 export default {
 	data() {
 		return {
-			drawer: true,
-			formData: {
-				name: "",
-				url: "",
-				owner: "",
-				type: "",
-				approver: "",
-				date: "",
-				desc: ""
-			},
+			drawer: false,
+			maxHeight: "100px",
+			treeLoading: false,
+			roleEditLoading: false,
 			menuTree: [],
 			tabCol: [
 				{ key: "id", width: 60, align: "center" },
@@ -88,6 +84,9 @@ export default {
 										// 	name: "menu-edit",
 										// 	params: { id: data.row.id }
 										// });
+										this.role_id = data.row.id;
+										this.menu_ids = [];
+										this.roleMenuAll(this.role_id);
 										this.drawer = true;
 									}
 								}
@@ -98,10 +97,7 @@ export default {
 								style: { marginRight: "10px" },
 								on: {
 									click: () => {
-										this.$router.push({
-											name: "menu-edit",
-											params: { id: data.row.id }
-										});
+										this.$router.push({ name: "menu-edit", params: { id: data.row.id } });
 									}
 								}
 							}),
@@ -128,7 +124,10 @@ export default {
 				}
 			],
 			loading: false,
-			tabData: []
+			tabData: [],
+			//角色菜单
+			role_id: 0,
+			menu_ids: []
 		};
 	},
 	methods: {
@@ -137,10 +136,7 @@ export default {
 				if (resp.code == 200) {
 					this.menuTree = resp.data;
 				} else {
-					this.$Message.error({
-						content: resp.msg,
-						duration: 3
-					});
+					this.$Message.error({ content: resp.msg, duration: 3 });
 				}
 			});
 		},
@@ -156,35 +152,15 @@ export default {
 			});
 		},
 		renderContent(h, { root, node, data }) {
-			return h(
-				"span",
-				{
-					style: {
-						display: "inline-block",
-						cursor: "pointer"
-					},
-					on: {
-						click: () => {
-							data.checked = !data.checked;
-						}
-					}
-				},
-				[
-					h("span", [
-						h("Icon", {
-							props: {
-								type: data.icon,
-								size: "16"
-							},
-							style: {
-								"margin-right": "8px",
-								"margin-bottom": "3px"
-							}
-						}),
-						h("span", data.title)
-					])
-				]
-			);
+			return h("span", { style: { display: "inline-block", width: "100%" } }, [
+				h("span", [
+					h("Icon", {
+						props: { type: data.icon, size: "16" },
+						style: { marginRight: "8px" }
+					}),
+					h("span", data.title)
+				])
+			]);
 		},
 		//删除
 		emitDrop(data) {
@@ -200,9 +176,54 @@ export default {
 					this.$Message.error(resp.msg);
 				}
 			});
+		},
+		// 提交权限
+		emitRoleEdit() {
+			this.roleEditLoading = true;
+			let menuIds = [];
+			let selectedNodes = this.$refs.tree.getCheckedAndIndeterminateNodes();
+			selectedNodes.forEach(function (item) {
+				menuIds.push(item.id);
+			});
+			this.menu_ids = menuIds;
+			adadmRoleMenuEdit({
+				role_id: this.role_id,
+				menu_ids: this.menu_ids
+			}).then((resp) => {
+				this.roleEditLoading = false;
+				if (resp.code == 200) {
+					this.$Message.success({
+						content: "授权成功",
+						onClose: () => {
+							this.tabData.splice(data.index, 1);
+						}
+					});
+				} else {
+					this.$Message.error({ content: resp.msg, duration: 3 });
+				}
+				// if (res.success) {
+				// 	this.$Message.success("操作成功");
+				// 	// 标记重新获取菜单数据
+				// 	this.$store.commit("setAdded", false);
+				// 	util.initRouter(this);
+				// 	this.getDataList();
+				// 	this.permModalVisible = false;
+				// }
+			});
+		},
+		//
+		roleMenuAll(role_id) {
+			admRoleMenuAll({ id: role_id }).then((resp) => {
+				if (resp.code == 200) {
+					console.log(resp);
+				} else {
+					this.$Message.error({ content: resp.msg, duration: 3 });
+				}
+			});
 		}
 	},
 	created() {
+		this.maxHeight = Number(document.documentElement.clientHeight - 121) + "px";
 		this.preinit();
 		this.init();
 	}

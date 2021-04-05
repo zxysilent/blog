@@ -2,6 +2,7 @@ package sysctl
 
 import (
 	"blog/model"
+	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/zxysilent/utils"
@@ -86,7 +87,7 @@ func RoleAdd(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
-	// ipt.Ctime = time.Now()
+	ipt.Ctime = time.Now()
 	err = model.RoleAdd(ipt)
 	if err != nil {
 		return ctx.JSON(utils.Fail("添加失败", err.Error()))

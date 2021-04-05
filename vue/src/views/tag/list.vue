@@ -14,7 +14,7 @@
 			</Form>
 			<div slot="footer">
 				<ButtonGroup>
-					<Button type="warning" :loading="editLoading" @click="cmtEdit">提交保存</Button>
+					<Button type="warning" :loading="editLoading" @click="emitEdit">提交保存</Button>
 					<Button type="info" style="margin-left: 8px" @click="showEdit=false">取消关闭</Button>
 				</ButtonGroup>
 			</div>
@@ -89,7 +89,7 @@ export default {
 				}
 			});
 		},
-		cmtEdit() {
+		emitEdit() {
 			this.$refs["editForm"].validate(valid => {
 				if (valid) {
 					this.editLoading = true;

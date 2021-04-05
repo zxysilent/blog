@@ -10,7 +10,7 @@ Target Server Type    : MariaDB
 Target Server Version : 100412
 File Encoding         : 65001
 
-Date: 2021-04-01 17:14:18
+Date: 2021-04-05 17:24:37
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -191,7 +191,7 @@ CREATE TABLE `sys_menu` (
   `ctime` datetime DEFAULT NULL COMMENT '时间',
   `use` tinyint(4) DEFAULT 1 COMMENT '是否使用',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -199,7 +199,7 @@ CREATE TABLE `sys_menu` (
 INSERT INTO `sys_menu` VALUES ('1', '0', '文章管理', 'post', '/post', 'ios-megaphone-outline', '1', '1', 'layout', '1000', '2021-03-31 14:18:36', '1');
 INSERT INTO `sys_menu` VALUES ('2', '1', '文章列表', 'post-list', '/post/list', 'ios-list-box-outline', '1', '1', 'views/post/list.vue', '1000', '2021-03-31 14:18:39', '1');
 INSERT INTO `sys_menu` VALUES ('3', '1', '添加文章', 'post-add', '/post/add', 'ios-add-circle-outline', '1', '1', 'views/article/article.vue', '1000', '2021-03-31 14:18:42', '1');
-INSERT INTO `sys_menu` VALUES ('4', '1', '编辑文章', 'post-edit', '/post/edit/:id(\\\\d+)', 'ios-create-outline', '0', '1', 'views/article/article.vue', '1000', '2021-03-31 14:18:45', '1');
+INSERT INTO `sys_menu` VALUES ('4', '1', '编辑文章', 'post-edit', '/post/edit/:id', 'ios-create-outline', '0', '1', 'views/article/article.vue', '1000', '2021-03-31 14:18:45', '1');
 INSERT INTO `sys_menu` VALUES ('5', '0', '页面管理', 'page', '/page', 'ios-map-outline', '1', '1', 'layout', '1000', '2021-03-31 14:20:41', '1');
 INSERT INTO `sys_menu` VALUES ('6', '5', '页面列表', 'page-list', '/page/list', 'ios-list-box-outline', '1', '1', 'views/page/list.vue', '1000', '2021-03-31 14:20:44', '1');
 INSERT INTO `sys_menu` VALUES ('7', '5', '添加页面', 'page-add', '/page/add', 'ios-add-circle-outline', '1', '1', 'views/article/article.vue', '1000', '2021-03-31 14:20:47', '1');
@@ -219,10 +219,13 @@ INSERT INTO `sys_menu` VALUES ('20', '17', '统计设置', 'setting-analytic', '
 INSERT INTO `sys_menu` VALUES ('21', '17', '自 定 义', 'setting-custom', '/setting/custom', 'ios-code-working', '1', '1', 'views/setting/custom.vue', '1000', '2021-03-31 20:09:05', '1');
 INSERT INTO `sys_menu` VALUES ('22', '0', '个人中心', 'auth', '/auth', 'ios-contact-outline', '1', '1', 'layout', '1000', '2021-03-31 20:09:08', '1');
 INSERT INTO `sys_menu` VALUES ('23', '22', '个人中心', 'auth-self', '/auth/self', 'ios-contact-outline', '1', '1', 'views/user/self.vue', '1000', '2021-03-31 20:09:11', '1');
-INSERT INTO `sys_menu` VALUES ('25', '0', '菜单管理', 'menu', '/menu', 'ios-pricetags-outline', '1', '1', 'layout', '1000', '2021-03-31 23:40:30', '1');
+INSERT INTO `sys_menu` VALUES ('25', '0', '菜单管理', 'menu', '/menu', 'ios-menu-outline', '1', '1', 'layout', '1000', '2021-03-31 23:40:30', '1');
 INSERT INTO `sys_menu` VALUES ('26', '25', '菜单列表', 'menu-list', '/menu/list', 'ios-list-box-outline', '1', '1', 'views/menu/list.vue', '1000', '2021-03-31 23:40:33', '1');
 INSERT INTO `sys_menu` VALUES ('27', '25', '添加菜单', 'menu-add', '/menu/add', 'ios-add-circle-outline', '1', '1', 'views/menu/add.vue', '1000', '2021-03-31 23:40:36', '1');
-INSERT INTO `sys_menu` VALUES ('28', '25', '编辑菜单', 'menu-edit', '/menu/edit/:id(\\\\d+)', 'ios-create-outline', '0', '1', 'views/menu/edit.vue', '1000', '2021-03-31 23:40:39', '1');
+INSERT INTO `sys_menu` VALUES ('28', '25', '编辑菜单', 'menu-edit', '/menu/edit/:id', 'ios-create-outline', '0', '1', 'views/menu/edit.vue', '1000', '2021-03-31 23:40:39', '1');
+INSERT INTO `sys_menu` VALUES ('29', '0', '角色管理', 'role', '/role', 'ios-woman-outline', '1', '0', 'layout', '1000', null, '1');
+INSERT INTO `sys_menu` VALUES ('30', '29', '角色列表', 'role-list', '/role/list', 'ios-list-box-outline', '1', '0', 'views/role/list.vue', '1000', null, '1');
+INSERT INTO `sys_menu` VALUES ('31', '29', '添加角色', 'role-add', '/role/add', 'ios-add-circle-outline', '1', '0', 'views/role/add', '1000', null, '1');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -235,13 +238,14 @@ CREATE TABLE `sys_role` (
   `inner` tinyint(4) DEFAULT 0 COMMENT '内部禁止删除',
   `ctime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
 INSERT INTO `sys_role` VALUES ('1', '超级管理员', '内置管理员拥有所有权限', '1', '2020-12-30 14:59:13');
 INSERT INTO `sys_role` VALUES ('2', '管理员', '管理员', '1', '2021-03-31 23:29:21');
+INSERT INTO `sys_role` VALUES ('4', 'test', 'test', '0', null);
 
 -- ----------------------------
 -- Table structure for sys_role_menu
@@ -318,4 +322,4 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'zxysilent', 'zxysilent', '3b861abeaa25fba9d03898324463f7', '1074791424', 'zxysilent@foxmail.com', '', '127.0.0.1', '1', '2021-04-01 14:10:29', '2017-04-05 23:28:35', '1074791424');
+INSERT INTO `user` VALUES ('1', 'zxysilent', 'zxysilent', '3b861abeaa25fba9d03898324463f7', '1074791424', 'zxysilent@foxmail.com', '', '127.0.0.1', '2', '2021-04-05 17:22:59', '2017-04-05 23:28:35', '1074791424');

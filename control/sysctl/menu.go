@@ -2,6 +2,7 @@ package sysctl
 
 import (
 	"blog/model"
+	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/zxysilent/utils"
@@ -109,7 +110,7 @@ func MenuAdd(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
-	// ipt.Utime = time.Now()
+	ipt.Ctime = time.Now()
 	err = model.MenuAdd(ipt)
 	if err != nil {
 		return ctx.JSON(utils.Fail("添加失败", err.Error()))
@@ -130,7 +131,6 @@ func MenuEdit(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
-	// ipt.Ctime = time.Now()
 	err = model.MenuEdit(ipt)
 	if err != nil {
 		return ctx.JSON(utils.Fail("修改失败", err.Error()))

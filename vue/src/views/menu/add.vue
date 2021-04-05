@@ -74,7 +74,6 @@
 					</FormItem>
 					</Col>
 				</Row>
-
 				<FormItem>
 					<Button type="warning" :loading="loading" @click="emitAdd">提交保存</Button>
 					<Button type="success" @click="emitReset()" style="margin-left: 8px">重置填写</Button>
@@ -120,10 +119,7 @@ export default {
 				if (resp.code == 200) {
 					this.menuAll = resp.data;
 				} else {
-					this.$Message.error({
-						content: resp.msg,
-						duration: 3
-					});
+					this.$Message.error({ content: resp.msg, duration: 3 });
 				}
 			});
 		},
@@ -140,17 +136,12 @@ export default {
 							this.$Message.success({
 								content: "添加成功",
 								onClose: () => {
-									// this.$router.push({
-									// 	name: "menu-list"
-									// });
+									// this.$router.push({ name: "menu-list" });
 									this.emitReset();
 								}
 							});
 						} else {
-							this.$Message.error({
-								content: resp.msg,
-								duration: 3
-							});
+							this.$Message.error({ content: resp.msg, duration: 3 });
 						}
 					});
 				}
