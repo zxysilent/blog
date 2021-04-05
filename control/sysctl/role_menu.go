@@ -81,12 +81,13 @@ func RoleMenuEdit(ctx echo.Context) error {
 			Ctime:  time.Now(),
 		})
 	}
-	model.RoleMenuAddMulti(addRoleMenus)
-	// 删除旧的角色菜单集合
-	model.RoleMenuDropMulti(dropIds)
-	// err = model.RoleMenuEdit(ipt)
-	// if err != nil {
-	// 	return ctx.JSON(utils.Fail("修改失败", err.Error()))
-	// }
+	// model.RoleMenuAddMulti(addRoleMenus)
+	// // 删除旧的角色菜单集合
+	// model.RoleMenuDropMulti(dropIds)
+	// 合并到一个事务
+	err = model.RoleMenuEdit(addRoleMenus, dropIds)
+	if err != nil {
+		return ctx.JSON(utils.Fail("修改失败", err.Error()))
+	}
 	return ctx.JSON(utils.Succ("succ"))
 }
