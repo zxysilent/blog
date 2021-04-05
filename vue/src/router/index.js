@@ -47,30 +47,10 @@ export const initRouter = [
 	}
 ];
 export const errorRouter = [
-	{
-		path: "/jwt",
-		name: "errjwt",
-		title: "jwt-重新登录",
-		component: () => import("@/views/errors/jwt.vue")
-	},
-	{
-		path: "/401",
-		name: "err401",
-		title: "401-没有权限",
-		component: () => import("@/views/errors/401.vue")
-	},
-	{
-		path: "/50x",
-		name: "err50x",
-		title: "50x-服务异常",
-		component: () => import("@/views/errors/50x.vue")
-	},
-	{
-		path: "/*",
-		name: "err404",
-		title: "404-没发现",
-		component: () => import("@/views/errors/404.vue")
-	}
+	{ path: "/jwt", name: "errjwt", title: "jwt-重新登录", component: () => import("@/views/errors/jwt.vue") },
+	{ path: "/401", name: "err401", title: "401-没有权限", component: () => import("@/views/errors/401.vue") },
+	{ path: "/50x", name: "err50x", title: "50x-服务异常", component: () => import("@/views/errors/50x.vue") },
+	{ path: "/*", name: "err404", title: "404-没发现", component: () => import("@/views/errors/404.vue") }
 ];
 
 // 路由配置
@@ -95,15 +75,11 @@ router.beforeEach(async (to, from, next) => {
 		// 已经登陆 去登陆地方
 		if (Utils.getToken() && to.name == "login") {
 			Utils.title("主页");
-			next({
-				name: "home"
-			});
+			next({ name: "home" });
 		} else if (!Utils.getToken() && !Utils.noAuth(to.name)) {
 			// //没有登陆 不是去不需要权限的地方
 			Utils.title("登陆");
-			next({
-				name: "login"
-			});
+			next({ name: "login" });
 		} else {
 			next();
 		}
