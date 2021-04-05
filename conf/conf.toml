@@ -8,7 +8,7 @@ srv = "http://127.0.0.1:8085"
 # token 相关
 token_key = "token"
 # 过期时间 h
-token_exp = 8
+token_exp = 24
 # 单点登录
 token_sso =false
 # 保持在线
