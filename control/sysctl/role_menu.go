@@ -74,11 +74,12 @@ func RoleMenuEdit(ctx echo.Context) error {
 	}
 	// 添加新的角色菜单集合
 	addRoleMenus := make([]model.RoleMenu, 0, len(addIds))
+	now := time.Now()
 	for _, item := range addIds {
 		addRoleMenus = append(addRoleMenus, model.RoleMenu{
 			RoleId: ipt.RoleId,
 			MenuId: item,
-			Ctime:  time.Now(),
+			Ctime:  now,
 		})
 	}
 	// model.RoleMenuAddMulti(addRoleMenus)
