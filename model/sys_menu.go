@@ -111,7 +111,7 @@ func MenuPage(pi int, ps int, cols ...string) ([]Menu, error) {
 	if len(cols) > 0 {
 		sess.Cols(cols...)
 	}
-	err := sess.Desc("Utime").Limit(ps, (pi-1)*ps).Find(&mods)
+	err := sess.Desc("Ctime").Limit(ps, (pi-1)*ps).Find(&mods)
 	return mods, err
 }
 
@@ -175,4 +175,13 @@ func MenuDrop(id int) error {
 	}
 	sess.Commit()
 	return nil
+}
+
+// ------------------------------------------------------ 角色菜单 ------------------------------------------------------
+
+// RoleMenuAll 通过RoleId查询所有菜单信息
+func RoleMenuAll(roleId int) ([]Menu, error) {
+	mods := make([]Menu, 0, 8)
+	err := Db.SQL("SELECT sys_menu.* FROM sys_menu LEFT JOIN sys_role_menu ON sys_menu.id = sys_role_menu.menu_id WHERE sys_role_menu.role_id = ?", roleId).Find(&mods)
+	return mods, err
 }

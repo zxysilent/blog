@@ -13,16 +13,16 @@ import (
 // @Param id query int true "id"
 // @Param token query string true "token"
 // @Success 200 {object} model.Reply{data=model.Role} "成功数据"
-// @Router /adm/role/api/get [get]
+// @Router /adm/role/api/all [get]
 func RoleApiAll(ctx echo.Context) error {
 	ipt := &model.IptId{}
 	err := ctx.Bind(ipt)
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
-	mods, has := model.RoleMenuAll(ipt.Id)
-	if !has {
-		return ctx.JSON(utils.ErrOpt("未查询到角色菜单导航信息"))
+	mods, err := model.RoleMenuAll(ipt.Id)
+	if err != nil {
+		return ctx.JSON(utils.ErrOpt("未查询到角色api接口信息", err.Error()))
 	}
 	return ctx.JSON(utils.Succ("succ", mods))
 }

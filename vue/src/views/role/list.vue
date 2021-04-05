@@ -195,7 +195,6 @@ export default {
 					this.$Message.success({
 						content: "授权成功",
 						onClose: () => {
-							this.tabData.splice(data.index, 1);
 						}
 					});
 				} else {

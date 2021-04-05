@@ -14,19 +14,14 @@ func (RoleMenu) TableName() string {
 	return "sys_role_menu"
 }
 
-// RoleMenuGet 单条角色菜单导航信息
-func RoleMenuGet(id int) (*RoleMenu, bool) {
-	mod := &RoleMenu{}
-	has, _ := Db.ID(id).Get(mod)
-	return mod, has
-}
+//TODO 删除和添加，需要合并到一个事务中
 
-// RoleMenuAdd 添加角色菜单导航信息
-func RoleMenuAdd(mod *RoleMenu) error {
+// RoleMenuAddMulti 批量添加角色菜单导航信息
+func RoleMenuAddMulti(mods []RoleMenu) error {
 	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
-	if _, err := sess.InsertOne(mod); err != nil {
+	if _, err := sess.InsertMulti(&mods); err != nil {
 		sess.Rollback()
 		return err
 	}
@@ -34,25 +29,12 @@ func RoleMenuAdd(mod *RoleMenu) error {
 	return nil
 }
 
-// RoleMenuEdit 编辑角色菜单导航信息
-func RoleMenuEdit(mod *RoleMenu, cols ...string) error {
+// RoleMenuDropMulti 批量删除角色菜单导航信息
+func RoleMenuDropMulti(menuIds []int) error {
 	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
-	if _, err := sess.ID(mod.Id).Cols(cols...).Update(mod); err != nil {
-		sess.Rollback()
-		return err
-	}
-	sess.Commit()
-	return nil
-}
-
-// RoleMenuDrop 删除单条角色菜单导航信息
-func RoleMenuDrop(id int) error {
-	sess := Db.NewSession()
-	defer sess.Close()
-	sess.Begin()
-	if _, err := sess.ID(id).Delete(&RoleMenu{}); err != nil {
+	if _, err := sess.In("menu_id", menuIds).Delete(&RoleMenu{}); err != nil {
 		sess.Rollback()
 		return err
 	}

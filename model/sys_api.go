@@ -103,3 +103,12 @@ func ApiDrop(id int) error {
 	sess.Commit()
 	return nil
 }
+
+// ------------------------------------------------------ 角色接口 ------------------------------------------------------
+
+// RoleApiAll  通过RoleId查询所有接口信息
+func RoleApiAll(roleId int) ([]Api, error) {
+	mods := make([]Api, 0, 8)
+	err := Db.SQL("SELECT sys_api.* FROM sys_api LEFT JOIN sys_role_api ON sys_api.id = sys_role_api.api_id WHERE sys_role_api.role_id = ?", roleId).Find(&mods)
+	return mods, err
+}
