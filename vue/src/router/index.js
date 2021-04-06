@@ -31,6 +31,7 @@ export const initRouter = [
 		title: "登录",
 		component: () => import("@/views/login.vue")
 	},
+
 	{
 		path: "/_home",
 		name: "_home",
@@ -42,6 +43,12 @@ export const initRouter = [
 				title: "管理主页",
 				name: "home",
 				component: () => import("@/views/home/home.vue")
+			},
+			{
+				path: "/auth/self",
+				name: "auth-self",
+				title: "个人信息",
+				component: () => import("@/views/user/self.vue")
 			}
 		]
 	}
