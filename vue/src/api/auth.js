@@ -1,10 +1,10 @@
 import fetch from "./fetch";
 
 export const apiAuthLogin = data => {
-	return fetch.post("/api/login", data);
+	return fetch.post("/api/auth/login", data);
 };
 export const apiAuthVcode = () => {
-	return fetch.get("/api/vcode");
+	return fetch.get("/api/auth/vcode");
 };
 export const admAuth = () => {
 	return fetch.get("/adm/auth");
