@@ -142,7 +142,7 @@ export default {
 		},
 		init() {
 			this.loading = true;
-			admRoleAll({ table: true }).then((resp) => {
+			admRoleAll().then((resp) => {
 				if (resp.code == 200) {
 					this.tabData = resp.data;
 				} else {
@@ -194,8 +194,7 @@ export default {
 				if (resp.code == 200) {
 					this.$Message.success({
 						content: "授权成功",
-						onClose: () => {
-						}
+						onClose: () => {}
 					});
 				} else {
 					this.$Message.error({ content: resp.msg, duration: 3 });
@@ -210,11 +209,29 @@ export default {
 				// }
 			});
 		},
+		initTree(tree, set) {
+			tree.map((item) => {
+				this.$set(item, "expand", false);
+				if (set.has(item.id)) {
+					this.$set(item, "checked", true);
+				} else {
+					this.$set(item, "checked", false);
+				}
+				if (item.children) {
+					this.initTree(item.children, set);
+				}
+			});
+		},
 		//
 		roleMenuAll(role_id) {
 			admRoleMenuAll({ id: role_id }).then((resp) => {
 				if (resp.code == 200) {
-					console.log(resp);
+					const set = new Set(); //保存已有的选项
+					resp.data.map((item) => {
+						set.add(item.id);
+					});
+					// 设置默认选择
+					this.initTree(this.menuTree, set);
 				} else {
 					this.$Message.error({ content: resp.msg, duration: 3 });
 				}

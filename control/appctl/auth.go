@@ -85,7 +85,7 @@ func UserLogin(ctx echo.Context) error {
 	auth := hwt.Auth{
 		Id:    mod.Id,
 		Role:  int(mod.Role1),
-		ExpAt: time.Now().Add(time.Hour * 2).Unix(),
+		ExpAt: time.Now().Add(time.Hour * 24).Unix(),
 	}
 	mod.Ltime = now
 	mod.Ip = ctx.RealIP()

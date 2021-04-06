@@ -44,16 +44,23 @@ func RoleMenuDropMulti(menuIds []int) error {
 // param	mods	"待添加集合"
 // param	menuIds	"待删除集合"
 func RoleMenuEdit(mods []RoleMenu, menuIds []int) error {
+	if len(mods) == 0 && len(menuIds) == 0 {
+		return nil
+	}
 	sess := Db.NewSession()
 	defer sess.Close()
-	if _, err := sess.InsertMulti(&mods); err != nil {
-		sess.Rollback()
-		return err
-	}
 	sess.Begin()
-	if _, err := sess.In("menu_id", menuIds).Delete(&RoleMenu{}); err != nil {
-		sess.Rollback()
-		return err
+	if len(mods) > 0 {
+		if _, err := sess.InsertMulti(&mods); err != nil {
+			sess.Rollback()
+			return err
+		}
+	}
+	if len(menuIds) > 0 {
+		if _, err := sess.In("menu_id", menuIds).Delete(&RoleMenu{}); err != nil {
+			sess.Rollback()
+			return err
+		}
 	}
 	sess.Commit()
 	return nil
