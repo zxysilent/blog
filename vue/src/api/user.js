@@ -9,8 +9,8 @@ export const admUserAdd = data => {
 	return fetch.post("/adm/user/add", data);
 };
 //分页
-export const apiUserPage = (rl, data) => {
-	return fetch.get(`/api/user/page/${rl}`, { params: data });
+export const admUserPage = data => {
+	return fetch.get(`/adm/user/page`, { params: data });
 };
 //更新用户状态
 export const admUserChgatv = id => {

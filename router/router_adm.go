@@ -58,6 +58,13 @@ func admRouter(adm *echo.Group) {
 		adm.GET("/api/drop/:id", sysctl.ApiDrop) // 接口分页
 		adm.POST("/api/add", sysctl.ApiAdd)      // 添加接口
 		adm.POST("/api/edit", sysctl.ApiEdit)    // 编辑接口
-
+	}
+	{ // user
+		adm.POST("/user/add", sysctl.UserAdd)
+		adm.POST("/user/edit", sysctl.UserEdit)
+		adm.GET("/user/drop/:id", sysctl.UserDrop)
+		adm.GET("/user/reset/:id", sysctl.UserReset)
+		adm.GET("/user/get/:id", sysctl.UserGet)
+		adm.GET("/user/page", sysctl.UserPage)
 	}
 }

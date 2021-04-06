@@ -1,128 +1,183 @@
 package sysctl
 
-// import (
-// 	"blog/model"
-// 	"strconv"
+import (
+	"blog/model"
+	"strconv"
+	"time"
 
-// 	"github.com/labstack/echo/v4"
-// 	"github.com/zxysilent/utils"
-// )
+	"github.com/labstack/echo/v4"
+	"github.com/zxysilent/utils"
+)
 
-// // UserGet doc
-// // @Tags sysuser
-// // @Summary 通过id获取单条用户信息
-// // @Param id path int true "pk id" default(1)
-// // @Router /sys/user/get/{id} [get]
-// func UserGet(ctx echo.Context) error {
-// 	id, err := strconv.Atoi(ctx.Param("id"))
-// 	if err != nil {
-// 		return ctx.JSON(utils.ErrIpt("数据输入错误", err.Error()))
-// 	}
-// 	mod, has := model.UserGet(id)
-// 	if !has {
-// 		return ctx.JSON(utils.ErrOpt("未查询到用户信息"))
-// 	}
-// 	return ctx.JSON(utils.Succ("succ", mod))
-// }
+// UserGet doc
+// @Tags user
+// @Summary 通过id获取user信息
+// @Param id path int true "id"
+// @Success 200 {object} model.Reply{data=model.User} "成功数据"
+// @Router /api/user/get/{id} [get]
+func UserGet(ctx echo.Context) error {
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		return ctx.JSON(utils.ErrIpt("数据输入错误", err.Error()))
+	}
+	mod, has := model.UserGet(id)
+	if !has {
+		return ctx.JSON(utils.ErrOpt("未查询到数据"))
+	}
+	return ctx.JSON(utils.Succ(`用户数据`, mod))
+}
 
-// // UserAll doc
-// // @Tags sysuser
-// // @Summary 获取所有用户信息
-// // @Router /sys/user/all [get]
-// func UserAll(ctx echo.Context) error {
-// 	mods, err := model.UserAll()
-// 	if err != nil {
-// 		return ctx.JSON(utils.ErrOpt("未查询到用户信息", err.Error()))
-// 	}
-// 	return ctx.JSON(utils.Succ("succ", mods))
-// }
+// UserExist doc
+// @Tags user
+// @Summary 获取某个用户信息
+// @Param num path string true "账号"
+// @Success 200 {object} model.Reply "成功数据"
+// @Router /api/user/exist/{num} [get]
+func UserExist(ctx echo.Context) error {
+	num := ctx.Param("num")
+	if !model.UserExist(num) {
+		return ctx.JSON(utils.Fail("不存在"))
+	}
+	return ctx.JSON(utils.Succ(`succ`))
+}
 
-// // UserPage doc
-// // @Tags sysuser
-// // @Summary 获取用户分页信息
-// // @Param cid path int true "分类id" default(1)
-// // @Param pi query int true "分页数" default(1)
-// // @Param ps query int true "每页条数[5,20]" default(5)
-// // @Router /sys/user/page/{cid} [get]
-// func UserPage(ctx echo.Context) error {
-// 	// cid, err := strconv.Atoi(ctx.Param("cid"))
-// 	// if err != nil {
-// 	//  return ctx.JSON(utils.ErrIpt("数据输入错误", err.Error()))
-// 	// }
-// 	ipt := &model.Page{}
-// 	err := ctx.Bind(ipt)
-// 	if err != nil {
-// 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
-// 	}
-// 	if ipt.Ps > 20 || ipt.Ps < 5 {
-// 		return ctx.JSON(utils.ErrIpt("分页大小输入错误", ipt.Ps))
-// 	}
-// 	count := model.UserCount()
-// 	if count < 1 {
-// 		return ctx.JSON(utils.ErrOpt("未查询到数据", " count < 1"))
-// 	}
-// 	mods, err := model.UserPage(ipt.Pi, ipt.Ps)
-// 	if err != nil {
-// 		return ctx.JSON(utils.ErrOpt("查询数据错误", err.Error()))
-// 	}
-// 	if len(mods) < 1 {
-// 		return ctx.JSON(utils.ErrOpt("未查询到数据", "len(mods) < 1"))
-// 	}
-// 	return ctx.JSON(utils.Page("succ", mods, int(count)))
-// }
+// UserAdd doc
+// @Tags user
+// @Summary 添加user信息
+// @Param token query string true "凭证"
+// @Param body body model.User true "request"
+// @Success 200 {object} model.Reply "成功数据"
+// @Router /adm/user/add [post]
+func UserAdd(ctx echo.Context) error {
+	// role, _ := ctx.Get("role").(int)
+	// if role < model.RoleAdmin {
+	// 	return ctx.JSON(utils.ErrDeny("对不起您没有此权限"))
+	// }
+	ipt := &struct {
+		model.User
+		Pass string `json:"pass"`
+	}{}
+	err := ctx.Bind(ipt)
+	if err != nil {
+		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
+	}
+	ipt.User.Passwd = ipt.Pass
+	ipt.Ltime = time.Now()
+	// ipt.Utime = ipt.Ltime
+	err = model.UserAdd(&ipt.User)
+	if err != nil {
+		return ctx.JSON(utils.Fail("添加失败", err.Error()))
+	}
+	return ctx.JSON(utils.Succ("succ"))
+}
 
-// // UserAdd doc
-// // @Tags sysuser
-// // @Summary 添加用户信息
-// // @Param token query string true "hmt" default(token)
-// // @Router /sys/user/add [post]
-// func UserAdd(ctx echo.Context) error {
-// 	ipt := &model.User{}
-// 	err := ctx.Bind(ipt)
-// 	if err != nil {
-// 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
-// 	}
-// 	// ipt.Utime = time.Now()
-// 	err = model.UserAdd(ipt)
-// 	if err != nil {
-// 		return ctx.JSON(utils.Fail("添加失败", err.Error()))
-// 	}
-// 	return ctx.JSON(utils.Succ("succ"))
-// }
+// UserEdit doc
+// @Tags user
+// @Summary 修改user信息
+// @Param token query string true "凭证"
+// @Param body body model.User true "request"
+// @Success 200 {object} model.Reply "成功数据"
+// @Router /adm/user/edit [post]
+func UserEdit(ctx echo.Context) error {
+	// role, _ := ctx.Get("role").(int)
+	// if role < model.RoleAdmin {
+	// 	return ctx.JSON(utils.ErrDeny("对不起您没有此权限"))
+	// }
+	ipt := &model.User{}
+	err := ctx.Bind(ipt)
+	if err != nil {
+		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
+	}
+	err = model.UserEdit(ipt, "Name", "Phone", "Addr")
+	if err != nil {
+		return ctx.JSON(utils.Fail("修改失败", err.Error()))
+	}
+	return ctx.JSON(utils.Succ("succ"))
+}
 
-// // UserEdit doc
-// // @Tags sysuser
-// // @Summary 修改用户信息
-// // @Param token query string true "hmt" default(token)
-// // @Router /sys/user/edit [post]
-// func UserEdit(ctx echo.Context) error {
-// 	ipt := &model.User{}
-// 	err := ctx.Bind(ipt)
-// 	if err != nil {
-// 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
-// 	}
-// 	// ipt.Utime = time.Now()
-// 	err = model.UserEdit(ipt)
-// 	if err != nil {
-// 		return ctx.JSON(utils.Fail("修改失败", err.Error()))
-// 	}
-// 	return ctx.JSON(utils.Succ("succ"))
-// }
+// UserReset doc
+// @Tags user
+// @Summary 重置密码
+// @Param id path int true "id"
+// @Param token query string true "凭证"
+// @Success 200 {object} model.Reply "成功数据"
+// @Router /adm/user/reset/{id} [get]
+func UserReset(ctx echo.Context) error {
+	// role, _ := ctx.Get("role").(int)
+	// if role < model.RoleAdmin {
+	// 	return ctx.JSON(utils.ErrDeny("对不起您没有此权限"))
+	// }
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		return ctx.JSON(utils.ErrIpt("数据输入错误", err.Error()))
+	}
+	if id == ctx.Get("uid").(int) {
+		return ctx.JSON(utils.ErrOpt("不能重置自己"))
+	}
+	mod := model.User{Id: id, Passwd: "fde6bb0541387e4ebdadf7c2ff3112"} //1q2w3e
+	err = model.UserEdit(&mod, "passwd")
+	if err != nil {
+		return ctx.JSON(utils.Fail("修改失败", err.Error()))
+	}
+	return ctx.JSON(utils.Succ("succ"))
+}
 
-// // UserDrop doc
-// // @Tags sysuser
-// // @Summary 通过id删除单条用户信息
-// // @Param id path int true "pk id" default(1)
-// // @Param token query string true "hmt" default(token)
-// // @Router /sys/user/drop/{id} [get]
-// func UserDrop(ctx echo.Context) error {
-// 	id, err := strconv.Atoi(ctx.Param("id"))
-// 	if err != nil {
-// 		return ctx.JSON(utils.ErrIpt("数据输入错误", err.Error()))
-// 	}
-// 	err = model.UserDrop(id)
-// 	if err != nil {
-// 		return ctx.JSON(utils.ErrOpt("删除失败", err.Error()))
-// 	}
-// 	return ctx.JSON(utils.Succ("succ"))
-// }
+// UserDrop doc
+// @Tags user
+// @Summary 删除user信息
+// @Param id path int true "id"
+// @Param token query string true "凭证"
+// @Success 200 {object} model.Reply "成功数据"
+// @Router /adm/user/drop/{id} [post]
+func UserDrop(ctx echo.Context) error {
+	// role, _ := ctx.Get("role").(int)
+	// if role < model.RoleAdmin {
+	// 	return ctx.JSON(utils.ErrDeny("对不起您没有此权限"))
+	// }
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		return ctx.JSON(utils.ErrIpt("数据输入错误", err.Error()))
+	}
+	if id == ctx.Get("uid").(int) {
+		return ctx.JSON(utils.ErrOpt("不能删除自己"))
+	}
+	err = model.UserDrop(id)
+	if err != nil {
+		return ctx.JSON(utils.ErrOpt("删除失败", err.Error()))
+	}
+	return ctx.JSON(utils.Succ(`succ`))
+}
+
+// UserPage doc
+// @Tags user
+// @Summary 获取某个分类下分页数据
+// @Param pi query int true "分页数"
+// @Param ps query int true "每页条数[5,20]" default(5)
+// @Success 200 {object} model.Reply "成功数据"
+// @Router /api/user/page [get]
+func UserPage(ctx echo.Context) error {
+	// role, _ := ctx.Get("role").(int)
+	// if role < model.RoleAdmin {
+	// 	return ctx.JSON(utils.ErrDeny("对不起您没有此权限"))
+	// }
+	ipt := &model.Page{}
+	err := ctx.Bind(ipt)
+	if err != nil {
+		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
+	}
+	if ipt.Ps > 20 || ipt.Ps < 5 {
+		return ctx.JSON(utils.ErrIpt("分页大小输入错误", ipt.Ps))
+	}
+	count := model.UserCount()
+	if count < 1 {
+		return ctx.JSON(utils.ErrOpt("未查询到数据", " count < 1"))
+	}
+	mods, err := model.UserPage(ipt.Pi, ipt.Ps)
+	if err != nil {
+		return ctx.JSON(utils.ErrOpt("查询数据错误", err.Error()))
+	}
+	if len(mods) < 1 {
+		return ctx.JSON(utils.ErrOpt("未查询到数据", "len(mods) < 1"))
+	}
+	return ctx.JSON(utils.Page("succ", mods, int(count)))
+}
