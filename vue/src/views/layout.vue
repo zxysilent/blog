@@ -93,6 +93,8 @@
 						<MenuItem name="setting-custom" to="/setting/custom">
 						<Icon type="ios-code-working" /> 自 定 义</MenuItem>
 					</Submenu>-->
+					<MenuItem name="home" to="/home">
+					<Icon type="ios-home-outline" /> 管理主页</MenuItem>
 					<template v-for="item in getMenus">
 						<Submenu v-if="item.children && item.show" :name="item.name" :key="item.name">
 							<template slot="title">
