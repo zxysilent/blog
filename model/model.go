@@ -49,6 +49,8 @@ func Init() {
 		cacher := caches.NewLRUCacher(caches.NewMemoryStore(), conf.App.OrmCacheSize)
 		db.SetDefaultCacher(cacher)
 	}
+	// mysql int(11)、tinyint(4)、smallint(6)、mediumint(9)、bigint(20)
+
 	if conf.App.OrmSync {
 		err := db.Sync2(
 			new(User),

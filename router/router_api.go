@@ -9,10 +9,10 @@ import (
 
 // apiRouter 通用访问
 func apiRouter(api *echo.Group) {
-	api.POST(`/login`, sysctl.Login)                // 登陆
-	api.GET(`/user/exist/:num`, appctl.UserExist)   // 判断账号是否存在
-	api.GET("/vcode", appctl.Vcode)                 // 验证码
-	api.POST(`/logout`, appctl.UserLogout)          // 注销
+	api.GET("/auth/vcode", sysctl.AuthVcode)        // 验证码
+	api.GET(`/auth/exist`, appctl.UserExist)        // 判断账号是否存在
+	api.POST(`/auth/login`, sysctl.AuthLogin)       // 登陆
+	api.POST(`/auth/logout`, sysctl.UserLogout)     // 注销
 	api.GET(`/cate/all`, appctl.CateAll)            // 分类列表
 	api.GET(`/post/tag/get/:id`, appctl.PostTagGet) // 通过分类查询文章
 	api.GET(`/post/get/:id`, appctl.PostGet)        // 文章

@@ -1,15 +1,15 @@
 import fetch from "./fetch";
 
-export const apiLogin = data => {
+export const apiAuthLogin = data => {
 	return fetch.post("/api/login", data);
 };
-export const apiVcode = () => {
+export const apiAuthVcode = () => {
 	return fetch.get("/api/vcode");
 };
 export const admAuth = () => {
 	return fetch.get("/adm/auth");
 };
-export const apiLogoff = data => {
+export const apiAuthLogoff = data => {
 	//   return fetch.post("/api/logoff", data);
 };
 // 统计状态

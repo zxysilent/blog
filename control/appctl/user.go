@@ -136,10 +136,10 @@ func UserEdit(ctx echo.Context) error {
 	if len(ipt.Roles) == 0 {
 		return ctx.JSON(utils.ErrIpt(`请至少选择一个权限`))
 	}
-	role := model.UserBaseRole()
-	for idx := range ipt.Roles {
-		role += (1 << ipt.Roles[idx])
-	}
+	// role := model.UserBaseRole()
+	// for idx := range ipt.Roles {
+	// 	role += (1 << ipt.Roles[idx])
+	// }
 	//ipt.User.Role = role
 	//auth := ctx.Get("auth").(*model.JwtClaims)
 	// if !model.UserEdit(&ipt.User, auth.Role, "Name", "Phone", "Email", "Desc", "Role") {
@@ -182,16 +182,16 @@ func UserPass(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(utils.Fail(`输入数据有误`, err.Error()))
 	}
-	mod, has := model.UserGet(ctx.Get("uid").(int))
-	if !has {
-		return ctx.JSON(utils.Fail(`输入数据有误,请重试`))
-	}
-	if mod.Pass != ipt.Opass {
-		return ctx.JSON(utils.Fail(`原始密码输入错误,请重试`))
-	}
-	if !model.UserPass(mod.Id, ipt.Npass) {
-		return ctx.JSON(utils.Fail(`密码修改失败`))
-	}
+	// mod, has := model.UserGet(ctx.Get("uid").(int))
+	// if !has {
+	// 	return ctx.JSON(utils.Fail(`输入数据有误,请重试`))
+	// }
+	// if mod.Pass != ipt.Opass {
+	// 	return ctx.JSON(utils.Fail(`原始密码输入错误,请重试`))
+	// }
+	// if !model.UserPass(mod.Id, ipt.Npass) {
+	// 	return ctx.JSON(utils.Fail(`密码修改失败`))
+	// }
 	return ctx.JSON(utils.Succ(`密码修改成功`))
 }
 
@@ -211,8 +211,9 @@ func UserEditSelf(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, err.Error()))
 	}
-	if !model.UserEdit(mod, 0, "Name", "Phone", "Email") {
-		return ctx.JSON(utils.Fail(`用户信息修改失败`))
+	err = model.UserEdit(mod, "Name", "Phone", "Email")
+	if err != nil {
+		return ctx.JSON(utils.Fail(`用户信息修改失败`, err.Error()))
 	}
 	return ctx.JSON(utils.Succ(`用户信息修改成功`))
 }

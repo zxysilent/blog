@@ -2,7 +2,7 @@
 @import "./login.less";
 </style>
 <template>
-	<div class="login" @keydown.enter="submit">
+	<div class="login" @keydown.enter="emitLogin">
 		<div class="top">
 			<div class="header">
 				<a>
@@ -35,7 +35,7 @@
 					</Row>
 				</FormItem>
 				<FormItem>
-					<Button size="large" @click="submit" type="primary" long>登 录</Button>
+					<Button size="large" @click="emitLogin" type="primary" long>登 录</Button>
 				</FormItem>
 			</Form>
 			<p class="login-tip">首页
@@ -70,7 +70,7 @@
 </template>
 <script>
 import md5 from "js-md5";
-import { apiLogin, apiVcode } from "@/api/auth";
+import { apiAuthLogin, apiAuthVcode } from "@/api/auth";
 import Utils from "@/utils";
 export default {
 	data() {
@@ -84,7 +84,7 @@ export default {
 		};
 	},
 	methods: {
-		submit() {
+		emitLogin() {
 			this.$refs.loginForm.validate((valid) => {
 				if (valid) {
 					let data = {
@@ -93,7 +93,7 @@ export default {
 						vreal: this.dataForm.vreal,
 						passwd: md5(this.dataForm.passwd).substr(1, 30)
 					};
-					apiLogin(data).then((resp) => {
+					apiAuthLogin(data).then((resp) => {
 						if (resp.code == 200) {
 							this.$Message.success({
 								content: "登陆成功",
@@ -111,7 +111,7 @@ export default {
 			});
 		},
 		reload() {
-			apiVcode().then((resp) => {
+			apiAuthVcode().then((resp) => {
 				if (resp.code == 200) {
 					this.$refs.vcode.src = "data:image/png;base64," + resp.data.vcode;
 					this.dataForm.vcode = "";

@@ -17,7 +17,7 @@ import (
 	"github.com/zxysilent/utils"
 )
 
-// auth 相关
+// auth 相关-登录，注销、个人信息、角色菜单、角色接口
 
 //RBAC 模型
 // sysctl 独立权限管理
@@ -31,10 +31,11 @@ var loginLimiter = rate.NewLimiter(20, 5)
 // @Tags auth
 // @Summary 登陆
 // @Accept mpfd
-// @Param num formData string true "账号" default(super)
-// @Param pass formData string true "密码" default(123654)
-// @Router /login [post]
-func Login(ctx echo.Context) error {
+// @Param num formData string true "账号" default(zxysilent)
+// @Param pass formData string true "密码" default(zxyslt)
+// @Success 200 {object} model.Reply{data=string} "成功数据"
+// @Router /api/auth/login [post]
+func AuthLogin(ctx echo.Context) error {
 	ct, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := loginLimiter.Wait(ct); err != nil {
@@ -70,37 +71,37 @@ func Login(ctx echo.Context) error {
 		}
 		mod.Ecount = 0
 	}
-	if mod.Pass != ipt.Passwd {
+	if mod.Passwd != ipt.Passwd {
 		mod.Ltime = now
 		mod.Ecount++
 		// 错误次数大于 3 锁定
 		if mod.Ecount >= 3 {
 			mod.Ecount = -1
-			model.UserEditLogin(mod, "Ltime", "Ecount")
+			//model.UserEditLogin(mod, "Ltime", "Ecount")
 			return ctx.JSON(utils.Fail(`登录锁定请「5」分钟后登录`))
 		}
 		// 小于3 提示剩余次数
-		model.UserEditLogin(mod, "Ltime", "Ecount")
+		//model.UserEditLogin(mod, "Ltime", "Ecount")
 		return ctx.JSON(utils.Fail(`密码错误,剩于登录次数：` + strconv.Itoa(int(3-mod.Ecount))))
 	}
-	if !mod.Role1.IsAtv() {
-		return ctx.JSON(utils.Fail(`当前账号已被禁用`))
-	}
+	// if !mod.Role1.IsAtv() {
+	// 	return ctx.JSON(utils.Fail(`当前账号已被禁用`))
+	// }
 	auth := hwt.Auth{
-		Id:    mod.Id,
-		Role:  int(mod.Role1),
-		ExpAt: time.Now().Add(time.Hour * 2).Unix(),
+		Id: mod.Id,
+		//	Role:  int(mod.Role1),
+		ExpAt: time.Now().Add(time.Hour * 24).Unix(),
 	}
 	mod.Ltime = now
-	mod.Ip = ctx.RealIP()
-	model.UserEditLogin(mod, "Ltime", "Ip", "Ecount")
+	// mod.Ip = ctx.RealIP()
+	// model.UserEditLogin(mod, "Ltime", "Ip", "Ecount")
 	return ctx.JSON(utils.Succ(`登陆成功`, auth.Encode(conf.App.TokenSecret)))
 }
 
 // UserLogout doc
 // @Tags auth
 // @Summary 注销
-// @Router /logout [post]
+// @Router /api/auth/logout [post]
 func UserLogout(ctx echo.Context) error {
 	return ctx.HTML(200, `hello`)
 }
@@ -108,21 +109,21 @@ func UserLogout(ctx echo.Context) error {
 // UserAuth doc
 // @Tags auth
 // @Summary 获取登录信息
-// @Param token query string true "凭证hwt" default(hwt)
-// @Router /api/auth [get]
-func UserAuth(ctx echo.Context) error {
+// @Param token query string true "凭证"
+// @Success 200 {object} model.Reply{data=model.User} "成功数据"
+// @Router /adm/auth [get]
+func Auth(ctx echo.Context) error {
 	mod, _ := model.UserGet(ctx.Get("uid").(int))
-	return ctx.JSON(utils.Succ(`信息`, mod))
+	return ctx.JSON(utils.Succ(`auth`, mod))
 }
 
 // Login doc
 // @Tags auth
 // @Summary 登陆
 // @Accept mpfd
-// @Param num formData string true "账号" default(super)
-// @Param passwd formData string true "密码" default(123654)
-// @Router /api/login [post]
-func Vcode(ctx echo.Context) error {
+// @Success 200 {object} model.Reply "成功数据"
+// @Router /api/auth/vcode [post]
+func AuthVcode(ctx echo.Context) error {
 	rnd := utils.RandDigitStr(5)
 	out := struct {
 		Vcode string `json:"vcode"`

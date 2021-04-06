@@ -10,7 +10,7 @@ Target Server Type    : MariaDB
 Target Server Version : 100412
 File Encoding         : 65001
 
-Date: 2021-04-05 17:24:37
+Date: 2021-04-06 15:09:08
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -245,7 +245,6 @@ CREATE TABLE `sys_role` (
 -- ----------------------------
 INSERT INTO `sys_role` VALUES ('1', '超级管理员', '内置管理员拥有所有权限', '1', '2020-12-30 14:59:13');
 INSERT INTO `sys_role` VALUES ('2', '管理员', '管理员', '1', '2021-03-31 23:29:21');
-INSERT INTO `sys_role` VALUES ('4', 'test', 'test', '0', null);
 
 -- ----------------------------
 -- Table structure for sys_role_menu
@@ -257,11 +256,72 @@ CREATE TABLE `sys_role_menu` (
   `menu_id` int(11) DEFAULT 0,
   `ctime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sys_role_menu
 -- ----------------------------
+INSERT INTO `sys_role_menu` VALUES ('1', '1', '1', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('2', '1', '2', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('3', '1', '3', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('4', '1', '4', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('5', '1', '5', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('6', '1', '6', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('7', '1', '7', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('8', '1', '8', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('9', '1', '9', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('10', '1', '10', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('11', '1', '11', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('12', '1', '12', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('13', '1', '13', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('14', '1', '14', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('15', '1', '15', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('16', '1', '16', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('17', '1', '17', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('18', '1', '18', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('19', '1', '19', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('20', '1', '20', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('21', '1', '21', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('22', '1', '22', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('23', '1', '23', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('24', '1', '25', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('25', '1', '26', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('26', '1', '27', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('27', '1', '28', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('28', '1', '29', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('29', '1', '30', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('30', '1', '31', '2021-04-06 15:08:32');
+
+-- ----------------------------
+-- Table structure for sys_user
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_user`;
+CREATE TABLE `sys_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `num` varchar(255) DEFAULT NULL,
+  `pass` varchar(255) DEFAULT NULL,
+  `role` int(11) DEFAULT 0,
+  `email` varchar(255) DEFAULT NULL,
+  `phone` varchar(255) DEFAULT NULL,
+  `ip` varchar(32) DEFAULT NULL,
+  `ecount` int(11) DEFAULT 0,
+  `ltime` datetime DEFAULT NULL,
+  `ctime` datetime DEFAULT NULL,
+  `role1` int(11) DEFAULT 0,
+  `passwd` varchar(255) DEFAULT NULL COMMENT '密码',
+  `role_id` int(11) DEFAULT 0 COMMENT '角色',
+  `lock` tinyint(4) DEFAULT 0 COMMENT '锁定',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UQE_user_num` (`num`),
+  UNIQUE KEY `UQE_user_email` (`email`),
+  UNIQUE KEY `UQE_sys_user_phone` (`phone`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of sys_user
+-- ----------------------------
+INSERT INTO `sys_user` VALUES ('1', 'zxysilent', 'zxysilent', '3b861abeaa25fba9d03898324463f7', '1074791424', 'zxysilent@foxmail.com', '', '127.0.0.1', '2', '2021-04-06 13:14:19', '2017-04-05 23:28:35', '1074791424', null, '0', '0');
 
 -- ----------------------------
 -- Table structure for tag
@@ -296,30 +356,3 @@ INSERT INTO `tag` VALUES ('17', 'machinelearning', 'ml');
 INSERT INTO `tag` VALUES ('18', 'ds', 'ds');
 INSERT INTO `tag` VALUES ('19', 'matplotlib', 'matplotlib');
 INSERT INTO `tag` VALUES ('20', 'opencv', 'opencv');
-
--- ----------------------------
--- Table structure for user
--- ----------------------------
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
-  `num` varchar(255) DEFAULT NULL,
-  `pass` varchar(255) DEFAULT NULL,
-  `role` int(11) DEFAULT 0,
-  `email` varchar(255) DEFAULT NULL,
-  `phone` varchar(255) DEFAULT NULL,
-  `ip` varchar(32) DEFAULT NULL,
-  `ecount` int(11) DEFAULT 0,
-  `ltime` datetime DEFAULT NULL,
-  `ctime` datetime DEFAULT NULL,
-  `role1` int(11) DEFAULT 0,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UQE_user_num` (`num`),
-  UNIQUE KEY `UQE_user_email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of user
--- ----------------------------
-INSERT INTO `user` VALUES ('1', 'zxysilent', 'zxysilent', '3b861abeaa25fba9d03898324463f7', '1074791424', 'zxysilent@foxmail.com', '', '127.0.0.1', '2', '2021-04-05 17:22:59', '2017-04-05 23:28:35', '1074791424');
