@@ -7,7 +7,7 @@ type User struct {
 	Id     int       `xorm:"INT(11) PK AUTOINCR comment('主键')" json:"id"`
 	Name   string    `xorm:"VARCHAR(255) comment('姓名')" json:"name"`
 	Num    string    `xorm:"VARCHAR(255) UNIQUE comment('账号')" json:"num"`
-	Passwd string    `xorm:"VARCHAR(255) comment('密码')" json:"passwd"`
+	Passwd string    `xorm:"VARCHAR(255) comment('密码')" json:"-"`
 	RoleId int       `xorm:"INT(11) DEFAULT 0 comment('角色')" json:"role_id"`
 	Email  string    `xorm:"VARCHAR(255) UNIQUE comment('邮箱')" json:"email"`
 	Phone  string    `xorm:"VARCHAR(255) UNIQUE comment('电话')" json:"phone"`
