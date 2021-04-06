@@ -6,37 +6,33 @@
 			</p>
 			<div style="max-width:520px">
 				<Alert closable type="error">部分信息「用户名」修改后刷新后有效</Alert>
-				<Form ref="userForm" :model="userForm" :label-width="100" label-position="right" :rules="userRules">
-					<FormItem label="用户账号：" prop="num">
-						<Input readonly disabled v-model="userForm.num">
-						</Input>
+				<Form ref="dataForm" :model="dataForm" :label-width="120" label-colon label-position="right" :rules="dataRules">
+					<FormItem label="登录账号" prop="num">
+						<Input readonly disabled v-model="dataForm.num"> </Input>
 					</FormItem>
-					<FormItem label="用户姓名：" prop="name">
-						<Input v-model="userForm.name"></Input>
+					<FormItem label="用户姓名" prop="name">
+						<Input v-model="dataForm.name"></Input>
 					</FormItem>
-					<FormItem label="电话：" prop="phone">
-						<Input v-model="userForm.phone"></Input>
+					<FormItem label="电话" prop="phone">
+						<Input v-model="dataForm.phone"></Input>
 					</FormItem>
-					<FormItem label="邮箱地址：" prop="email">
-						<Input v-model="userForm.email"></Input>
+					<FormItem label="邮箱地址" prop="email">
+						<Input v-model="dataForm.email"></Input>
 					</FormItem>
-					<FormItem label="登录密码：">
-						<Button type="text" size="small" @click="showModel">修改密码</Button>
+					<FormItem label="登录密码">
+						<Button type="text" size="small" @click="modalPass = true">修改密码</Button>
 					</FormItem>
-					<FormItem label="创建时间：">
-						<span>{{ userForm.ctime.replace(/T|\+08:00|Z/g, " ") }}</span>
-					</FormItem>
-					<FormItem label="备注信息：" prop="remark">
-						<span>{{userForm.remark}}</span>
+					<FormItem label="创建时间">
+						<span>{{ dataForm.ctime.replace(/T|\+08:00/g, " ")}}</span>
 					</FormItem>
 					<FormItem>
-						<Button type="warning" :loading="loadingSaveInfo" @click="saveUser">提交保存</Button>
-						<Button type="success" @click="resetEdit()" style="margin-left: 8px">重置填写</Button>
+						<Button type="warning" :loading="loading" @click="emitPasswd">提交保存</Button>
+						<Button type="success" @click="init()" style="margin-left: 8px">重置填写</Button>
 					</FormItem>
 				</Form>
 			</div>
 		</Card>
-		<Modal v-model="showPasswordModal" :closable='false' :mask-closable=false :width="500">
+		<Modal v-model="modalPass" :closable='false' :mask-closable=false :width="500">
 			<h3 slot="header" style="color:#2D8CF0">
 				<Icon type="ios-eye-off-outline" /> 修改密码</h3>
 			<Form ref="passForm" :model="passForm" :label-width="100" label-position="right" :rules="passRules">
@@ -51,8 +47,8 @@
 				</FormItem>
 			</Form>
 			<div slot="footer">
-				<Button type="warning" :loading="loadingSavePass" @click="savePass">提交保存</Button>
-				<Button type="success" @click="resetForm('passForm')" style="margin-left: 8px">重置填写</Button>
+				<Button type="warning" :loading="loadingPass" @click="emit">提交保存</Button>
+				<Button type="success" @click="resetPasswd('passForm')" style="margin-left: 8px">重置填写</Button>
 				<Button type="info" @click="cancelPass()" style="margin-left: 8px">取消关闭</Button>
 			</div>
 		</Modal>
@@ -60,25 +56,23 @@
 </template>
 <script>
 import md5 from "js-md5";
-import util from "@/utils.js";
-import { admAuth } from "@/api/auth";
-import { admUserPass, admUserEditSelf } from "@/api/user";
+import { apiUserExist } from "@/api/user";
+import { admAuthGet, admAuthEditInfo, admAuthEditPasswd } from "@/api/auth";
 export default {
 	data() {
-		const valideRePassword = (rule, value, callback) => {
-			if (value !== this.passForm.newPass) {
-				callback(new Error("两次输入密码不一致"));
-			} else {
-				callback();
-			}
-		};
 		return {
-			userForm: { id: 0, num: "", name: "", email: "", phone: "", remark: "", ctime: "" },
-			loadingSaveInfo: false,
-			showPasswordModal: false, // 修改密码模态框显示
-			loadingSavePass: false,
+			dataForm: { id: 1, name: "", num: "", phone: "", ctime: "" },
+			loading: false,
+			modalPass: false, // 修改密码模态框显示
+			loadingPass: false,
 			oldPassError: "",
-			userRules: {
+			dataRules: {
+				num: [
+					{ required: true, message: "请输入账号", trigger: "blur" },
+					{ min: 5, message: "请至少输入5个字符", trigger: "blur" },
+					{ max: 32, message: "最多输入32个字符", trigger: "blur" },
+					{ validator: this.valideNum, trigger: "blur" }
+				],
 				name: [{ required: true, message: "请输入姓名", trigger: "blur" }]
 			},
 			passForm: { oldPass: "", newPass: "", rePass: "" },
@@ -91,79 +85,90 @@ export default {
 				],
 				rePass: [
 					{ required: true, message: "请再次输入新密码", trigger: "blur" },
-					{ validator: valideRePassword, trigger: "blur" }
+					{ validator: this.valideRePassword, trigger: "blur" }
 				]
 			}
 		};
 	},
 	methods: {
-		showModel() {
-			this.showPasswordModal = true;
+		valideRePassword(rule, value, callback) {
+			if (value !== this.passForm.newPass) {
+				callback(new Error("两次输入密码不一致"));
+			} else {
+				callback();
+			}
 		},
-		resetEdit() {
-			this.init();
+		init() {
+			admAuthGet().then(resp => {
+				if (resp.code == 200) {
+					this.dataForm = resp.data;
+				} else {
+					this.$Message.error({
+						content: resp.msg,
+						duration: 3
+					});
+				}
+			});
 		},
-		resetForm(form) {
-			this.$refs[form].resetFields();
+		resetPasswd(form) {
+			this.$refs.passForm.resetFields();
 		},
-		saveUser() {
-			this.$refs["userForm"].validate(valid => {
+		emitPasswd() {
+			this.$refs.dataForm.validate(valid => {
 				if (valid) {
-					this.loadingSaveInfo = true;
-					admUserEditSelf(this.userForm).then(res => {
-						this.loadingSaveInfo = false;
-						if (res.code == 200) {
+					this.loading = true;
+					admAuthEditInfo(this.dataForm).then(resp => {
+						this.loading = false;
+						if (resp.code == 200) {
 							this.$Message.success({
 								content: "信息修改成功",
 								onClose: () => {
-									this.loadingSavePass = false;
+									this.loadingPass = false;
 								}
 							});
 						} else {
-							this.$Message.error({ content: `信息修改失败,请重试`, duration: 3 });
+							this.$Message.error({
+								content: resp.msg,
+								duration: 3
+							});
 						}
 					});
 				}
 			});
 		},
 		cancelPass() {
-			this.showPasswordModal = false;
+			this.modalPass = false;
+			this.$refs.passForm.resetFields();
 		},
-		savePass() {
-			this.$refs["passForm"].validate(valid => {
+		emit() {
+			this.$refs.passForm.validate(valid => {
 				if (valid) {
-					this.loadingSavePass = true;
+					this.loadingPass = true;
 					let passObj = {
-						id: this.userForm.id,
+						id: this.dataForm.id,
 						opass: md5(this.passForm.oldPass).substr(1, 30),
 						npass: md5(this.passForm.newPass).substr(1, 30)
 					};
-					admUserPass(passObj).then(res => {
-						this.loadingSavePass = false;
-						if (res.code == 200) {
+					admAuthEditPasswd(passObj).then(resp => {
+						this.loadingPass = false;
+						if (resp.code == 200) {
 							this.$Message.success({
 								content: "密码修改成功,请重新登陆",
 								onClose: () => {
-									// 退出登录
-									// this.$store.commit("logout", this);
+									localStorage.clear();
+									sessionStorage.clear();
 									this.$router.push({
 										name: "login"
 									});
 								}
 							});
 						} else {
-							this.$Message.error({ content: `密码修改失败`, duration: 2 });
+							this.$Message.error({
+								content: resp.msg,
+								duration: 2
+							});
 						}
 					});
-				}
-			});
-		},
-		init() {
-			admAuth().then(res => {
-				if (res.code == 200) {
-					this.userForm = res.data;
-				} else {
-					this.$Message.error({ content: `未查询到数据，请重试`, duration: 3 });
 				}
 			});
 		}

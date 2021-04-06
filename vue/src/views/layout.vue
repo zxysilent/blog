@@ -94,7 +94,7 @@
 						<Icon type="ios-code-working" /> 自 定 义</MenuItem>
 					</Submenu>-->
 					<template v-for="item in getMenus">
-						<Submenu v-if="item.children" :name="item.name" :key="item.name">
+						<Submenu v-if="item.children && item.show" :name="item.name" :key="item.name">
 							<template slot="title">
 								<Icon :type="item.icon"></Icon>
 								{{item.title}}

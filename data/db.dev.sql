@@ -10,7 +10,7 @@ Target Server Type    : MariaDB
 Target Server Version : 100412
 File Encoding         : 65001
 
-Date: 2021-04-06 15:09:08
+Date: 2021-04-06 21:15:24
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -191,7 +191,7 @@ CREATE TABLE `sys_menu` (
   `ctime` datetime DEFAULT NULL COMMENT '时间',
   `use` tinyint(4) DEFAULT 1 COMMENT '是否使用',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -217,15 +217,17 @@ INSERT INTO `sys_menu` VALUES ('18', '17', '基本设置', 'setting-base', '/set
 INSERT INTO `sys_menu` VALUES ('19', '17', '评论设置', 'setting-comment', '/setting/comment', 'ios-text-outline', '1', '1', 'views/setting/comment.vue', '1000', '2021-03-31 20:09:01', '1');
 INSERT INTO `sys_menu` VALUES ('20', '17', '统计设置', 'setting-analytic', '/setting/analytic', 'ios-pulse', '1', '1', 'views/setting/analytic.vue', '1000', '2021-03-31 20:09:03', '1');
 INSERT INTO `sys_menu` VALUES ('21', '17', '自 定 义', 'setting-custom', '/setting/custom', 'ios-code-working', '1', '1', 'views/setting/custom.vue', '1000', '2021-03-31 20:09:05', '1');
-INSERT INTO `sys_menu` VALUES ('22', '0', '个人中心', 'auth', '/auth', 'ios-contact-outline', '1', '1', 'layout', '1000', '2021-03-31 20:09:08', '1');
-INSERT INTO `sys_menu` VALUES ('23', '22', '个人中心', 'auth-self', '/auth/self', 'ios-contact-outline', '1', '1', 'views/user/self.vue', '1000', '2021-03-31 20:09:11', '1');
-INSERT INTO `sys_menu` VALUES ('25', '0', '菜单管理', 'menu', '/menu', 'ios-menu-outline', '1', '1', 'layout', '1000', '2021-03-31 23:40:30', '1');
-INSERT INTO `sys_menu` VALUES ('26', '25', '菜单列表', 'menu-list', '/menu/list', 'ios-list-box-outline', '1', '1', 'views/menu/list.vue', '1000', '2021-03-31 23:40:33', '1');
-INSERT INTO `sys_menu` VALUES ('27', '25', '添加菜单', 'menu-add', '/menu/add', 'ios-add-circle-outline', '1', '1', 'views/menu/add.vue', '1000', '2021-03-31 23:40:36', '1');
-INSERT INTO `sys_menu` VALUES ('28', '25', '编辑菜单', 'menu-edit', '/menu/edit/:id', 'ios-create-outline', '0', '1', 'views/menu/edit.vue', '1000', '2021-03-31 23:40:39', '1');
-INSERT INTO `sys_menu` VALUES ('29', '0', '角色管理', 'role', '/role', 'ios-woman-outline', '1', '0', 'layout', '1000', null, '1');
-INSERT INTO `sys_menu` VALUES ('30', '29', '角色列表', 'role-list', '/role/list', 'ios-list-box-outline', '1', '0', 'views/role/list.vue', '1000', null, '1');
-INSERT INTO `sys_menu` VALUES ('31', '29', '添加角色', 'role-add', '/role/add', 'ios-add-circle-outline', '1', '0', 'views/role/add', '1000', null, '1');
+INSERT INTO `sys_menu` VALUES ('22', '0', '菜单管理', 'menu', '/menu', 'ios-menu-outline', '1', '1', 'layout', '1000', '2021-03-31 23:40:30', '1');
+INSERT INTO `sys_menu` VALUES ('23', '22', '菜单列表', 'menu-list', '/menu/list', 'ios-list-box-outline', '1', '1', 'views/menu/list.vue', '1000', '2021-03-31 23:40:33', '1');
+INSERT INTO `sys_menu` VALUES ('24', '22', '添加菜单', 'menu-add', '/menu/add', 'ios-add-circle-outline', '1', '1', 'views/menu/add.vue', '1000', '2021-03-31 23:40:36', '1');
+INSERT INTO `sys_menu` VALUES ('25', '22', '编辑菜单', 'menu-edit', '/menu/edit/:id', 'ios-create-outline', '0', '1', 'views/menu/edit.vue', '1000', '2021-03-31 23:40:39', '1');
+INSERT INTO `sys_menu` VALUES ('26', '0', '角色管理', 'role', '/role', 'ios-woman-outline', '1', '0', 'layout', '1000', '2021-04-06 21:07:19', '1');
+INSERT INTO `sys_menu` VALUES ('27', '26', '角色列表', 'role-list', '/role/list', 'ios-list-box-outline', '1', '0', 'views/role/list.vue', '1000', '2021-04-06 21:07:22', '1');
+INSERT INTO `sys_menu` VALUES ('28', '26', '添加角色', 'role-add', '/role/add', 'ios-add-circle-outline', '1', '0', 'views/role/add', '1000', '2021-04-06 21:07:24', '1');
+INSERT INTO `sys_menu` VALUES ('29', '0', '用户管理', 'user', '/user', 'ios-person-outline', '1', '0', 'layout', '1000', '2021-04-06 21:03:01', '1');
+INSERT INTO `sys_menu` VALUES ('30', '29', '用户列表', 'user-list', '/user/list', 'ios-list-box-outline', '1', '0', 'views/user/list.vue', '1000', '2021-04-06 21:03:48', '1');
+INSERT INTO `sys_menu` VALUES ('31', '29', '添加用户', 'user-add', '/user/add', 'ios-person-add-outline', '1', '0', 'views/user/add.vue', '1000', '2021-04-06 21:04:29', '1');
+INSERT INTO `sys_menu` VALUES ('32', '29', '编辑用户', 'user-edit', '/user/edit/:id', 'ios-create-outline', '0', '0', 'views/user/edit.vue', '1000', '2021-04-06 21:05:18', '1');
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -256,7 +258,7 @@ CREATE TABLE `sys_role_menu` (
   `menu_id` int(11) DEFAULT 0,
   `ctime` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sys_role_menu
@@ -284,44 +286,42 @@ INSERT INTO `sys_role_menu` VALUES ('20', '1', '20', '2021-04-06 15:08:32');
 INSERT INTO `sys_role_menu` VALUES ('21', '1', '21', '2021-04-06 15:08:32');
 INSERT INTO `sys_role_menu` VALUES ('22', '1', '22', '2021-04-06 15:08:32');
 INSERT INTO `sys_role_menu` VALUES ('23', '1', '23', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('24', '1', '25', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('25', '1', '26', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('26', '1', '27', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('27', '1', '28', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('28', '1', '29', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('29', '1', '30', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('30', '1', '31', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('24', '1', '24', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('25', '1', '25', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('26', '1', '26', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('27', '1', '27', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('28', '1', '28', '2021-04-06 15:08:32');
+INSERT INTO `sys_role_menu` VALUES ('29', '1', '29', '2021-04-06 19:39:46');
+INSERT INTO `sys_role_menu` VALUES ('30', '1', '30', '2021-04-06 19:39:46');
+INSERT INTO `sys_role_menu` VALUES ('31', '1', '31', '2021-04-06 21:06:23');
+INSERT INTO `sys_role_menu` VALUES ('32', '1', '32', '2021-04-06 21:06:23');
 
 -- ----------------------------
 -- Table structure for sys_user
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE `sys_user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
-  `num` varchar(255) DEFAULT NULL,
-  `pass` varchar(255) DEFAULT NULL,
-  `role` int(11) DEFAULT 0,
-  `email` varchar(255) DEFAULT NULL,
-  `phone` varchar(255) DEFAULT NULL,
-  `ip` varchar(32) DEFAULT NULL,
-  `ecount` int(11) DEFAULT 0,
-  `ltime` datetime DEFAULT NULL,
-  `ctime` datetime DEFAULT NULL,
-  `role1` int(11) DEFAULT 0,
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `name` varchar(255) DEFAULT NULL COMMENT '姓名',
+  `num` varchar(255) DEFAULT NULL COMMENT '账号',
   `passwd` varchar(255) DEFAULT NULL COMMENT '密码',
   `role_id` int(11) DEFAULT 0 COMMENT '角色',
+  `email` varchar(255) DEFAULT NULL COMMENT '邮箱',
+  `phone` varchar(255) DEFAULT NULL COMMENT '电话',
   `lock` tinyint(4) DEFAULT 0 COMMENT '锁定',
+  `ecount` int(11) DEFAULT 0 COMMENT '错误次数',
+  `ltime` datetime DEFAULT NULL COMMENT '上次登录时间',
+  `ctime` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UQE_user_num` (`num`),
-  UNIQUE KEY `UQE_user_email` (`email`),
+  UNIQUE KEY `UQE_sys_user_num` (`num`),
+  UNIQUE KEY `UQE_sys_user_email` (`email`),
   UNIQUE KEY `UQE_sys_user_phone` (`phone`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES ('1', 'zxysilent', 'zxysilent', '3b861abeaa25fba9d03898324463f7', '1074791424', 'zxysilent@foxmail.com', '', '127.0.0.1', '2', '2021-04-06 13:14:19', '2017-04-05 23:28:35', '1074791424', null, '0', '0');
+INSERT INTO `sys_user` VALUES ('1', 'zxysilent', 'zxysilent', '3b861abeaa25fba9d03898324463f7', '1', '', '', '0', '0', '2021-04-06 17:47:14', '2021-04-06 17:47:16');
 
 -- ----------------------------
 -- Table structure for tag
