@@ -24,11 +24,22 @@ const Store = {
 		async authMenu({ commit }) {
 			const resp = await admAuthMenu();
 			if (resp.code == 200) {
-				const routes = resp.data.slice();
+				// deep clone
+				// arr.slice 仅复制一层,不能处理数组对象
+				// const routes = resp.data.slice();
+				const routes = JSON.parse(JSON.stringify(resp.data));
 				commit("setMenus", resp.data);
+				console.log(resp.data);
+                // 仅放入路由,菜单没有
+				routes.push({
+					path: "/*",
+					name: "err404",
+					title: "404-没发现",
+					comp: "views/errors/404.vue"
+				});
 				dynamicRouter(routes);
 				// routes.push(errorRouter);
-				console.log(errorRouter);
+				// console.log(errorRouter);
 				console.log(routes);
 				commit("setRoutes", routes);
 			}

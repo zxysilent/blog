@@ -51,13 +51,10 @@ export const initRouter = [
 				component: () => import("@/views/user/self.vue")
 			}
 		]
-	}
-];
-export const errorRouter = [
+	},
 	{ path: "/jwt", name: "errjwt", title: "jwt-重新登录", component: () => import("@/views/errors/jwt.vue") },
 	{ path: "/401", name: "err401", title: "401-没有权限", component: () => import("@/views/errors/401.vue") },
-	{ path: "/50x", name: "err50x", title: "50x-服务异常", component: () => import("@/views/errors/50x.vue") },
-	{ path: "/*", name: "err404", title: "404-没发现", component: () => import("@/views/errors/404.vue") }
+	{ path: "/50x", name: "err50x", title: "50x-服务异常", component: () => import("@/views/errors/50x.vue") }
 ];
 
 // 路由配置
