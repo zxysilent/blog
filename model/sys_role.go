@@ -101,6 +101,10 @@ func RoleDrop(id int) error {
 		sess.Rollback()
 		return err
 	}
+	// 删除角色菜单
+	sess.Exec("DELETE FROM sys_role_menu WHERE role_id = ?", id)
+	// 删除角色接口
+	// sess.Exec("DELETE FROM sys_role_api WHERE role_id = ?", id)
 	sess.Commit()
 	return nil
 }
