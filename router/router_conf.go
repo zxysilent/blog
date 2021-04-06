@@ -143,7 +143,6 @@ func midAuth(next echo.HandlerFunc) echo.HandlerFunc {
 			if tokenRaw == "" {
 				return ctx.JSON(utils.ErrJwt("请重新登陆", "token为空"))
 			}
-			tokenRaw = tokenRaw[7:] // Bearer token len("Bearer ")==7
 		}
 		auth := hwt.Auth{}
 		err := auth.Decode(tokenRaw, conf.App.TokenSecret)
@@ -153,8 +152,7 @@ func midAuth(next echo.HandlerFunc) echo.HandlerFunc {
 			// 验证通过，保存信息
 			ctx.Set("auth", auth)
 			ctx.Set("uid", auth.Id)
-			ctx.Set("role", auth.Role)
-			ctx.Set("roleId", auth.RoleId)
+			ctx.Set("rid", auth.RoleId)
 		}
 		// 后续流程
 		return next(ctx)

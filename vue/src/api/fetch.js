@@ -12,8 +12,8 @@ fetch.interceptors.request.use(
 		ViewUI.LoadingBar.start();
 		//在请求发出之前进行一些操作
 		console.log("send");
-		if (config.url.indexOf("/api/login") == -1) {
-			config.headers.Authorization = "Bearer " + Util.getItem("bearer"); //Bearer
+		if (config.url.indexOf("/api/auth/login") == -1) {
+			config.headers.Authorization = Util.getItem("bearer");
 		}
 		return config;
 	},

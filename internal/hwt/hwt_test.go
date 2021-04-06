@@ -8,7 +8,6 @@ import (
 func TestEncode(t *testing.T) {
 	auth := Auth{
 		Id:     1,
-		Role:   1000,
 		RoleId: 1,
 		Num:    "账号",
 		ExpAt:  time.Now().Add(time.Hour * 2).Unix(),
@@ -24,7 +23,6 @@ func TestVerify(t *testing.T) {
 func BenchmarkEncode(b *testing.B) {
 	auth := Auth{
 		Id:     1,
-		Role:   1000,
 		Num:    "账号",
 		RoleId: 1,
 		ExpAt:  time.Now().Add(time.Hour * 2).Unix(),

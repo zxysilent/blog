@@ -57,7 +57,7 @@ func AuthLogin(ctx echo.Context) error {
 	if ipt.Num == "" && len(ipt.Num) > 18 {
 		return ctx.JSON(utils.ErrIpt(`请输入正确的账号`))
 	}
-	mod, has := model.UserByNum(ipt.Num)
+	mod, has := model.UserLogin(ipt.Num)
 	if !has {
 		return ctx.JSON(utils.ErrOpt(`账号输入错误`))
 	}
@@ -88,9 +88,9 @@ func AuthLogin(ctx echo.Context) error {
 	// 	return ctx.JSON(utils.Fail(`当前账号已被禁用`))
 	// }
 	auth := hwt.Auth{
-		Id: mod.Id,
-		//	Role:  int(mod.Role1),
-		ExpAt: time.Now().Add(time.Hour * 24).Unix(),
+		Id:     mod.Id,
+		RoleId: mod.RoleId,
+		ExpAt:  time.Now().Add(time.Hour * time.Duration(conf.App.TokenExp)).Unix(),
 	}
 	mod.Ltime = now
 	// mod.Ip = ctx.RealIP()

@@ -14,7 +14,6 @@ import (
 type Auth struct {
 	Id     int    `json:"i"`
 	Num    string `json:"n"`
-	Role   int    `json:"r"`
 	RoleId int    `json:"ri"`
 	ExpAt  int64  `json:"e"`
 }

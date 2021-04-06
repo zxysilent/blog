@@ -24,10 +24,10 @@ func (User) TableName() string {
 	return "sys_user"
 }
 
-//UserByNum 通过账号获取用户信息
-func UserByNum(num string) (*User, bool) {
+//UserLogin 用户登录
+func UserLogin(num string) (*User, bool) {
 	mod := &User{}
-	has, _ := Db.Where("num=?", num).Get(mod)
+	has, _ := Db.Where("num = ?", num).Get(mod)
 	return mod, has
 }
 
