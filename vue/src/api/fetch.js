@@ -12,7 +12,10 @@ fetch.interceptors.request.use(
 		ViewUI.LoadingBar.start();
 		//在请求发出之前进行一些操作
 		console.log("send");
-		if (config.url.indexOf("/api/auth/login") == -1) {
+		// 仅以/adm开始的接口才传递 token
+        // 可自行修改为一直携带或者仅登录不携带-由程序内自主控制
+        // if (config.url.indexOf("/api/auth/login") == -1) {
+		if (config.url.indexOf("/adm") == 0) {
 			config.headers.Authorization = Util.getItem("bearer");
 		}
 		return config;
