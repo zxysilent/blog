@@ -15,9 +15,7 @@ type User struct {
 	Ecount int       `xorm:"INT(11) DEFAULT 0 comment('错误次数')" json:"ecount"`
 	Ltime  time.Time `xorm:"DATETIME comment('上次登录时间')" json:"ltime"`
 	Ctime  time.Time `xorm:"DATETIME comment('创建时间')" json:"ctime"`
-	Role   Role      `xorm:"-" json:"role"`  //用户角色
-	Auths  []Api     `xorm:"-" json:"auths"` //权限集合
-	Menus  []Menu    `xorm:"-" json:"menus"` //菜单导航
+	Role   Role      `xorm:"-" json:"role"` //用户角色
 }
 
 func (User) TableName() string {
@@ -61,7 +59,7 @@ func UserPage(pi int, ps int, cols ...string) ([]User, error) {
 	if len(cols) > 0 {
 		sess.Cols(cols...)
 	}
-	err := sess.Desc("Utime").Limit(ps, (pi-1)*ps).Find(&mods)
+	err := sess.Desc("Ctime").Limit(ps, (pi-1)*ps).Find(&mods)
 	return mods, err
 }
 

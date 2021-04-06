@@ -8,8 +8,6 @@ type Role struct {
 	Name  string    `xorm:"VARCHAR(255) comment('角色名称')" json:"name"`
 	Intro string    `xorm:"VARCHAR(255) comment('角色描述')" json:"intro"`
 	Inner bool      `xorm:"TINYINT(4) DEFAULT 0 comment('内部禁止删除')" json:"show"`
-	Apis  []Api     `xorm:"-" json:"apis"`  //权限集合
-	Menus []Menu    `xorm:"-" json:"menus"` //菜单导航
 	Ctime time.Time `xorm:"DATETIME comment('时间')" json:"ctime"`
 }
 
