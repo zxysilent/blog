@@ -98,14 +98,6 @@ func AuthLogin(ctx echo.Context) error {
 	return ctx.JSON(utils.Succ(`登陆成功`, auth.Encode(conf.App.TokenSecret)))
 }
 
-// UserLogout doc
-// @Tags auth
-// @Summary 注销
-// @Router /api/auth/logout [post]
-func UserLogout(ctx echo.Context) error {
-	return ctx.HTML(200, `hello`)
-}
-
 // UserAuth doc
 // @Tags auth
 // @Summary 获取登录信息
@@ -115,6 +107,30 @@ func UserLogout(ctx echo.Context) error {
 func Auth(ctx echo.Context) error {
 	mod, _ := model.UserGet(ctx.Get("uid").(int))
 	return ctx.JSON(utils.Succ(`auth`, mod))
+}
+
+// AuthMenu doc
+// @Tags auth
+// @Summary 获取当前用户的菜单导航树
+// @Param token query string true "token"
+// @Success 200 {object} model.Reply{data=[]model.Menu} "成功数据"
+// @Router /adm/auth/menu [post]
+func AuthMenu(ctx echo.Context) error {
+	// 登录信息获取roleId
+	roleId, _ := ctx.Get("rid").(int)
+	mods, err := model.RoleMenuTree(roleId)
+	if err != nil {
+		return ctx.JSON(utils.Fail("未查询到角色菜单导航信息", err.Error()))
+	}
+	return ctx.JSON(utils.Succ("succ", mods))
+}
+
+// UserLogout doc
+// @Tags auth
+// @Summary 注销
+// @Router /api/auth/logout [post]
+func UserLogout(ctx echo.Context) error {
+	return ctx.HTML(200, `hello`)
 }
 
 // Login doc

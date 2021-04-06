@@ -8,26 +8,6 @@ import (
 	"github.com/zxysilent/utils"
 )
 
-// RoleMenuAll doc
-// @Tags role,menu
-// @Summary 通过角色id获取所有角色菜单信息
-// @Param id query int true "id"
-// @Param token query string true "token"
-// @Success 200 {object} model.Reply{data=model.Role} "成功数据"
-// @Router /adm/role/menu/all [get]
-func RoleMenuAll(ctx echo.Context) error {
-	ipt := &model.IptId{}
-	err := ctx.Bind(ipt)
-	if err != nil {
-		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
-	}
-	mods, err := model.RoleMenuAll(ipt.Id)
-	if err != nil {
-		return ctx.JSON(utils.Fail("未查询到角色菜单导航信息", err.Error()))
-	}
-	return ctx.JSON(utils.Succ("succ", mods))
-}
-
 // RoleMenuTree doc
 // @Tags role,menu
 // @Summary 通过角色id获取所有角色菜单tree信息
@@ -36,6 +16,26 @@ func RoleMenuAll(ctx echo.Context) error {
 // @Success 200 {object} model.Reply{data=model.Role} "成功数据"
 // @Router /adm/role/menu/tree [get]
 func RoleMenuTree(ctx echo.Context) error {
+	ipt := &model.IptId{}
+	err := ctx.Bind(ipt)
+	if err != nil {
+		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
+	}
+	mods, err := model.RoleMenuTree(ipt.Id)
+	if err != nil {
+		return ctx.JSON(utils.Fail("未查询到角色菜单导航信息", err.Error()))
+	}
+	return ctx.JSON(utils.Succ("succ", mods))
+}
+
+// RoleMenuAll doc
+// @Tags role,menu
+// @Summary 通过角色id获取所有角色菜单信息
+// @Param id query int true "id"
+// @Param token query string true "token"
+// @Success 200 {object} model.Reply{data=model.Role} "成功数据"
+// @Router /adm/role/menu/all [get]
+func RoleMenuAll(ctx echo.Context) error {
 	ipt := &model.IptId{}
 	err := ctx.Bind(ipt)
 	if err != nil {

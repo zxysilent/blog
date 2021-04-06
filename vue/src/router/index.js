@@ -66,7 +66,7 @@ router.beforeEach(async (to, from, next) => {
 	ViewUI.LoadingBar.start();
 	Utils.title(to.meta.title);
 	if (first) {
-		await store.dispatch("FetchMenu");
+		await store.dispatch("authMenu");
 		const asyncRouters = store.getters.getRoutes;
 		router.addRoutes(asyncRouters);
 		first = false;

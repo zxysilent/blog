@@ -185,3 +185,31 @@ func RoleMenuAll(roleId int) ([]Menu, error) {
 	err := Db.SQL("SELECT sys_menu.* FROM sys_menu LEFT JOIN sys_role_menu ON sys_menu.id = sys_role_menu.menu_id WHERE sys_role_menu.role_id = ?", roleId).Find(&mods)
 	return mods, err
 }
+
+// RoleMenuTree 通过RoleId查询所有菜单信息树形
+func RoleMenuTree(roleId int) ([]Menu, error) {
+	mods := make([]Menu, 0, 8)
+	// err := Db.Asc("Pid", "Sort", "Id").Find(&mods)
+	err := Db.SQL("SELECT sys_menu.* FROM sys_menu LEFT JOIN sys_role_menu ON sys_menu.id = sys_role_menu.menu_id WHERE sys_role_menu.role_id = ? ORDER BY pid,sort,sys_menu.id", roleId).Find(&mods)
+	if err != nil {
+		return nil, err
+	}
+	modMap := make(map[int][]Menu, 8)
+	for idx := range mods {
+		itm := mods[idx]
+		if _, ok := modMap[itm.Pid]; !ok {
+			modMap[itm.Pid] = make([]Menu, 0, 4)
+		}
+		modMap[itm.Pid] = append(modMap[itm.Pid], itm)
+	}
+	menus := make([]Menu, 0, 10)
+	iters := modMap[0]
+	for _, menu := range iters {
+		mod := menu
+		if children, has := modMap[mod.Id]; has {
+			mod.Children = children
+		}
+		menus = append(menus, mod)
+	}
+	return menus, err
+}
