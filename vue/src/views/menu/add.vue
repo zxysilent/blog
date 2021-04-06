@@ -5,22 +5,22 @@
 			<Icon type="ios-add-circle-outline" /> 添加菜单
 		</p>
 		<div style="max-width:520px">
-			<Form ref="dataForm" :model="dataForm" :label-width="100" label-position="right" :rules="dataRules">
+			<Form ref="dataForm" :model="dataForm" :label-width="100" label-colon label-position="right" :rules="dataRules">
 				<!-- <Alert type="warning" closable>保存之后,无法修改</Alert> -->
-				<FormItem label="所属菜单：" prop="pid">
+				<FormItem label="所属菜单" prop="pid">
 					<Select v-model="dataForm.pid" placeholder="请选择所属菜单">
 						<template v-for="item in menuAll">
 							<Option v-if="item.pid==0" style="white-space: pre;" :value="item.id" :key="item.id">{{ "「"+item.name+"」"+item.title }}</Option>
 						</template>
 					</Select>
 				</FormItem>
-				<FormItem label="菜单标题：" prop="title">
+				<FormItem label="菜单标题" prop="title">
 					<Input v-model="dataForm.title" placeholder="请填写菜单标题"></Input>
 				</FormItem>
-				<FormItem label="菜单名称：" prop="name">
+				<FormItem label="菜单名称" prop="name">
 					<Input v-model="dataForm.name" placeholder="请填写菜单名称"></Input>
 				</FormItem>
-				<FormItem label="菜单图标：" prop="icon">
+				<FormItem label="菜单图标" prop="icon">
 					<Select v-model="dataForm.icon" placeholder="请选择菜单图标" filterable>
 						<Icon :type="dataForm.icon" slot="prefix" size="22" />
 						<Option v-for="item in icons" :value="item" :label="item" :key="item.id">
@@ -31,14 +31,14 @@
 						</Option>
 					</Select>
 				</FormItem>
-				<FormItem label="菜单路径：" prop="path">
+				<FormItem label="菜单路径" prop="path">
 					<Input v-model="dataForm.path" placeholder="请填写菜单路径"></Input>
 				</FormItem>
-				<!-- <FormItem label="菜单路由：" prop="ptah">
+				<!-- <FormItem label="菜单路由" prop="ptah">
 					<Input v-model="dataForm.ptah"></Input>
 				</FormItem> -->
 
-				<!-- <FormItem label="跳转链接：" prop="url">
+				<!-- <FormItem label="跳转链接" prop="url">
 					<Input v-model="dataForm.url">
 					<Tooltip slot="append" placement="top">
 						<Button>说明</Button>
@@ -50,26 +50,26 @@
 					</Tooltip>
 					</Input>
 				</FormItem> -->
-				<FormItem label="菜单组件：" prop="comp">
+				<FormItem label="菜单组件" prop="comp">
 					<Input v-model="dataForm.comp" placeholder="请填写菜单组件"></Input>
 				</FormItem>
 				<Row>
 					<Col span="8">
-					<FormItem :label-width="100" label="是否使用：" prop="use" title="是否允许添加新闻">
+					<FormItem :label-width="100" label="是否使用" prop="use" title="是否允许添加新闻">
 						<i-Switch size="large" v-model="dataForm.use"><span slot="open">使用</span>
 							<span slot="close">禁用</span>
 						</i-Switch>
 					</FormItem>
 					</Col>
 					<Col span="8" style="text-align: center">
-					<FormItem :label-width="90" label="是否显示：" prop="show" title="导航是否显示">
+					<FormItem :label-width="90" label="是否显示" prop="show" title="导航是否显示">
 						<i-Switch size="large" v-model="dataForm.show"><span slot="open">显示</span>
 							<span slot="close">隐藏</span>
 						</i-Switch>
 					</FormItem>
 					</Col>
 					<Col span="8">
-					<FormItem :label-width="90" label="显示顺序：" prop="sort">
+					<FormItem :label-width="90" label="显示顺序" prop="sort">
 						<InputNumber :max="10000" :min="1" v-model="dataForm.sort"></InputNumber>
 					</FormItem>
 					</Col>
