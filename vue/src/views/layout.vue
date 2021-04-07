@@ -124,7 +124,7 @@
 <script>
 import Utils from "@/utils.js";
 import { mapGetters, mapMutations } from "vuex";
-import { admAuth } from "@/api/auth";
+import { admAuthGet } from "@/api/auth";
 export default {
 	data() {
 		return {
@@ -142,7 +142,7 @@ export default {
 	},
 	methods: {
 		init() {
-			admAuth().then((resp) => {
+			admAuthGet().then((resp) => {
 				if (resp.code == 200) {
 					this.user = resp.data;
 				}

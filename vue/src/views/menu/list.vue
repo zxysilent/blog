@@ -148,7 +148,7 @@ export default {
 						}
 					});
 				} else {
-					this.$Message.error(resp.msg);
+					this.$Message.error({ content: resp.msg, duration: 3 });
 				}
 			});
 		}

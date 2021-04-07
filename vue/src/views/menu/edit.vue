@@ -157,10 +157,7 @@ export default {
 								}
 							});
 						} else {
-							this.$Message.error({
-								content: resp.msg,
-								duration: 3
-							});
+							this.$Message.error({ content: resp.msg, duration: 3 });
 						}
 					});
 				}
