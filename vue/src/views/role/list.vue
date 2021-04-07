@@ -29,12 +29,12 @@
 			</FormItem> -->
 		</Form>
 		<Table row-key="id" size="small" :loading="loading" border :columns="tabCol" :data="tabData"></Table>
-		<Drawer title="授权" v-model="drawer" width="520">
+		<Drawer title="授权-请保持父子菜单一致" v-model="drawer" width="520">
 			<!-- <Tree :data="menuTree" show-checkbox></Tree> -->
 			<div :style="{ maxHeight: maxHeight }" class="drawer-content">
 				<div style="position: relative">
-					<Tree ref="tree" :data="menuTree" show-checkbox :check-directly="true" :render="renderContent"></Tree>
-					<Spin size="large" fix v-if="treeLoading"></Spin>
+                      <!-- <Alert type="warning">A warning prompt</Alert> -->
+					<Tree ref="tree" :data="menuTree" show-checkbox :check-directly="true" :check-strictly="true" :render="renderContent"></Tree>
 				</div>
 			</div>
 			<div class="drawer-footer">
@@ -58,7 +58,6 @@ export default {
 		return {
 			drawer: false,
 			maxHeight: "100px",
-			treeLoading: false,
 			roleEditLoading: false,
 			menuTree: [],
 			tabCol: [
@@ -97,7 +96,7 @@ export default {
 								style: { marginRight: "10px" },
 								on: {
 									click: () => {
-										this.$router.push({ name: "menu-edit", params: { id: data.row.id } });
+										this.$router.push({ name: "role-edit", params: { id: data.row.id } });
 									}
 								}
 							}),
@@ -211,7 +210,7 @@ export default {
 		},
 		initTree(tree, set) {
 			tree.map((item) => {
-				this.$set(item, "expand", false);
+				this.$set(item, "expand", true);
 				if (set.has(item.id)) {
 					this.$set(item, "checked", true);
 				} else {
