@@ -7,7 +7,7 @@
 		</p>
 		<Table size="small" border :columns="tabCol" :data="tabData"></Table>
 		<br>
-		<Page :total="page.total" :current.sync="page.pi" :page-size="page.ps" :page-size-opts="[10,12,15]" @on-change="piChange" @on-page-size-change="psChange" show-sizer show-elevator show-total></Page>
+		<Page :total="total" :current.sync="page.pi" :page-size="page.ps" :page-size-opts="[10,12,15]" @on-change="piChange" @on-page-size-change="psChange" show-sizer show-elevator show-total></Page>
 	</Card>
 </template>
 <script>
@@ -15,7 +15,8 @@ import { admUserPage, admUserDrop, admUserReset, admUserChgAtv } from "@/api/use
 export default {
 	data() {
 		return {
-			page: { pi: 1, ps: 12, total: 0 },
+			total: 0,
+			page: { pi: 1, ps: 12 },
 			tabCol: [
 				{ type: "index", width: 60, align: "center" },
 				{ title: "登录账号", key: "num", width: 200 },
@@ -24,11 +25,7 @@ export default {
 					title: "用户角色",
 					minWidth: 150,
 					render: (h, data) => {
-						if (data.row.role == 4096) {
-							return h("div", "系统管理员");
-						} else if (data.row.role == 2048) {
-							return h("div", "内容管理员");
-						}
+						return h("div", data.row.role.name);
 					}
 				},
 				{ title: "用户电话", width: 150, key: "phone" },
@@ -95,9 +92,9 @@ export default {
 									props: { confirm: true, title: "确定要重置密码吗？" },
 									on: {
 										"on-ok": () => {
-											admUserReset(data.row.id).then(resp => {
+											admUserReset({ id: data.row.id }).then((resp) => {
 												if (resp.code != 200) {
-													this.$Message.error(resp.msg);
+													this.$Message.error({ content: resp.msg, duration: 3 });
 												}
 											});
 										}
@@ -150,13 +147,13 @@ export default {
 	},
 	methods: {
 		init() {
-			admUserPage(this.page).then(resp => {
+			admUserPage(this.page).then((resp) => {
 				if (resp.code == 200) {
 					this.tabData = resp.data.items;
-					this.page.total = resp.data.count;
+					this.total = resp.data.count;
 				} else {
 					this.tabData = [];
-					this.page.total = 0;
+					this.total = 0;
 				}
 			});
 		},
@@ -174,17 +171,17 @@ export default {
 		},
 		//删除
 		emitDrop(data) {
-			admUserDrop(data.row.id).then(resp => {
+			admUserDrop({ id: data.row.id }).then((resp) => {
 				if (resp.code == 200) {
 					this.$Message.success({
 						content: "删除成功",
 						onClose: () => {
 							this.tabData.splice(data.index, 1);
-							this.page.total--;
+							this.total--;
 						}
 					});
 				} else {
-					this.$Message.error(resp.msg);
+					this.$Message.error({ content: resp.msg, duration: 3 });
 				}
 			});
 		}

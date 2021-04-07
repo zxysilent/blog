@@ -5,7 +5,7 @@
 				<Icon type="ios-create-outline" /> 修改用户
 			</p>
 			<div style="max-width:520px">
-				<Form ref="dataForm" :model="dataForm" :label-width="120" label-colon  label-position="right" :rules="dataRules">
+				<Form ref="dataForm" :model="dataForm" :label-width="120" label-colon label-position="right" :rules="dataRules">
 					<FormItem label="登录账号" prop="num">
 						<Input readonly disabled v-model="dataForm.num"> </Input>
 					</FormItem>
@@ -19,8 +19,8 @@
 						<Input v-model="dataForm.email"></Input>
 					</FormItem>
 					<FormItem>
-						<Button type="warning" :loading="loading" @click="emit">提交保存</Button>
-						<Button type="success" @click="reset()" style="margin-left: 8px">重置填写</Button>
+						<Button type="warning" :loading="loading" @click="emitEdit">提交保存</Button>
+						<Button type="success" @click="emitReset()" style="margin-left: 8px">重置填写</Button>
 						<Button :to="{name:'user-list'}" style="margin-left: 8px">返回列表</Button>
 					</FormItem>
 				</Form>
@@ -44,26 +44,22 @@ export default {
 	},
 	methods: {
 		init() {
-			admUserGet(this.dataForm.id).then(resp => {
+			admUserGet({ id: this.dataForm.id }).then((resp) => {
 				if (resp.code == 200) {
 					this.dataForm = resp.data;
-					this.dataForm.roles = Utils.roleSets(this.dataForm.role);
 				} else {
-					this.$Message.error({
-						content: `未查询到数据，请重试`,
-						duration: 3
-					});
+					this.$Message.error({ content: resp.msg, duration: 3 });
 				}
 			});
 		},
-		reset() {
+		emitReset() {
 			this.init();
 		},
-		emit() {
-			this.$refs.dataForm.validate(valid => {
+		emitEdit() {
+			this.$refs.dataForm.validate((valid) => {
 				if (valid) {
 					this.loading = true;
-					admUserEdit(this.dataForm).then(resp => {
+					admUserEdit(this.dataForm).then((resp) => {
 						this.loading = false;
 						if (resp.code == 200) {
 							this.$Message.success({
