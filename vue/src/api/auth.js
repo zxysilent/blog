@@ -1,19 +1,43 @@
 import fetch from "./fetch";
 
-export const admAuth = () => {
-	return fetch.get("/adm/auth");
+// 获取登录信息
+export const admAuthGet = () => {
+	return fetch.request({
+		url: "/adm/auth/get",
+		method: "get"
+	});
 };
-
+// 登录
 export const apiAuthLogin = data => {
-	return fetch.post("/api/auth/login", data);
+	return fetch.request({
+		url: "/api/auth/login",
+		method: "post",
+		data: data
+	});
 };
-
+// 获取验证码
 export const apiAuthVcode = () => {
-	return fetch.get("/api/auth/vcode");
+    return fetch.request({
+		url: "/api/auth/vcode",
+		method: "get"
+	});
 };
 
+// 获取当前用户的菜单导航
 export const admAuthMenu = () => {
-	return fetch.get("/adm/auth/menu");
+    return fetch.request({
+		url: "/adm/auth/menu",
+		method: "get"
+	});
+};
+
+// 修改自己密码
+export const admUserPass = data => {
+	return fetch.post("/adm/user/pass", data);
+};
+// 修改自己信息
+export const admUserEditSelf = data => {
+	return fetch.post("/adm/user/edit/self", data);
 };
 
 export const apiAuthLogoff = data => {

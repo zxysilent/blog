@@ -1,38 +1,63 @@
 import fetch from "./fetch";
-
+// 获取用户信息
+export const admUserGet = data => {
+    return fetch.request({
+		url: "/adm/user/get",
+		method: "get",
+		params: data
+	});
+};
 // 判断当前账号是否已经存在
-export const apiUserExist = num => {
-	return fetch.get(`/api/user/exist/${num}`);
+export const apiUserExist = data => {
+    return fetch.request({
+		url: "/adm/user/exist",
+		method: "get",
+		params: data
+	});
 };
-//添加用户
+// 添加用户
 export const admUserAdd = data => {
-	return fetch.post("/adm/user/add", data);
+    return fetch.request({
+		url: "/adm/user/add",
+		method: "post",
+		data: data
+	});
 };
-//分页
+// 分页
 export const admUserPage = data => {
-	return fetch.get(`/adm/user/page`, { params: data });
+    return fetch.request({
+		url: "/adm/user/page",
+		method: "get",
+		params: data
+	});
 };
-//更新用户状态
-export const admUserChgatv = id => {
-	return fetch.get(`/adm/user/chgatv/${id}`);
+
+// 重置用户密码
+export const admUserReset = data => {
+    return fetch.request({
+		url: "/adm/user/reset",
+		method: "get",
+		params: data
+	});
 };
-//重置用户密码
-export const admUserResetPass = id => {
-	return fetch.get(`/adm/user/reset/pass/${id}`);
-};
-//修改用户
+// 修改用户
 export const admUserEdit = data => {
-	return fetch.post("/adm/user/edit", data);
+	return fetch.request({
+		url: "/adm/user/edit",
+		method: "post",
+		data: data
+	});
 };
-//删除用户
-export const admUserDrop = id => {
-	return fetch.get(`/adm/user/drop/${id}`);
+// 删除用户
+export const admUserDrop = data => {
+	return fetch.request({
+		url: "/adm/user/drop",
+		method: "get",
+		params: data
+	});
 };
-//修改自己密码
-export const admUserPass = data => {
-	return fetch.post("/adm/user/pass", data);
-};
-//修改自己信息
-export const admUserEditSelf = data => {
-	return fetch.post("/adm/user/edit/self", data);
+
+// 更新用户状态
+export const admUserChgatv = id => {
+	return fetch.get("/adm/user/chgatv/${id}");
 };

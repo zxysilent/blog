@@ -9,11 +9,11 @@ import (
 
 // admRouter 登录访问
 func admRouter(adm *echo.Group) {
-	adm.GET("/auth", sysctl.Auth)          // 获取当前信息
-	adm.GET("/auth/api", sysctl.Auth)      // 获取当前接口
-	adm.GET("/auth/menu", sysctl.AuthMenu) // 获取当前导航
-	adm.POST("/auth/edit", sysctl.Auth)    // 修改自己信息
-	adm.POST("/auth/passwd", sysctl.Auth)  // 修改自己密码
+	adm.GET("/auth/get", sysctl.AuthGet)     // 获取当前信息
+	adm.GET("/auth/api", sysctl.AuthGet)     // 获取当前接口
+	adm.GET("/auth/menu", sysctl.AuthMenu)   // 获取当前导航
+	adm.POST("/auth/edit", sysctl.AuthGet)   // 修改自己信息
+	adm.POST("/auth/passwd", sysctl.AuthGet) // 修改自己密码
 	// adm.POST("/user/edit/self", appctl.UserEditSelf) // 修改自身信息
 	// adm.POST("/user/pass", appctl.UserPass)          // 修改密码
 	adm.GET("/sys", appctl.Sys)                // 服务器信息
@@ -62,9 +62,9 @@ func admRouter(adm *echo.Group) {
 	{ // user
 		adm.POST("/user/add", sysctl.UserAdd)
 		adm.POST("/user/edit", sysctl.UserEdit)
-		adm.GET("/user/drop/:id", sysctl.UserDrop)
-		adm.GET("/user/reset/:id", sysctl.UserReset)
-		adm.GET("/user/get/:id", sysctl.UserGet)
+		adm.GET("/user/drop", sysctl.UserDrop)
+		adm.GET("/user/reset", sysctl.UserReset)
+		adm.GET("/user/get", sysctl.UserGet)
 		adm.GET("/user/page", sysctl.UserPage)
 	}
 }
