@@ -2,7 +2,6 @@ package sysctl
 
 import (
 	"blog/model"
-	"strconv"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -12,33 +11,34 @@ import (
 // UserGet doc
 // @Tags user
 // @Summary 通过id获取user信息
-// @Param id path int true "id"
+// @Param id query int true "id"
 // @Success 200 {object} model.Reply{data=model.User} "成功数据"
-// @Router /api/user/get/{id} [get]
+// @Router /adm/user/get [get]
 func UserGet(ctx echo.Context) error {
-	id, err := strconv.Atoi(ctx.Param("id"))
+	ipt := &model.IptId{}
+	err := ctx.Bind(ipt)
 	if err != nil {
-		return ctx.JSON(utils.ErrIpt("数据输入错误", err.Error()))
+		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
-	mod, has := model.UserGet(id)
+	mod, has := model.UserGet(ipt.Id)
 	if !has {
 		return ctx.JSON(utils.ErrOpt("未查询到数据"))
 	}
-	return ctx.JSON(utils.Succ(`用户数据`, mod))
+	return ctx.JSON(utils.Succ("用户数据", mod))
 }
 
 // UserExist doc
 // @Tags user
 // @Summary 获取某个用户信息
-// @Param num path string true "账号"
+// @Param num query string true "账号"
 // @Success 200 {object} model.Reply "成功数据"
-// @Router /api/user/exist/{num} [get]
+// @Router /api/user/exist [get]
 func UserExist(ctx echo.Context) error {
-	num := ctx.Param("num")
+	num := ctx.QueryParam("num")
 	if !model.UserExist(num) {
 		return ctx.JSON(utils.Fail("不存在"))
 	}
-	return ctx.JSON(utils.Succ(`succ`))
+	return ctx.JSON(utils.Succ("succ"))
 }
 
 // UserAdd doc
@@ -63,7 +63,7 @@ func UserAdd(ctx echo.Context) error {
 	}
 	ipt.User.Passwd = ipt.Pass
 	ipt.Ltime = time.Now()
-	// ipt.Utime = ipt.Ltime
+	ipt.Ctime = ipt.Ltime
 	err = model.UserAdd(&ipt.User)
 	if err != nil {
 		return ctx.JSON(utils.Fail("添加失败", err.Error()))
@@ -98,7 +98,7 @@ func UserEdit(ctx echo.Context) error {
 // UserReset doc
 // @Tags user
 // @Summary 重置密码
-// @Param id path int true "id"
+// @Param id query int true "id"
 // @Param token query string true "凭证"
 // @Success 200 {object} model.Reply "成功数据"
 // @Router /adm/user/reset/{id} [get]
@@ -107,14 +107,15 @@ func UserReset(ctx echo.Context) error {
 	// if role < model.RoleAdmin {
 	// 	return ctx.JSON(utils.ErrDeny("对不起您没有此权限"))
 	// }
-	id, err := strconv.Atoi(ctx.Param("id"))
+	ipt := &model.IptId{}
+	err := ctx.Bind(ipt)
 	if err != nil {
-		return ctx.JSON(utils.ErrIpt("数据输入错误", err.Error()))
+		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
-	if id == ctx.Get("uid").(int) {
-		return ctx.JSON(utils.ErrOpt("不能重置自己"))
+	if ipt.Id == ctx.Get("uid").(int) {
+		return ctx.JSON(utils.ErrOpt("不能重置自己d的密码"))
 	}
-	mod := model.User{Id: id, Passwd: "fde6bb0541387e4ebdadf7c2ff3112"} //1q2w3e
+	mod := model.User{Id: ipt.Id, Passwd: "fde6bb0541387e4ebdadf7c2ff3112"} //1q2w3e
 	err = model.UserEdit(&mod, "passwd")
 	if err != nil {
 		return ctx.JSON(utils.Fail("修改失败", err.Error()))
@@ -125,27 +126,28 @@ func UserReset(ctx echo.Context) error {
 // UserDrop doc
 // @Tags user
 // @Summary 删除user信息
-// @Param id path int true "id"
+// @Param id query int true "id"
 // @Param token query string true "凭证"
 // @Success 200 {object} model.Reply "成功数据"
-// @Router /adm/user/drop/{id} [post]
+// @Router /adm/user/drop [post]
 func UserDrop(ctx echo.Context) error {
 	// role, _ := ctx.Get("role").(int)
 	// if role < model.RoleAdmin {
 	// 	return ctx.JSON(utils.ErrDeny("对不起您没有此权限"))
 	// }
-	id, err := strconv.Atoi(ctx.Param("id"))
+	ipt := &model.IptId{}
+	err := ctx.Bind(ipt)
 	if err != nil {
-		return ctx.JSON(utils.ErrIpt("数据输入错误", err.Error()))
+		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
-	if id == ctx.Get("uid").(int) {
+	if ipt.Id == ctx.Get("uid").(int) {
 		return ctx.JSON(utils.ErrOpt("不能删除自己"))
 	}
-	err = model.UserDrop(id)
+	err = model.UserDrop(ipt.Id)
 	if err != nil {
 		return ctx.JSON(utils.ErrOpt("删除失败", err.Error()))
 	}
-	return ctx.JSON(utils.Succ(`succ`))
+	return ctx.JSON(utils.Succ("succ"))
 }
 
 // UserPage doc

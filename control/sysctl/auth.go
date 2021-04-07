@@ -98,13 +98,13 @@ func AuthLogin(ctx echo.Context) error {
 	return ctx.JSON(utils.Succ(`登陆成功`, auth.Encode(conf.App.TokenSecret)))
 }
 
-// UserAuth doc
+// AuthGet doc
 // @Tags auth
 // @Summary 获取登录信息
 // @Param token query string true "凭证"
 // @Success 200 {object} model.Reply{data=model.User} "成功数据"
-// @Router /adm/auth [get]
-func Auth(ctx echo.Context) error {
+// @Router /adm/auth/get [get]
+func AuthGet(ctx echo.Context) error {
 	mod, _ := model.UserGet(ctx.Get("uid").(int))
 	return ctx.JSON(utils.Succ(`auth`, mod))
 }
