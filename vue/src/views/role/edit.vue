@@ -13,8 +13,9 @@
 					<Input v-model="dataForm.intro" placeholder="请填写角色介绍"></Input>
 				</FormItem>
 				<FormItem>
-					<Button type="warning" :loading="loading" @click="emitAdd">提交保存</Button>
+					<Button type="warning" :loading="loading" @click="emitEdit">提交保存</Button>
 					<Button type="success" @click="emitReset()" style="margin-left: 8px">重置填写</Button>
+                    <Button :to="{name:'role-list'}" style="margin-left: 8px">返回列表</Button>
 				</FormItem>
 			</Form>
 		</div>
@@ -57,7 +58,7 @@ export default {
 						this.loading = false;
 						if (resp.code == 200) {
 							this.$Message.success({
-								content: "添加成功",
+								content: "修改成功",
 								onClose: () => {
 									this.$router.push({ name: "role-list" });
 								}
