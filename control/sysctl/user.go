@@ -101,7 +101,7 @@ func UserEdit(ctx echo.Context) error {
 // @Param id query int true "id"
 // @Param token query string true "凭证"
 // @Success 200 {object} model.Reply "成功数据"
-// @Router /adm/user/reset/{id} [get]
+// @Router /adm/user/reset [get]
 func UserReset(ctx echo.Context) error {
 	// role, _ := ctx.Get("role").(int)
 	// if role < model.RoleAdmin {

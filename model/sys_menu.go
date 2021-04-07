@@ -18,7 +18,7 @@ type Menu struct {
 	Sort     int       `xorm:"INT(11) DEFAULT 1000 comment('排序')" json:"sort"`
 	Inner    bool      `xorm:"TINYINT(4) DEFAULT 0 comment('内部禁止删除')" json:"inner"`
 	Ctime    time.Time `xorm:"DATETIME comment('时间')" json:"ctime"`
-	Children []Menu    `xorm:"-" json:"children"`
+	Children []Menu    `xorm:"-" json:"children" swaggerignore:"true"` //忽略文档生成
 }
 
 func (Menu) TableName() string {
