@@ -77,18 +77,15 @@ func ApiEdit(mod *Api, cols ...string) error {
 	return nil
 }
 
-// ApiIds 返回接口信息-ids
-func ApiIds(ids []int) map[int]*Api {
+// ApiMapIds 通过id集合返回接口信息
+func ApiMapIds(ids []int) map[int]*Api {
 	mods := make([]Api, 0, len(ids))
 	Db.In("id", ids).Find(&mods)
-	if len(mods) > 0 {
-		mapMods := make(map[int]*Api, len(mods))
-		for idx := range mods {
-			mapMods[mods[idx].Id] = &mods[idx]
-		}
-		return mapMods
+	mapSet := make(map[int]*Api, len(mods))
+	for idx := range mods {
+		mapSet[mods[idx].Id] = &mods[idx]
 	}
-	return nil
+	return mapSet
 }
 
 // ApiDrop 删除单条接口信息

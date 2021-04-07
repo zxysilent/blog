@@ -15,7 +15,7 @@ type User struct {
 	Ecount int       `xorm:"INT(11) DEFAULT 0 comment('错误次数')" json:"ecount"`
 	Ltime  time.Time `xorm:"DATETIME comment('上次登录时间')" json:"ltime"`
 	Ctime  time.Time `xorm:"DATETIME comment('创建时间')" json:"ctime"`
-	Role   Role      `xorm:"-" json:"role"` //用户角色
+	Role   *Role     `xorm:"-" json:"role"` //用户角色
 }
 
 func (User) TableName() string {
@@ -60,6 +60,18 @@ func UserPage(pi int, ps int, cols ...string) ([]User, error) {
 		sess.Cols(cols...)
 	}
 	err := sess.Desc("Ctime").Limit(ps, (pi-1)*ps).Find(&mods)
+	if len(mods) > 0 {
+		ids := make([]int, 0, len(mods))
+		for idx := range mods {
+			if !inOf(mods[idx].RoleId, ids) {
+				ids = append(ids, mods[idx].RoleId)
+			}
+		}
+		mapSet := RoleMapIds(ids)
+		for idx := range mods {
+			mods[idx].Role = mapSet[mods[idx].RoleId]
+		}
+	}
 	return mods, err
 }
 

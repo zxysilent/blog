@@ -69,20 +69,6 @@ func SysLogEdit(mod *SysLog, cols ...string) error {
 	return nil
 }
 
-// SysLogIds 返回调用信息-ids
-func SysLogIds(ids []int) map[int]*SysLog {
-	mods := make([]SysLog, 0, len(ids))
-	Db.In("id", ids).Find(&mods)
-	if len(mods) > 0 {
-		mapMods := make(map[int]*SysLog, len(mods))
-		for idx := range mods {
-			mapMods[mods[idx].Id] = &mods[idx]
-		}
-		return mapMods
-	}
-	return nil
-}
-
 // SysLogDrop 删除单条调用信息
 func SysLogDrop(id int) error {
 	sess := Db.NewSession()

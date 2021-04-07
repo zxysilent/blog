@@ -76,18 +76,15 @@ func RoleEdit(mod *Role, cols ...string) error {
 	return nil
 }
 
-// RoleIds 返回角色信息-ids
-func RoleIds(ids []int) map[int]*Role {
+// RoleMapIds 通过id集合返回角色信息
+func RoleMapIds(ids []int) map[int]*Role {
 	mods := make([]Role, 0, len(ids))
 	Db.In("id", ids).Find(&mods)
-	if len(mods) > 0 {
-		mapMods := make(map[int]*Role, len(mods))
-		for idx := range mods {
-			mapMods[mods[idx].Id] = &mods[idx]
-		}
-		return mapMods
+	mapSet := make(map[int]*Role, len(mods))
+	for idx := range mods {
+		mapSet[mods[idx].Id] = &mods[idx]
 	}
-	return nil
+	return mapSet
 }
 
 // RoleDrop 删除单条角色信息

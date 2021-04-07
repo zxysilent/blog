@@ -69,20 +69,6 @@ func SysApiLogEdit(mod *SysApiLog, cols ...string) error {
 	return nil
 }
 
-// SysApiLogIds 返回调用信息-ids
-func SysApiLogIds(ids []int) map[int]*SysApiLog {
-	mods := make([]SysApiLog, 0, len(ids))
-	Db.In("id", ids).Find(&mods)
-	if len(mods) > 0 {
-		mapMods := make(map[int]*SysApiLog, len(mods))
-		for idx := range mods {
-			mapMods[mods[idx].Id] = &mods[idx]
-		}
-		return mapMods
-	}
-	return nil
-}
-
 // SysApiLogDrop 删除单条调用信息
 func SysApiLogDrop(id int) error {
 	sess := Db.NewSession()

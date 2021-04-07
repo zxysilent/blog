@@ -150,18 +150,15 @@ func MenuEdit(mod *Menu, cols ...string) error {
 	return nil
 }
 
-// MenuIds 返回菜单导航信息-ids
-func MenuIds(ids []int) map[int]*Menu {
+// MenuMapIds 通过id集合返回菜单导航信息
+func MenuMapIds(ids []int) map[int]*Menu {
 	mods := make([]Menu, 0, len(ids))
 	Db.In("id", ids).Find(&mods)
-	if len(mods) > 0 {
-		mapMods := make(map[int]*Menu, len(mods))
-		for idx := range mods {
-			mapMods[mods[idx].Id] = &mods[idx]
-		}
-		return mapMods
+	mapSet := make(map[int]*Menu, len(mods))
+	for idx := range mods {
+		mapSet[mods[idx].Id] = &mods[idx]
 	}
-	return nil
+	return mapSet
 }
 
 // MenuDrop 删除单条菜单导航信息
