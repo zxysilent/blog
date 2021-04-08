@@ -99,7 +99,6 @@ func (t *TplRender) Render(w io.Writer, name string, data interface{}, ctx echo.
 	//每次强制加载函数
 	if conf.App.IsDev() {
 		t.templates, _ = utils.LoadTmpl("./views", funcMap)
-
 	}
 	return t.templates.ExecuteTemplate(w, name, data)
 }

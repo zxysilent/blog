@@ -21,5 +21,4 @@ func apiRouter(api *echo.Group) {
 	api.GET("/page/all", appctl.PostPageAll)        // 页面
 	api.GET("/tag/all", appctl.TagAll)              // 标签列表
 	api.GET("/opts/base", appctl.OptsBase)          // 配置
-
 }
