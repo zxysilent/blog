@@ -68,8 +68,8 @@ func MenuAll(ctx echo.Context) error {
 // MenuPage doc
 // @Tags menu
 // @Summary 获取菜单导航分页信息
-// @Param pi query int true "分页数" default(1)
-// @Param ps query int true "每页条数[5,30]" default(5)
+// @Param pi query int true "分页数"
+// @Param ps query int true "每页条数[5,30]"
 // @Param token query string true "token"
 // @Success 200 {object} model.Reply{data=[]model.Menu} "成功数据"
 // @Param token query string true "token"
