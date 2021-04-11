@@ -52,8 +52,8 @@ export const admUserEdit = data => {
 export const admUserDrop = data => {
 	return fetch.request({
 		url: "/adm/user/drop",
-		method: "get",
-		params: data
+		method: "post",
+		data: data
 	});
 };
 
