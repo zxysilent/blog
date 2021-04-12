@@ -8,6 +8,9 @@ const _import = require("./_import"); //获取组件的方法-不这样会失败
 Vue.use(VueRouter);
 export const dynamicRouter = routers => {
 	routers.map(item => {
+		item.meta = {
+			title: item.title //标题显示
+		};
 		if (item.comp) {
 			item.component = item.comp === "layout" ? Layout : _import(item.comp);
 		} else {
