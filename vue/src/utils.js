@@ -44,7 +44,7 @@ utils.getAuth = () => {
 };
 // 不需要也可登录页面集合
 utils.noAuth = r => {
-	return ["login", "errjwt", "err401", "err50x", "err404"].indexOf(r) > -1;
+	return ["login", "errjwt", "err50x", "err401"].indexOf(r) > -1;
 };
 utils.Role = {
 	RSup: 30, //超级管理员
