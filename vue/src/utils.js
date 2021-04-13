@@ -42,10 +42,6 @@ utils.getAuth = () => {
 		location.href = "/login";
 	}
 };
-// 不需要也可登录页面集合
-utils.noAuth = r => {
-	return ["login", "errjwt", "err50x", "err401"].indexOf(r) > -1;
-};
 utils.Role = {
 	RSup: 30, //超级管理员
 	RAtv: 20, //启用/禁用
