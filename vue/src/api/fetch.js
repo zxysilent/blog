@@ -1,7 +1,7 @@
 import axios from "axios";
 import Util from "@/utils.js";
 import ViewUI from "view-design";
-
+import Router from "@/router"
 const fetch = axios.create({
 	baseURL: process.env.VUE_APP_SRV,
 	timeout: 30000
@@ -38,7 +38,8 @@ fetch.interceptors.response.use(
 			// 	desc: "对不起你没有权限访问"
 			// });
 			// return new Promise(() => {});
-			location.href = "/#/401"; //没有权限
+			// location.href = "/#/401"; //没有权限
+            Router.push({ name: "err401" });
 		}
 		if (res.data.code == 340) {
 			// ViewUI.Notice.error({
@@ -53,7 +54,8 @@ fetch.interceptors.response.use(
 			// });
 			// return new Promise(() => {});
 			Util.clearData();
-			location.href = "/#/jwt"; //需要重新登陆
+			// location.href = "/#/jwt"; //需要重新登陆
+            Router.push({ name: "errjwt" });
 		}
 		if (res.data.code == 350) {
 			// ViewUI.Notice.error({
@@ -62,7 +64,8 @@ fetch.interceptors.response.use(
 			// 	desc: "服务端发生错误,请重试"
 			// });
 			// return new Promise(() => {});
-			location.href = "/#/50x"; //服务器异常
+			// location.href = "/#/50x"; //服务器异常
+            Router.push({ name: "err50x" });
 		}
 		return res.data;
 	},

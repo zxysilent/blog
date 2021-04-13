@@ -62,7 +62,7 @@ func admRouter(adm *echo.Group) {
 	{ // user
 		adm.POST("/user/add", sysctl.UserAdd)
 		adm.POST("/user/edit", sysctl.UserEdit)
-		adm.GET("/user/drop", sysctl.UserDrop)
+		adm.POST("/user/drop", sysctl.UserDrop)
 		adm.GET("/user/reset", sysctl.UserReset)
 		adm.GET("/user/get", sysctl.UserGet)
 		adm.GET("/user/page", sysctl.UserPage)

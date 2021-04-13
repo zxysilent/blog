@@ -8,6 +8,9 @@ const _import = require("./_import"); //获取组件的方法-不这样会失败
 Vue.use(VueRouter);
 export const dynamicRouter = routers => {
 	routers.map(item => {
+		item.meta = {
+			title: item.title //标题显示
+		};
 		if (item.comp) {
 			item.component = item.comp === "layout" ? Layout : _import(item.comp);
 		} else {
@@ -69,25 +72,34 @@ const router = new VueRouter(RouterConfig);
 router.beforeEach(async (to, from, next) => {
 	ViewUI.LoadingBar.start();
 	Utils.title(to.meta.title);
-	if (first) {
-		await store.dispatch("authMenu");
-		const asyncRouters = store.getters.getRoutes;
-		router.addRoutes(asyncRouters);
-		first = false;
-		next({ ...to, replace: true });
-	} else {
-		// 已经登陆 去登陆地方
-		if (Utils.getToken() && to.name == "login") {
+	const token = Utils.getToken();
+	// 去不需要登录的地方
+	if (Utils.noAuth(to.name)) {
+		if (token) {
+			console.log("f2");
 			Utils.title("主页");
 			next({ name: "home" });
-		} else if (!Utils.getToken() && !Utils.noAuth(to.name)) {
-			// //没有登陆 不是去不需要权限的地方
-			Utils.title("登陆");
-			next({ name: "login" });
 		} else {
 			next();
 		}
+	} else {
+		if (token) {
+			if (first) {
+				await store.dispatch("authMenu");
+				const asyncRouters = store.getters.getRoutes;
+				router.addRoutes(asyncRouters);
+				first = false;
+				next({ ...to, replace: true });
+			} else {
+				next();
+			}
+		} else {
+			//没有登陆 不是去不需要权限的地方
+			Utils.title("登陆");
+			next({ name: "login" });
+		}
 	}
+	// next()
 });
 
 router.afterEach(to => {
