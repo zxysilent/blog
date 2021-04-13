@@ -11,7 +11,7 @@ import (
 
 // RunApp 入口
 func RunApp() {
-	engine := echo.New()
+	engine := echo.New()                              // 实例化echo
 	engine.Renderer = initRender()                    // 初始渲染引擎
 	engine.Use(midRecover, midLogger)                 // 恢复 日志记录
 	engine.Use(middleware.CORSWithConfig(crosConfig)) // 跨域设置

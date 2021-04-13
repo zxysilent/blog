@@ -52,6 +52,7 @@ func midLogger(next echo.HandlerFunc) echo.HandlerFunc {
 		buf.WriteString("\t" + ctx.RealIP())
 		buf.WriteString("\t" + ctx.Request().Method + "：" + ctx.Request().RequestURI)
 		buf.WriteString(" - " + stop.Sub(start).String())
+		// 这里仅仅记录的是 url 访问记录
 		// 开发模式直接输出
 		// 生产模式中间层会记录
 		// os.Stdout.Write(buf.Bytes())

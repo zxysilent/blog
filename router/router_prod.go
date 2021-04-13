@@ -26,8 +26,8 @@ func midLogger(next echo.HandlerFunc) echo.HandlerFunc {
 
 /*  正式模式 编译 取消文档
  *  生成文档 swag init
- *  go build -tags=prod -o blog.exe .\main.go
+ *  go build -tags=prod  .\main.go
  *
  *  开发模式 编译 添加文档
- *  go build -o blogdev.exe .\main.go
+ *  go build .\main.go
  */
