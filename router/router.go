@@ -23,6 +23,11 @@ func RunApp() {
 	engine.Static(`/static`, "static")                // 静态目录
 	engine.File(`/favicon.ico`, "favicon.ico")        // ico
 	engine.File("/dashboard*", "dist/index.html")     // 前后端分离页面
+	engine.GET("/dashboard", func(ctx echo.Context) error {
+		// 301 永久重定向
+		// 302 临时重定向
+		return ctx.Redirect(302, "/dashboard/")
+	})
 	//--- 页面 -- start
 	engine.GET(`/`, appctl.IndexView)                 // 首页
 	engine.GET(`/archives`, appctl.ArchivesView)      // 归档
