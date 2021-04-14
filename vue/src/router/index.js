@@ -69,15 +69,14 @@ const RouterConfig = {
 let first = true;
 
 const router = new VueRouter(RouterConfig);
-
+const noAuth = ["login", "errjwt", "err50x", "err401"];
 router.beforeEach(async (to, from, next) => {
 	ViewUI.LoadingBar.start();
 	Utils.title(to.meta.title);
 	const token = Utils.getToken();
 	// 去不需要登录的地方
-	if (Utils.noAuth(to.name)) {
+	if (noAuth.indexOf(to.name) > -1) {
 		if (token) {
-			console.log("f2");
 			Utils.title("主页");
 			next({ name: "home" });
 		} else {
