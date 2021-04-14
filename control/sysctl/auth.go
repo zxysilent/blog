@@ -127,17 +127,17 @@ func AuthMenu(ctx echo.Context) error {
 
 // UserLogout doc
 // @Tags auth
-// @Summary 注销
+// @Summary 注销登录
 // @Router /api/auth/logout [post]
 func UserLogout(ctx echo.Context) error {
 	return ctx.HTML(200, `hello`)
 }
 
-// Login doc
+// AuthVcode doc
 // @Tags auth
-// @Summary 登陆
+// @Summary 验证码
 // @Accept mpfd
-// @Success 200 {object} model.Reply "成功数据"
+// @Success 200 {object} model.Reply{data=string} "成功数据"
 // @Router /api/auth/vcode [post]
 func AuthVcode(ctx echo.Context) error {
 	rnd := utils.RandDigitStr(5)
@@ -155,4 +155,55 @@ func hmc(raw, key string) string {
 	hm := hmac.New(sha1.New, []byte(key))
 	hm.Write([]byte(raw))
 	return base64.RawURLEncoding.EncodeToString(hm.Sum(nil))
+}
+
+// AuthEdit doc
+// @Tags auth
+// @Summary 修改个人信息
+// @Param name formData string true "名称"
+// @Param phone formData string true "号码"
+// @Param email formData string true "邮箱"
+// @Success 200 {object} model.Reply{data=string} "成功数据"
+// @Router /adm/auth/edit [post]
+func AuthEdit(ctx echo.Context) error {
+	ipt := &model.User{}
+	err := ctx.Bind(&ipt)
+	if err != nil {
+		return ctx.JSON(utils.Fail("输入数据有误", err.Error()))
+	}
+	ipt.Id = ctx.Get("uid").(int)
+	if err := model.UserEdit(ipt, "name", "email", "phone"); err != nil {
+		return ctx.JSON(utils.Fail("修改失败", err.Error()))
+	}
+	return ctx.JSON(utils.Succ("succ"))
+}
+
+// AuthPasswd doc
+// @Tags auth
+// @Summary 修改自己的密码
+// @Param opasswd formData string true "旧密码"
+// @Param npasswd formData string true "新密码"
+// @Success 200 {object} model.Reply{data=string} "成功数据"
+// @Router /adm/auth/passwd [post]
+func AuthPasswd(ctx echo.Context) error {
+	ipt := &struct {
+		Opasswd string `form:"opasswd" json:"opasswd"`
+		Npasswd string `form:"npassws" json:"npasswd"`
+	}{}
+	err := ctx.Bind(ipt)
+	if err != nil {
+		return ctx.JSON(utils.Fail("输入数据有误", err.Error()))
+	}
+	mod, has := model.UserGet(ctx.Get("uid").(int))
+	if !has {
+		return ctx.JSON(utils.Fail("输入数据有误,请重试"))
+	}
+	if mod.Passwd != ipt.Opasswd {
+		return ctx.JSON(utils.Fail("原始密码输入错误,请重试"))
+	}
+	mod.Passwd = ipt.Npasswd
+	if err := model.UserEdit(mod, "passwd"); err != nil {
+		return ctx.JSON(utils.Fail("密码修改失败", err.Error()))
+	}
+	return ctx.JSON(utils.Succ("succ"))
 }
