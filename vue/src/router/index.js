@@ -31,10 +31,11 @@ export const initRouter = [
 	{
 		path: "/login",
 		name: "login",
-		title: "登录",
+		meta: {
+			title: "登录"
+		},
 		component: () => import("@/views/login.vue")
 	},
-
 	{
 		path: "/_home",
 		name: "_home",
@@ -43,21 +44,21 @@ export const initRouter = [
 		children: [
 			{
 				path: "/home",
-				title: "管理主页",
+				meta: { title: "管理主页" },
 				name: "home",
 				component: () => import("@/views/home/home.vue")
 			},
 			{
 				path: "/auth/self",
 				name: "auth-self",
-				title: "个人信息",
+				meta: { title: "个人信息" },
 				component: () => import("@/views/user/self.vue")
 			}
 		]
 	},
-	{ path: "/jwt", name: "errjwt", title: "jwt-重新登录", component: () => import("@/views/errors/jwt.vue") },
-	{ path: "/401", name: "err401", title: "401-没有权限", component: () => import("@/views/errors/401.vue") },
-	{ path: "/50x", name: "err50x", title: "50x-服务异常", component: () => import("@/views/errors/50x.vue") }
+	{ path: "/jwt", name: "errjwt",meta: { title: "jwt-重新登录" }, component: () => import("@/views/errors/jwt.vue") },
+	{ path: "/401", name: "err401",meta: { title: "401-没有权限" }, component: () => import("@/views/errors/401.vue") },
+	{ path: "/50x", name: "err50x",meta: { title: "50x-服务异常" }, component: () => import("@/views/errors/50x.vue") }
 ];
 
 // 路由配置
