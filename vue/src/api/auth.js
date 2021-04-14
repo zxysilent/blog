@@ -32,12 +32,20 @@ export const admAuthMenu = () => {
 };
 
 // 修改自己密码
-export const admUserPass = data => {
-	return fetch.post("/adm/user/pass", data);
+export const admAuthPasswd = data => {
+	return fetch.request({
+		url: "/adm/auth/passwd",
+		method: "post",
+		data: data
+	});
 };
 // 修改自己信息
-export const admUserEditSelf = data => {
-	return fetch.post("/adm/user/edit/self", data);
+export const admAuthEdit = data => {
+    return fetch.request({
+		url: "/adm/auth/edit",
+		method: "post",
+		data: data
+	});
 };
 
 export const apiAuthLogoff = data => {
