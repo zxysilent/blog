@@ -24,10 +24,10 @@ func midLogger(next echo.HandlerFunc) echo.HandlerFunc {
 	return next
 }
 
-/*  正式模式 编译 取消文档
+/*  生产模式-编译 取消文档-请求记录
  *  生成文档 swag init
  *  go build -tags=prod  .\main.go
  *
- *  开发模式 编译 添加文档
+ *  开发模式-编译 添加文档-请求记录
  *  go build .\main.go
  */
