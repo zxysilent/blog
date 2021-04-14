@@ -152,7 +152,7 @@ func UserDrop(ctx echo.Context) error {
 
 // UserPage doc
 // @Tags user
-// @Summary 获取某个分类下分页数据
+// @Summary 获取分页数据
 // @Param pi query int true "分页数"
 // @Param ps query int true "每页条数[5,20]" default(5)
 // @Success 200 {object} model.Reply "成功数据"
