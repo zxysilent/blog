@@ -18,11 +18,14 @@
 							<Col span="8"><Input type="text" v-bind:disabled="isEdit" v-model="dataForm.path" placeholder="请输入访问路径"></Input>
 							</Col>
 							<Col span="10" style="min-width:250px"> .html&nbsp;<a title="预览" @click="clkPreview">
-								<Icon type="ios-eye" size="22" /></a></Button>
+								<Icon type="ios-eye" size="22" />
+							</a></Button>
 							<Button type="info" @click="cmtDraft" :loading="draftLoading">
-								<Icon type="ios-trash" size="20" />存草稿</Button>&nbsp;
+								<Icon type="ios-trash" size="20" />存草稿
+							</Button>&nbsp;
 							<Button type="warning" @click="cmtPublish" :loading="publishLoading">
-								<Icon type="ios-send" size="20" />发 布</Button>
+								<Icon type="ios-send" size="20" />发 布
+							</Button>
 							</Col>
 						</Row>
 					</FormItem>
@@ -47,7 +50,8 @@
 						</FormItem>
 						<FormItem label="权限" prop="is_public">
 							<i-switch v-model="dataForm.is_public"><span slot="open">公开</span>
-								<span slot="close">私密</span></i-switch>
+								<span slot="close">私密</span>
+							</i-switch>
 						</FormItem>
 						<FormItem label="评论" prop="allow_comment">
 							<Checkbox v-model="dataForm.allow_comment">允许评论</Checkbox>
@@ -74,7 +78,7 @@ import "mavon-editor/dist/css/index.css";
 import toolbars from "./toolbars";
 import { apiCateAll } from "@/api/cate";
 import { apiTagAll } from "@/api/tag";
-import util from "@/utils.js";
+import { getToken } from "@/utils/token";
 import { apiPostGet, admPostOpts, apiPostTagGet } from "@/api/post";
 // 通用 文章/页面 + 添加/修改
 // 减少js体积
@@ -118,7 +122,7 @@ export default {
 				this.getOne();
 			}
 			if (this.isPost && this.isEdit) {
-				apiPostTagGet(this.dataId).then(resp => {
+				apiPostTagGet(this.dataId).then((resp) => {
 					if (resp.code == 200) {
 						this.tags = resp.data;
 					}
@@ -126,7 +130,7 @@ export default {
 			}
 		},
 		getCate() {
-			apiCateAll().then(resp => {
+			apiCateAll().then((resp) => {
 				if (resp.code == 200) {
 					this.cateAll = resp.data;
 					if (this.isAdd) {
@@ -139,7 +143,7 @@ export default {
 			});
 		},
 		getTag() {
-			apiTagAll().then(resp => {
+			apiTagAll().then((resp) => {
 				if (resp.code == 200) {
 					this.tagAll = resp.data;
 				} else {
@@ -149,7 +153,7 @@ export default {
 			});
 		},
 		getOne() {
-			apiPostGet(this.dataId).then(resp => {
+			apiPostGet(this.dataId).then((resp) => {
 				if (resp.code == 200) {
 					this.dataForm = resp.data;
 				} else {
@@ -210,13 +214,13 @@ export default {
 				this.$refs.md.$img2Url(pos, process.env.VUE_APP_SRV + json.data);
 			};
 
-			formData.append("token", util.getToken());
+			formData.append("token", getToken());
 			formData.append("file", $file);
 			xhr.send(formData);
 		},
 		// 存草稿
 		cmtDraft() {
-			this.$refs.dataForm.validate(valid => {
+			this.$refs.dataForm.validate((valid) => {
 				if (valid) {
 					if (this.dataForm.content == "") {
 						this.$Message.warning("请填写内容");
@@ -230,7 +234,7 @@ export default {
 						edit: this.isEdit,
 						type: this.isPost ? 0 : 1,
 						tags: this.tags
-					}).then(resp => {
+					}).then((resp) => {
 						this.draftLoading = false;
 						if (resp.code == 200) {
 							this.$Message.success({
@@ -251,7 +255,7 @@ export default {
 		},
 		// 发布
 		cmtPublish() {
-			this.$refs.dataForm.validate(valid => {
+			this.$refs.dataForm.validate((valid) => {
 				if (valid) {
 					if (this.dataForm.content == "") {
 						this.$Message.warning("请填写内容");
@@ -264,7 +268,7 @@ export default {
 						edit: this.isEdit,
 						type: this.isPost ? 0 : 1,
 						tags: this.tags
-					}).then(resp => {
+					}).then((resp) => {
 						this.publishLoading = false;
 						if (resp.code == 200) {
 							this.$Message.success({

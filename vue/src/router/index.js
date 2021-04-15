@@ -1,5 +1,5 @@
 import Vue from "vue";
-import Utils from "@/utils.js";
+import { getToken } from "@/utils/token";
 import store from "@/store";
 import ViewUI from "view-design";
 import VueRouter from "vue-router";
@@ -56,11 +56,25 @@ export const initRouter = [
 			}
 		]
 	},
-	{ path: "/jwt", name: "errjwt",meta: { title: "jwt-重新登录" }, component: () => import("@/views/errors/jwt.vue") },
-	{ path: "/401", name: "err401",meta: { title: "401-没有权限" }, component: () => import("@/views/errors/401.vue") },
-	{ path: "/50x", name: "err50x",meta: { title: "50x-服务异常" }, component: () => import("@/views/errors/50x.vue") }
+	{
+		path: "/jwt",
+		name: "errjwt",
+		meta: { title: "jwt-重新登录" },
+		component: () => import("@/views/errors/jwt.vue")
+	},
+	{
+		path: "/401",
+		name: "err401",
+		meta: { title: "401-没有权限" },
+		component: () => import("@/views/errors/401.vue")
+	},
+	{ path: "/50x", name: "err50x", meta: { title: "50x-服务异常" }, component: () => import("@/views/errors/50x.vue") }
 ];
 
+const toTitle = title => {
+	title = title || "zadmin";
+	window.document.title = title;
+};
 // 路由配置
 const RouterConfig = {
 	mode: "hash", //history
@@ -72,12 +86,12 @@ const router = new VueRouter(RouterConfig);
 const noAuth = ["login", "errjwt", "err50x", "err401"];
 router.beforeEach(async (to, from, next) => {
 	ViewUI.LoadingBar.start();
-	Utils.title(to.meta.title);
-	const token = Utils.getToken();
+	toTitle(to.meta.title);
+	const token = getToken();
 	// 去不需要登录的地方
 	if (noAuth.indexOf(to.name) > -1) {
 		if (token) {
-			Utils.title("主页");
+			toTitle("主页");
 			next({ name: "home" });
 		} else {
 			next();
@@ -95,7 +109,7 @@ router.beforeEach(async (to, from, next) => {
 			}
 		} else {
 			//没有登陆 不是去不需要权限的地方
-			Utils.title("登陆");
+			toTitle("登陆");
 			next({ name: "login" });
 		}
 	}

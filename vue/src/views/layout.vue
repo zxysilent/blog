@@ -122,7 +122,6 @@
 	</Layout>
 </template>
 <script>
-import Utils from "@/utils.js";
 import { mapGetters, mapMutations } from "vuex";
 import { admAuthGet } from "@/api/auth";
 export default {

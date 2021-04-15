@@ -71,7 +71,7 @@
 <script>
 import md5 from "js-md5";
 import { apiAuthLogin, apiAuthVcode } from "@/api/auth";
-import Utils from "@/utils";
+import { setToken } from "@/utils/token";
 export default {
 	data() {
 		return {
@@ -98,7 +98,7 @@ export default {
 							this.$Message.success({
 								content: "登陆成功",
 								onClose: () => {
-									Utils.setToken(resp.data);
+									setToken(resp.data);
 									this.$router.push({ name: "home" });
 								}
 							});
