@@ -42,31 +42,4 @@ utils.getAuth = () => {
 		location.href = "/login";
 	}
 };
-utils.Role = {
-	RSup: 30, //超级管理员
-	RAtv: 20, //启用/禁用
-	RBas: 10, //基本权限
-	//判断指定位置权限
-	getRole: (rl, r) => {
-		if ((rl & (1 << r)) >> r == 1) {
-			return true;
-		}
-		return false;
-	}
-};
-utils.Role.isSup = rl => {
-	return utils.Role.getRole(rl, utils.Role.RSup);
-};
-utils.Role.isAtv = rl => {
-	return utils.Role.getRole(rl, utils.Role.RAtv);
-};
-// 权限路由相关
-utils.Role.allow = (role, arr) => {
-	for (let i = 0; i < arr.length; i++) {
-		if (utils.Role.getRole(role, arr[i])) {
-			return true;
-		}
-	}
-	return false;
-};
 export default utils;

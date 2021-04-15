@@ -29,7 +29,6 @@
 	</div>
 </template>
 <script>
-import Utils from "@/utils";
 import { admUserGet, admUserEdit } from "@/api/user";
 export default {
 	data() {
