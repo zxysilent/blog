@@ -24,6 +24,8 @@ var funcMap template.FuncMap
 func init() {
 	funcMap = template.FuncMap{"str2html": Str2html, "str2js": Str2js, "date": Date, "md5": Md5}
 }
+
+// midRecover 恢复中间件
 func midRecover(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(ctx echo.Context) error {
 		defer func() {
@@ -133,7 +135,7 @@ func initRender() *TplRender {
 	}
 }
 
-// midAuth 中间件登录认证
+// midAuth 登录认证中间件
 func midAuth(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(ctx echo.Context) error {
 		tokenRaw := ctx.FormValue(conf.App.TokenKey) // query/form 查找 token
@@ -158,4 +160,5 @@ func midAuth(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
+// html404 404错误页面
 const html404 = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><title>404 Not Found zxysilent</title><style>* { margin: 0; padding: 0; }body { background-color: #f8f8f8; -webkit-font-smoothing: antialiased; }.error { position: absolute; left: 50%; top: 25rem; width: 483px; margin: -300px 0 0 -242px; padding-top: 199px; font-size: 18px; color: #666; text-align: center; background: #f8f8f8 url(/static/imgs/404.jpg) 0 0 no-repeat; }.error .remind { margin: 30px 0; }.error .button { display: inline-block; padding: 0 20px; line-height: 40px; font-size: 14px; color: #fff; background-color: #f8912d; text-decoration: none; }.error .button:hover { opacity: .9; }</style></head><body><div class="error">    <p class="remind">您访问的页面不存在，请返回主页！</p>    <p><a class="button" href="/">返回主页</a></p></div></body></html>`

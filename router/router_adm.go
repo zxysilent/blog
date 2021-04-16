@@ -29,17 +29,15 @@ func admRouter(adm *echo.Group) {
 
 	// sysctl
 	{ // role
-		adm.GET("/role/get", sysctl.RoleGet)    // 单条角色
-		adm.GET("/role/all", sysctl.RoleAll)    // 所有角色
-		adm.POST("/role/drop", sysctl.RoleDrop) // 角色分页
-		adm.POST("/role/add", sysctl.RoleAdd)   // 添加角色
-		adm.POST("/role/edit", sysctl.RoleEdit) // 编辑角色
-		// role-menu
-		adm.GET("/role/menu/all", sysctl.RoleMenuAll)    // 所有角色菜单导航
+		adm.GET("/role/get", sysctl.RoleGet)             // 单条角色
+		adm.GET("/role/all", sysctl.RoleAll)             // 所有角色
+		adm.POST("/role/drop", sysctl.RoleDrop)          // 角色分页
+		adm.POST("/role/add", sysctl.RoleAdd)            // 添加角色
+		adm.POST("/role/edit", sysctl.RoleEdit)          // 编辑角色
+		adm.GET("/role/menu/all", sysctl.RoleMenuAll)    // 所有角色菜单导航 // role-menu
 		adm.POST("/role/menu/edit", sysctl.RoleMenuEdit) // 编辑角色菜单导航
-		// role-api
-		adm.GET("/role/api/all", sysctl.RoleApiAll)    // 所有角色接口
-		adm.POST("/role/api/edit", sysctl.RoleApiEdit) // 编辑角色接口
+		adm.GET("/role/api/all", sysctl.RoleApiAll)      // 所有角色接口 // role-api
+		adm.POST("/role/api/edit", sysctl.RoleApiEdit)   // 编辑角色接口
 	}
 	{ // menu
 		adm.GET("/menu/get", sysctl.MenuGet)             // 单条菜单导航
