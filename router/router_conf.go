@@ -149,12 +149,11 @@ func midAuth(next echo.HandlerFunc) echo.HandlerFunc {
 		err := auth.Decode(tokenRaw, conf.App.TokenSecret)
 		if err != nil {
 			return ctx.JSON(utils.ErrJwt("请重新登陆", err.Error()))
-		} else {
-			// 验证通过，保存信息
-			ctx.Set("auth", auth)
-			ctx.Set("uid", auth.Id)
-			ctx.Set("rid", auth.RoleId)
 		}
+		// 验证通过，保存信息
+		ctx.Set("auth", auth)
+		ctx.Set("uid", auth.Id)
+		ctx.Set("rid", auth.RoleId)
 		// 后续流程
 		return next(ctx)
 	}
