@@ -88,6 +88,8 @@ router.beforeEach(async (to, from, next) => {
 	ViewUI.LoadingBar.start();
 	toTitle(to.meta.title);
 	const token = getToken();
+    console.log("token",token)
+    console.log("to.name",to.name)
 	// 去不需要登录的地方
 	if (noAuth.indexOf(to.name) > -1) {
 		if (token) {
