@@ -1,28 +1,66 @@
 import fetch from "./fetch";
 
-export const admMenuAll = data => {
-	return fetch.get("/adm/menu/all", { params: data });
+// 通过id获取单条菜单
+export const admMenuGet = (data) => {
+    return fetch.request({
+		url: "/adm/menu/get",
+		method: "get",
+		params: data,
+	});
 };
-
+// 获取所有菜单
+export const admMenuAll = (data) => {
+    return fetch.request({
+		url: "/adm/menu/all",
+		method: "get",
+		params: data,
+	});
+};
+// 获取所有菜单树
 export const admMenuTree = data => {
-	return fetch.get("/adm/menu/tree", { params: data });
+    return fetch.request({
+		url: "/adm/menu/tree",
+		method: "get",
+		params: data,
+	});
 };
-
-export const admMenuGet = data => {
-	return fetch.get("/adm/menu/get", { params: data });
+// 获取菜单分页
+export const admMenuPage = (data) => {
+    return fetch.request({
+		url: "/adm/menu/page",
+		method: "get",
+		params: data,
+	});
 };
-
-export const admMenuAdd = data => {
-	return fetch.post("/adm/menu/add", data);
+// 添加菜单
+export const admMenuAdd = (data) => {
+    return fetch.request({
+		url: "/adm/menu/add",
+		method: "post",
+		data: data,
+	});
 };
-
-export const admMenuEdit = data => {
-	return fetch.post("/adm/menu/edit", data);
+// 修改菜单
+export const admMenuEdit = (data) => {
+	return fetch.request({
+		url: "/adm/menu/edit",
+		method: "post",
+		data: data,
+	});
 };
+// 修改菜单显隐
 export const admMenuEditShow = data => {
-	return fetch.post("/adm/menu/edit/show", data);
+    return fetch.request({
+		url: "/adm/menu/edit/show",
+		method: "post",
+		data: data,
+	});
 };
-
-export const admMenuDrop = data => {
-	return fetch.post("/adm/menu/drop", data);
+// 通过id删除单条菜单
+export const admMenuDrop = (data) => {
+	return fetch.request({
+		url: "/adm/menu/drop",
+		method: "post",
+		data: data,
+	});
 };
