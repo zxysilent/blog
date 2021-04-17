@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import { admAuthMenu } from "@/api/auth";
 Vue.use(Vuex);
-import { dynamicRouter, errorRouter } from "@/router";
+import { dynamicRouter } from "@/router";
 
 const Store = {
 	state: {
@@ -30,7 +30,7 @@ const Store = {
 				const routes = JSON.parse(JSON.stringify(resp.data));
 				commit("setMenus", resp.data);
 				console.log(resp.data);
-                // 仅放入路由,菜单没有
+				// 仅放入路由,菜单没有
 				routes.push({
 					path: "/*",
 					name: "err404",
