@@ -21,5 +21,5 @@ export const setToken = token => {
 };
 // 读取token
 export const getToken = () => {
-	storage.getItem(tokenKey);
+	return storage.getItem(tokenKey);
 };
