@@ -1,9 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import { admAuthMenu } from "@/api/auth";
-Vue.use(Vuex);
 import { dynamicRouter } from "@/router";
-
+Vue.use(Vuex);
 const Store = {
 	state: {
 		menus: [], //左侧导航
@@ -37,6 +36,7 @@ const Store = {
 					title: "404-没发现",
 					comp: "views/errors/404.vue"
 				});
+                // 动态导入
 				dynamicRouter(routes);
 				// routes.push(errorRouter);
 				// console.log(errorRouter);
