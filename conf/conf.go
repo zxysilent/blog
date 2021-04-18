@@ -53,10 +53,11 @@ func (app *appconf) IsDev() bool {
 	return app.Mode == "dev"
 }
 
-//uid:pass@tcp(host:port)/dbname?charset=utf8&parseTime=true
-//用户名:密码@tcp(主机:端口)/数据库名称?charset=utf8&parseTime=true
+// uid:pass@tcp(host:port)/dbname?charset=utf8&parseTime=true
+// 用户名:密码@tcp(主机:端口)/数据库名称?charset=utf8&parseTime=true
 const _dsn = "%s:%s@tcp(%s:%d)/%s?%s"
 
+// MySQL链接字符串
 func (app *appconf) Dsn() string {
 	return fmt.Sprintf(_dsn, app.DbUser, app.DbPasswd, app.DbHost, app.DbPort, app.DbName, app.DbParams)
 }
