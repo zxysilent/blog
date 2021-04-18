@@ -19,10 +19,10 @@ type appconf struct {
 	TokenSso     bool   `toml:"token_sso"`      //单点登录
 	TokenSecret  string `toml:"token_secret"`   //加密私钥
 	ImageCut     bool   `toml:"image_cut"`      //图片裁剪
-	ImageWidth   int    `toml:"image_width"`    //
-	ImageHeight  int    `toml:"image_height"`   //
-	PageMin      int    `toml:"page_min"`       //分页
-	PageMax      int    `toml:"page_max"`       //
+	ImageWidth   int    `toml:"image_width"`    //图片宽度
+	ImageHeight  int    `toml:"image_height"`   //图片高度
+	PageMin      int    `toml:"page_min"`       //最小分页大小
+	PageMax      int    `toml:"page_max"`       //最大分页大小
 	DbHost       string `toml:"db_host"`        //数据库地址
 	DbPort       int    `toml:"db_port"`        //数据库端口
 	DbUser       string `toml:"db_user"`        //数据库账号
