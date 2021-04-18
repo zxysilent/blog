@@ -50,18 +50,19 @@ func Init() {
 		db.SetDefaultCacher(cacher)
 	}
 	// mysql int(11)、tinyint(4)、smallint(6)、mediumint(9)、bigint(20)
-
 	if conf.App.OrmSync {
 		err := db.Sync2(
-			new(User),
+			// app
 			new(Cate),
 			new(Tag),
 			new(Post),
 			new(PostTag),
 			new(Opts),
-			new(Role),
+			// sys
 			// new(Api),
 			// new(RoleApi),
+			new(Role),
+			new(User),
 			new(Menu),
 			new(RoleMenu),
 		)
