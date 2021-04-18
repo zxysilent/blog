@@ -95,14 +95,38 @@ func UserEdit(ctx echo.Context) error {
 	return ctx.JSON(utils.Succ("succ"))
 }
 
-// UserReset doc
+// UserEditLock doc
+// @Tags user
+// @Summary 修改用户锁定状态
+// @Param token query string true "token"
+// @Param body body object{id=int,lock=bool} true "json"
+// @Success 200 {object} model.Reply{data=string} "成功数据"
+// @Router /adm/user/edit/lock [post]
+func UserEditLock(ctx echo.Context) error {
+	ipt := &struct {
+		Id   int  `json:"id"`
+		Lock bool `json:"lock"`
+	}{}
+	err := ctx.Bind(ipt)
+	if err != nil {
+		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
+	}
+	mod := &model.User{Id: ipt.Id, Lock: ipt.Lock}
+	err = model.UserEdit(mod, "Lock")
+	if err != nil {
+		return ctx.JSON(utils.Fail("修改失败", err.Error()))
+	}
+	return ctx.JSON(utils.Succ("succ"))
+}
+
+// UserEditReset doc
 // @Tags user
 // @Summary 重置密码
 // @Param id query int true "id"
 // @Param token query string true "凭证"
 // @Success 200 {object} model.Reply "成功数据"
-// @Router /adm/user/reset [get]
-func UserReset(ctx echo.Context) error {
+// @Router /adm/user/edit/reset [post]
+func UserEditReset(ctx echo.Context) error {
 	// role, _ := ctx.Get("role").(int)
 	// if role < model.RoleAdmin {
 	// 	return ctx.JSON(utils.ErrDeny("对不起您没有此权限"))

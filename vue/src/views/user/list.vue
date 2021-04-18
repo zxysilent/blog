@@ -11,7 +11,7 @@
 	</Card>
 </template>
 <script>
-import { admUserPage, admUserDrop, admUserReset, admUserChgAtv } from "@/api/user";
+import { admUserPage, admUserDrop, admUserEditReset, admUserEditLock } from "@/api/user";
 export default {
 	data() {
 		return {
@@ -30,48 +30,38 @@ export default {
 				},
 				{ title: "用户电话", width: 150, key: "phone" },
 				{ title: "用户邮箱", width: 150, key: "email" },
-				// {
-				// 	title: "状态",
-				// 	width: 100,
-				// 	key: "istop",
-				// 	render: (h, data) => {
-				// 		let taht = this;
-				// 		return h(
-				// 			"i-switch",
-				// 			{
-				// 				props: { value: this.getRole(40), size: "large" },
-				// 				on: {
-				// 					"on-change": function(val) {
-				// 						admUserChgAtv({ id: data.row.id, flag: val }).then(resp => {
-				// 							if (resp.code != 200) {
-				// 								taht.$Message.error({
-				// 									content: "状态修失败",
-				// 									onClose: () => {
-				// 										taht.init();
-				// 									}
-				// 								});
-				// 							}
-				// 						});
-				// 					}
-				// 				}
-				// 			},
-				// 			[
-				// 				h("span", {
-				// 					slot: "open",
-				// 					domProps: {
-				// 						innerHTML: "启用"
-				// 					}
-				// 				}),
-				// 				h("span", {
-				// 					slot: "close",
-				// 					domProps: {
-				// 						innerHTML: "禁用"
-				// 					}
-				// 				})
-				// 			]
-				// 		);
-				// 	}
-				// },
+				{
+					title: "状态",
+					width: 100,
+					key: "lock",
+					render: (h, data) => {
+						return h(
+							"i-switch",
+							{
+								props: { value: data.row.lock, size: "large" },
+								on: {
+									"on-change": function (val) {
+										admUserEditLock({ id: data.row.id, lock: val }).then((resp) => {
+											if (resp.code != 200) {
+												this.$Message.error({
+													content: "状态修失败",
+													duration: 3,
+													onClose: () => {
+														this.init();
+													}
+												});
+											}
+										});
+									}
+								}
+							},
+							[
+								h("span", { slot: "open", domProps: { innerHTML: "启用" } }),
+								h("span", { slot: "close", domProps: { innerHTML: "禁用" } })
+							]
+						);
+					}
+				},
 				{
 					title: "创建日期",
 					width: 150,
@@ -92,7 +82,7 @@ export default {
 									props: { confirm: true, title: "确定要重置密码吗？" },
 									on: {
 										"on-ok": () => {
-											admUserReset({ id: data.row.id }).then((resp) => {
+											admUserEditReset({ id: data.row.id }).then((resp) => {
 												if (resp.code != 200) {
 													this.$Message.error({ content: resp.msg, duration: 3 });
 												}

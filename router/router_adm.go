@@ -41,26 +41,28 @@ func admRouter(adm *echo.Group) {
 	}
 	{ // menu
 		adm.GET("/menu/get", sysctl.MenuGet)             // 单条菜单导航
-		adm.GET("/menu/tree", sysctl.MenuTree)           // 菜单导航树
 		adm.GET("/menu/all", sysctl.MenuAll)             // 所有菜单导航
-		adm.POST("/menu/drop", sysctl.MenuDrop)          // 菜单导航分页
+		adm.GET("/menu/tree", sysctl.MenuTree)           // 菜单导航树形
+		adm.POST("/menu/drop", sysctl.MenuDrop)          // 删除菜单导航
 		adm.POST("/menu/add", sysctl.MenuAdd)            // 添加菜单导航
 		adm.POST("/menu/edit", sysctl.MenuEdit)          // 编辑菜单导航
 		adm.POST("/menu/edit/show", sysctl.MenuEditShow) // 编辑菜单导航显隐
 	}
 	{ // api
-		adm.GET("/api/page", sysctl.ApiPage)     // 接口分页
-		adm.GET("/api/all", sysctl.ApiAll)       // 所有接口
-		adm.GET("/api/drop/:id", sysctl.ApiDrop) // 接口分页
-		adm.POST("/api/add", sysctl.ApiAdd)      // 添加接口
-		adm.POST("/api/edit", sysctl.ApiEdit)    // 编辑接口
+		adm.GET("/api/get", sysctl.ApiGet)    // 单条接口
+		adm.GET("/api/all", sysctl.ApiAll)    // 所有接口
+		adm.GET("/api/page", sysctl.ApiPage)  // 接口分页
+		adm.POST("/api/drop", sysctl.ApiDrop) // 删除接口
+		adm.POST("/api/add", sysctl.ApiAdd)   // 添加接口
+		adm.POST("/api/edit", sysctl.ApiEdit) // 编辑接口
 	}
 	{ // user
-		adm.POST("/user/add", sysctl.UserAdd)
-		adm.POST("/user/edit", sysctl.UserEdit)
-		adm.POST("/user/drop", sysctl.UserDrop)
-		adm.GET("/user/reset", sysctl.UserReset)
-		adm.GET("/user/get", sysctl.UserGet)
-		adm.GET("/user/page", sysctl.UserPage)
+		adm.GET("/user/get", sysctl.UserGet)               // 单条用户
+		adm.GET("/user/page", sysctl.UserPage)             // 用户分页
+		adm.POST("/user/add", sysctl.UserAdd)              // 添加用户
+		adm.POST("/user/drop", sysctl.UserDrop)            // 删除用户
+		adm.POST("/user/edit", sysctl.UserEdit)            // 编辑用户
+		adm.POST("/user/edit/lock", sysctl.UserEditLock)   // 编辑用户启用禁用
+		adm.POST("/user/edit/reset", sysctl.UserEditReset) // 编辑用户重置密码
 	}
 }
