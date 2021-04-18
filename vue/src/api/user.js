@@ -31,14 +31,6 @@ export const admUserPage = data => {
 		params: data
 	});
 };
-// 重置用户密码
-export const admUserEditReset = data => {
-	return fetch.request({
-		url: "/adm/user/edit/reset",
-		method: "post",
-		params: data
-	});
-};
 // 修改用户
 export const admUserEdit = data => {
 	return fetch.request({
@@ -51,6 +43,14 @@ export const admUserEdit = data => {
 export const admUserEditLock = data => {
 	return fetch.request({
 		url: "/adm/user/edit/lock",
+		method: "post",
+		data: data
+	});
+};
+// 重置用户密码
+export const admUserEditReset = data => {
+	return fetch.request({
+		url: "/adm/user/edit/reset",
 		method: "post",
 		data: data
 	});

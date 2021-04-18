@@ -35,6 +35,7 @@ export default {
 					width: 100,
 					key: "lock",
 					render: (h, data) => {
+						const that = this;
 						return h(
 							"i-switch",
 							{
@@ -43,11 +44,11 @@ export default {
 									"on-change": function (val) {
 										admUserEditLock({ id: data.row.id, lock: val }).then((resp) => {
 											if (resp.code != 200) {
-												this.$Message.error({
-													content: "状态修失败",
+												that.$Message.error({
+													content: resp.msg,
 													duration: 3,
 													onClose: () => {
-														this.init();
+														that.init();
 													}
 												});
 											}

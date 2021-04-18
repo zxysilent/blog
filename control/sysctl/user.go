@@ -111,6 +111,9 @@ func UserEditLock(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
+	if ipt.Id == ctx.Get("uid").(int) {
+		return ctx.JSON(utils.ErrOpt("不能修改自己的状态"))
+	}
 	mod := &model.User{Id: ipt.Id, Lock: ipt.Lock}
 	err = model.UserEdit(mod, "Lock")
 	if err != nil {
@@ -137,7 +140,7 @@ func UserEditReset(ctx echo.Context) error {
 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
 	if ipt.Id == ctx.Get("uid").(int) {
-		return ctx.JSON(utils.ErrOpt("不能重置自己d的密码"))
+		return ctx.JSON(utils.ErrOpt("不能重置自己的密码"))
 	}
 	mod := model.User{Id: ipt.Id, Passwd: "fde6bb0541387e4ebdadf7c2ff3112"} //1q2w3e
 	err = model.UserEdit(&mod, "passwd")
