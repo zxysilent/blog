@@ -165,7 +165,7 @@ func PostView(ctx echo.Context) error {
 
 var reg = regexp.MustCompile(`<img src="([^" ]+)" alt="([^" ]*)"\s?\/?>`)
 
-// 生成目录并替换内容
+// getTocHTML 生成目录并替换内容
 func getTocHTML(html string) string {
 	html = strings.Replace(html, `id="`, `id="toc_`, -1)
 	regToc := regexp.MustCompile("<h[1-6]>.*?</h[1-6]>")
@@ -213,6 +213,7 @@ func getTocHTML(html string) string {
 	}
 	return html
 }
+
 func atoi(raw string, def int) (int, error) {
 	out, err := strconv.Atoi(raw)
 	if err != nil {
