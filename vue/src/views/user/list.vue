@@ -39,7 +39,7 @@ export default {
 						return h(
 							"i-switch",
 							{
-								props: { value: data.row.lock, size: "large" },
+								props: { value: !data.row.lock, size: "large" },
 								on: {
 									"on-change": function (val) {
 										admUserEditLock({ id: data.row.id, lock: val }).then((resp) => {

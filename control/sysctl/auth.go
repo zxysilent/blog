@@ -84,9 +84,9 @@ func AuthLogin(ctx echo.Context) error {
 		//model.UserEditLogin(mod, "Ltime", "Ecount")
 		return ctx.JSON(utils.Fail(`密码错误,剩于登录次数：` + strconv.Itoa(int(3-mod.Ecount))))
 	}
-	// if !mod.Role1.IsAtv() {
-	// 	return ctx.JSON(utils.Fail(`当前账号已被禁用`))
-	// }
+	if mod.Lock {
+		return ctx.JSON(utils.Fail(`当前账号已被禁用`))
+	}
 	auth := hwt.Auth{
 		Id:     mod.Id,
 		RoleId: mod.RoleId,
