@@ -44,6 +44,7 @@ export default {
 									"on-change": function (val) {
 										admUserEditLock({ id: data.row.id, lock: val }).then((resp) => {
 											if (resp.code != 200) {
+												data.row.lock = !val;
 												that.$Message.error({
 													content: resp.msg,
 													duration: 3,
