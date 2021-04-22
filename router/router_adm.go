@@ -9,23 +9,23 @@ import (
 
 // admRouter 登录访问
 func admRouter(adm *echo.Group) {
-	adm.GET("/auth/get", sysctl.AuthGet)        // 获取当前信息
-	adm.GET("/auth/api", sysctl.AuthGet)        // 获取当前接口
-	adm.GET("/auth/menu", sysctl.AuthMenu)      // 获取当前导航
-	adm.POST("/auth/edit", sysctl.AuthEdit)     // 修改自己信息
-	adm.POST("/auth/passwd", sysctl.AuthPasswd) // 修改自己密码
-	adm.GET("/sys", appctl.Sys)                 // 服务器信息
-	adm.GET("/collect", appctl.Collect)         // 统计信息
-	adm.POST("/upload", appctl.Upload)          // 图片上传
-	adm.GET("/cate/drop/:id", appctl.CateDrop)  // 删除分类
-	adm.POST("/cate/add", appctl.CateAdd)       // 添加分类
-	adm.POST("/cate/edit", appctl.CateEdit)     // 编辑分类
-	adm.POST("/post/opts", appctl.PostOpts)     // 文章/页面-编辑/添加
-	adm.GET("/post/drop/:id", appctl.PostDrop)  // 删除文章/页面
-	adm.GET("/tag/drop/:id", appctl.TagDrop)    // 删除标签
-	adm.POST("/tag/add", appctl.TagAdd)         // 添加标签
-	adm.POST("/tag/edit", appctl.TagEdit)       // 编辑标签
-	adm.POST("/opts/edit", appctl.OptsEdit)     // 编辑配置
+	adm.GET("/auth/get", sysctl.AuthGet)           // 获取当前信息
+	adm.GET("/auth/api", sysctl.AuthGet)           // 获取当前接口
+	adm.GET("/auth/menu", sysctl.AuthMenu)         // 获取当前导航
+	adm.POST("/auth/edit", sysctl.AuthEdit)        // 修改自己信息
+	adm.POST("/auth/passwd", sysctl.AuthPasswd)    // 修改自己密码
+	adm.GET("/status/goinfo", sysctl.StatusGoinfo) // 服务器信息
+	adm.GET("/collect", appctl.Collect)            // 统计信息
+	adm.POST("/upload", appctl.Upload)             // 图片上传
+	adm.GET("/cate/drop/:id", appctl.CateDrop)     // 删除分类
+	adm.POST("/cate/add", appctl.CateAdd)          // 添加分类
+	adm.POST("/cate/edit", appctl.CateEdit)        // 编辑分类
+	adm.POST("/post/opts", appctl.PostOpts)        // 文章/页面-编辑/添加
+	adm.GET("/post/drop/:id", appctl.PostDrop)     // 删除文章/页面
+	adm.GET("/tag/drop/:id", appctl.TagDrop)       // 删除标签
+	adm.POST("/tag/add", appctl.TagAdd)            // 添加标签
+	adm.POST("/tag/edit", appctl.TagEdit)          // 编辑标签
+	adm.POST("/opts/edit", appctl.OptsEdit)        // 编辑配置
 
 	// sysctl
 	{ // role

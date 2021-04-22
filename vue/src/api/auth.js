@@ -56,6 +56,6 @@ export const admCollect = () => {
 	return fetch.get("/adm/collect");
 };
 // 服务器信息
-export const admSys = () => {
-	return fetch.get("/adm/sys");
+export const admStatusGoinfo = () => {
+	return fetch.get("/adm/status/goinfo");
 };

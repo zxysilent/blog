@@ -5,7 +5,6 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"runtime"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -43,22 +42,6 @@ func Upload(ctx echo.Context) error {
 		return ctx.JSON(utils.ErrIpt(`文件写入失败,请重试`, err.Error()))
 	}
 	return ctx.JSON(utils.Succ(`文件上传成功`, "/"+filePathName))
-}
-
-// Sys 系统信息
-func Sys(ctx echo.Context) error {
-	state := struct {
-		ARCH    string `json:"arch"`
-		OS      string `json:"os"`
-		Version string `json:"version"`
-		NumCPU  int    `json:"num_cpu"`
-	}{
-		ARCH:    runtime.GOARCH,
-		OS:      runtime.GOOS,
-		Version: runtime.Version(),
-		NumCPU:  runtime.NumCPU(),
-	}
-	return ctx.JSON(utils.Succ(`系统信息`, state))
 }
 
 // Collect 统计信息
