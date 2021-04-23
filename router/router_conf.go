@@ -127,7 +127,7 @@ func Md5(str string) string {
 	return hex.EncodeToString(ctx.Sum(nil))
 }
 
-// 初始化模板和函数
+// initRender 初始化模板和函数
 func initRender() *TplRender {
 	tpl, _ := utils.LoadTmpl("./views", funcMap)
 	return &TplRender{
