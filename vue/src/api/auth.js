@@ -17,7 +17,7 @@ export const apiAuthLogin = data => {
 };
 // 获取验证码
 export const apiAuthVcode = () => {
-    return fetch.request({
+	return fetch.request({
 		url: "/api/auth/vcode",
 		method: "get"
 	});
@@ -25,7 +25,7 @@ export const apiAuthVcode = () => {
 
 // 获取当前用户的菜单导航
 export const admAuthMenu = () => {
-    return fetch.request({
+	return fetch.request({
 		url: "/adm/auth/menu",
 		method: "get"
 	});
@@ -41,7 +41,7 @@ export const admAuthPasswd = data => {
 };
 // 修改自己信息
 export const admAuthEdit = data => {
-    return fetch.request({
+	return fetch.request({
 		url: "/adm/auth/edit",
 		method: "post",
 		data: data
@@ -57,5 +57,8 @@ export const admCollect = () => {
 };
 // 服务器信息
 export const admStatusGoinfo = () => {
-	return fetch.get("/adm/status/goinfo");
+	return fetch.request({
+		url: "/adm/status/goinfo",
+		method: "get"
+	});
 };
