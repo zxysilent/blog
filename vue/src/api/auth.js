@@ -22,7 +22,6 @@ export const apiAuthVcode = () => {
 		method: "get"
 	});
 };
-
 // 获取当前用户的菜单导航
 export const admAuthMenu = () => {
 	return fetch.request({
@@ -30,7 +29,6 @@ export const admAuthMenu = () => {
 		method: "get"
 	});
 };
-
 // 修改自己密码
 export const admAuthPasswd = data => {
 	return fetch.request({
@@ -47,13 +45,15 @@ export const admAuthEdit = data => {
 		data: data
 	});
 };
-
 export const apiAuthLogoff = data => {
 	//   return fetch.post("/api/logoff", data);
 };
 // 统计状态
 export const admCollect = () => {
-	return fetch.get("/adm/collect");
+    return fetch.request({
+		url: "/adm/collect",
+		method: "get"
+	});
 };
 // 服务器信息
 export const admStatusGoinfo = () => {
