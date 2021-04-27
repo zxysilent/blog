@@ -17,7 +17,7 @@ export const admTagAdd = data => {
 // 修改标签
 export const admTagEdit = data => {
 	return fetch.request({
-		url: "/adm/menu/tree",
+		url: "/adm/tag/edit",
 		method: "post",
 		data: data
 	});
