@@ -25,7 +25,6 @@ export const admRoleAdd = data => {
 };
 
 export const admRoleEdit = data => {
-	return fetch.post("", data);
     return fetch.request({
 		url: "/adm/role/edit",
 		method: "post",
