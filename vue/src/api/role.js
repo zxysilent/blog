@@ -1,23 +1,44 @@
 import fetch from "./fetch";
 
 export const admRoleAll = data => {
-	return fetch.get("/adm/role/all", { params: data });
+    return fetch.request({
+		url: "/adm/role/all",
+		method: "get",
+		params: data
+	});
 };
 
 export const admRoleGet = data => {
-	return fetch.get("/adm/role/get", { params: data });
+    return fetch.request({
+		url: "/adm/role/get",
+		method: "get",
+		params: data
+	});
 };
 
 export const admRoleAdd = data => {
-	return fetch.post("/adm/role/add", data);
+    return fetch.request({
+		url: "/adm/role/add",
+		method: "post",
+		data: data
+	});
 };
 
 export const admRoleEdit = data => {
-	return fetch.post("/adm/role/edit", data);
+	return fetch.post("", data);
+    return fetch.request({
+		url: "/adm/role/edit",
+		method: "post",
+		data: data
+	});
 };
 
 export const admRoleDrop = data => {
-	return fetch.post("/adm/role/drop", data);
+    return fetch.request({
+		url: "/adm/role/drop",
+		method: "post",
+		data: data
+	});
 };
 
 // ------------------------------------------------------ 角色菜单 ------------------------------------------------------
