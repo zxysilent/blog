@@ -7,7 +7,7 @@ import (
 
 func TestConf(t *testing.T) {
 	defConfig = "./conf.toml"
-	conf, err := initConf()
+	conf, err := initCfg()
 	if err != nil {
 		t.Fatal(err)
 	} else {
