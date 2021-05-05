@@ -66,7 +66,12 @@ website = "https://github.com/zxysilent"
 # 移动 网站 https://open.weixin.qq.com/cgi-bin/index
 # 公众号 小程序 https://mp.weixin.qq.com/
 [wechat]
-# 需要适配多个,这里列举一个目标
+# 公众号
 # 请同时修改 conf.go
-xxx_appid = "appid"
-xxx_secret = "secret"
+gzh_appid = "appid"
+gzh_secret = "secret"
+# 小程序
+mpg_appid = "appid"
+mpg_secret = "secret"
+# web
+web_appid = "appid"
