@@ -7,13 +7,13 @@ import (
 	"github.com/zxysilent/logs"
 )
 
-type appconf struct {
+type appcfg struct {
 	Title        string `toml:"title" json:"title"`                   //
 	Intro        string `toml:"intro" json:"intro"`                   //
 	Mode         string `toml:"mode" json:"mode"`                     //
 	Addr         string `toml:"addr" json:"addr"`                     //
 	Srv          string `toml:"srv" json:"srv"`                       //
-	TokenKey     string `toml:"token_key" json:"token_key"`           //
+	TokenKey     string `toml:"token_key" json:"token_key"`           //token关键词
 	TokenExp     int    `toml:"token_exp" json:"token_exp"`           //过期时间 h
 	TokenKeep    bool   `toml:"token_keep" json:"token_keep"`         //保持在线
 	TokenSso     bool   `toml:"token_sso" json:"token_sso"`           //单点登录
@@ -49,10 +49,10 @@ type appconf struct {
 	} `toml:"wechat" json:"wechat"`
 }
 
-func (app *appconf) IsProd() bool {
+func (app *appcfg) IsProd() bool {
 	return app.Mode == "prod"
 }
-func (app *appconf) IsDev() bool {
+func (app *appcfg) IsDev() bool {
 	return app.Mode == "dev"
 }
 
@@ -61,26 +61,26 @@ func (app *appconf) IsDev() bool {
 const _dsn = "%s:%s@tcp(%s:%d)/%s?%s"
 
 // MySQL链接字符串
-func (app *appconf) Dsn() string {
+func (app *appcfg) Dsn() string {
 	return fmt.Sprintf(_dsn, app.DbUser, app.DbPasswd, app.DbHost, app.DbPort, app.DbName, app.DbParams)
 }
 
 var (
-	App       *appconf             //运行配置实体
+	App       *appcfg              //运行配置实体
 	defConfig = "./conf/conf.toml" //配置文件路径，方便测试
 )
 
 func Init() {
 	var err error
-	App, err = initConf()
+	App, err = initCfg()
 	if err != nil {
 		logs.Fatal("config init error : ", err.Error())
 	}
 	logs.Debug("conf init")
 }
 
-func initConf() (*appconf, error) {
-	app := &appconf{}
+func initCfg() (*appcfg, error) {
+	app := &appcfg{}
 	_, err := toml.DecodeFile(defConfig, &app)
 	if err != nil {
 		return nil, err
