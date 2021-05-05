@@ -1,1 +1,27 @@
-<!DOCTYPE html><html lang="zh-CN"><head><title>{{.title}}·归档</title><link rel="canonical" href="{{.site_url}}/archives" />{{template "tpl-linker.html" .}}</head><body>{{template "tpl-naver.html" .}}<div id="main"><article class="post archive"><h1 class="title">归档</h1>{{ range $k, $v := .Posts }}<div class="entry-content"><h3>{{ date $v.Time "2006年01月" }} ({{len $v.Posts }})</h3><ul>{{ range $k1, $v1 := $v.Posts }}<li><a href="/post/{{$v1.Path}}.html" title="{{$v1.Title}}">{{$v1.Title}}</a>&nbsp;<span class="date">{{ date $v1.CreateTime "2006-01-02" }}</span></li>{{end}}</ul></div>{{end}}</article>{{template "tpl-footer.html" .}}</body></html>
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <title>{{.title}}·归档</title>
+        <link rel="canonical" href="{{.site_url}}/archives" />
+        {{template "tpl-linker.html" .}}
+    </head>
+    <body>
+        {{template "tpl-naver.html" .}}
+        <div id="main">
+            <article class="post archive">
+                <h1 class="title">归档</h1>
+                {{ range $k, $v := .Posts }}
+                <div class="entry-content">
+                    <h3>{{ date $v.Time "2006年01月" }} ({{len $v.Posts }})</h3>
+                    <ul>
+                        {{ range $k1, $v1 := $v.Posts }}
+                        <li><a href="/post/{{$v1.Path}}.html" title="{{$v1.Title}}">{{$v1.Title}}</a>&nbsp;<span class="date">{{ date $v1.CreateTime "2006-01-02" }}</span></li>
+                        {{end}}
+                    </ul>
+                </div>
+                {{end}}
+            </article>
+        </div>
+        {{template "tpl-footer.html" .}}
+    </body>
+</html>
