@@ -148,7 +148,7 @@ func PostView(ctx echo.Context) error {
 			return ctx.Redirect(302, "/")
 		}
 		if paths[1] == "html" {
-			mod.Content = reg.ReplaceAllString(mod.Content, `<img class="lazy-load" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="$1" alt="$2">`)
+			mod.Content = regImg.ReplaceAllString(mod.Content, `<img class="lazy-load" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="$1" alt="$2">`)
 			tags, _ := model.PostTags(mod.Id)
 			return ctx.Render(http.StatusOK, "post.html", map[string]interface{}{
 				"Post":    mod,
@@ -163,13 +163,13 @@ func PostView(ctx echo.Context) error {
 	return ctx.Redirect(302, "/404")
 }
 
-var reg = regexp.MustCompile(`<img src="([^" ]+)" alt="([^" ]*)"\s?\/?>`)
+var regImg = regexp.MustCompile(`<img src="([^" ]+)" alt="([^" ]*)"\s?\/?>`)
+var regToc = regexp.MustCompile("<h[1-6]>.*?</h[1-6]>")
+var regH = regexp.MustCompile(`<h[1-6]><a id="(.*?)"></a>(.*?)</h[1-6]>`)
 
 // getTocHTML 生成目录并替换内容
 func getTocHTML(html string) string {
 	html = strings.Replace(html, `id="`, `id="toc_`, -1)
-	regToc := regexp.MustCompile("<h[1-6]>.*?</h[1-6]>")
-	regH := regexp.MustCompile(`<h[1-6]><a id="(.*?)"></a>(.*?)</h[1-6]>`)
 	hs := regToc.FindAllString(html, -1)
 	if len(hs) > 1 {
 		sb := strings.Builder{}
