@@ -47,6 +47,7 @@ git clone -b v0.1.0 --depth=1 https://github.com/zxysilent/blog.git
 
 ### 部署界面
 - 安装依赖```npm install```
+- 修改```.env.development```中的```VUE_APP_SRV```为自己的服务地址
 - 发布```npm run build```会自动发布到```dist```目录下面
 - 友链里面第一个为后台登陆地址默认用户名```zxysilent```,密码```zxyslt```，可自行数据库修改
 ### 部署服务
