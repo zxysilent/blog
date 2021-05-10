@@ -63,7 +63,7 @@ name = "zxysilent"
 website = "https://github.com/zxysilent"
 
 # 微信相关 
-# 移动 网站 https://open.weixin.qq.com/cgi-bin/index
+# H5 网站 https://open.weixin.qq.com/cgi-bin/index
 # 公众号 小程序 https://mp.weixin.qq.com/
 [wechat]
 # 公众号
