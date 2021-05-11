@@ -9,8 +9,8 @@ type User struct {
 	Num    string    `xorm:"VARCHAR(255) UNIQUE comment('账号')" json:"num"`
 	Passwd string    `xorm:"VARCHAR(255) comment('密码')" json:"-"`
 	RoleId int       `xorm:"INT(11) DEFAULT 0 comment('角色')" json:"role_id"`
-	Email  string    `xorm:"VARCHAR(255) UNIQUE comment('邮箱')" json:"email"`
-	Phone  string    `xorm:"VARCHAR(255) UNIQUE comment('电话')" json:"phone"`
+	Email  string    `xorm:"VARCHAR(255) comment('邮箱')" json:"email"`
+	Phone  string    `xorm:"VARCHAR(255) comment('电话')" json:"phone"`
 	Lock   bool      `xorm:"TINYINT(4) DEFAULT 0 comment('锁定')" json:"lock"`
 	Ecount int       `xorm:"INT(11) DEFAULT 0 comment('错误次数')" json:"ecount"`
 	Ltime  time.Time `xorm:"DATETIME comment('上次登录时间')" json:"ltime"`
