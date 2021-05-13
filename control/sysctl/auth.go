@@ -33,7 +33,7 @@ var loginLimiter = rate.NewLimiter(20, 5)
 // @Accept mpfd
 // @Param num formData string true "账号" default(zxysilent)
 // @Param pass formData string true "密码" default(zxyslt)
-// @Success 200 {object} model.Reply{data=string} "成功数据"
+// @Success 200 {object} model.Reply{data=string} "返回数据"
 // @Router /api/auth/login [post]
 func AuthLogin(ctx echo.Context) error {
 	ct, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -102,7 +102,7 @@ func AuthLogin(ctx echo.Context) error {
 // @Tags auth
 // @Summary 获取登录信息
 // @Param token query string true "凭证"
-// @Success 200 {object} model.Reply{data=model.User} "成功数据"
+// @Success 200 {object} model.Reply{data=model.User} "返回数据"
 // @Router /adm/auth/get [get]
 func AuthGet(ctx echo.Context) error {
 	mod, _ := model.UserGet(ctx.Get("uid").(int))
@@ -113,7 +113,7 @@ func AuthGet(ctx echo.Context) error {
 // @Tags auth
 // @Summary 获取当前用户的菜单导航树
 // @Param token query string true "token"
-// @Success 200 {object} model.Reply{data=[]model.Menu} "成功数据"
+// @Success 200 {object} model.Reply{data=[]model.Menu} "返回数据"
 // @Router /adm/auth/menu [post]
 func AuthMenu(ctx echo.Context) error {
 	// 登录信息获取roleId
@@ -137,7 +137,7 @@ func UserLogout(ctx echo.Context) error {
 // @Tags auth
 // @Summary 验证码
 // @Accept mpfd
-// @Success 200 {object} model.Reply{data=string} "成功数据"
+// @Success 200 {object} model.Reply{data=string} "返回数据"
 // @Router /api/auth/vcode [post]
 func AuthVcode(ctx echo.Context) error {
 	rnd := utils.RandDigitStr(5)
@@ -163,7 +163,7 @@ func hmc(raw, key string) string {
 // @Param name formData string true "名称"
 // @Param phone formData string true "号码"
 // @Param email formData string true "邮箱"
-// @Success 200 {object} model.Reply{data=string} "成功数据"
+// @Success 200 {object} model.Reply{data=string} "返回数据"
 // @Router /adm/auth/edit [post]
 func AuthEdit(ctx echo.Context) error {
 	ipt := &model.User{}
@@ -183,7 +183,7 @@ func AuthEdit(ctx echo.Context) error {
 // @Summary 修改自己的密码
 // @Param opasswd formData string true "旧密码"
 // @Param npasswd formData string true "新密码"
-// @Success 200 {object} model.Reply{data=string} "成功数据"
+// @Success 200 {object} model.Reply{data=string} "返回数据"
 // @Router /adm/auth/passwd [post]
 func AuthPasswd(ctx echo.Context) error {
 	ipt := &struct {

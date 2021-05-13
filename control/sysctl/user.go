@@ -12,7 +12,7 @@ import (
 // @Tags user
 // @Summary 通过id获取user信息
 // @Param id query int true "id"
-// @Success 200 {object} model.Reply{data=model.User} "成功数据"
+// @Success 200 {object} model.Reply{data=model.User} "返回数据"
 // @Router /adm/user/get [get]
 func UserGet(ctx echo.Context) error {
 	ipt := &model.IptId{}
@@ -31,7 +31,7 @@ func UserGet(ctx echo.Context) error {
 // @Tags user
 // @Summary 获取某个用户信息
 // @Param num query string true "账号"
-// @Success 200 {object} model.Reply "成功数据"
+// @Success 200 {object} model.Reply "返回数据"
 // @Router /api/user/exist [get]
 func UserExist(ctx echo.Context) error {
 	num := ctx.QueryParam("num")
@@ -46,7 +46,7 @@ func UserExist(ctx echo.Context) error {
 // @Summary 添加user信息
 // @Param token query string true "凭证"
 // @Param body body model.User true "request"
-// @Success 200 {object} model.Reply "成功数据"
+// @Success 200 {object} model.Reply "返回数据"
 // @Router /adm/user/add [post]
 func UserAdd(ctx echo.Context) error {
 	// role, _ := ctx.Get("role").(int)
@@ -76,7 +76,7 @@ func UserAdd(ctx echo.Context) error {
 // @Summary 修改user信息
 // @Param token query string true "凭证"
 // @Param body body model.User true "request"
-// @Success 200 {object} model.Reply "成功数据"
+// @Success 200 {object} model.Reply "返回数据"
 // @Router /adm/user/edit [post]
 func UserEdit(ctx echo.Context) error {
 	// role, _ := ctx.Get("role").(int)
@@ -100,7 +100,7 @@ func UserEdit(ctx echo.Context) error {
 // @Summary 修改用户锁定状态
 // @Param token query string true "token"
 // @Param body body object{id=int,lock=bool} true "json"
-// @Success 200 {object} model.Reply{data=string} "成功数据"
+// @Success 200 {object} model.Reply{data=string} "返回数据"
 // @Router /adm/user/edit/lock [post]
 func UserEditLock(ctx echo.Context) error {
 	ipt := &struct {
@@ -127,7 +127,7 @@ func UserEditLock(ctx echo.Context) error {
 // @Summary 重置密码
 // @Param id query int true "id"
 // @Param token query string true "凭证"
-// @Success 200 {object} model.Reply "成功数据"
+// @Success 200 {object} model.Reply "返回数据"
 // @Router /adm/user/edit/reset [post]
 func UserEditReset(ctx echo.Context) error {
 	// role, _ := ctx.Get("role").(int)
@@ -155,7 +155,7 @@ func UserEditReset(ctx echo.Context) error {
 // @Summary 删除user信息
 // @Param id query int true "id"
 // @Param token query string true "凭证"
-// @Success 200 {object} model.Reply "成功数据"
+// @Success 200 {object} model.Reply "返回数据"
 // @Router /adm/user/drop [post]
 func UserDrop(ctx echo.Context) error {
 	// role, _ := ctx.Get("role").(int)
@@ -182,7 +182,7 @@ func UserDrop(ctx echo.Context) error {
 // @Summary 获取分页数据
 // @Param pi query int true "分页数"
 // @Param ps query int true "每页条数[5,20]" default(5)
-// @Success 200 {object} model.Reply "成功数据"
+// @Success 200 {object} model.Reply "返回数据"
 // @Router /api/user/page [get]
 func UserPage(ctx echo.Context) error {
 	// role, _ := ctx.Get("role").(int)

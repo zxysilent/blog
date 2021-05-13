@@ -12,7 +12,7 @@ import (
 // @Tags 分类
 // @Summary 所有分类
 // @Param token query string true "凭证jwt" default(jwt)
-// @Success 200 {object} model.Reply "成功数据"
+// @Success 200 {object} model.Reply "返回数据"
 // @Router /api/cate/all [get]
 func CateAll(ctx echo.Context) error {
 	mods, err := model.CateAll()
@@ -32,7 +32,7 @@ func CateAll(ctx echo.Context) error {
 // @Param pi query int true "分页页数pi" default(1)
 // @Param ps query int true "分页大小ps" default(6)
 // @Param token query string true "凭证jwt" default(jwt)
-// @Success 200 {object} model.Reply "成功数据"
+// @Success 200 {object} model.Reply "返回数据"
 // @Router /api/cate/post/{cid} [get]
 func CatePost(ctx echo.Context) error {
 	cid, err := strconv.Atoi(ctx.Param("cid"))
@@ -60,7 +60,7 @@ func CatePost(ctx echo.Context) error {
 // @Summary 添加分类
 // @Param body body model.Cate true "分类 struct"
 // @Param token query string true "凭证jwt" default(jwt)
-// @Success 200 {object} model.Reply "成功数据"
+// @Success 200 {object} model.Reply "返回数据"
 // @Router /api/cate/add [post]
 func CateAdd(ctx echo.Context) error {
 	ipt := &model.Cate{}
@@ -79,7 +79,7 @@ func CateAdd(ctx echo.Context) error {
 // @Summary 修改分类
 // @Param body body model.Cate true "分类 struct"
 // @Param token query string true "凭证jwt" default(jwt)
-// @Success 200 {object} model.Reply "成功数据"
+// @Success 200 {object} model.Reply "返回数据"
 // @Router /api/cate/edit [post]
 func CateEdit(ctx echo.Context) error {
 	ipt := &model.Cate{}
@@ -98,7 +98,7 @@ func CateEdit(ctx echo.Context) error {
 // @Summary 删除分类
 // @Param id path int true "id-分类" default(0)
 // @Param token query string true "凭证jwt" default(jwt)
-// @Success 200 {object} model.Reply "成功数据"
+// @Success 200 {object} model.Reply "返回数据"
 // @Router /api/cate/drop/{id} [get]
 func CateDrop(ctx echo.Context) error {
 	id, err := strconv.Atoi(ctx.Param("id"))

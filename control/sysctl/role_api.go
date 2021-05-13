@@ -12,7 +12,7 @@ import (
 // @Summary 通过角色id获取所有api接口信息
 // @Param id query int true "id"
 // @Param token query string true "token"
-// @Success 200 {object} model.Reply{data=model.Role} "成功数据"
+// @Success 200 {object} model.Reply{data=model.Role} "返回数据"
 // @Router /adm/role/api/all [get]
 func RoleApiAll(ctx echo.Context) error {
 	ipt := &model.IptId{}
@@ -32,7 +32,8 @@ func RoleApiAll(ctx echo.Context) error {
 // @Summary 修改角色接口信息
 // @Param id query int true "id"
 // @Param token query string true "token"
-// @Success 200 {object} model.Reply{data=string} "成功数据"
+// @Param body body model.RoleApi true "请求数据"
+// @Success 200 {object} model.Reply{data=string} "返回数据"
 // @Router /adm/role/api/edit [post]
 func RoleApiEdit(ctx echo.Context) error {
 	ipt := &model.RoleApi{}

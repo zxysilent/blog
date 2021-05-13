@@ -13,7 +13,7 @@ import (
 // @Summary 通过id获取单条角色信息
 // @Param id query int true "id"
 // @Param token query string true "token"
-// @Success 200 {object} model.Reply{data=model.Role} "成功数据"
+// @Success 200 {object} model.Reply{data=model.Role} "返回数据"
 // @Router /adm/role/get [get]
 func RoleGet(ctx echo.Context) error {
 	ipt := &model.IptId{}
@@ -32,7 +32,7 @@ func RoleGet(ctx echo.Context) error {
 // @Tags role
 // @Summary 获取所有角色信息
 // @Param token query string true "token"
-// @Success 200 {object} model.Reply{data=[]model.Role} "成功数据"
+// @Success 200 {object} model.Reply{data=[]model.Role} "返回数据"
 // @Router /adm/role/all [get]
 func RoleAll(ctx echo.Context) error {
 	mods, err := model.RoleAll()
@@ -48,7 +48,7 @@ func RoleAll(ctx echo.Context) error {
 // @Param pi query int true "分页数" default(1)
 // @Param ps query int true "每页条数[5,30]" default(5)
 // @Param token query string true "token"
-// @Success 200 {object} model.Reply{data=[]model.Role} "成功数据"
+// @Success 200 {object} model.Reply{data=[]model.Role} "返回数据"
 // @Param token query string true "token"
 // @Router /adm/role/page [get]
 func RolePage(ctx echo.Context) error {
@@ -78,8 +78,8 @@ func RolePage(ctx echo.Context) error {
 // @Tags role
 // @Summary 添加角色信息
 // @Param token query string true "token"
-// @Param body body model.Role true "json"
-// @Success 200 {object} model.Reply{data=string} "成功数据"
+// @Param body body model.Role true "请求数据"
+// @Success 200 {object} model.Reply{data=string} "返回数据"
 // @Router /adm/role/add [post]
 func RoleAdd(ctx echo.Context) error {
 	ipt := &model.Role{}
@@ -99,8 +99,8 @@ func RoleAdd(ctx echo.Context) error {
 // @Tags role
 // @Summary 修改角色信息
 // @Param token query string true "token"
-// @Param body body model.Role true "json"
-// @Success 200 {object} model.Reply{data=string} "成功数据"
+// @Param body body model.Role true "请求数据"
+// @Success 200 {object} model.Reply{data=string} "返回数据"
 // @Router /adm/role/edit [post]
 func RoleEdit(ctx echo.Context) error {
 	ipt := &model.Role{}
@@ -121,7 +121,7 @@ func RoleEdit(ctx echo.Context) error {
 // @Summary 通过id删除单条角色信息
 // @Param token query string true "token"
 // @Param body body model.IptId true "json"
-// @Success 200 {object} model.Reply{data=string} "成功数据"
+// @Success 200 {object} model.Reply{data=string} "返回数据"
 // @Router /adm/role/drop [post]
 func RoleDrop(ctx echo.Context) error {
 	ipt := &model.IptId{}

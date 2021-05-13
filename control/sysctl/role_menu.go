@@ -13,7 +13,7 @@ import (
 // @Summary 通过角色id获取所有角色菜单tree信息
 // @Param id query int true "id"
 // @Param token query string true "token"
-// @Success 200 {object} model.Reply{data=model.Role} "成功数据"
+// @Success 200 {object} model.Reply{data=model.Role} "返回数据"
 // @Router /adm/role/menu/tree [get]
 func RoleMenuTree(ctx echo.Context) error {
 	ipt := &model.IptId{}
@@ -33,7 +33,7 @@ func RoleMenuTree(ctx echo.Context) error {
 // @Summary 通过角色id获取所有角色菜单信息
 // @Param id query int true "id"
 // @Param token query string true "token"
-// @Success 200 {object} model.Reply{data=model.Role} "成功数据"
+// @Success 200 {object} model.Reply{data=model.Role} "返回数据"
 // @Router /adm/role/menu/all [get]
 func RoleMenuAll(ctx echo.Context) error {
 	ipt := &model.IptId{}
@@ -53,7 +53,7 @@ func RoleMenuAll(ctx echo.Context) error {
 // @Summary 修改菜单导航信息菜单导航
 // @Param id query int true "id"
 // @Param token query string true "token"
-// @Success 200 {object} model.Reply{data=string} "成功数据"
+// @Success 200 {object} model.Reply{data=string} "返回数据"
 // @Router /adm/role/menu/edit [post]
 func RoleMenuEdit(ctx echo.Context) error {
 	ipt := &struct {
