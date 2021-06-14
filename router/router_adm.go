@@ -36,8 +36,6 @@ func admRouter(adm *echo.Group) {
 		adm.POST("/role/edit", sysctl.RoleEdit)          // 编辑角色
 		adm.GET("/role/menu/all", sysctl.RoleMenuAll)    // 所有角色菜单导航 // role-menu
 		adm.POST("/role/menu/edit", sysctl.RoleMenuEdit) // 编辑角色菜单导航
-		adm.GET("/role/api/all", sysctl.RoleApiAll)      // 所有角色接口 // role-api
-		adm.POST("/role/api/edit", sysctl.RoleApiEdit)   // 编辑角色接口
 	}
 	{ // menu
 		adm.GET("/menu/get", sysctl.MenuGet)             // 单条菜单导航
@@ -47,14 +45,6 @@ func admRouter(adm *echo.Group) {
 		adm.POST("/menu/add", sysctl.MenuAdd)            // 添加菜单导航
 		adm.POST("/menu/edit", sysctl.MenuEdit)          // 编辑菜单导航
 		adm.POST("/menu/edit/show", sysctl.MenuEditShow) // 编辑菜单导航显隐
-	}
-	{ // api
-		adm.GET("/api/get", sysctl.ApiGet)    // 单条接口
-		adm.GET("/api/all", sysctl.ApiAll)    // 所有接口
-		adm.GET("/api/page", sysctl.ApiPage)  // 接口分页
-		adm.POST("/api/drop", sysctl.ApiDrop) // 删除接口
-		adm.POST("/api/add", sysctl.ApiAdd)   // 添加接口
-		adm.POST("/api/edit", sysctl.ApiEdit) // 编辑接口
 	}
 	{ // user
 		adm.GET("/user/get", sysctl.UserGet)               // 单条用户
