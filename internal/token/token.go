@@ -18,8 +18,8 @@ type Auth struct {
 }
 
 // Encode 生成 token
-func (jc *Auth) Encode(key string) string {
-	data, _ := json.Marshal(jc)
+func (auth *Auth) Encode(key string) string {
+	data, _ := json.Marshal(auth)
 	bStr := base64.RawURLEncoding.EncodeToString(data)
 	hm := hmac.New(sha1.New, []byte(key))
 	hm.Write([]byte(bStr))
@@ -43,13 +43,13 @@ func Verify(raw string, key string) (*Auth, error) {
 	if err != nil {
 		return nil, errors.New("base64解码失败,error: " + err.Error())
 	}
-	ha := &Auth{}
-	err = json.Unmarshal(datab, ha)
+	auth := &Auth{}
+	err = json.Unmarshal(datab, auth)
 	if err != nil {
 		return nil, errors.New("json解码失败,error: " + err.Error())
 	}
-	if time.Now().Unix() > ha.ExpAt {
+	if time.Now().Unix() > auth.ExpAt {
 		return nil, errors.New("toekn 已经过期")
 	}
-	return ha, nil
+	return auth, nil
 }
