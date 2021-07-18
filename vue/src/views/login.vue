@@ -38,26 +38,30 @@
 					<Button size="large" @click="emitLogin" type="primary" long>登 录</Button>
 				</FormItem>
 			</Form>
-			<p class="login-tip">首页
-				<a href="/" title="首页">
-					<Icon type="ios-send-outline" size="20" />
+			<p class="login-tip">
+				<a href="/" title="QQ登陆">
+					<img :src="logins.qq" alt="加载失败" class="ivu-icon" style="width:20px">
+				</a>
+				<a @click="wechatLogin" title="微信登陆">
+					<img :src="logins.wechat" alt="加载失败" class="ivu-icon" style="width:20px">
 				</a>
 			</p>
 			<div class="other-login">
 				<span>系统推荐浏览器</span>&nbsp;<br><br>
 				<a href="https://www.microsoft.com/zh-cn/edge" target="_blank" title="微软 Edge">
-					<Icon type="logo-codepen" size="20" />Edge
+					<Icon type="logo-codepen" size="20" />&nbsp;Edge
 				</a>
 				<a href="https://www.google.cn/chrome/" target="_blank" title="谷歌 Chrome">
-					<Icon type="logo-chrome" size="20" />Chrome
+					<Icon type="logo-chrome" size="20" />&nbsp;Chrome
 				</a>
 				<a href="http://www.firefox.com.cn/" target="_blank" title="火狐 Firefox">
-					<Icon type="ios-globe" size="20" />Firefox
+					<Icon type="ios-globe" size="20" />&nbsp;Firefox
 				</a>
 			</div>
 		</div>
 		<div class="footer">
 			<div class="links">
+				<a href="/">首页</a>
 				<a>帮助</a>
 				<a>隐私</a>
 				<a>条款</a>
@@ -70,12 +74,15 @@
 </template>
 <script>
 import md5 from "js-md5";
+import loginQQ from "@/assets/login/qq.svg";
+import loginWechat from "@/assets/login/wechat.svg";
 import { apiAuthLogin, apiAuthVcode } from "@/api/auth";
 import { setToken } from "@/utils/token";
 export default {
 	data() {
 		return {
 			dataForm: { num: "", passwd: "", vcode: "", vreal: "" },
+			logins: { qq: loginQQ, wechat: loginWechat },
 			rules: {
 				num: [{ required: true, message: "账号不能为空", trigger: "blur" }],
 				passwd: [{ required: true, message: "密码不能为空", trigger: "blur" }],
@@ -84,6 +91,9 @@ export default {
 		};
 	},
 	methods: {
+		wechatLogin() {
+			this.$Message.warning("暂不支持");
+		},
 		emitLogin() {
 			this.$refs.loginForm.validate((valid) => {
 				if (valid) {
