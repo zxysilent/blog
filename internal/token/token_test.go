@@ -15,8 +15,9 @@ func TestEncode(t *testing.T) {
 }
 func TestVerify(t *testing.T) {
 	raw := "eyJpZCI6MSwicmlkIjoxMDAwLCJlYXQiOjE2MjA5Nzc3NTl9.8H_3zTm7B6RJFbXtQ5CVZxPkoag"
-	Auth, err := Verify(raw, "key")
-	t.Log(Auth, err)
+	auth := Auth{}
+	err := auth.Decode(raw, "key")
+	t.Log(auth, err)
 }
 func BenchmarkEncode(b *testing.B) {
 	auth := Auth{
@@ -30,8 +31,9 @@ func BenchmarkEncode(b *testing.B) {
 }
 func BenchmarkVerify(b *testing.B) {
 	raw := "eyJpZCI6MSwicmlkIjoxMDAwLCJlYXQiOjE2MjA5Nzc3NTl9.8H_3zTm7B6RJFbXtQ5CVZxPkoag"
+	auth := Auth{}
 	for i := 0; i < b.N; i++ {
-		Verify(raw, "key")
+		auth.Decode(raw, "key")
 	}
 
 }

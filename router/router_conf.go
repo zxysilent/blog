@@ -2,7 +2,7 @@ package router
 
 import (
 	"blog/conf"
-	"blog/internal/hwt"
+	"blog/internal/token"
 	"blog/model"
 	"crypto/md5"
 	"encoding/hex"
@@ -145,7 +145,7 @@ func midAuth(next echo.HandlerFunc) echo.HandlerFunc {
 				return ctx.JSON(utils.ErrJwt("请重新登陆", "token为空"))
 			}
 		}
-		auth := hwt.Auth{}
+		auth := token.Auth{}
 		err := auth.Decode(tokenRaw, conf.App.TokenSecret)
 		if err != nil {
 			return ctx.JSON(utils.ErrJwt("请重新登陆", err.Error()))

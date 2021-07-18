@@ -2,8 +2,8 @@ package sysctl
 
 import (
 	"blog/conf"
-	"blog/internal/hwt"
 	"blog/internal/rate"
+	"blog/internal/token"
 	"blog/internal/vcode"
 	"blog/model"
 	"context"
@@ -87,7 +87,7 @@ func AuthLogin(ctx echo.Context) error {
 	if mod.Lock {
 		return ctx.JSON(utils.Fail(`当前账号已被禁用`))
 	}
-	auth := hwt.Auth{
+	auth := token.Auth{
 		Id:     mod.Id,
 		RoleId: mod.RoleId,
 		ExpAt:  time.Now().Add(time.Hour * time.Duration(conf.App.TokenExp)).Unix(),

@@ -27,29 +27,28 @@ func (auth *Auth) Encode(key string) string {
 	return bStr + "." + sign
 }
 
-// Verify 验证
-func Verify(raw string, key string) (*Auth, error) {
+// Decode 验证
+func (auth *Auth) Decode(raw string, key string) error {
 	parts := strings.Split(raw, ".")
 	if len(parts) != 2 {
-		return nil, errors.New("非法的token: " + raw)
+		return errors.New("非法的token: " + raw)
 	}
 	hm := hmac.New(sha1.New, []byte(key))
 	hm.Write([]byte(parts[0]))
 	sign := base64.RawURLEncoding.EncodeToString(hm.Sum(nil))
 	if sign != parts[1] {
-		return nil, errors.New("token 非法")
+		return errors.New("token 非法")
 	}
 	datab, err := base64.RawURLEncoding.DecodeString(parts[0])
 	if err != nil {
-		return nil, errors.New("base64解码失败,error: " + err.Error())
+		return errors.New("base64解码失败,error: " + err.Error())
 	}
-	auth := &Auth{}
 	err = json.Unmarshal(datab, auth)
 	if err != nil {
-		return nil, errors.New("json解码失败,error: " + err.Error())
+		return errors.New("json解码失败,error: " + err.Error())
 	}
 	if time.Now().Unix() > auth.ExpAt {
-		return nil, errors.New("toekn 已经过期")
+		return errors.New("toekn 已经过期")
 	}
-	return auth, nil
+	return nil
 }
