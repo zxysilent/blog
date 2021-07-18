@@ -1,7 +1,6 @@
 package appctl
 
 import (
-	"blog/model"
 	"io"
 	"os"
 	"path/filepath"
@@ -42,14 +41,6 @@ func Upload(ctx echo.Context) error {
 		return ctx.JSON(utils.ErrIpt(`文件写入失败,请重试`, err.Error()))
 	}
 	return ctx.JSON(utils.Succ(`文件上传成功`, "/"+filePathName))
-}
-
-// Collect 统计信息
-func Collect(ctx echo.Context) error {
-	if mod, has := model.Collect(); has {
-		return ctx.JSON(utils.Succ(`统计信息`, mod))
-	}
-	return ctx.JSON(utils.Fail(`未查询到统计信息`))
 }
 
 // ExportMd

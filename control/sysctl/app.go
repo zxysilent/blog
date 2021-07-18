@@ -10,7 +10,7 @@ import (
 // ------------------------------------------------------ 配置中心 ------------------------------------------------------
 
 // GlobalGet doc
-// @Tags global
+// @Tags global-全局配置
 // @Summary 获取单个global信息
 // @Param token query string true "token"
 // @Success 200 {object} model.Reply{data=string} "返回数据"
@@ -24,7 +24,7 @@ func GlobalGet(ctx echo.Context) error {
 }
 
 // GlobalEdit doc
-// @Tags global
+// @Tags global-全局配置
 // @Summary 编辑global信息
 // @Param token query string true "token"
 // @Param body body model.Global true "请求数据"

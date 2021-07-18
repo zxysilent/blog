@@ -9,7 +9,7 @@ import (
 )
 
 // UserGet doc
-// @Tags user
+// @Tags user-用户
 // @Summary 通过id获取user信息
 // @Param id query int true "id"
 // @Success 200 {object} model.Reply{data=model.User} "返回数据"
@@ -28,7 +28,7 @@ func UserGet(ctx echo.Context) error {
 }
 
 // UserExist doc
-// @Tags user
+// @Tags user-用户
 // @Summary 获取某个用户信息
 // @Param num query string true "账号"
 // @Success 200 {object} model.Reply "返回数据"
@@ -42,7 +42,7 @@ func UserExist(ctx echo.Context) error {
 }
 
 // UserAdd doc
-// @Tags user
+// @Tags user-用户
 // @Summary 添加user信息
 // @Param token query string true "凭证"
 // @Param body body model.User true "request"
@@ -72,7 +72,7 @@ func UserAdd(ctx echo.Context) error {
 }
 
 // UserEdit doc
-// @Tags user
+// @Tags user-用户
 // @Summary 修改user信息
 // @Param token query string true "凭证"
 // @Param body body model.User true "request"
@@ -96,7 +96,7 @@ func UserEdit(ctx echo.Context) error {
 }
 
 // UserEditLock doc
-// @Tags user
+// @Tags user-用户
 // @Summary 修改用户锁定状态
 // @Param token query string true "token"
 // @Param body body object{id=int,lock=bool} true "json"
@@ -123,7 +123,7 @@ func UserEditLock(ctx echo.Context) error {
 }
 
 // UserEditReset doc
-// @Tags user
+// @Tags user-用户
 // @Summary 重置密码
 // @Param id query int true "id"
 // @Param token query string true "凭证"
@@ -151,7 +151,7 @@ func UserEditReset(ctx echo.Context) error {
 }
 
 // UserDrop doc
-// @Tags user
+// @Tags user-用户
 // @Summary 删除user信息
 // @Param id query int true "id"
 // @Param token query string true "凭证"
@@ -178,7 +178,7 @@ func UserDrop(ctx echo.Context) error {
 }
 
 // UserPage doc
-// @Tags user
+// @Tags user-用户
 // @Summary 获取分页数据
 // @Param pi query int true "分页数"
 // @Param ps query int true "每页条数[5,20]" default(5)

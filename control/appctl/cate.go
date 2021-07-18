@@ -9,7 +9,7 @@ import (
 )
 
 // CateAll doc
-// @Tags 分类
+// @Tags cate-分类
 // @Summary 所有分类
 // @Param token query string true "凭证jwt" default(jwt)
 // @Success 200 {object} model.Reply "返回数据"
@@ -26,7 +26,7 @@ func CateAll(ctx echo.Context) error {
 }
 
 // CatePost doc
-// @Tags 分类
+// @Tags cate-分类
 // @Summary 分类文章列表
 // @Param cid path int true "分类id" default(1)
 // @Param pi query int true "分页页数pi" default(1)
@@ -56,7 +56,7 @@ func CatePost(ctx echo.Context) error {
 }
 
 // CateAdd doc
-// @Tags 分类
+// @Tags cate-分类
 // @Summary 添加分类
 // @Param body body model.Cate true "分类 struct"
 // @Param token query string true "凭证jwt" default(jwt)
@@ -75,7 +75,7 @@ func CateAdd(ctx echo.Context) error {
 }
 
 // CateEdit doc
-// @Tags 分类
+// @Tags cate-分类
 // @Summary 修改分类
 // @Param body body model.Cate true "分类 struct"
 // @Param token query string true "凭证jwt" default(jwt)
@@ -94,7 +94,7 @@ func CateEdit(ctx echo.Context) error {
 }
 
 // CateDrop doc
-// @Tags 分类
+// @Tags cate-分类
 // @Summary 删除分类
 // @Param id path int true "id-分类" default(0)
 // @Param token query string true "凭证jwt" default(jwt)

@@ -9,7 +9,7 @@ import (
 )
 
 // GrantAll doc
-// @Tags grant
+// @Tags grant-权限
 // @Summary 获取所有授权树
 // @Param token query string true "token"
 // @Success 200 {object} model.Reply{data=[]model.Grant} "返回数据"
@@ -25,7 +25,7 @@ func GrantTree(ctx echo.Context) error {
 }
 
 // GrantGet doc
-// @Tags grant
+// @Tags grant-权限
 // @Summary 通过id获取单条授权信息
 // @Param id query int true "id"
 // @Param token query string true "token"
@@ -45,7 +45,7 @@ func GrantGet(ctx echo.Context) error {
 }
 
 // GrantAll doc
-// @Tags grant
+// @Tags grant-权限
 // @Summary 获取所有授权信息
 // @Param token query string true "token"
 // @Param body body object{slt=bool,show=bool} true "json"
@@ -60,7 +60,7 @@ func GrantAll(ctx echo.Context) error {
 }
 
 // GrantPage doc
-// @Tags grant
+// @Tags grant-权限
 // @Summary 获取授权分页信息
 // @Param pi query int true "分页数"
 // @Param ps query int true "每页条数[5,30]"
@@ -92,7 +92,7 @@ func GrantPage(ctx echo.Context) error {
 }
 
 // GrantAdd doc
-// @Tags grant
+// @Tags grant-权限
 // @Summary 添加授权信息
 // @Param token query string true "token"
 // @Param body body model.Grant true "请求数据"
@@ -113,7 +113,7 @@ func GrantAdd(ctx echo.Context) error {
 }
 
 // GrantEdit doc
-// @Tags grant
+// @Tags grant-权限
 // @Summary 修改授权信息
 // @Param token query string true "token"
 // @Param body body model.Grant true "请求数据"
@@ -133,7 +133,7 @@ func GrantEdit(ctx echo.Context) error {
 }
 
 // GrantDrop doc
-// @Tags grant
+// @Tags grant-权限
 // @Summary 通过id删除单条授权信息
 // @Param token query string true "token"
 // @Param body body model.IptId true "json"

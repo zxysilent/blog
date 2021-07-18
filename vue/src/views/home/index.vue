@@ -105,7 +105,7 @@
 	</div>
 </template>
 <script>
-import { admStatusGoinfo, admCollect } from "@/api/auth";
+import { admStatusGoinfo, admStatusAppinfo } from "@/api/home";
 export default {
 	data() {
 		return {
@@ -132,7 +132,7 @@ export default {
 					this.$Message.warning("未查询到系统信息,请重试！");
 				}
 			});
-			admCollect().then((resp) => {
+			admStatusAppinfo().then((resp) => {
 				if (resp.code == 200) {
 					this.collect = resp.data;
 				} else {

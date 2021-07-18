@@ -48,17 +48,3 @@ export const admAuthEdit = data => {
 export const apiAuthLogoff = data => {
 	//   return fetch.post("/api/logoff", data);
 };
-// 统计状态
-export const admCollect = () => {
-    return fetch.request({
-		url: "/adm/collect",
-		method: "get"
-	});
-};
-// 服务器信息
-export const admStatusGoinfo = () => {
-	return fetch.request({
-		url: "/adm/status/goinfo",
-		method: "get"
-	});
-};
