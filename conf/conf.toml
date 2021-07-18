@@ -49,7 +49,7 @@ orm_open = 8
 # 显示sql
 orm_show = true 
 # 同步表结构
-orm_sync = false
+orm_sync = true
 # 是否使用orm缓存
 orm_cache_use = false 
 # orm缓存数量

@@ -46,7 +46,7 @@ export const initRouter = [
 				path: "/home",
 				meta: { title: "管理主页" },
 				name: "home",
-				component: () => import("@/views/home/home.vue")
+				component: () => import("@/views/home/index.vue")
 			},
 			{
 				path: "/auth/self",
@@ -56,19 +56,8 @@ export const initRouter = [
 			}
 		]
 	},
-	{
-		path: "/jwt",
-		name: "errjwt",
-		meta: { title: "jwt-重新登录" },
-		component: () => import("@/views/errors/jwt.vue")
-	},
-	{
-		path: "/401",
-		name: "err401",
-		meta: { title: "401-没有权限" },
-		component: () => import("@/views/errors/401.vue")
-	},
-	{ path: "/50x", name: "err50x", meta: { title: "50x-服务异常" }, component: () => import("@/views/errors/50x.vue") }
+	{ path: "/500", name: "500", meta: { title: "500-异常" }, component: () => import("@/components/errors/500.vue") },
+	{ path: "/*", name: "404", meta: { title: "404-没发现" }, component: () => import("@/components/errors/404.vue") }
 ];
 
 const toTitle = title => {
@@ -88,8 +77,8 @@ router.beforeEach(async (to, from, next) => {
 	ViewUI.LoadingBar.start();
 	toTitle(to.meta.title);
 	const token = getToken();
-    console.log("token",token)
-    console.log("to.name",to.name)
+	console.log("token", token);
+	console.log("to.name", to.name);
 	// 去不需要登录的地方
 	if (noAuth.indexOf(to.name) > -1) {
 		if (token) {
