@@ -64,7 +64,7 @@ func Init() {
 			new(Role),
 			new(User),
 			new(Menu),
-			new(RoleMenu),
+			new(Global),
 		)
 		if err != nil {
 			logs.Fatal("数据库 sync:", err.Error())
