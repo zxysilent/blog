@@ -2,15 +2,15 @@
 Navicat MariaDB Data Transfer
 
 Source Server         : 127.0.0.1
-Source Server Version : 100412
+Source Server Version : 100505
 Source Host           : 127.0.0.1:3306
 Source Database       : blog
 
 Target Server Type    : MariaDB
-Target Server Version : 100412
+Target Server Version : 100505
 File Encoding         : 65001
 
-Date: 2021-04-07 16:12:46
+Date: 2021-07-18 17:57:03
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -36,36 +36,6 @@ INSERT INTO `cate` VALUES ('3', 'learn', '0', '学习笔记');
 INSERT INTO `cate` VALUES ('4', 'goweb', '0', '动态网站');
 INSERT INTO `cate` VALUES ('5', 'python', '0', 'python');
 INSERT INTO `cate` VALUES ('6', 'javascript', '0', 'javascript');
-
--- ----------------------------
--- Table structure for opts
--- ----------------------------
-DROP TABLE IF EXISTS `opts`;
-CREATE TABLE `opts` (
-  `key` varchar(64) NOT NULL,
-  `value` varchar(2048) DEFAULT NULL,
-  `intro` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`key`),
-  UNIQUE KEY `UQE_opts_key` (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of opts
--- ----------------------------
-INSERT INTO `opts` VALUES ('analytic', '<script async src=\"//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js\"></script> ', '统计代码，可以添加百度统计、Google 统计等');
-INSERT INTO `opts` VALUES ('auto_summary', '0', '');
-INSERT INTO `opts` VALUES ('comment', '{\"clientID\": \"2d028c155cbc14d10f53\",\"clientSecret\": \"e503c3d371fb046b2ec9ca99253c10b320be0052\",\"repo\": \"comments\",\"owner\": \"zxysilent\",\"admin\":[\"zxysilent\"],\"distractionFreeMode\":true,\"githubUserName\":\"zxysilent\"}', '评论类型');
-INSERT INTO `opts` VALUES ('custom_js', 'console.log(\"https://blog.zxysilent.com\")', '自定义js');
-INSERT INTO `opts` VALUES ('favicon_url', '/favicon.ico', 'favicon');
-INSERT INTO `opts` VALUES ('github_url', 'https://github.com/zxysilent', 'GitHub 地址');
-INSERT INTO `opts` VALUES ('introription', 'zxysilent;zxysilent blog;zxyslt;zxyslt blog;', '网站描述');
-INSERT INTO `opts` VALUES ('keywords', 'zxysilent,zxyslt,zxy', '网站关键字');
-INSERT INTO `opts` VALUES ('logo_url', '/static/logo.png', 'logo 地址');
-INSERT INTO `opts` VALUES ('miitbeian', '蜀ICP备16011344号-2', '网站备案号');
-INSERT INTO `opts` VALUES ('page_size', '6', '文章一页显示的条数');
-INSERT INTO `opts` VALUES ('site_url', 'https://blog.zxysilent.com', '网站地址');
-INSERT INTO `opts` VALUES ('title', 'zxysilent', '网站标题');
-INSERT INTO `opts` VALUES ('weibo_url', 'https://weibo.com/u/7072792903', '微博地址');
 
 -- ----------------------------
 -- Table structure for post
@@ -172,6 +142,36 @@ CREATE TABLE `post_tag` (
 -- ----------------------------
 -- Records of post_tag
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for sys_global
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_global`;
+CREATE TABLE `sys_global` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `site_url` varchar(255) DEFAULT '' COMMENT '网站地址',
+  `logo_url` varchar(255) DEFAULT NULL COMMENT 'Logo地址',
+  `title` varchar(255) DEFAULT NULL COMMENT '网站标题',
+  `keywords` varchar(255) DEFAULT NULL COMMENT '网站关键词',
+  `description` varchar(255) DEFAULT NULL COMMENT '网站描述',
+  `favicon_url` varchar(255) DEFAULT NULL COMMENT 'Favicon地址',
+  `beian_miit` varchar(255) DEFAULT NULL COMMENT 'ICP备案',
+  `beian_nism` varchar(255) DEFAULT NULL COMMENT '公安备案',
+  `copyright` varchar(255) DEFAULT NULL COMMENT '版权',
+  `site_js` varchar(512) DEFAULT NULL COMMENT '全局js',
+  `site_css` varchar(512) DEFAULT NULL COMMENT '全局css',
+  `page_size` int(11) DEFAULT 6 COMMENT '分页大小',
+  `comment` varchar(1024) DEFAULT NULL COMMENT '评论脚本',
+  `github_url` varchar(255) DEFAULT NULL COMMENT 'githu地址',
+  `weibo_url` varchar(255) DEFAULT NULL COMMENT '微博地址',
+  `analytic` varchar(1024) DEFAULT NULL COMMENT '统计脚本',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of sys_global
+-- ----------------------------
+INSERT INTO `sys_global` VALUES ('1', 'https://blog.zxysilent.com', '/static/logo.png', 'zxysilent', 'zxysilent,zxyslt,zxy', 'zxysilent;zxysilent blog;zxyslt;zxyslt blog;', '/favicon.ico', '蜀ICP备16011344号-2', null, null, 'console.log(\"https://blog.zxysilent.com\")', null, '6', '{\"clientID\": \"2d028c155cbc14d10f53\",\"clientSecret\": \"e503c3d371fb046b2ec9ca99253c10b320be0052\",\"repo\": \"comments\",\"owner\": \"zxysilent\",\"admin\":[\"zxysilent\"],\"distractionFreeMode\":true,\"githubUserName\":\"zxysilent\"}', 'https://github.com/zxysilent', 'https://weibo.com/u/7072792903', '<script async src=\"//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js\"></script> ');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -315,9 +315,7 @@ CREATE TABLE `sys_user` (
   `ltime` datetime DEFAULT NULL COMMENT '上次登录时间',
   `ctime` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UQE_sys_user_num` (`num`),
-  UNIQUE KEY `UQE_sys_user_email` (`email`),
-  UNIQUE KEY `UQE_sys_user_phone` (`phone`)
+  UNIQUE KEY `UQE_sys_user_num` (`num`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
