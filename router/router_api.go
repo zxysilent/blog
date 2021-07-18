@@ -17,8 +17,7 @@ func apiRouter(api *echo.Group) {
 	api.GET("/post/tag/get/:id", appctl.PostTagGet) // 通过分类查询文章
 	api.GET("/post/get/:id", appctl.PostGet)        // 文章
 	api.GET("/cate/post/:cid", appctl.CatePost)     // 通过分类查询文章
-	api.GET("/opts/:key", appctl.OptsGet)           // 获取配置项
 	api.GET("/page/all", appctl.PostPageAll)        // 页面
 	api.GET("/tag/all", appctl.TagAll)              // 标签列表
-	api.GET("/opts/base", appctl.OptsBase)          // 配置
+	api.GET("/global/get", sysctl.GlobalGet)        // 全局配置
 }

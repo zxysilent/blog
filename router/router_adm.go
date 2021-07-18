@@ -25,7 +25,6 @@ func admRouter(adm *echo.Group) {
 	adm.GET("/tag/drop/:id", appctl.TagDrop)         // 删除标签
 	adm.POST("/tag/add", appctl.TagAdd)              // 添加标签
 	adm.POST("/tag/edit", appctl.TagEdit)            // 编辑标签
-	adm.POST("/opts/edit", appctl.OptsEdit)          // 编辑配置
 
 	// sysctl
 	{ // role

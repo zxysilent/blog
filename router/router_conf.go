@@ -83,18 +83,7 @@ func (t *TplRender) Render(w io.Writer, name string, data interface{}, ctx echo.
 	if mp, is := data.(map[string]interface{}); is {
 		mp["appjs"] = AppJsUrl
 		mp["appcss"] = AppCssUrl
-		mp["title"] = model.MapOpts.MustGet("title")
-		mp["favicon"] = model.MapOpts.MustGet("favicon")
-		mp["comment"] = model.MapOpts.MustGet("comment")
-		mp["analytic"] = model.MapOpts.MustGet("analytic")
-		mp["site_url"] = model.MapOpts.MustGet("site_url")
-		mp["logo_url"] = model.MapOpts.MustGet("logo_url")
-		mp["keywords"] = model.MapOpts.MustGet("keywords")
-		mp["miitbeian"] = model.MapOpts.MustGet("miitbeian")
-		mp["weibo_url"] = model.MapOpts.MustGet("weibo_url")
-		mp["custom_js"] = model.MapOpts.MustGet("custom_js")
-		mp["github_url"] = model.MapOpts.MustGet("github_url")
-		mp["description"] = model.MapOpts.MustGet("description")
+		mp["global"] = model.Gcfg()
 	}
 	//开发模式
 	//每次强制读取模板

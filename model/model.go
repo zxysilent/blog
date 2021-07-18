@@ -57,10 +57,7 @@ func Init() {
 			new(Tag),
 			new(Post),
 			new(PostTag),
-			new(Opts),
 			// sys
-			// new(Api),
-			// new(RoleApi),
 			new(Role),
 			new(User),
 			new(Menu),
@@ -72,7 +69,7 @@ func Init() {
 	}
 	Db = db
 	//缓存
-	initMap()
+	initGlobal()
 	logs.Info("model init")
 }
 

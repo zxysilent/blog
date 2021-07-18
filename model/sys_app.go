@@ -19,23 +19,23 @@ type Goinfo struct {
 
 // Global 全局配置
 type Global struct {
-	Id              int    `xorm:"INT(11) PK AUTOINCR comment('主键')"` //主键
-	SiteUrl         string `xorm:"VARCHAR(255) comment('网站地址')"`      //网站地址
-	SiteLogoUrl     string `xorm:"VARCHAR(255) comment('Logo地址')"`    //Logo地址
-	SiteTitle       string `xorm:"VARCHAR(255) comment('网站标题')"`      //网站标题
-	SiteKeywords    string `xorm:"VARCHAR(255) comment('网站关键词')"`     //网站关键词
-	SiteDescription string `xorm:"VARCHAR(255) comment('网站描述')"`      //网站描述
-	SiteFaviconUrl  string `xorm:"VARCHAR(255) comment('Favicon地址')"` //Favicon地址
-	SiteBeianMiit   string `xorm:"VARCHAR(255) comment('ICP备案')"`     //ICP备案
-	SiteBeianNism   string `xorm:"VARCHAR(255) comment('公安备案')"`      //公安备案
-	SiteCopyright   string `xorm:"VARCHAR(255) comment('版权')"`        //版权
-	SitePowered     string `xorm:"VARCHAR(255) comment('技术支持')"`      //技术支持
-	SiteJs          string `xorm:"VARCHAR(255) comment('全局js')"`      //全局js
-	SiteCss         string `xorm:"VARCHAR(255) comment('全局css')"`     //全局css--以上为基本属性
-	PageSize        int    `xorm:"INT(11) DEFAULT 6 comment('分页大小')"` //分页大小
-	Comment         string `xorm:"VARCHAR(255) comment('评论脚本')"`      //评论脚本
-	GithubUrl       string `xorm:"VARCHAR(255) comment('githu地址')"`   //githu地址
-	WeiboUrl        string `xorm:"VARCHAR(255) comment('微博地址')"`      //微博地址
+	Id          int    `xorm:"INT(11) PK AUTOINCR comment('主键')" json:"id"`          //主键
+	SiteUrl     string `xorm:"VARCHAR(255) comment('网站地址')" json:"site_url"`         //网站地址
+	LogoUrl     string `xorm:"VARCHAR(255) comment('Logo地址')" json:"logo_url"`       //Logo地址
+	Title       string `xorm:"VARCHAR(255) comment('网站标题')" json:"title"`            //网站标题
+	Keywords    string `xorm:"VARCHAR(255) comment('网站关键词')" json:"keywords"`        //网站关键词
+	Description string `xorm:"VARCHAR(255) comment('网站描述')" json:"description"`      //网站描述
+	FaviconUrl  string `xorm:"VARCHAR(255) comment('Favicon地址')" json:"favicon_url"` //Favicon地址
+	BeianMiit   string `xorm:"VARCHAR(255) comment('ICP备案')" json:"beian_miit"`      //ICP备案
+	BeianNism   string `xorm:"VARCHAR(255) comment('公安备案')" json:"beian_nism"`       //公安备案
+	Copyright   string `xorm:"VARCHAR(255) comment('版权')" json:"copyright"`          //版权
+	SiteJs      string `xorm:"VARCHAR(512) comment('全局js')" json:"site_js"`          //全局js
+	SiteCss     string `xorm:"VARCHAR(512) comment('全局css')" json:"site_css"`        //全局css--以上为基本属性
+	PageSize    int    `xorm:"INT(11) DEFAULT 6 comment('分页大小')" json:"page_size"`   //分页大小
+	Analytic    string `xorm:"VARCHAR(1024) comment('统计脚本')" json:"analytic"`        //统计脚本
+	Comment     string `xorm:"VARCHAR(1024) comment('评论脚本')" json:"comment"`         //评论脚本
+	GithubUrl   string `xorm:"VARCHAR(255) comment('githu地址')" json:"github_url"`    //githu地址
+	WeiboUrl    string `xorm:"VARCHAR(255) comment('微博地址')" json:"weibo_url"`        //微博地址
 }
 
 const globalId = 1
@@ -61,6 +61,10 @@ func GlobalGet() (*Global, bool) {
 	// mod := &Global{}
 	// has, _ := Db.ID(globalId).Get(mod)
 	return &globalCache, true
+}
+func Gcfg() Global {
+	cache := globalCache
+	return cache
 }
 
 // GlobalEdit 编辑global信息

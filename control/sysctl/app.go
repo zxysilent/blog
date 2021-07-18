@@ -11,10 +11,9 @@ import (
 
 // GlobalGet doc
 // @Tags global-全局配置
-// @Summary 获取单个global信息
-// @Param token query string true "token"
-// @Success 200 {object} model.Reply{data=string} "返回数据"
-// @Router /api/global/get/{id} [get]
+// @Summary 获取global信息
+// @Success 200 {object} model.Reply{data=model.Global} "返回数据"
+// @Router /api/global/get [get]
 func GlobalGet(ctx echo.Context) error {
 	mod, has := model.GlobalGet()
 	if !has {
