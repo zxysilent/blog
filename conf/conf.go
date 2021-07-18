@@ -7,6 +7,11 @@ import (
 	"github.com/zxysilent/logs"
 )
 
+const (
+	dev  = "dev"  //开发模式
+	prod = "prod" //线上模式
+)
+
 type appcfg struct {
 	Title        string `toml:"title" json:"title"`                   //
 	Intro        string `toml:"intro" json:"intro"`                   //
@@ -50,10 +55,10 @@ type appcfg struct {
 }
 
 func (app *appcfg) IsProd() bool {
-	return app.Mode == "prod"
+	return app.Mode == prod
 }
 func (app *appcfg) IsDev() bool {
-	return app.Mode == "dev"
+	return app.Mode == dev
 }
 
 // uid:pass@tcp(host:port)/dbname?charset=utf8&parseTime=true

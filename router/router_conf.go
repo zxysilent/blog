@@ -53,15 +53,15 @@ func HTTPErrorHandler(err error, ctx echo.Context) {
 				if strings.HasPrefix(ctx.Request().URL.Path, "/static") || strings.HasPrefix(ctx.Request().URL.Path, "/dist") {
 					ctx.NoContent(404)
 				} else if strings.HasPrefix(ctx.Request().URL.Path, "/api") || strings.HasPrefix(ctx.Request().URL.Path, "/adm") {
-					ctx.JSON(utils.NewErrSvr("系统错误", he.Message))
+					ctx.JSON(utils.ErrSvr("系统错误", he.Message))
 				} else {
 					ctx.HTML(404, html404)
 				}
 			} else {
-				ctx.JSON(utils.NewErrSvr("系统错误", he.Message))
+				ctx.JSON(utils.ErrSvr("系统错误", he.Message))
 			}
 		} else {
-			ctx.JSON(utils.NewErrSvr("系统错误", err.Error()))
+			ctx.JSON(utils.ErrSvr("系统错误", err.Error()))
 		}
 	}
 }
@@ -131,13 +131,13 @@ func midAuth(next echo.HandlerFunc) echo.HandlerFunc {
 		if tokenRaw == "" {
 			tokenRaw = ctx.Request().Header.Get(echo.HeaderAuthorization) // header 查找token
 			if tokenRaw == "" {
-				return ctx.JSON(utils.ErrJwt("请重新登陆", "token为空"))
+				return ctx.JSON(utils.ErrToken("请重新登陆", "token为空"))
 			}
 		}
 		auth := token.Auth{}
 		err := auth.Decode(tokenRaw, conf.App.TokenSecret)
 		if err != nil {
-			return ctx.JSON(utils.ErrJwt("请重新登陆", err.Error()))
+			return ctx.JSON(utils.ErrToken("请重新登陆", err.Error()))
 		}
 		// 验证通过，保存信息
 		ctx.Set("auth", auth)

@@ -10,7 +10,7 @@ import (
 func TestGen(t *testing.T) {
 	defer os.RemoveAll("logs")
 	//name: [{ required: true, message: "请填写", trigger: "blur", max: 128 }],
-	generate(Menu{})
+	generate(User{})
 
 }
 func generate(ipt interface{}) {

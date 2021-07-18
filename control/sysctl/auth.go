@@ -109,20 +109,24 @@ func AuthGet(ctx echo.Context) error {
 	return ctx.JSON(utils.Succ(`auth`, mod))
 }
 
-// AuthMenu doc
-// @Tags auth-登陆相关
-// @Summary 获取当前用户的菜单导航树
+// AuthGrant doc
+// @Tags auth
+// @Summary 获取当前用户的授权
 // @Param token query string true "token"
-// @Success 200 {object} model.Reply{data=[]model.Menu} "返回数据"
-// @Router /adm/auth/menu [post]
-func AuthMenu(ctx echo.Context) error {
+// @Success 200 {object} model.Reply{data=[]string} "返回数据"
+// @Router /adm/auth/grant [get]
+func AuthGrant(ctx echo.Context) error {
 	// 登录信息获取roleId
 	roleId, _ := ctx.Get("rid").(int)
-	mods, err := model.RoleMenuTree(roleId)
+	mods, err := model.RoleGrantAll(roleId)
 	if err != nil {
-		return ctx.JSON(utils.Fail("未查询到角色菜单导航信息", err.Error()))
+		return ctx.JSON(utils.Fail("未查询到角色授权信息", err.Error()))
 	}
-	return ctx.JSON(utils.Succ("succ", mods))
+	grants := make([]string, 0, len(mods))
+	for _, val := range mods {
+		grants = append(grants, val.Guid)
+	}
+	return ctx.JSON(utils.Succ("succ", grants))
 }
 
 // UserLogout doc

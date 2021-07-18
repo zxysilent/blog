@@ -40,36 +40,26 @@ export const admRoleDrop = data => {
 	});
 };
 
-// ------------------------------------------------------ 角色菜单 ------------------------------------------------------
-
-export const admRoleMenuAll = data => {
+// ------------------------------------------------------ 角色授权 ------------------------------------------------------
+export const admGrantTree = data => {
     return fetch.request({
-		url: "/adm/role/menu/all",
+		url: "/adm/grant/tree",
 		method: "get",
 		params: data
 	});
 };
 
-export const adadmRoleMenuEdit = data => {
+export const admRoleGrantAll = data => {
     return fetch.request({
-		url: "/adm/role/menu/edit",
-		method: "post",
-		data: data
-	});
-};
-// ------------------------------------------------------ 角色接口 ------------------------------------------------------
-
-export const admRoleApiAll = data => {
-    return fetch.request({
-		url: "/adm/role/get",
+		url: "/adm/role/grant/all",
 		method: "get",
 		params: data
 	});
 };
 
-export const adadmRoleApiEdit = data => {
+export const adadmRoleGrantEdit = data => {
     return fetch.request({
-		url: "/adm/role/api/edit",
+		url: "/adm/role/grant/edit",
 		method: "post",
 		data: data
 	});

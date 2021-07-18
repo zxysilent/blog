@@ -7,8 +7,8 @@ type Role struct {
 	Id    int       `xorm:"INT(11) PK AUTOINCR comment('主键')" json:"id"`
 	Name  string    `xorm:"VARCHAR(255) comment('角色名称')" json:"name"`
 	Intro string    `xorm:"VARCHAR(255) comment('角色描述')" json:"intro"`
-	Inner bool      `xorm:"TINYINT(4) DEFAULT 0 comment('内部禁止删除')" json:"show"`
-	Ctime time.Time `xorm:"DATETIME comment('时间')" json:"ctime"`
+	Inner bool      `xorm:"TINYINT(4) DEFAULT 0 comment('内部禁止删除')" json:"inner"`
+	Ctime time.Time `xorm:"DATETIME comment('时间')" swaggerignore:"true" json:"ctime"`
 }
 
 func (Role) TableName() string {
@@ -23,9 +23,14 @@ func RoleGet(id int) (*Role, bool) {
 }
 
 // RoleAll 所有角色信息
-func RoleAll() ([]Role, error) {
+func RoleAll(rid int) ([]Role, error) {
 	mods := make([]Role, 0, 8)
-	err := Db.Find(&mods)
+	sess := Db.NewSession()
+	defer sess.Close()
+	if rid > 0 {
+		sess.Where("id >= ?", rid)
+	}
+	err := sess.Find(&mods)
 	return mods, err
 }
 
@@ -96,8 +101,8 @@ func RoleDrop(id int) error {
 		sess.Rollback()
 		return err
 	}
-	// 删除角色菜单
-	sess.Exec("DELETE FROM sys_role_menu WHERE role_id = ?", id)
+	// 删除角色授权
+	sess.Exec("DELETE FROM sys_role_grant WHERE role_id = ?", id)
 	// 删除角色接口
 	// sess.Exec("DELETE FROM sys_role_api WHERE role_id = ?", id)
 	sess.Commit()

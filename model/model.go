@@ -60,7 +60,7 @@ func Init() {
 			// sys
 			new(Role),
 			new(User),
-			new(Menu),
+			new(Grant),
 			new(Global),
 		)
 		if err != nil {
