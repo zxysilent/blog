@@ -55,11 +55,11 @@ func AuthLogin(ctx echo.Context) error {
 		return ctx.JSON(utils.ErrIpt("请输入正确的验证码"))
 	}
 	if ipt.Num == "" && len(ipt.Num) > 18 {
-		return ctx.JSON(utils.ErrIpt(`请输入正确的账号`))
+		return ctx.JSON(utils.ErrIpt("请输入正确的账号"))
 	}
 	mod, has := model.UserLogin(ipt.Num)
 	if !has {
-		return ctx.JSON(utils.ErrOpt(`账号输入错误`))
+		return ctx.JSON(utils.ErrOpt("账号输入错误"))
 	}
 	now := time.Now()
 	// 禁止登陆证 5 分钟
@@ -67,7 +67,7 @@ func AuthLogin(ctx echo.Context) error {
 		// 登录时间差
 		span := 5 - int(now.Sub(mod.Ltime).Minutes())
 		if span >= 1 { //「」
-			return ctx.JSON(utils.Fail(`请「` + strconv.Itoa(span) + `」分钟后登录`))
+			return ctx.JSON(utils.Fail("请「" + strconv.Itoa(span) + "」分钟后登录"))
 		}
 		mod.Ecount = 0
 	}
@@ -78,14 +78,14 @@ func AuthLogin(ctx echo.Context) error {
 		if mod.Ecount >= 3 {
 			mod.Ecount = -1
 			//model.UserEditLogin(mod, "Ltime", "Ecount")
-			return ctx.JSON(utils.Fail(`登录锁定请「5」分钟后登录`))
+			return ctx.JSON(utils.Fail("登录锁定请「5」分钟后登录"))
 		}
 		// 小于3 提示剩余次数
 		//model.UserEditLogin(mod, "Ltime", "Ecount")
-		return ctx.JSON(utils.Fail(`密码错误,剩于登录次数：` + strconv.Itoa(int(3-mod.Ecount))))
+		return ctx.JSON(utils.Fail("密码错误,剩于登录次数：" + strconv.Itoa(int(3-mod.Ecount))))
 	}
 	if mod.Lock {
-		return ctx.JSON(utils.Fail(`当前账号已被禁用`))
+		return ctx.JSON(utils.Fail("当前账号已被禁用"))
 	}
 	auth := token.Auth{
 		Id:     mod.Id,
@@ -95,7 +95,7 @@ func AuthLogin(ctx echo.Context) error {
 	mod.Ltime = now
 	// mod.Ip = ctx.RealIP()
 	// model.UserEditLogin(mod, "Ltime", "Ip", "Ecount")
-	return ctx.JSON(utils.Succ(`登陆成功`, auth.Encode(conf.App.TokenSecret)))
+	return ctx.JSON(utils.Succ("登陆成功", auth.Encode(conf.App.TokenSecret)))
 }
 
 // AuthGet doc
@@ -106,7 +106,7 @@ func AuthLogin(ctx echo.Context) error {
 // @Router /adm/auth/get [get]
 func AuthGet(ctx echo.Context) error {
 	mod, _ := model.UserGet(ctx.Get("uid").(int))
-	return ctx.JSON(utils.Succ(`auth`, mod))
+	return ctx.JSON(utils.Succ("auth", mod))
 }
 
 // AuthGrant doc
@@ -134,7 +134,7 @@ func AuthGrant(ctx echo.Context) error {
 // @Summary 注销登录
 // @Router /api/auth/logout [post]
 func UserLogout(ctx echo.Context) error {
-	return ctx.HTML(200, `hello`)
+	return ctx.HTML(200, "ok")
 }
 
 // AuthVcode doc

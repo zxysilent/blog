@@ -1,6 +1,8 @@
 package model
 
-import "time"
+import (
+	"time"
+)
 
 // User 用户
 type User struct {
@@ -52,13 +54,14 @@ func UserAll() ([]User, error) {
 }
 
 // UserPage 用户分页信息
-func UserPage(pi int, ps int, cols ...string) ([]User, error) {
+func UserPage(pi int, ps int, roleId int, cols ...string) ([]User, error) {
 	mods := make([]User, 0, ps)
 	sess := Db.NewSession()
 	defer sess.Close()
 	if len(cols) > 0 {
 		sess.Cols(cols...)
 	}
+	sess.Where("role_id >= ?", roleId)
 	err := sess.Desc("Ctime").Limit(ps, (pi-1)*ps).Find(&mods)
 	if len(mods) > 0 {
 		ids := make([]int, 0, len(mods))
@@ -76,10 +79,11 @@ func UserPage(pi int, ps int, cols ...string) ([]User, error) {
 }
 
 // UserCount 用户分页信息总数
-func UserCount() int {
+func UserCount(roleId int) int {
 	mod := &User{}
 	sess := Db.NewSession()
 	defer sess.Close()
+	sess.Where("role_id >= ?", roleId)
 	count, _ := sess.Count(mod)
 	return int(count)
 }

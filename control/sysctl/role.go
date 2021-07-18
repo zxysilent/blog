@@ -9,7 +9,7 @@ import (
 )
 
 // RoleGet doc
-// @Tags role
+// @Tags role-角色
 // @Summary 通过id获取单条角色信息
 // @Param id query int true "id"
 // @Param token query string true "token"
@@ -29,7 +29,7 @@ func RoleGet(ctx echo.Context) error {
 }
 
 // RoleAll doc
-// @Tags role
+// @Tags role-角色
 // @Summary 获取所有角色信息
 // @Param token query string true "token"
 // @Success 200 {object} model.Reply{data=[]model.Role} "返回数据"
@@ -48,7 +48,7 @@ func RoleAll(ctx echo.Context) error {
 }
 
 // RolePage doc
-// @Tags role
+// @Tags role-角色
 // @Summary 获取角色分页信息
 // @Param pi query int true "分页数" default(1)
 // @Param ps query int true "每页条数[5,30]" default(5)
@@ -80,7 +80,7 @@ func RolePage(ctx echo.Context) error {
 }
 
 // RoleAdd doc
-// @Tags role
+// @Tags role-角色
 // @Summary 添加角色信息
 // @Param token query string true "token"
 // @Param body body model.Role true "请求数据"
@@ -101,7 +101,7 @@ func RoleAdd(ctx echo.Context) error {
 }
 
 // RoleEdit doc
-// @Tags role
+// @Tags role-角色
 // @Summary 修改角色信息
 // @Param token query string true "token"
 // @Param body body model.Role true "请求数据"
@@ -124,7 +124,7 @@ func RoleEdit(ctx echo.Context) error {
 }
 
 // RoleDrop doc
-// @Tags role
+// @Tags role-角色
 // @Summary 通过id删除单条角色信息
 // @Param token query string true "token"
 // @Param body body model.IptId true "json"
@@ -151,7 +151,7 @@ func RoleDrop(ctx echo.Context) error {
 }
 
 // RoleGrantAll doc
-// @Tags role,grant
+// @Tags role-角色-角色权限
 // @Summary 通过角色id获取所有角色授权信息
 // @Param id query int true "id"
 // @Param token query string true "token"
@@ -171,7 +171,7 @@ func RoleGrantAll(ctx echo.Context) error {
 }
 
 // RoleGrantEdit doc
-// @Tags role,grant
+// @Tags role-角色-角色权限
 // @Summary 修改角色授权信息
 // @Param id query int true "id"
 // @Param token query string true "token"

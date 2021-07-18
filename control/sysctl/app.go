@@ -35,7 +35,7 @@ func GlobalEdit(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
-	err = model.GlobalEdit(ipt, "")
+	err = model.GlobalEdit(ipt)
 	if err != nil {
 		return ctx.JSON(utils.Fail("修改失败", err.Error()))
 	}

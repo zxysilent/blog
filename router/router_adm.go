@@ -56,12 +56,4 @@ func admRouter(adm *echo.Group) {
 	adm.GET("/tag/drop/:id", appctl.TagDrop)   // 删除标签
 	adm.POST("/tag/add", appctl.TagAdd)        // 添加标签
 	adm.POST("/tag/edit", appctl.TagEdit)      // 编辑标签
-	// menu
-	adm.GET("/menu/get", sysctl.MenuGet)             // 单条菜单导航
-	adm.GET("/menu/all", sysctl.MenuAll)             // 所有菜单导航
-	adm.GET("/menu/tree", sysctl.MenuTree)           // 菜单导航树形
-	adm.POST("/menu/drop", sysctl.MenuDrop)          // 删除菜单导航
-	adm.POST("/menu/add", sysctl.MenuAdd)            // 添加菜单导航
-	adm.POST("/menu/edit", sysctl.MenuEdit)          // 编辑菜单导航
-	adm.POST("/menu/edit/show", sysctl.MenuEditShow) // 编辑菜单导航显隐
 }
