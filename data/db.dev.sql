@@ -2,15 +2,15 @@
 Navicat MariaDB Data Transfer
 
 Source Server         : 127.0.0.1
-Source Server Version : 100412
+Source Server Version : 100505
 Source Host           : 127.0.0.1:3306
 Source Database       : blog
 
 Target Server Type    : MariaDB
-Target Server Version : 100412
+Target Server Version : 100505
 File Encoding         : 65001
 
-Date: 2021-04-07 16:12:46
+Date: 2021-07-18 21:41:30
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -36,36 +36,6 @@ INSERT INTO `cate` VALUES ('3', 'learn', '0', '学习笔记');
 INSERT INTO `cate` VALUES ('4', 'goweb', '0', '动态网站');
 INSERT INTO `cate` VALUES ('5', 'python', '0', 'python');
 INSERT INTO `cate` VALUES ('6', 'javascript', '0', 'javascript');
-
--- ----------------------------
--- Table structure for opts
--- ----------------------------
-DROP TABLE IF EXISTS `opts`;
-CREATE TABLE `opts` (
-  `key` varchar(64) NOT NULL,
-  `value` varchar(2048) DEFAULT NULL,
-  `intro` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`key`),
-  UNIQUE KEY `UQE_opts_key` (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of opts
--- ----------------------------
-INSERT INTO `opts` VALUES ('analytic', '<script async src=\"//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js\"></script> ', '统计代码，可以添加百度统计、Google 统计等');
-INSERT INTO `opts` VALUES ('auto_summary', '0', '');
-INSERT INTO `opts` VALUES ('comment', '{\"clientID\": \"2d028c155cbc14d10f53\",\"clientSecret\": \"e503c3d371fb046b2ec9ca99253c10b320be0052\",\"repo\": \"comments\",\"owner\": \"zxysilent\",\"admin\":[\"zxysilent\"],\"distractionFreeMode\":true,\"githubUserName\":\"zxysilent\"}', '评论类型');
-INSERT INTO `opts` VALUES ('custom_js', 'console.log(\"https://blog.zxysilent.com\")', '自定义js');
-INSERT INTO `opts` VALUES ('favicon_url', '/favicon.ico', 'favicon');
-INSERT INTO `opts` VALUES ('github_url', 'https://github.com/zxysilent', 'GitHub 地址');
-INSERT INTO `opts` VALUES ('introription', 'zxysilent;zxysilent blog;zxyslt;zxyslt blog;', '网站描述');
-INSERT INTO `opts` VALUES ('keywords', 'zxysilent,zxyslt,zxy', '网站关键字');
-INSERT INTO `opts` VALUES ('logo_url', '/static/logo.png', 'logo 地址');
-INSERT INTO `opts` VALUES ('miitbeian', '蜀ICP备16011344号-2', '网站备案号');
-INSERT INTO `opts` VALUES ('page_size', '6', '文章一页显示的条数');
-INSERT INTO `opts` VALUES ('site_url', 'https://blog.zxysilent.com', '网站地址');
-INSERT INTO `opts` VALUES ('title', 'zxysilent', '网站标题');
-INSERT INTO `opts` VALUES ('weibo_url', 'https://weibo.com/u/7072792903', '微博地址');
 
 -- ----------------------------
 -- Table structure for post
@@ -174,6 +144,56 @@ CREATE TABLE `post_tag` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for sys_global
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_global`;
+CREATE TABLE `sys_global` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `site_url` varchar(255) DEFAULT '' COMMENT '网站地址',
+  `logo_url` varchar(255) DEFAULT NULL COMMENT 'Logo地址',
+  `title` varchar(255) DEFAULT NULL COMMENT '网站标题',
+  `keywords` varchar(255) DEFAULT NULL COMMENT '网站关键词',
+  `description` varchar(255) DEFAULT NULL COMMENT '网站描述',
+  `favicon_url` varchar(255) DEFAULT NULL COMMENT 'Favicon地址',
+  `beian_miit` varchar(255) DEFAULT NULL COMMENT 'ICP备案',
+  `beian_nism` varchar(255) DEFAULT NULL COMMENT '公安备案',
+  `copyright` varchar(255) DEFAULT NULL COMMENT '版权',
+  `site_js` varchar(512) DEFAULT NULL COMMENT '全局js',
+  `site_css` varchar(512) DEFAULT NULL COMMENT '全局css',
+  `page_size` int(11) DEFAULT 6 COMMENT '分页大小',
+  `comment` varchar(1024) DEFAULT NULL COMMENT '评论脚本',
+  `github_url` varchar(255) DEFAULT NULL COMMENT 'githu地址',
+  `weibo_url` varchar(255) DEFAULT NULL COMMENT '微博地址',
+  `analytic` varchar(1024) DEFAULT NULL COMMENT '统计脚本',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of sys_global
+-- ----------------------------
+INSERT INTO `sys_global` VALUES ('1', 'https://blog.zxysilent.com', '/static/logo.png', 'zxysilent', 'zxysilent,zxyslt,zxy', 'zxysilent;zxysilent blog;zxyslt;zxyslt blog;', '/favicon.ico', '蜀ICP备16011344号-2', null, null, 'console.log(\"https://blog.zxysilent.com\")', null, '6', '{\"clientID\": \"2d028c155cbc14d10f53\",\"clientSecret\": \"e503c3d371fb046b2ec9ca99253c10b320be0052\",\"repo\": \"comments\",\"owner\": \"zxysilent\",\"admin\":[\"zxysilent\"],\"distractionFreeMode\":true,\"githubUserName\":\"zxysilent\"}', 'https://github.com/zxysilent', 'https://weibo.com/u/7072792903', '<script async src=\"//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js\"></script> ');
+
+-- ----------------------------
+-- Table structure for sys_grant
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_grant`;
+CREATE TABLE `sys_grant` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `guid` varchar(255) DEFAULT NULL COMMENT '标识',
+  `name` varchar(255) DEFAULT NULL COMMENT '名称',
+  `group` varchar(255) DEFAULT NULL COMMENT '组',
+  `sort` int(11) DEFAULT 1000 COMMENT '排序id',
+  `inner` tinyint(4) DEFAULT 0 COMMENT '内部禁止删除',
+  `ctime` datetime DEFAULT NULL COMMENT '时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UQE_sys_grant_guid` (`guid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of sys_grant
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for sys_menu
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_menu`;
@@ -250,55 +270,6 @@ INSERT INTO `sys_role` VALUES ('1', '超级管理员', '内置管理员拥有所
 INSERT INTO `sys_role` VALUES ('2', '管理员', '管理员', '1', '2021-03-31 23:29:21');
 
 -- ----------------------------
--- Table structure for sys_role_menu
--- ----------------------------
-DROP TABLE IF EXISTS `sys_role_menu`;
-CREATE TABLE `sys_role_menu` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `role_id` int(11) DEFAULT 0,
-  `menu_id` int(11) DEFAULT 0,
-  `ctime` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of sys_role_menu
--- ----------------------------
-INSERT INTO `sys_role_menu` VALUES ('1', '1', '1', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('2', '1', '2', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('3', '1', '3', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('4', '1', '4', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('5', '1', '5', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('6', '1', '6', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('7', '1', '7', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('8', '1', '8', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('9', '1', '9', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('10', '1', '10', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('11', '1', '11', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('12', '1', '12', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('13', '1', '13', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('14', '1', '14', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('15', '1', '15', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('16', '1', '16', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('17', '1', '17', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('18', '1', '18', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('19', '1', '19', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('20', '1', '20', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('21', '1', '21', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('22', '1', '22', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('23', '1', '23', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('24', '1', '24', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('25', '1', '25', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('26', '1', '26', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('27', '1', '27', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('28', '1', '28', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('33', '1', '33', '2021-04-07 10:28:01');
-INSERT INTO `sys_role_menu` VALUES ('36', '1', '30', '2021-04-07 14:01:19');
-INSERT INTO `sys_role_menu` VALUES ('37', '1', '31', '2021-04-07 14:01:19');
-INSERT INTO `sys_role_menu` VALUES ('38', '1', '32', '2021-04-07 14:01:19');
-INSERT INTO `sys_role_menu` VALUES ('39', '1', '29', '2021-04-07 14:01:38');
-
--- ----------------------------
 -- Table structure for sys_user
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user`;
@@ -315,9 +286,7 @@ CREATE TABLE `sys_user` (
   `ltime` datetime DEFAULT NULL COMMENT '上次登录时间',
   `ctime` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UQE_sys_user_num` (`num`),
-  UNIQUE KEY `UQE_sys_user_email` (`email`),
-  UNIQUE KEY `UQE_sys_user_phone` (`phone`)
+  UNIQUE KEY `UQE_sys_user_num` (`num`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------

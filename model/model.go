@@ -57,14 +57,12 @@ func Init() {
 			new(Tag),
 			new(Post),
 			new(PostTag),
-			new(Opts),
 			// sys
-			// new(Api),
-			// new(RoleApi),
 			new(Role),
 			new(User),
-			new(Menu),
-			new(RoleMenu),
+			new(Grant),
+			new(Global),
+			new(RoleGrant),
 		)
 		if err != nil {
 			logs.Fatal("数据库 sync:", err.Error())
@@ -72,7 +70,7 @@ func Init() {
 	}
 	Db = db
 	//缓存
-	initMap()
+	initGlobal()
 	logs.Info("model init")
 }
 

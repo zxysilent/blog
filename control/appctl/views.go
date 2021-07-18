@@ -18,7 +18,7 @@ func IndexView(ctx echo.Context) error {
 	if pi == 0 {
 		pi = 1
 	}
-	ps, _ := atoi(model.MapOpts.MustGet("page_size"), 6)
+	ps := model.Gcfg().PageSize
 	mods, _ := model.PostPage(pi, ps)
 	total := model.PostCount()
 	naver := model.Naver{}
@@ -66,7 +66,7 @@ func CatePostView(ctx echo.Context) error {
 	if pi == 0 {
 		pi = 1
 	}
-	ps, _ := atoi(model.MapOpts.MustGet("page_size"), 6)
+	ps := model.Gcfg().PageSize
 	mods, err := model.CatePostList(mod.Id, pi, ps, true)
 	if err != nil || len(mods) < 1 {
 		return ctx.Redirect(302, "/")
@@ -118,7 +118,7 @@ func TagPostView(ctx echo.Context) error {
 	if pi == 0 {
 		pi = 1
 	}
-	ps, _ := atoi(model.MapOpts.MustGet("page_size"), 6)
+	ps := model.Gcfg().PageSize
 	mods, err := model.TagPostList(mod.Id, pi, ps)
 	if err != nil || len(mods) < 1 {
 		return ctx.Redirect(302, "/tags")

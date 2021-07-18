@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
     <head>
-        <title>{{.title}}·{{.Tag.Name}}</title>
-        <link rel="canonical" href="{{.site_url}}/tag/{{.Tag.Name}}" />
+        <title>{{.global.Title}}·{{.Tag.Name}}</title>
+        <link rel="canonical" href="{{.global.SiteUrl}}/tag/{{.Tag.Name}}" />
         {{template "tpl-linker.html" .}}
     </head>
     <body>

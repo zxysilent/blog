@@ -1,54 +1,48 @@
-
 <template>
-	<Card :bordered="false" dis-hover>
+	<Card dis-hover>
 		<p slot="title">
 			<Icon type="ios-create-outline" /> 修改角色
 		</p>
 		<div style="max-width:520px">
-			<Form ref="dataForm" :model="dataForm" :rules="dataRules" label-position="top">
+			<Form ref="dataForm" :model="dataForm" :label-width="120" label-colon label-position="right" :rules="dataRules">
 				<FormItem label="角色名称" prop="name">
 					<Input v-model="dataForm.name" placeholder="请填写角色名称"></Input>
 				</FormItem>
 				<FormItem label="角色介绍" prop="intro">
-					<Input v-model="dataForm.intro" placeholder="请填写角色介绍"></Input>
+					<Input v-model="dataForm.intro" type="textarea" :autosize="{minRows: 2,maxRows: 4}" maxlength="128" show-word-limit placeholder="请填写角色介绍"></Input>
 				</FormItem>
 				<FormItem>
 					<Button type="warning" :loading="loading" @click="emitEdit">提交保存</Button>
-					<Button type="success" @click="emitReset()" style="margin-left: 8px">重置填写</Button>
-                    <Button :to="{name:'role-list'}" style="margin-left: 8px">返回列表</Button>
+					<Button type="success" @click="emitReset" style="margin-left: 8px">重置填写</Button>
+					<Button :to="{name:'role-list'}" style="margin-left: 8px">取消返回</Button>
 				</FormItem>
 			</Form>
 		</div>
 	</Card>
 </template>
 <script>
-import { admRoleGet,admRoleEdit } from "@/api/role";
+import { admRoleGet, admRoleEdit } from "@/api/role";
 export default {
 	data() {
 		return {
-			dataForm: { id:0,name: "", intro: "" },
+			loading: false,
+			dataForm: { id: 0, name: "", intro: "" },
 			dataRules: {
-				name: [{ required: true, message: "请填写角色名称", trigger: "blur", max: 128 }],
-				intro: [{ required: true, message: "请填写角色介绍", trigger: "blur", max: 128 }]
-			},
-			loading: false
+				name: [{ required: true, message: "请填写角色名", trigger: "blur", max: 128 }],
+				intro: [{ required: true, message: "请填写角色详细", trigger: "blur", max: 128 }]
+			}
 		};
 	},
 	methods: {
-        init() {
+		init() {
 			admRoleGet({ id: this.dataForm.id }).then((resp) => {
 				if (resp.code == 200) {
 					this.dataForm = resp.data;
-				} else {
-					this.$Message.error({
-						content: resp.msg,
-						duration: 3
-					});
 				}
 			});
 		},
 		emitReset() {
-			this.init()
+			this.init();
 		},
 		emitEdit() {
 			this.$refs["dataForm"].validate((valid) => {
@@ -60,7 +54,7 @@ export default {
 							this.$Message.success({
 								content: "修改成功",
 								onClose: () => {
-									this.$router.push({ name: "role-list" });
+									this.init();
 								}
 							});
 						} else {
@@ -70,9 +64,8 @@ export default {
 				}
 			});
 		}
-	}
-    ,created() {
-		console.log(this.$route.params.id);
+	},
+	mounted() {
 		this.dataForm.id = parseInt(this.$route.params.id, 10);
 		this.init();
 	}

@@ -2,7 +2,7 @@ package router
 
 import (
 	"blog/conf"
-	"blog/internal/hwt"
+	"blog/internal/token"
 	"blog/model"
 	"crypto/md5"
 	"encoding/hex"
@@ -53,15 +53,15 @@ func HTTPErrorHandler(err error, ctx echo.Context) {
 				if strings.HasPrefix(ctx.Request().URL.Path, "/static") || strings.HasPrefix(ctx.Request().URL.Path, "/dist") {
 					ctx.NoContent(404)
 				} else if strings.HasPrefix(ctx.Request().URL.Path, "/api") || strings.HasPrefix(ctx.Request().URL.Path, "/adm") {
-					ctx.JSON(utils.NewErrSvr("系统错误", he.Message))
+					ctx.JSON(utils.ErrSvr("系统错误", he.Message))
 				} else {
 					ctx.HTML(404, html404)
 				}
 			} else {
-				ctx.JSON(utils.NewErrSvr("系统错误", he.Message))
+				ctx.JSON(utils.ErrSvr("系统错误", he.Message))
 			}
 		} else {
-			ctx.JSON(utils.NewErrSvr("系统错误", err.Error()))
+			ctx.JSON(utils.ErrSvr("系统错误", err.Error()))
 		}
 	}
 }
@@ -83,18 +83,7 @@ func (t *TplRender) Render(w io.Writer, name string, data interface{}, ctx echo.
 	if mp, is := data.(map[string]interface{}); is {
 		mp["appjs"] = AppJsUrl
 		mp["appcss"] = AppCssUrl
-		mp["title"] = model.MapOpts.MustGet("title")
-		mp["favicon"] = model.MapOpts.MustGet("favicon")
-		mp["comment"] = model.MapOpts.MustGet("comment")
-		mp["analytic"] = model.MapOpts.MustGet("analytic")
-		mp["site_url"] = model.MapOpts.MustGet("site_url")
-		mp["logo_url"] = model.MapOpts.MustGet("logo_url")
-		mp["keywords"] = model.MapOpts.MustGet("keywords")
-		mp["miitbeian"] = model.MapOpts.MustGet("miitbeian")
-		mp["weibo_url"] = model.MapOpts.MustGet("weibo_url")
-		mp["custom_js"] = model.MapOpts.MustGet("custom_js")
-		mp["github_url"] = model.MapOpts.MustGet("github_url")
-		mp["description"] = model.MapOpts.MustGet("description")
+		mp["global"] = model.Gcfg()
 	}
 	//开发模式
 	//每次强制读取模板
@@ -142,13 +131,13 @@ func midAuth(next echo.HandlerFunc) echo.HandlerFunc {
 		if tokenRaw == "" {
 			tokenRaw = ctx.Request().Header.Get(echo.HeaderAuthorization) // header 查找token
 			if tokenRaw == "" {
-				return ctx.JSON(utils.ErrJwt("请重新登陆", "token为空"))
+				return ctx.JSON(utils.ErrToken("请重新登陆", "token为空"))
 			}
 		}
-		auth := hwt.Auth{}
+		auth := token.Auth{}
 		err := auth.Decode(tokenRaw, conf.App.TokenSecret)
 		if err != nil {
-			return ctx.JSON(utils.ErrJwt("请重新登陆", err.Error()))
+			return ctx.JSON(utils.ErrToken("请重新登陆", err.Error()))
 		}
 		// 验证通过，保存信息
 		ctx.Set("auth", auth)

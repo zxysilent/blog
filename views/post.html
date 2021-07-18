@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
     <head>
-        <title>{{.title}}·{{.Post.Title}}</title>
-        <link rel="canonical" href="{{.site_url}}/post/{{.Post.Path}}.html" />
+        <title>{{.global.Title}}·{{.Post.Title}}</title>
+        <link rel="canonical" href="{{.global.SiteUrl}}/post/{{.Post.Path}}.html" />
         {{template "tpl-linker.html" .}}
     </head>
     <body>
@@ -18,7 +18,7 @@
                     </div>
                     <h1 class="title">{{.Post.Title}}</h1>
                     <div class="entry-content">{{str2html .Post.Content}}</div>
-                    <p>本文链接：<a href="{{.site_url}}/post/{{.Post.Path}}.html">{{.site_url}}/post/{{.Post.Path}}.html</a></p>
+                    <p>本文链接：<a href="{{.global.SiteUrl}}/post/{{.Post.Path}}.html">{{.global.SiteUrl}}/post/{{.Post.Path}}.html</a></p>
                     <p>-- <acronym title="End of File">EOF</acronym> --</p>
                     <div class="post-info">
                         <!-- <code class="notebook">zxysilent</code> -->
