@@ -11,7 +11,7 @@ import (
 	"github.com/zxysilent/logs"
 )
 
-// @Title Blog’s Api文档
+// @Title Blog’s 接口文档
 // @Version 1.0
 // @Description token传递方式包括[get/post]token、[header]Authorization
 // @Description 数据传递方式包括json、formData推荐使用json
