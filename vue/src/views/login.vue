@@ -1,6 +1,3 @@
-<style lang="less" scoped>
-@import "./login.less";
-</style>
 <template>
 	<div class="login" @keydown.enter="emitLogin">
 		<div class="top">
@@ -38,15 +35,15 @@
 					<Button size="large" @click="emitLogin" type="primary" long>登 录</Button>
 				</FormItem>
 			</Form>
-			<p class="login-tip">
+			<!-- <p class="other-login">
 				<a href="/" title="QQ登陆">
 					<img :src="logins.qq" alt="加载失败" class="ivu-icon" style="width:20px">
 				</a>
-				<a @click="wechatLogin" title="微信登陆">
+				<a @click="wechatLogin" disabled title="微信登陆">
 					<img :src="logins.wechat" alt="加载失败" class="ivu-icon" style="width:20px">
 				</a>
-			</p>
-			<div class="other-login">
+			</p> -->
+			<div class="login-tips">
 				<span>系统推荐浏览器</span>&nbsp;<br><br>
 				<a href="https://www.microsoft.com/zh-cn/edge" target="_blank" title="微软 Edge">
 					<Icon type="logo-codepen" size="20" />&nbsp;Edge
@@ -138,3 +135,93 @@ export default {
 	}
 };
 </script>
+<style lang="less" scoped>
+.login {
+	width: 100%;
+	min-height: 100%;
+	background: #f0f2f5 url(../assets/bg.svg) no-repeat 50%;
+	background-size: 100%;
+	padding: 110px 0 144px;
+	position: relative;
+	a {
+		text-decoration: none;
+	}
+	.top {
+		text-align: center;
+		.header {
+			height: 44px;
+			line-height: 44px;
+			.logo {
+				height: 44px;
+				vertical-align: top;
+				margin-right: 16px;
+				border-style: none;
+				border-radius: 50%;
+			}
+			.title {
+				font-size: 30px;
+				color: rgba(0, 0, 0, 0.85);
+				font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+					"微软雅黑", Arial, sans-serif;
+				font-weight: 600;
+				position: relative;
+				top: 2px;
+			}
+		}
+		.desc {
+			font-size: 16px;
+			color: rgba(0, 0, 0, 0.45);
+			margin-top: 12px;
+			margin-bottom: 30px;
+		}
+	}
+	.main {
+		min-width: 260px;
+		width: 368px;
+		margin: 0 auto;
+		.login-tips {
+			text-align: left;
+			margin-top: 20px;
+			line-height: 22px;
+			font-size: 16px;
+			a {
+				color: rgba(0, 0, 0, 0.45);
+				transition: all 0.3s;
+				&:not(:last-child) {
+					margin-right: 40px;
+				}
+			}
+		}
+		.other-login {
+			text-align: center;
+			color: #c3c3c3;
+			a {
+				margin: 10px;
+			}
+		}
+	}
+	.footer {
+		position: absolute;
+		width: 100%;
+		bottom: 0;
+		padding: 0 16px;
+		margin: 48px 0 24px;
+		text-align: center;
+		.links {
+			margin-bottom: 8px;
+			font-size: 14px;
+			a {
+				color: rgba(0, 0, 0, 0.45);
+				transition: all 0.3s;
+				&:not(:last-child) {
+					margin-right: 40px;
+				}
+			}
+		}
+		.copyright {
+			color: rgba(0, 0, 0, 0.45);
+			font-size: 14px;
+		}
+	}
+}
+</style>

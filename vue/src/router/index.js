@@ -3,7 +3,7 @@ import { getToken } from "@/utils/token";
 import store from "@/store";
 import ViewUI from "view-design";
 import VueRouter from "vue-router";
-import Layout from "@/views/layout.vue";
+import Layout from "@/views/Layout.vue";
 const _import = require("./_import"); //获取组件的方法-不这样会失败
 Vue.use(VueRouter);
 export const dynamicRouter = routers => {
@@ -34,7 +34,7 @@ export const initRouter = [
 		meta: {
 			title: "登录"
 		},
-		component: () => import("@/views/login.vue")
+		component: () => import("@/views/Login.vue")
 	},
 	{
 		path: "/_home",
