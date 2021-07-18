@@ -110,7 +110,7 @@ func AuthGet(ctx echo.Context) error {
 }
 
 // AuthGrant doc
-// @Tags auth
+// @Tags auth-登陆相关
 // @Summary 获取当前用户的授权
 // @Param token query string true "token"
 // @Success 200 {object} model.Reply{data=[]string} "返回数据"

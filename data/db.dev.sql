@@ -10,7 +10,7 @@ Target Server Type    : MariaDB
 Target Server Version : 100505
 File Encoding         : 65001
 
-Date: 2021-07-18 17:57:03
+Date: 2021-07-18 21:41:30
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -174,6 +174,26 @@ CREATE TABLE `sys_global` (
 INSERT INTO `sys_global` VALUES ('1', 'https://blog.zxysilent.com', '/static/logo.png', 'zxysilent', 'zxysilent,zxyslt,zxy', 'zxysilent;zxysilent blog;zxyslt;zxyslt blog;', '/favicon.ico', '蜀ICP备16011344号-2', null, null, 'console.log(\"https://blog.zxysilent.com\")', null, '6', '{\"clientID\": \"2d028c155cbc14d10f53\",\"clientSecret\": \"e503c3d371fb046b2ec9ca99253c10b320be0052\",\"repo\": \"comments\",\"owner\": \"zxysilent\",\"admin\":[\"zxysilent\"],\"distractionFreeMode\":true,\"githubUserName\":\"zxysilent\"}', 'https://github.com/zxysilent', 'https://weibo.com/u/7072792903', '<script async src=\"//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js\"></script> ');
 
 -- ----------------------------
+-- Table structure for sys_grant
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_grant`;
+CREATE TABLE `sys_grant` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `guid` varchar(255) DEFAULT NULL COMMENT '标识',
+  `name` varchar(255) DEFAULT NULL COMMENT '名称',
+  `group` varchar(255) DEFAULT NULL COMMENT '组',
+  `sort` int(11) DEFAULT 1000 COMMENT '排序id',
+  `inner` tinyint(4) DEFAULT 0 COMMENT '内部禁止删除',
+  `ctime` datetime DEFAULT NULL COMMENT '时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UQE_sys_grant_guid` (`guid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of sys_grant
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for sys_menu
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_menu`;
@@ -248,55 +268,6 @@ CREATE TABLE `sys_role` (
 -- ----------------------------
 INSERT INTO `sys_role` VALUES ('1', '超级管理员', '内置管理员拥有所有权限', '1', '2020-12-30 14:59:13');
 INSERT INTO `sys_role` VALUES ('2', '管理员', '管理员', '1', '2021-03-31 23:29:21');
-
--- ----------------------------
--- Table structure for sys_role_menu
--- ----------------------------
-DROP TABLE IF EXISTS `sys_role_menu`;
-CREATE TABLE `sys_role_menu` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `role_id` int(11) DEFAULT 0,
-  `menu_id` int(11) DEFAULT 0,
-  `ctime` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of sys_role_menu
--- ----------------------------
-INSERT INTO `sys_role_menu` VALUES ('1', '1', '1', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('2', '1', '2', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('3', '1', '3', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('4', '1', '4', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('5', '1', '5', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('6', '1', '6', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('7', '1', '7', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('8', '1', '8', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('9', '1', '9', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('10', '1', '10', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('11', '1', '11', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('12', '1', '12', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('13', '1', '13', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('14', '1', '14', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('15', '1', '15', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('16', '1', '16', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('17', '1', '17', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('18', '1', '18', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('19', '1', '19', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('20', '1', '20', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('21', '1', '21', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('22', '1', '22', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('23', '1', '23', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('24', '1', '24', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('25', '1', '25', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('26', '1', '26', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('27', '1', '27', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('28', '1', '28', '2021-04-06 15:08:32');
-INSERT INTO `sys_role_menu` VALUES ('33', '1', '33', '2021-04-07 10:28:01');
-INSERT INTO `sys_role_menu` VALUES ('36', '1', '30', '2021-04-07 14:01:19');
-INSERT INTO `sys_role_menu` VALUES ('37', '1', '31', '2021-04-07 14:01:19');
-INSERT INTO `sys_role_menu` VALUES ('38', '1', '32', '2021-04-07 14:01:19');
-INSERT INTO `sys_role_menu` VALUES ('39', '1', '29', '2021-04-07 14:01:38');
 
 -- ----------------------------
 -- Table structure for sys_user
