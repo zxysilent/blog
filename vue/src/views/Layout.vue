@@ -93,6 +93,7 @@
 </template>
 <script>
 // import { mapGetters, mapMutations } from "vuex";
+import Storage from "@/utils/storage";
 import { admAuthGet } from "@/api/auth";
 export default {
 	data() {
@@ -105,7 +106,6 @@ export default {
 		// cachePage() {
 		// 	return this.$store.state.app.cachePage;
 		// }
-
 		// 使用对象展开运算符将 getter 混入 computed 对象中
 		// ...mapGetters(["getMenus"])
 	},
@@ -121,8 +121,7 @@ export default {
 		logout() {
 			// this.$store.commit("logout", this);
 			// 移除 vuex
-			localStorage.clear();
-			sessionStorage.clear();
+			Storage.clear();
 			this.$router.push({ name: "login" });
 		}
 	},

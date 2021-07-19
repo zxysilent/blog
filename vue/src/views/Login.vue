@@ -74,7 +74,7 @@ import md5 from "js-md5";
 import loginQQ from "@/assets/login/qq.svg";
 import loginWechat from "@/assets/login/wechat.svg";
 import { apiAuthLogin, apiAuthVcode } from "@/api/auth";
-import { setToken } from "@/utils/token";
+import Storage from "@/utils/storage";
 export default {
 	data() {
 		return {
@@ -105,7 +105,7 @@ export default {
 							this.$Message.success({
 								content: "登陆成功",
 								onClose: () => {
-									setToken(resp.data);
+									Storage.setToken(resp.data);
 									this.$router.push({ name: "home" });
 								}
 							});
@@ -132,6 +132,7 @@ export default {
 	},
 	mounted() {
 		this.reload();
+        Storage.clear()
 	}
 };
 </script>

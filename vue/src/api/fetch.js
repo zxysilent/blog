@@ -1,8 +1,8 @@
-import axios from "axios";
-import { getToken, clearData } from "@/utils/token";
+import Axios from "axios";
+import Storage from "@/utils/storage";
 import ViewUI from "view-design";
 import Router from "@/router";
-const fetch = axios.create({
+const fetch = Axios.create({
 	baseURL: process.env.VUE_APP_SRV,
 	timeout: 30000
 });
@@ -16,7 +16,7 @@ fetch.interceptors.request.use(
 		// 可自行修改为一直携带或者仅登录不携带-由程序内自主控制
 		// if (config.url.indexOf("/api/auth/login") == -1) {
 		if (config.url.indexOf("/adm") == 0) {
-			config.headers.Authorization = getToken();
+			config.headers.Authorization = Storage.getToken();
 		}
 		return config;
 	},
@@ -40,7 +40,7 @@ fetch.interceptors.response.use(
 			return new Promise(() => {});
 		}
 		if (resp.data.code == 340) {
-			clearData();
+			Storage.clear()
 			Router.push({ name: "login" });
 			return new Promise(() => {});
 		}

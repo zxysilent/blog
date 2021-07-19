@@ -14,7 +14,7 @@ export const renderImage = (h, imageUrl) => {
 				h("div", { slot: "content" }, [
 					h("img", {
 						attrs: { src: imageUrl },
-						style: { maxHeight: "300px" , maxWidth: "400px" }
+						style: { maxHeight: "300px", maxWidth: "400px" }
 					})
 				])
 			]

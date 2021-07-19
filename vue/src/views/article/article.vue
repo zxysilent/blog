@@ -78,7 +78,7 @@ import "mavon-editor/dist/css/index.css";
 import toolbars from "./toolbars";
 import { apiCateAll } from "@/api/cate";
 import { apiTagAll } from "@/api/tag";
-import { getToken } from "@/utils/token";
+import Storage from "@/utils/storage"
 import { apiPostGet, admPostOpts, apiPostTagGet } from "@/api/post";
 // 通用 文章/页面 + 添加/修改
 // 减少js体积
@@ -214,7 +214,7 @@ export default {
 				this.$refs.md.$img2Url(pos, process.env.VUE_APP_SRV + json.data);
 			};
 
-			formData.append("token", getToken());
+			formData.append("token", Storage.getToken());
 			formData.append("file", $file);
 			xhr.send(formData);
 		},

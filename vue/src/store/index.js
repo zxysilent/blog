@@ -8,6 +8,7 @@ const Store = {
 		grants: [] //授权
 	},
 	mutations: {
+		// 权限集合
 		setGrants(state, grants) {
 			state.grants = grants;
 		}
@@ -16,8 +17,7 @@ const Store = {
 		// 从后台获取授权
 		async fetchGrant({ commit }) {
 			const resp = await admAuthGrant();
-			console.log("admAuthGrant");
-			console.log(resp);
+			console.log("admAuthGrant==>", resp);
 			if (resp.code == 200) {
 				commit("setGrants", resp.data);
 			} else {

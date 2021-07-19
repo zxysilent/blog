@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Utils from "@/utils";
-import store from "@/store";
+import Storage from "@/utils/storage";
+import Store from "@/store";
 import ViewUI from "view-design";
 import VueRouter from "vue-router";
 import Layout from "@/views/Layout.vue";
@@ -39,7 +40,7 @@ const routes = [
 			{
 				path: "/role/list",
 				name: "role-list",
-				meta: { module: "sys", title: "角色列表" },
+				meta: { module: "sys", title: "角色管理" },
 				component: () => import("@/views/role/list.vue")
 			},
 			{
@@ -57,7 +58,7 @@ const routes = [
 			{
 				path: "/user/list",
 				name: "user-list",
-				meta: { module: "sys", title: "用户列表" },
+				meta: { module: "sys", title: "用户管理" },
 				component: () => import("@/views/user/list.vue")
 			},
 			{
@@ -161,35 +162,35 @@ const routes = [
 
 // 路由配置
 const router = new VueRouter({
-	mode: "hash", //hash/history
+	mode: "hash", //hash,history
 	routes
 });
-let init = true;
+
 router.beforeEach(async (to, from, next) => {
 	ViewUI.LoadingBar.start();
-	// Utils.title(to.meta.title);
-	// if (Utils.getToken() && !Utils.noAuth(to.name)) {
-	// 	if (init) {
-	// 		await store.dispatch("fetchGrant");
-	// 		console.log(store.getters.AuthGrant);
-	// 		init = false;
-	// 	}
-	// }
-	// // 已经登陆 去登陆地方
-	// if (Utils.getToken() && to.name == "login") {
-	// 	Utils.title("主页");
-	// 	next({
-	// 		name: "home"
-	// 	});
-	// } else if (!Utils.getToken() && !Utils.noAuth(to.name)) {
-	// 	// //没有登陆 不是去不需要权限的地方
-	// 	Utils.title("登陆");
-	// 	next({
-	// 		name: "login"
-	// 	});
-	// } else {
-	next();
-	// }
+	Utils.title(to.meta.title);
+	if (Storage.getToken() && !Utils.noAuth(to.name)) {
+		if (Storage.getGrant() != "granted") {
+			await Store.dispatch("fetchGrant");
+			console.log(Store.getters.AuthGrant);
+			Storage.setGrant("granted");
+		}
+	}
+	// 已经登陆 去登陆地方
+	if (Storage.getToken() && to.name == "login") {
+		Utils.title("主页");
+		next({
+			name: "home"
+		});
+	} else if (!Storage.getToken() && !Utils.noAuth(to.name)) {
+		// //没有登陆 不是去不需要权限的地方
+		Utils.title("登陆");
+		next({
+			name: "login"
+		});
+	} else {
+		next();
+	}
 	ViewUI.LoadingBar.finish();
 });
 
