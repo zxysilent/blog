@@ -92,7 +92,7 @@
 	</Layout>
 </template>
 <script>
-import { mapGetters, mapMutations } from "vuex";
+// import { mapGetters, mapMutations } from "vuex";
 import { admAuthGet } from "@/api/auth";
 export default {
 	data() {
@@ -107,7 +107,7 @@ export default {
 		// }
 
 		// 使用对象展开运算符将 getter 混入 computed 对象中
-		...mapGetters(["getMenus"])
+		// ...mapGetters(["getMenus"])
 	},
 	methods: {
 		init() {

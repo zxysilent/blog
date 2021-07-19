@@ -8,11 +8,11 @@ import "view-design/dist/styles/iview.css";
 import { auth } from "@/directive/auth";
 // 按钮权限指令
 auth(Vue);
-// Vue.prototype.$auth = function(needs) {
-// 	const need = needs.toString().split(",");
-// 	const access = store.getters && store.getters.AuthGrant;
-// 	return need.some(v => access.includes(v));
-// };
+Vue.prototype.$auth = function(needs) {
+	const need = needs.toString().split(",");
+	const access = store.getters && store.getters.AuthGrant;
+	return need.some(v => access.includes(v));
+};
 Vue.use(ViewUI, {
 	transfer: true
 	// size: "large"

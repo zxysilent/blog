@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getToken ,clearData} from "@/utils/token";
+import { getToken, clearData } from "@/utils/token";
 import ViewUI from "view-design";
 import Router from "@/router";
 const fetch = axios.create({
@@ -32,40 +32,21 @@ fetch.interceptors.response.use(
 		//在这里对返回的数据进行处理
 		console.log("recv");
 		if (resp.data.code == 330) {
-			// ViewUI.Notice.error({
-			// 	duration: 3,
-			// 	title: "系统提醒",
-			// 	desc: "对不起你没有权限访问"
-			// });
-			// return new Promise(() => {});
-			// location.href = "/#/401"; //没有权限
-			Router.push({ name: "err401" });
+			ViewUI.Notice.error({
+				duration: 3,
+				title: "系统提醒",
+				desc: "对不起你没有权限访问"
+			});
+			return new Promise(() => {});
 		}
 		if (resp.data.code == 340) {
-			// ViewUI.Notice.error({
-			// 	duration: 2,
-			// 	title: "系统提醒",
-			// 	desc: "登陆失效,请重新登陆",
-			// 	onClose: () => {
-			// 		localStorage.removeItem("bearer");
-			// 		//没有登陆信息默认跳转到登陆页面
-			// 		// location.reload();
-			// 	}
-			// });
-			// return new Promise(() => {});
 			clearData();
-			// location.href = "/#/jwt"; //需要重新登陆
-			Router.push({ name: "errjwt" });
+			Router.push({ name: "login" });
+			return new Promise(() => {});
 		}
 		if (resp.data.code == 350) {
-			// ViewUI.Notice.error({
-			// 	duration: 3,
-			// 	title: "系统提醒",
-			// 	desc: "服务端发生错误,请重试"
-			// });
-			// return new Promise(() => {});
-			// location.href = "/#/50x"; //服务器异常
-			Router.push({ name: "err50x" });
+			Router.push({ name: "500" });
+			return new Promise(() => {});
 		}
 		return resp.data;
 	},
@@ -75,8 +56,19 @@ fetch.interceptors.response.use(
 			title: "系统提醒",
 			desc: "网络连接异常,请重试"
 		});
+		console.log(err);
 		return new Promise(() => {});
-		//return Promise.reject(err);
 	}
 );
+export const apiUploadImage = (file, attr) => {
+	let data = new FormData();
+	data.append("file", file);
+	// data.append("typ", "image");
+	// data.append("cut", "yes");
+	//   data.append("h","150");
+	// data.append("w", "1000");
+	attr.cut = true;
+	return fetch.post("/api/upload/image", data, { params: attr });
+};
+
 export default fetch;
