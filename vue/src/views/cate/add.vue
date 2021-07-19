@@ -15,6 +15,7 @@
 				<FormItem>
 					<Button type="warning" :loading="loading" @click="emitAdd">提交保存</Button>
 					<Button type="success" @click="emitReset()" style="margin-left: 8px">重置填写</Button>
+                    <Button :to="{name:'cate-list'}" style="margin-left: 8px">返回列表</Button>
 				</FormItem>
 			</Form>
 		</div>

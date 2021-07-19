@@ -23,60 +23,34 @@
 						</Tooltip>
 					</div>
 				</div>
-				<Menu ref="menu" :active-name="$route.name" :open-names="$route.name.split('-')" theme="dark" width="auto" accordion>
-					<!-- <MenuItem name="home" to="/home">
+				<Menu ref="menu" :active-name="$route.name.split('-')[0]" :open-names="[$route.meta.module,$route.name.split('-')]" theme="dark" width="auto" accordion>
+					<MenuItem name="home" to="/home">
 					<Icon type="ios-home-outline" /> 管理主页</MenuItem>
-					<Submenu name="post">
+					<MenuItem name="global" to="/global">
+					<Icon type="ios-cog-outline" /> 配置中心</MenuItem>
+					<Submenu name="sys">
 						<template slot="title">
-							<Icon type="ios-megaphone-outline" />
-							博客管理
+							<Icon type="ios-contact-outline" /> 系统模块
 						</template>
-						<MenuItem name="post-list" to="/post/list">
-						<Icon type="ios-list-box-outline" />文章列表</MenuItem>
-						<MenuItem name="post-add" to="/post/add">
-						<Icon type="ios-add-circle-outline" />添加文章</MenuItem>
-					</Submenu>
-					<Submenu name="page">
-						<template slot="title">
-							<Icon type="ios-map-outline" />
-							页面管理
-						</template>
-						<MenuItem name="page-list" to="/page/list">
-						<Icon type="ios-list-box-outline" />页面列表</MenuItem>
-						<MenuItem name="page-add" to="/page/add">
-						<Icon type="ios-add-circle-outline" />添加页面</MenuItem>
-					</Submenu>
-					<Submenu name="cate">
-						<template slot="title">
-							<Icon type="ios-school-outline" />
-							分类管理
-						</template>
-						<MenuItem name="cate-list" to="/cate/list">
-						<Icon type="ios-list-box-outline" />分类列表</MenuItem>
-						<MenuItem name="cate-add" to="/cate/add">
-						<Icon type="ios-add-circle-outline" />添加分类</MenuItem>
-					</Submenu>
-					<Submenu name="tag">
-						<template slot="title">
-							<Icon type="ios-pricetags-outline" />
-							标签管理
-						</template>
-						<MenuItem name="tag-list" to="/tag/list">
-						<Icon type="ios-list-box-outline" />标签列表</MenuItem>
-						<MenuItem name="tag-add" to="/tag/add">
-						<Icon type="ios-add-circle-outline" />添加标签</MenuItem>
-					</Submenu>
-					<Submenu name="sysctl">
-						<template slot="title">
-							<Icon type="ios-switch-outline" />
-							权限管理
-						</template>
-						<MenuItem name="sysctl-role" to="/sysctl/role">
+						<MenuItem name="role" to="/role/list">
 						<Icon type="ios-list-box-outline" />角色管理</MenuItem>
-						<MenuItem name="sysctl-add" to="/tag/add">
-						<Icon type="ios-add-circle-outline" />授权管理</MenuItem>
+						<MenuItem name="user" to="/user/list">
+						<Icon type="ios-list-box-outline" />用户管理</MenuItem>
 					</Submenu>
-                    <Submenu name="setting">
+					<Submenu name="app">
+						<template slot="title">
+							<Icon type="ios-megaphone-outline" /> 博客模块
+						</template>
+						<MenuItem name="post" to="/post/list">
+						<Icon type="ios-list-box-outline" />文章管理</MenuItem>
+						<MenuItem name="page" to="/page/list">
+						<Icon type="ios-list-box-outline" />页面管理</MenuItem>
+						<MenuItem name="cate" to="/cate/list">
+						<Icon type="ios-list-box-outline" />分类管理</MenuItem>
+						<MenuItem name="tag" to="/tag/list">
+						<Icon type="ios-list-box-outline" />标签管理</MenuItem>
+					</Submenu>
+					<!-- <Submenu name="setting">
 						<template slot="title">
 							<Icon type="ios-cog-outline" />
 							系统设置
@@ -89,8 +63,8 @@
 						<Icon type="ios-pulse" /> 统计设置</MenuItem>
 						<MenuItem name="setting-custom" to="/setting/custom">
 						<Icon type="ios-code-working" /> 自 定 义</MenuItem>
-					</Submenu>-->
-					<MenuItem name="home" to="/home">
+					</Submenu> -->
+					<!-- <MenuItem name="home" to="/home">
 					<Icon type="ios-home-outline" /> 管理主页</MenuItem>
 					<template v-for="item in getMenus">
 						<Submenu v-if="item.children && item.show" :name="item.name" :key="item.name">
@@ -106,8 +80,7 @@
 						<Icon :type="item.icon"></Icon>
 						{{item.title}}
 						</MenuItem>
-					</template>
-
+					</template> -->
 				</Menu>
 			</div>
 		</Sider>

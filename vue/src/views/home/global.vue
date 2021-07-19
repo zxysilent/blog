@@ -57,16 +57,13 @@
 					<Poptip v-auth="'global_edit'" confirm title="确定要修改吗？" @on-ok="emitEdit" @on-cancel="emitReset">
 						<Button type="warning" :loading="loading" :disabled="denyEdit" style="margin-left: 5px" @click="">提交保存</Button>
 					</Poptip>
-					<Poptip v-auth="'global_clear'" confirm title="确定要清理数据吗？" @on-ok="emitClear">
-						<Button type="error" :disabled="denyEdit" style="margin-left: 5px">清理数据</Button>
-					</Poptip>
 				</FormItem>
 			</Form>
 		</div>
 	</Card>
 </template>
 <script>
-import { apiGlobalGet, admGlobalEdit, admGlobalClear } from "@/api/home";
+import { apiGlobalGet, admGlobalEdit } from "@/api/home";
 import Uimage from "@/components/upload/Uimage.vue";
 export default {
 	components: { Uimage },
@@ -110,20 +107,6 @@ export default {
 		},
 		emitReset() {
 			this.init();
-		},
-		emitClear() {
-			admGlobalClear().then((resp) => {
-				if (resp.code == 200) {
-					this.$Message.success({
-						content: "清理成功",
-						onClose: () => {
-							this.init();
-						}
-					});
-				} else {
-					this.$Message.error({ content: resp.msg, duration: 3 });
-				}
-			});
 		},
 		emitEdit() {
 			this.$refs.dataForm.validate((valid) => {

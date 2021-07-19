@@ -23,177 +23,53 @@ const routes = [
 				component: () => import("@/views/home/index.vue")
 			},
 			{
-				path: "/record",
-				name: "record",
-				meta: { title: "操作记录" },
-				component: () => import("@/views/home/record.vue")
-			},
-			{
 				path: "/global",
 				name: "global",
 				meta: { title: "配置中心" },
 				component: () => import("@/views/home/global.vue")
-			},
-			{
-				path: "/setting",
-				name: "setting",
-				meta: { title: "信息配置" },
-				component: () => import("@/views/home/setting.vue")
 			}
 		]
 	},
 	{
-		path: "/child",
-		name: "child",
-		meta: { title: "小孩管理" },
+		path: "/sys",
+		name: "sys",
+		meta: { module: "sys", title: "系统模块" },
 		component: Layout,
 		children: [
 			{
-				path: "list",
-				name: "child-list",
-				meta: { title: "小孩列表" },
-				component: () => import("@/views/child/list.vue")
-			},
-			{
-				path: "add",
-				name: "child-add",
-				meta: { title: "添加小孩" },
-				component: () => import("@/views/child/add.vue")
-			},
-			{
-				path: "edit/:id(\\d+)",
-				name: "child-edit",
-				meta: { title: "修改小孩" },
-				component: () => import("@/views/child/edit.vue")
-			},
-			{
-				path: "view/:id(\\d+)",
-				name: "child-view",
-				meta: { title: "查看小孩" },
-				component: () => import("@/views/child/view.vue")
-			}
-		]
-	},
-	{
-		path: "/adult",
-		name: "adult",
-		meta: { title: "大人管理" },
-		component: Layout,
-		children: [
-			{
-				path: "list",
-				name: "adult-list",
-				meta: { title: "大人列表" },
-				component: () => import("@/views/adult/list.vue")
-			},
-			{
-				path: "add",
-				name: "adult-add",
-				meta: { title: "添加大人" },
-				component: () => import("@/views/adult/add.vue")
-			},
-			{
-				path: "edit/:id(\\d+)",
-				name: "adult-edit",
-				meta: { title: "修改大人" },
-				component: () => import("@/views/adult/edit.vue")
-			}
-		]
-	},
-	{
-		path: "/guest",
-		name: "guest",
-		meta: { title: "微信用户" },
-		component: Layout,
-		children: [
-			{
-				path: "list",
-				name: "guest-list",
-				meta: { title: "微信用户列表" },
-				component: () => import("@/views/guest/list.vue")
-			},
-			{
-				path: "edit/:id(\\d+)",
-				name: "guest-edit",
-				meta: { title: "微信用户" },
-				component: () => import("@/views/guest/edit.vue")
-			}
-		]
-	},
-	{
-		path: "/dict",
-		name: "dict",
-		meta: { title: "字典管理" },
-		component: Layout,
-		children: [
-			{
-				path: "list",
-				name: "dict-list",
-				meta: { title: "字典列表" },
-				component: () => import("@/views/dict/list.vue")
-			},
-			{
-				path: "add",
-				name: "dict-add",
-				meta: { title: "添加字典" },
-				component: () => import("@/views/dict/add.vue")
-			},
-			{
-				path: "edit/:key",
-				name: "dict-edit",
-				meta: { title: "修改字典" },
-				component: () => import("@/views/dict/edit.vue")
-			}
-		]
-	},
-	{
-		path: "/role",
-		name: "role",
-		meta: { title: "角色管理" },
-		component: Layout,
-		children: [
-			{
-				path: "list",
+				path: "/role/list",
 				name: "role-list",
-				meta: { title: "角色列表" },
+				meta: { module: "sys", title: "角色列表" },
 				component: () => import("@/views/role/list.vue")
 			},
 			{
-				path: "add",
+				path: "/role/add",
 				name: "role-add",
-				meta: { title: "添加角色" },
+				meta: { module: "sys", title: "添加角色" },
 				component: () => import("@/views/role/add.vue")
 			},
 			{
-				path: "edit/:id(\\d+)",
+				path: "/role/edit/:id(\\d+)",
 				name: "role-edit",
-				meta: { title: "修改角色" },
+				meta: { module: "sys", title: "修改角色" },
 				component: () => import("@/views/role/edit.vue")
-			}
-		]
-	},
-	{
-		path: "/user",
-		name: "user",
-		meta: { title: "用户管理" },
-		component: Layout,
-		children: [
+			},
 			{
-				path: "list",
+				path: "/user/list",
 				name: "user-list",
-				meta: { title: "用户列表" },
+				meta: { module: "sys", title: "用户列表" },
 				component: () => import("@/views/user/list.vue")
 			},
 			{
-				path: "add",
+				path: "/user/add",
 				name: "user-add",
-				meta: { title: "添加用户" },
+				meta: { module: "sys", title: "添加用户" },
 				component: () => import("@/views/user/add.vue")
 			},
 			{
-				path: "edit/:id(\\d+)",
+				path: "/user/edit/:id(\\d+)",
 				name: "user-edit",
-				meta: { title: "修改用户" },
+				meta: { module: "sys", title: "修改用户" },
 				component: () => import("@/views/user/edit.vue")
 			}
 		]
@@ -211,6 +87,74 @@ const routes = [
 			}
 		]
 	},
+	{
+		path: "/app",
+		name: "app",
+		meta: { module: "app", title: "博客模块" },
+		component: Layout,
+		children: [
+			{
+				path: "/post/list",
+				name: "post-list",
+				meta: { module: "app", title: "文章列表" },
+				component: () => import("@/views/post/list.vue")
+			},
+			{
+				path: "/post/add",
+				name: "post-add",
+				meta: { module: "app", title: "添加文章" },
+				component: () => import("@/views/article/article.vue")
+			},
+			{
+				path: "/post/edit/:id(\\d+)",
+				name: "post-edit",
+				meta: { module: "app", title: "编辑文章" },
+				component: () => import("@/views/article/article.vue")
+			},
+			{
+				path: "/page/list",
+				meta: { module: "app", title: "页面列表" },
+				name: "page-list",
+				component: () => import("@/views/page/list.vue")
+			},
+			{
+				path: "/page/add",
+				meta: { module: "app", title: "添加页面" },
+				name: "page-add",
+				component: () => import("@/views/article/article.vue")
+			},
+			{
+				path: "/page/edit/:id(\\d+)",
+				name: "page-edit",
+				meta: { module: "app", title: "编辑页面" },
+				component: () => import("@/views/article/article.vue")
+			},
+			{
+				path: "/cate/list",
+				meta: { module: "app", title: "分类列表" },
+				name: "cate-list",
+				component: () => import("@/views/cate/list.vue")
+			},
+			{
+				path: "/cate/add",
+				meta: { module: "app", title: "添加分类" },
+				name: "cate-add",
+				component: () => import("@/views/cate/add.vue")
+			},
+			{
+				path: "/tag/list",
+				meta: { module: "app", title: "标签列表" },
+				name: "tag-list",
+				component: () => import("@/views/tag/list.vue")
+			},
+			{
+				path: "/tag/add",
+				meta: { module: "app", title: "添加标签" },
+				name: "tag-add",
+				component: () => import("@/views/tag/add.vue")
+			}
+		]
+	},
 	{ path: "/500", name: "500", meta: { title: "500-异常" }, component: () => import("@/components/errors/500.vue") },
 	{ path: "/*", name: "404", meta: { title: "404-没发现" }, component: () => import("@/components/errors/404.vue") }
 ];
@@ -223,29 +167,29 @@ const router = new VueRouter({
 let init = true;
 router.beforeEach(async (to, from, next) => {
 	ViewUI.LoadingBar.start();
-	Utils.title(to.meta.title);
-	if (Utils.getToken() && !Utils.noAuth(to.name)) {
-		if (init) {
-			await store.dispatch("fetchGrant");
-			console.log(store.getters.AuthGrant);
-			init = false;
-		}
-	}
-	// 已经登陆 去登陆地方
-	if (Utils.getToken() && to.name == "login") {
-		Utils.title("主页");
-		next({
-			name: "home"
-		});
-	} else if (!Utils.getToken() && !Utils.noAuth(to.name)) {
-		// //没有登陆 不是去不需要权限的地方
-		Utils.title("登陆");
-		next({
-			name: "login"
-		});
-	} else {
-		next();
-	}
+	// Utils.title(to.meta.title);
+	// if (Utils.getToken() && !Utils.noAuth(to.name)) {
+	// 	if (init) {
+	// 		await store.dispatch("fetchGrant");
+	// 		console.log(store.getters.AuthGrant);
+	// 		init = false;
+	// 	}
+	// }
+	// // 已经登陆 去登陆地方
+	// if (Utils.getToken() && to.name == "login") {
+	// 	Utils.title("主页");
+	// 	next({
+	// 		name: "home"
+	// 	});
+	// } else if (!Utils.getToken() && !Utils.noAuth(to.name)) {
+	// 	// //没有登陆 不是去不需要权限的地方
+	// 	Utils.title("登陆");
+	// 	next({
+	// 		name: "login"
+	// 	});
+	// } else {
+	next();
+	// }
 	ViewUI.LoadingBar.finish();
 });
 

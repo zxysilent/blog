@@ -1,59 +1,37 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { admAuthMenu } from "@/api/auth";
-import { dynamicRouter } from "@/router";
+import { admAuthGrant } from "@/api/auth";
 Vue.use(Vuex);
+
 const Store = {
 	state: {
-		menus: [], //左侧导航
-		routes: [] //路由集合
+		grants: [] //授权
 	},
 	mutations: {
-		setMenus(state, menus) {
-			//设置导航
-			state.menus = menus;
-		},
-		setRoutes(state, routes) {
-			//设置路由
-			state.routes = routes;
+		setGrants(state, grants) {
+			state.grants = grants;
 		}
 	},
 	actions: {
-		// 从后台获取菜单
-		async authMenu({ commit }) {
-			const resp = await admAuthMenu();
+		// 从后台获取授权
+		async fetchGrant({ commit }) {
+			const resp = await admAuthGrant();
+			console.log("admAuthGrant");
+			console.log(resp);
 			if (resp.code == 200) {
-				// deep clone
-				// arr.slice 仅复制一层,不能处理数组对象
-				// const routes = resp.data.slice();
-				const routes = JSON.parse(JSON.stringify(resp.data));
-				commit("setMenus", resp.data);
-				console.log(resp.data);
-				// 仅放入路由,菜单没有
-				routes.push({
-					path: "/*",
-					name: "err404",
-					title: "404-没发现",
-					comp: "views/errors/404.vue"
-				});
-                // 动态导入
-				dynamicRouter(routes);
-				// routes.push(errorRouter);
-				// console.log(errorRouter);
-				console.log(routes);
-				commit("setRoutes", routes);
+				commit("setGrants", resp.data);
+			} else {
+				commit("setGrants", []);
 			}
 			return true;
 		}
 	},
 	getters: {
-		getMenus(state) {
-			return state.menus;
-		},
-		getRoutes(state) {
-			return state.routes;
+		AuthGrant(state) {
+			return state.grants;
 		}
 	}
 };
+
 const store = new Vuex.Store(Store);
 export default store;

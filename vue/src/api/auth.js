@@ -22,10 +22,10 @@ export const apiAuthVcode = () => {
 		method: "get"
 	});
 };
-// 获取当前用户的菜单导航
-export const admAuthMenu = () => {
+// 获取当前用户的授权
+export const admAuthGrant = () => {
 	return fetch.request({
-		url: "/adm/auth/menu",
+		url: "/adm/auth/grant",
 		method: "get"
 	});
 };

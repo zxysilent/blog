@@ -13,7 +13,7 @@
 				</Select>
 			</FormItem> -->
 			<FormItem>
-				<Button v-auth="'role_show'" type="info" @click="init" icon="md-refresh" title="刷新数据">刷&nbsp;&nbsp;新</Button>
+				<Button  type="info" @click="init" icon="md-refresh" title="刷新数据">刷&nbsp;&nbsp;新</Button>
 			</FormItem>
 		</Form>
 		<Table size="small" :columns="tabCol" :data="tabData"></Table>
