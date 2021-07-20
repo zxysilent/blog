@@ -9,7 +9,7 @@ import (
 )
 
 // MenuAll doc
-// @Tags menu
+// @Tags menu-菜单
 // @Summary 获取所有菜单导航菜单导航树
 // @Param token query string true "token"
 // @Success 200 {object} model.Reply{data=[]model.Menu} "返回数据"
@@ -23,7 +23,7 @@ func MenuTree(ctx echo.Context) error {
 }
 
 // MenuGet doc
-// @Tags menu
+// @Tags menu-菜单
 // @Summary 通过id获取单条菜单导航信息
 // @Param id query int true "id"
 // @Param token query string true "token"
@@ -43,7 +43,7 @@ func MenuGet(ctx echo.Context) error {
 }
 
 // MenuAll doc
-// @Tags menu
+// @Tags menu-菜单
 // @Summary 获取所有菜单导航信息
 // @Param token query string true "token"
 // @Param body body object{slt=bool,show=bool} true "json"
@@ -66,7 +66,7 @@ func MenuAll(ctx echo.Context) error {
 }
 
 // MenuPage doc
-// @Tags menu
+// @Tags menu-菜单
 // @Summary 获取菜单导航分页信息
 // @Param pi query int true "分页数"
 // @Param ps query int true "每页条数[5,30]"
@@ -98,7 +98,7 @@ func MenuPage(ctx echo.Context) error {
 }
 
 // MenuAdd doc
-// @Tags menu
+// @Tags menu-菜单
 // @Summary 添加菜单导航信息
 // @Param token query string true "token"
 // @Param body body model.Menu true "请求数据"
@@ -119,7 +119,7 @@ func MenuAdd(ctx echo.Context) error {
 }
 
 // MenuEdit doc
-// @Tags menu
+// @Tags menu-菜单
 // @Summary 修改菜单导航信息
 // @Param token query string true "token"
 // @Param body body model.Menu true "请求数据"
@@ -139,7 +139,7 @@ func MenuEdit(ctx echo.Context) error {
 }
 
 // ClassChgShow doc
-// @Tags menu
+// @Tags menu-菜单
 // @Summary 修改菜单导航显示信息
 // @Param token query string true "token"
 // @Param body body object{id=int,show=bool} true "json"
@@ -163,7 +163,7 @@ func MenuEditShow(ctx echo.Context) error {
 }
 
 // MenuDrop doc
-// @Tags menu
+// @Tags menu-菜单
 // @Summary 通过id删除单条菜单导航信息
 // @Param token query string true "token"
 // @Param body body model.IptId true "json"

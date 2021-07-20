@@ -53,7 +53,7 @@ func admRouter(adm *echo.Group) {
 	adm.POST("/cate/edit", appctl.CateEdit)    // 编辑分类
 	adm.POST("/post/opts", appctl.PostOpts)    // 文章/页面-编辑/添加
 	adm.GET("/post/drop/:id", appctl.PostDrop) // 删除文章/页面
-	adm.GET("/tag/drop/:id", appctl.TagDrop)   // 删除标签
+	adm.GET("/tag/drop", appctl.TagDrop)       // 删除标签
 	adm.POST("/tag/add", appctl.TagAdd)        // 添加标签
 	adm.POST("/tag/edit", appctl.TagEdit)      // 编辑标签
 }

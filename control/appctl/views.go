@@ -110,7 +110,7 @@ func TagPostView(ctx echo.Context) error {
 	if tag == "" {
 		return ctx.Redirect(302, "/tags")
 	}
-	mod, has := model.TagName(tag)
+	mod, has := model.TagGetName(tag)
 	if !has {
 		return ctx.Redirect(302, "/tags")
 	}

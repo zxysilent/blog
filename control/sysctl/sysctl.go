@@ -21,7 +21,7 @@ import (
 )
 
 // UploadFile doc
-// @Tags init
+// @Tags ctrl-系统相关
 // @Summary 上传文件
 // @Accept  mpfd
 // @Param file formData file true "file"
@@ -54,7 +54,7 @@ func UploadFile(ctx echo.Context) error {
 }
 
 // UploadImage doc
-// @Tags init
+// @Tags ctrl-系统相关
 // @Summary 上传图片并裁剪
 // @Accept  mpfd
 // @Param file formData file true "file"

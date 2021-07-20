@@ -4,10 +4,9 @@ import "strconv"
 
 // Cate 分类
 type Cate struct {
-	Id    int    `xorm:"pk autoincr INT(11)" json:"id"`
-	Name  string `xorm:"unique VARCHAR(255)" json:"name"`
-	Pid   int    `xorm:"default 0 INT(11)" json:"pid"`
-	Intro string `xorm:"VARCHAR(255)" json:"intro"`
+	Id    int    `xorm:"INT(11) PK AUTOINCR comment('主键')" json:"id"`     //主键
+	Name  string `xorm:"VARCHAR(255) UNIQUE comment('分类名称')" json:"name"` //分类名称
+	Intro string `xorm:"VARCHAR(255) comment('分类描述')" json:"intro"`       //分类描述
 }
 
 // CateIds 通过id返回新闻类别信息集合
@@ -27,10 +26,8 @@ func cateIds(ids []int) map[int]*Cate {
 
 //CateGet 一个分类
 func CateGet(id int) (*Cate, bool) {
-	mod := &Cate{
-		Id: id,
-	}
-	has, _ := Db.Get(mod)
+	mod := &Cate{}
+	has, _ := Db.ID(id).Get(mod)
 	return mod, has
 }
 
