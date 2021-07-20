@@ -6,13 +6,21 @@ import (
 
 // Grant 授权
 type Grant struct {
-	Id    int       `xorm:"INT(11) PK AUTOINCR comment('主键')" json:"id"`
-	Guid  string    `xorm:"VARCHAR(255) UNIQUE comment('标识')" json:"guid"` //全局唯一标识符（GUID，Globally Unique Identifier）
-	Name  string    `xorm:"VARCHAR(255) comment('名称')" json:"name"`
-	Group string    `xorm:"VARCHAR(255) comment('组')" json:"group"`
-	Sort  int       `xorm:"INT(11) DEFAULT 1000 comment('排序id')" json:"sort"`
-	Inner bool      `xorm:"TINYINT(4) DEFAULT 0 comment('内部禁止删除')" json:"inner"`
-	Ctime time.Time `xorm:"DATETIME comment('时间')" swaggerignore:"true" json:"ctime"`
+	Id       int       `xorm:"INT(11) PK AUTOINCR comment('主键')" json:"id"`
+	Guid     string    `xorm:"VARCHAR(255) comment('标识')" json:"guid"` //全局唯一标识符（GUID，Globally Unique Identifier）
+	Name     string    `xorm:"VARCHAR(255) comment('名称')" json:"name"`
+	Pid      int       `xorm:"INT(11) DEFAULT 0 comment('父id')" json:"pid"`
+	Kind     int       `xorm:"INT(11) DEFAULT 0 comment('种类')" json:"kind"`
+	Title    string    `xorm:"VARCHAR(255) comment('菜单')" json:"title"`
+	Path     string    `xorm:"VARCHAR(255) comment('路径')" json:"path"`
+	Use      bool      `xorm:"TINYINT(4) DEFAULT 1 comment('是否使用')" json:"use"`
+	Icon     string    `xorm:"VARCHAR(255) comment('菜单图标')" json:"icon"`
+	Show     bool      `xorm:"TINYINT(4) DEFAULT 1 comment('导航显示')" json:"show"`
+	Comp     string    `xorm:"VARCHAR(255) comment('vue文件路径Component')" json:"comp"`
+	Sort     int       `xorm:"INT(11) DEFAULT 1000 comment('排序')" json:"sort"`
+	Inner    bool      `xorm:"TINYINT(4) DEFAULT 0 comment('内部禁止删除')" json:"inner"`
+	Ctime    time.Time `xorm:"DATETIME comment('时间')" json:"ctime"`
+	Children []Menu    `xorm:"-" swaggerignore:"true" json:"children"` //忽略文档生成
 }
 
 // 根角色
@@ -31,18 +39,18 @@ func GrantTree(roleId int) (map[string][]Grant, error) {
 		grants := getGrantsByRole(roleId)
 		sess.In("id", grants)
 	}
-	err := sess.Asc("group", "sort", "Id").Find(&mods)
+	err := sess.Asc("sort", "Id").Find(&mods)
 	if err != nil {
 		return nil, err
 	}
 	modMap := make(map[string][]Grant, 8)
-	for idx := range mods {
-		itm := mods[idx]
-		if _, ok := modMap[itm.Group]; !ok {
-			modMap[itm.Group] = make([]Grant, 0, 4)
-		}
-		modMap[itm.Group] = append(modMap[itm.Group], itm)
-	}
+	// for idx := range mods {
+	// 	itm := mods[idx]
+	// 	if _, ok := modMap[itm.Group]; !ok {
+	// 		modMap[itm.Group] = make([]Grant, 0, 4)
+	// 	}
+	// 	modMap[itm.Group] = append(modMap[itm.Group], itm)
+	// }
 	// menus := make([]Menu, 0, 10)
 	// iters := modMap[0]
 	// for _, menu := range iters {
@@ -66,7 +74,7 @@ func GrantGet(id int) (*Grant, bool) {
 // GrantAll 所有授权导航信息
 func GrantAll() ([]Grant, error) {
 	mods := make([]Grant, 0, 8)
-	err := Db.Asc("group", "sort", "Id").Find(&mods)
+	err := Db.Asc("sort", "Id").Find(&mods)
 	return mods, err
 }
 

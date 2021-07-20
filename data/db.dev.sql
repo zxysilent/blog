@@ -10,7 +10,7 @@ Target Server Type    : MariaDB
 Target Server Version : 100505
 File Encoding         : 65001
 
-Date: 2021-07-18 21:41:30
+Date: 2021-07-21 00:05:10
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -179,19 +179,58 @@ INSERT INTO `sys_global` VALUES ('1', 'https://blog.zxysilent.com', '/static/log
 DROP TABLE IF EXISTS `sys_grant`;
 CREATE TABLE `sys_grant` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `guid` varchar(255) DEFAULT NULL COMMENT '标识',
+  `pid` int(11) DEFAULT 0 COMMENT '父id',
+  `title` varchar(255) DEFAULT NULL COMMENT '菜单',
   `name` varchar(255) DEFAULT NULL COMMENT '名称',
-  `group` varchar(255) DEFAULT NULL COMMENT '组',
-  `sort` int(11) DEFAULT 1000 COMMENT '排序id',
+  `path` varchar(255) DEFAULT NULL COMMENT '路径',
+  `icon` varchar(255) DEFAULT NULL COMMENT '菜单图标',
+  `show` tinyint(4) DEFAULT 1 COMMENT '导航显示',
   `inner` tinyint(4) DEFAULT 0 COMMENT '内部禁止删除',
+  `comp` varchar(255) DEFAULT NULL COMMENT 'vue文件路径Component',
+  `sort` int(11) DEFAULT 1000 COMMENT '排序',
   `ctime` datetime DEFAULT NULL COMMENT '时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UQE_sys_grant_guid` (`guid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `use` tinyint(4) DEFAULT 1 COMMENT '是否使用',
+  `guid` varchar(255) DEFAULT NULL COMMENT '标识',
+  `kind` int(11) DEFAULT 0 COMMENT '种类',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sys_grant
 -- ----------------------------
+INSERT INTO `sys_grant` VALUES ('1', '0', '系统主页', 'home', '/post', 'ios-megaphone-outline', '1', '1', 'layout', '1000', '2021-03-31 14:18:36', '1', null, '1');
+INSERT INTO `sys_grant` VALUES ('2', '0', '系统模块', 'sysctl', '/post/list', 'ios-list-box-outline', '1', '1', 'views/post/list.vue', '1000', '2021-03-31 14:18:39', '1', null, '1');
+INSERT INTO `sys_grant` VALUES ('3', '0', '业务模块', 'appctl', '/post/add', 'ios-add-circle-outline', '1', '1', 'views/article/article.vue', '1000', '2021-03-31 14:18:42', '1', null, '1');
+INSERT INTO `sys_grant` VALUES ('4', '1', '配置管理', 'global', '/post/edit/:id', 'ios-create-outline', '0', '1', 'views/article/article.vue', '1000', '2021-03-31 14:18:45', '1', null, '1');
+INSERT INTO `sys_grant` VALUES ('5', '3', '页面管理', 'role', '/page', 'ios-map-outline', '1', '1', 'layout', '1000', '2021-03-31 14:20:41', '1', null, '1');
+INSERT INTO `sys_grant` VALUES ('6', '5', '查看', 'role-view', '/api/role/view', 'ios-list-box-outline', '1', '1', 'views/page/list.vue', '1000', '2021-03-31 14:20:44', '1', 'view', '2');
+INSERT INTO `sys_grant` VALUES ('7', '5', '添加', 'role-add', '/adm/role/add', 'ios-add-circle-outline', '1', '1', 'views/article/article.vue', '1000', '2021-03-31 14:20:47', '1', 'add', '2');
+INSERT INTO `sys_grant` VALUES ('8', '5', '编辑', 'role-edit', '/adm/role/edit', 'ios-create-outline', '0', '1', 'views/article/article.vue', '1000', '2021-03-31 14:20:50', '1', 'edit', '2');
+INSERT INTO `sys_grant` VALUES ('9', '5', '删除', 'role-drop', '/adm/role/drop', 'ios-school-outline', '1', '1', 'layout', '1000', '2021-03-31 14:25:47', '1', 'drop', '2');
+INSERT INTO `sys_grant` VALUES ('10', '9', '分类列表', 'cate-list', '/cate/list', 'ios-list-box-outline', '1', '1', 'views/cate/list.vue', '1000', '2021-03-31 14:25:50', '1', null, '0');
+INSERT INTO `sys_grant` VALUES ('11', '9', '添加分类', 'cate-add', '/cate/add', 'ios-add-circle-outline', '1', '1', 'views/cate/add.vue', '1000', '2021-03-31 14:25:54', '1', null, '0');
+INSERT INTO `sys_grant` VALUES ('12', '9', '编辑分类', 'cate-edit', '/cate/edit/:id(\\\\d+)', 'ios-create-outline', '0', '1', 'views/cate/edit.vue', '1000', '2021-03-31 14:25:56', '1', null, '0');
+INSERT INTO `sys_grant` VALUES ('13', '0', '标签管理', 'tag', '/tag', 'ios-pricetags-outline', '1', '1', 'layout', '1000', '2021-03-31 14:26:00', '1', null, '0');
+INSERT INTO `sys_grant` VALUES ('14', '13', '标签列表', 'tag-list', '/tag/list', 'ios-list-box-outline', '1', '1', 'views/tag/list.vue', '1000', '2021-03-31 14:26:02', '1', null, '0');
+INSERT INTO `sys_grant` VALUES ('15', '13', '添加标签', 'tag-add', '/tag/add', 'ios-add-circle-outline', '1', '1', 'views/tag/add.vue', '1000', '2021-03-31 14:26:04', '1', null, '0');
+INSERT INTO `sys_grant` VALUES ('16', '13', '编辑标签', 'tag-edit', '/tag/edit/:id(\\\\d+)', 'ios-create-outline', '0', '1', 'views/tag/edit.vue', '1000', '2021-03-31 14:26:07', '1', null, '0');
+INSERT INTO `sys_grant` VALUES ('17', '0', '系统设置', 'setting', '/setting', 'ios-cog-outline', '1', '1', 'layout', '1000', '2021-03-31 20:08:56', '1', null, '0');
+INSERT INTO `sys_grant` VALUES ('18', '17', '基本设置', 'setting-base', '/setting/base', 'ios-cog-outline', '1', '1', 'views/setting/base.vue', '1000', '2021-03-31 20:08:58', '1', null, '0');
+INSERT INTO `sys_grant` VALUES ('19', '17', '评论设置', 'setting-comment', '/setting/comment', 'ios-text-outline', '1', '1', 'views/setting/comment.vue', '1000', '2021-03-31 20:09:01', '1', null, '0');
+INSERT INTO `sys_grant` VALUES ('20', '17', '统计设置', 'setting-analytic', '/setting/analytic', 'ios-pulse', '1', '1', 'views/setting/analytic.vue', '1000', '2021-03-31 20:09:03', '1', null, '0');
+INSERT INTO `sys_grant` VALUES ('21', '17', '自 定 义', 'setting-custom', '/setting/custom', 'ios-code-working', '1', '1', 'views/setting/custom.vue', '1000', '2021-03-31 20:09:05', '1', null, '0');
+INSERT INTO `sys_grant` VALUES ('22', '0', '菜单管理', 'menu', '/menu', 'ios-menu-outline', '1', '1', 'layout', '1000', '2021-03-31 23:40:30', '1', null, '0');
+INSERT INTO `sys_grant` VALUES ('23', '22', '菜单列表', 'menu-list', '/menu/list', 'ios-list-box-outline', '1', '1', 'views/menu/list.vue', '1000', '2021-03-31 23:40:33', '1', null, '0');
+INSERT INTO `sys_grant` VALUES ('24', '22', '添加菜单', 'menu-add', '/menu/add', 'ios-add-circle-outline', '1', '1', 'views/menu/add.vue', '1000', '2021-03-31 23:40:36', '1', null, '0');
+INSERT INTO `sys_grant` VALUES ('25', '22', '编辑菜单', 'menu-edit', '/menu/edit/:id', 'ios-create-outline', '0', '1', 'views/menu/edit.vue', '1000', '2021-03-31 23:40:39', '1', null, '0');
+INSERT INTO `sys_grant` VALUES ('26', '0', '角色管理', 'role', '/role', 'ios-woman-outline', '1', '1', 'layout', '1000', '2021-04-06 21:07:19', '1', null, '0');
+INSERT INTO `sys_grant` VALUES ('27', '26', '角色列表', 'role-list', '/role/list', 'ios-list-box-outline', '1', '1', 'views/role/list.vue', '1000', '2021-04-06 21:07:22', '1', null, '0');
+INSERT INTO `sys_grant` VALUES ('28', '26', '添加角色', 'role-add', '/role/add', 'ios-add-circle-outline', '1', '1', 'views/role/add', '1000', '2021-04-06 21:07:24', '1', null, '0');
+INSERT INTO `sys_grant` VALUES ('29', '0', '用户管理', 'user', '/user', 'ios-person-outline', '1', '1', 'layout', '1000', '2021-04-06 21:03:01', '1', null, '0');
+INSERT INTO `sys_grant` VALUES ('30', '29', '用户列表', 'user-list', '/user/list', 'ios-list-box-outline', '1', '1', 'views/user/list.vue', '1000', '2021-04-06 21:03:48', '1', null, '0');
+INSERT INTO `sys_grant` VALUES ('31', '29', '添加用户', 'user-add', '/user/add', 'ios-person-add-outline', '1', '1', 'views/user/add.vue', '1000', '2021-04-06 21:04:29', '1', null, '0');
+INSERT INTO `sys_grant` VALUES ('32', '29', '编辑用户', 'user-edit', '/user/edit/:id', 'ios-create-outline', '0', '1', 'views/user/edit.vue', '1000', '2021-04-06 21:05:18', '1', null, '0');
+INSERT INTO `sys_grant` VALUES ('33', '26', '编辑角色', 'role-edit', '/role/edit/:id', 'ios-create-outline', '0', '1', 'views/role/edit.vue', '1000', '2021-04-07 10:16:47', '1', null, '0');
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -268,6 +307,21 @@ CREATE TABLE `sys_role` (
 -- ----------------------------
 INSERT INTO `sys_role` VALUES ('1', '超级管理员', '内置管理员拥有所有权限', '1', '2020-12-30 14:59:13');
 INSERT INTO `sys_role` VALUES ('2', '管理员', '管理员', '1', '2021-03-31 23:29:21');
+
+-- ----------------------------
+-- Table structure for sys_role_grant
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_role_grant`;
+CREATE TABLE `sys_role_grant` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `role_id` int(11) DEFAULT 0 COMMENT '角色id',
+  `grant_id` int(11) DEFAULT 0 COMMENT '授权id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of sys_role_grant
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for sys_user

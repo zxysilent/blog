@@ -22,12 +22,6 @@ const routes = [
 				name: "home",
 				meta: { title: "管理主页" },
 				component: () => import("@/views/home/index.vue")
-			},
-			{
-				path: "/global",
-				name: "global",
-				meta: { title: "配置中心" },
-				component: () => import("@/views/home/global.vue")
 			}
 		]
 	},
@@ -37,6 +31,12 @@ const routes = [
 		meta: { module: "sys", title: "系统模块" },
 		component: Layout,
 		children: [
+			{
+				path: "/global",
+				name: "global",
+				meta: { module: "sys", title: "配置中心" },
+				component: () => import("@/views/home/global.vue")
+			},
 			{
 				path: "/role/list",
 				name: "role-list",
