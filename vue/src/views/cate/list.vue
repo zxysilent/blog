@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<Card dis-hover>
-			<p slot="title">
-				<Icon type="md-add" /> 分类管理
-			</p>
+			<div slot="title">
+				<Icon type="ios-school-outline" /> 分类管理
+			</div>
 			<Form inline>
 				<!-- <FormItem>
 				<Select v-model="cid" placeholder="请选择文章类别" style="width:200px">

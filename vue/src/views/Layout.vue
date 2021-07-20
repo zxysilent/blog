@@ -30,25 +30,25 @@
 					<Icon type="ios-cog-outline" /> 配置中心</MenuItem>
 					<Submenu name="sys">
 						<template slot="title">
-							<Icon type="ios-contact-outline" /> 系统模块
+							<Icon type="ios-apps-outline" /> 系统模块
 						</template>
 						<MenuItem name="role" to="/role/list">
-						<Icon type="ios-list-box-outline" />角色管理</MenuItem>
+						<Icon type="ios-contact-outline" />角色管理</MenuItem>
 						<MenuItem name="user" to="/user/list">
-						<Icon type="ios-list-box-outline" />用户管理</MenuItem>
+						<Icon type="ios-person-outline" />用户管理</MenuItem>
 					</Submenu>
 					<Submenu name="app">
 						<template slot="title">
-							<Icon type="ios-megaphone-outline" /> 博客模块
+							<Icon type="ios-apps-outline" /> 博客模块
 						</template>
 						<MenuItem name="post" to="/post/list">
-						<Icon type="ios-list-box-outline" />文章管理</MenuItem>
+						<Icon type="ios-megaphone-outline" />文章管理</MenuItem>
 						<MenuItem name="page" to="/page/list">
 						<Icon type="ios-list-box-outline" />页面管理</MenuItem>
 						<MenuItem name="cate" to="/cate/list">
-						<Icon type="ios-list-box-outline" />分类管理</MenuItem>
+						<Icon type="ios-school-outline" />分类管理</MenuItem>
 						<MenuItem name="tag" to="/tag/list">
-						<Icon type="ios-list-box-outline" />标签管理</MenuItem>
+						<Icon type="ios-pricetags-outline" />标签管理</MenuItem>
 					</Submenu>
 					<!-- <Submenu name="setting">
 						<template slot="title">

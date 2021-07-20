@@ -2,9 +2,23 @@
 </style>
 <template>
 	<Card dis-hover>
-		<p slot="title">
-			<Icon type="md-person" /> 用户列表
-		</p>
+		<!-- <div slot="title">
+			<Icon type="md-person" /> 用户管理
+		</div> -->
+		<Form inline>
+			<!-- <FormItem>
+				<Select v-model="cid" placeholder="请选择文章类别" style="width:200px">
+					<Option v-for="item in columnAll" :value="item.id" :key="item.id">{{ item.name }}</Option>
+				</Select>
+			</FormItem> -->
+			<FormItem>
+				<Button :to="{name:'user-add'}" style="margin-right: 8px">添加用户</Button>
+				<Button type="info" @click="init" icon="md-refresh" title="刷新数据">刷&nbsp;&nbsp;新</Button>
+			</FormItem>
+			<!-- <FormItem>
+				<Button type="warning" @click="reCache" icon="ios-alert-outline" :title="'重新加载数据库缓存'+'\n'+'适用于直接修改数据库'">重载缓存</Button>
+			</FormItem> -->
+		</Form>
 		<Table size="small" border :columns="tabCol" :data="tabData"></Table>
 		<br>
 		<Page :total="total" :current.sync="page.pi" :page-size="page.ps" :page-size-opts="[10,12,15]" @on-change="piChange" @on-page-size-change="psChange" show-sizer show-elevator show-total></Page>

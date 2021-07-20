@@ -2,6 +2,7 @@
 	<Card dis-hover>
 		<Form inline>
 			<FormItem>
+                <Button :to="{name:'post-add'}" style="margin-right: 8px">添加页面</Button>
 				<Select v-model="cate_id" placeholder="请选择文章类别" style="width:200px">
 					<Option v-for="item in cateAll" :value="item.id" :key="item.id">{{ item.name }} [{{ item.intro }}]</Option>
 				</Select>

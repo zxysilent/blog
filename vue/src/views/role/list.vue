@@ -8,13 +8,17 @@
 	<Card dis-hover>
 		<Form inline>
 			<!-- <FormItem>
-				<Select v-model="cid" placeholder="请选择类别" style="width:200px">
+				<Select v-model="cid" placeholder="请选择文章类别" style="width:200px">
 					<Option v-for="item in columnAll" :value="item.id" :key="item.id">{{ item.name }}</Option>
 				</Select>
 			</FormItem> -->
 			<FormItem>
-				<Button  type="info" @click="init" icon="md-refresh" title="刷新数据">刷&nbsp;&nbsp;新</Button>
+				<Button :to="{name:'role-add'}" style="margin-right: 8px">添加角色</Button>
+				<Button type="info" @click="init" icon="md-refresh" title="刷新数据">刷&nbsp;&nbsp;新</Button>
 			</FormItem>
+			<!-- <FormItem>
+				<Button type="warning" @click="reCache" icon="ios-alert-outline" :title="'重新加载数据库缓存'+'\n'+'适用于直接修改数据库'">重载缓存</Button>
+			</FormItem> -->
 		</Form>
 		<Table size="small" :columns="tabCol" :data="tabData"></Table>
 		<Drawer title="角色授权" v-model="showGrant" width="520">

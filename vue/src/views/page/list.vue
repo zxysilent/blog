@@ -1,5 +1,19 @@
 <template>
 	<Card dis-hover>
+		<Form inline>
+			<!-- <FormItem>
+				<Select v-model="cid" placeholder="请选择文章类别" style="width:200px">
+					<Option v-for="item in columnAll" :value="item.id" :key="item.id">{{ item.name }}</Option>
+				</Select>
+			</FormItem> -->
+			<FormItem>
+				<Button :to="{name:'page-add'}" style="margin-right: 8px">添加页面</Button>
+				<Button type="info" @click="init" icon="md-refresh" title="刷新数据">刷&nbsp;&nbsp;新</Button>
+			</FormItem>
+			<!-- <FormItem>
+				<Button type="warning" @click="reCache" icon="ios-alert-outline" :title="'重新加载数据库缓存'+'\n'+'适用于直接修改数据库'">重载缓存</Button>
+			</FormItem> -->
+		</Form>
 		<Table size="small" stripe :columns="colPage" :data="dataPage"></Table>
 	</Card>
 </template>
@@ -55,13 +69,13 @@ export default {
 					align: "center",
 					render: (h, data) => {
 						return h("a", [
-                            h("Icon", {
+							h("Icon", {
 								props: { type: "md-eye", size: "20", color: "#5FB878" },
 								attrs: { title: "预览" },
 								style: { marginRight: "15px" },
 								on: {
 									click: () => {
-										window.open(process.env.VUE_APP_SRV+"/page/"+data.row.path+".html")
+										window.open(process.env.VUE_APP_SRV + "/page/" + data.row.path + ".html");
 									}
 								}
 							}),
@@ -104,7 +118,7 @@ export default {
 	},
 	methods: {
 		init() {
-			apiPageAll().then(resp => {
+			apiPageAll().then((resp) => {
 				if (resp.code == 200) {
 					this.dataPage = resp.data;
 				} else {
@@ -115,7 +129,7 @@ export default {
 		},
 		//删除
 		delete(data) {
-			admPostDrop(data.row.id).then(resp => {
+			admPostDrop(data.row.id).then((resp) => {
 				if (resp.code == 200) {
 					this.$Message.success({
 						content: "删除成功",
