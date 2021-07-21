@@ -25,13 +25,13 @@
 				</div>
 				<Menu ref="menu" :active-name="$route.name.split('-')[0]" :open-names="[$route.meta.module,$route.name.split('-')]" theme="dark" width="auto" accordion>
 					<MenuItem name="home" to="/home">
-					<Icon type="ios-home-outline" /> 管理主页</MenuItem>
-					<MenuItem name="global" to="/global">
-					<Icon type="ios-cog-outline" /> 配置中心</MenuItem>
+					<Icon type="ios-home-outline" />管理主页</MenuItem>
 					<Submenu name="sys">
 						<template slot="title">
-							<Icon type="ios-apps-outline" /> 系统模块
+							<Icon type="ios-apps-outline" />系统模块
 						</template>
+						<MenuItem name="global" to="/global">
+						<Icon type="ios-cog-outline" />配置管理</MenuItem>
 						<MenuItem name="role" to="/role/list">
 						<Icon type="ios-contact-outline" />角色管理</MenuItem>
 						<MenuItem name="user" to="/user/list">
@@ -39,7 +39,7 @@
 					</Submenu>
 					<Submenu name="app">
 						<template slot="title">
-							<Icon type="ios-apps-outline" /> 博客模块
+							<Icon type="ios-apps-outline" />博客模块
 						</template>
 						<MenuItem name="post" to="/post/list">
 						<Icon type="ios-megaphone-outline" />文章管理</MenuItem>
@@ -201,7 +201,7 @@ export default {
 	}
 }
 .ivu-menu-item > i {
-	margin-right: 12px !important;
+	margin-right: 8px !important;
 }
 .ivu-menu-submenu > .ivu-menu > .ivu-menu-item > i {
 	margin-right: 8px !important;
