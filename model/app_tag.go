@@ -33,7 +33,7 @@ func TagGet(id interface{}) (*Tag, bool) {
 	}
 }
 
-// TagAll 所有标签
+// TagAll 所有标签信息
 func TagAll() ([]Tag, error) {
 	mods := make([]Tag, 0, 8)
 	err := Db.Find(&mods)

@@ -28,15 +28,6 @@ func CateGet(id interface{}) (*Cate, bool) {
 	}
 }
 
-// CateGetName 通过name 查询分类
-func CateGetName(name string) (*Cate, bool) {
-	mod := &Cate{
-		Name: name,
-	}
-	has, _ := Db.Get(mod)
-	return mod, has
-}
-
 // CateAll 所有分类
 func CateAll() ([]Cate, error) {
 	mods := make([]Cate, 0, 8)
