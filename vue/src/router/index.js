@@ -38,52 +38,9 @@ const routes = [
 				component: () => import("@/views/home/global.vue")
 			},
 			{
-				path: "/role/list",
-				name: "role-list",
-				meta: { module: "sys", title: "角色管理" },
-				component: () => import("@/views/role/list.vue")
-			},
-			{
-				path: "/role/add",
-				name: "role-add",
-				meta: { module: "sys", title: "添加角色" },
-				component: () => import("@/views/role/add.vue")
-			},
-			{
-				path: "/role/edit/:id(\\d+)",
-				name: "role-edit",
-				meta: { module: "sys", title: "修改角色" },
-				component: () => import("@/views/role/edit.vue")
-			},
-			{
-				path: "/user/list",
-				name: "user-list",
-				meta: { module: "sys", title: "用户管理" },
-				component: () => import("@/views/user/list.vue")
-			},
-			{
-				path: "/user/add",
-				name: "user-add",
-				meta: { module: "sys", title: "添加用户" },
-				component: () => import("@/views/user/add.vue")
-			},
-			{
-				path: "/user/edit/:id(\\d+)",
-				name: "user-edit",
-				meta: { module: "sys", title: "修改用户" },
-				component: () => import("@/views/user/edit.vue")
-			}
-		]
-	},
-	{
-		path: "/auth",
-		meta: { title: "个人中心" },
-		component: Layout,
-		children: [
-			{
-				path: "self",
-				meta: { title: "个人中心" },
-				name: "self",
+				path: "/profile",
+				meta: { module: "sys", title: "个人中心" },
+				name: "profile",
 				component: () => import("@/views/user/self.vue")
 			}
 		]

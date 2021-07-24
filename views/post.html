@@ -37,7 +37,7 @@
                 {{if .Post.AllowComment}}
                 <div id="comments">
                     <h1 class="title">Comments</h1>
-                    <div id="gitalk-container" data-identifier="{{md5 .Post.Path}}" data-config="{{str2js .comment}}"></div>
+                    <div id="gitalk-container" data-identifier="{{md5 .Post.Path}}" data-config="{{str2js .global.Comment}}"></div>
                 </div>
                 {{end}}
             </div>
