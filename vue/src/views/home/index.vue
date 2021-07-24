@@ -76,10 +76,10 @@
 					系统信息
 				</p>
 				<Steps status="finish" :current="4">
-					<Step icon="ios-flash" title="系统架构" :content="sys.arch"></Step>
-					<Step icon="logo-snapchat" title="操作系统" :content="sys.os"></Step>
-					<Step icon="ios-thunderstorm" title="运行环境" :content="sys.version"></Step>
-					<Step icon="ios-flower" title="逻辑处理器" :content="sys.num_cpu+''"></Step>
+					<Step icon="ios-flash" title="系统架构" :content="goinfo.arch"></Step>
+					<Step icon="logo-snapchat" title="操作系统" :content="goinfo.os"></Step>
+					<Step icon="ios-thunderstorm" title="运行环境" :content="goinfo.version"></Step>
+					<Step icon="ios-flower" title="逻辑处理器" :content="goinfo.num_cpu+''"></Step>
 				</Steps>
 			</Card>
 			</Col>
@@ -109,25 +109,15 @@ import { admStatusGoinfo, admStatusAppinfo } from "@/api/home";
 export default {
 	data() {
 		return {
-			sys: {
-				arch: "--",
-				num_cpu: 0,
-				os: "--",
-				version: "--"
-			},
-			collect: {
-				post: 0,
-				page: 0,
-				cate: 0,
-				tag: 0
-			}
+			goinfo: { arch: "--", num_cpu: 0, os: "--", version: "--" },
+			collect: { post: 0, page: 0, cate: 0, tag: 0 }
 		};
 	},
 	methods: {
 		init() {
 			admStatusGoinfo().then((resp) => {
 				if (resp.code == 200) {
-					this.sys = resp.data;
+					this.goinfo = resp.data;
 				} else {
 					this.$Message.warning("未查询到系统信息,请重试！");
 				}

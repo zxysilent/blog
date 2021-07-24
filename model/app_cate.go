@@ -1,43 +1,37 @@
 package model
 
-import "strconv"
+import (
+	"strconv"
+)
 
 // Cate 分类
 type Cate struct {
-	Id    int    `xorm:"pk autoincr INT(11)" json:"id"`
-	Name  string `xorm:"unique VARCHAR(255)" json:"name"`
-	Pid   int    `xorm:"default 0 INT(11)" json:"pid"`
-	Intro string `xorm:"VARCHAR(255)" json:"intro"`
+	Id    int    `xorm:"INT(11) PK AUTOINCR comment('主键')" json:"id"`    //主键
+	Name  string `xorm:"UNIQUE VARCHAR(255) comment('分类名')" json:"name"` //分类名
+	Intro string `xorm:"VARCHAR(255) comment('描述')" json:"intro"`        //描述
 }
 
-// CateIds 通过id返回新闻类别信息集合
-func cateIds(ids []int) map[int]*Cate {
-	mods := make([]Cate, 0, 6)
-	Db.In("id", ids).Find(&mods)
-	if len(mods) > 0 {
-		mapSet := make(map[int]*Cate, len(mods))
-		for idx := range mods {
-			mods[idx].Intro = ""
-			mapSet[mods[idx].Id] = &mods[idx]
-		}
-		return mapSet
+// CateGet 单条分类
+// int	==>	id
+// str	==>	name
+func CateGet(id interface{}) (*Cate, bool) {
+	mod := &Cate{}
+	switch val := id.(type) {
+	case int:
+		has, _ := Db.ID(val).Get(mod)
+		return mod, has
+	case string:
+		has, _ := Db.Where("Name = ?", val).Get(mod)
+		return mod, has
+	default:
+		return mod, false
 	}
-	return nil
 }
 
-//CateGet 一个分类
-func CateGet(id int) (*Cate, bool) {
+// CateGetName 通过name 查询分类
+func CateGetName(name string) (*Cate, bool) {
 	mod := &Cate{
-		Id: id,
-	}
-	has, _ := Db.Get(mod)
-	return mod, has
-}
-
-// CateName 通过name 查询分类
-func CateName(nam string) (*Cate, bool) {
-	mod := &Cate{
-		Name: nam,
+		Name: name,
 	}
 	has, _ := Db.Get(mod)
 	return mod, has
@@ -45,52 +39,84 @@ func CateName(nam string) (*Cate, bool) {
 
 // CateAll 所有分类
 func CateAll() ([]Cate, error) {
-	mods := make([]Cate, 0, 4)
-	err := Db.Asc("id").Find(&mods)
+	mods := make([]Cate, 0, 8)
+	err := Db.Find(&mods)
 	return mods, err
 }
 
+// CatePage 分类分页
+func CatePage(pi int, ps int, cols ...string) ([]Cate, error) {
+	mods := make([]Cate, 0, ps)
+	sess := Db.NewSession()
+	defer sess.Close()
+	if len(cols) > 0 {
+		sess.Cols(cols...)
+	}
+	err := sess.Desc("Id").Limit(ps, (pi-1)*ps).Find(&mods)
+	return mods, err
+}
+
+// CateCount 分类分页总数
+func CateCount() int {
+	mod := &Cate{}
+	sess := Db.NewSession()
+	defer sess.Close()
+	count, _ := sess.Count(mod)
+	return int(count)
+}
+
+// CateIds 通过id集合返回分类
+func CateIds(ids []int) map[int]*Cate {
+	mods := make([]Cate, 0, len(ids))
+	Db.In("id", ids).Find(&mods)
+	mapSet := make(map[int]*Cate, len(mods))
+	for idx := range mods {
+		mapSet[mods[idx].Id] = &mods[idx]
+	}
+	return mapSet
+}
+
 // CateAdd 添加分类
-func CateAdd(mod *Cate) bool {
+func CateAdd(mod *Cate) error {
 	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
-	affect, _ := sess.InsertOne(mod)
-	if affect != 1 {
+	if _, err := sess.InsertOne(mod); err != nil {
 		sess.Rollback()
-		return false
+		return err
 	}
 	sess.Commit()
-	return true
+	return nil
 }
 
-// CateEdit 修改分类
-func CateEdit(mod *Cate) bool {
+// CateEdit 编辑分类
+func CateEdit(mod *Cate, cols ...string) error {
 	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
-	affect, err := sess.ID(mod.Id).Cols("Name", "Intro").Update(mod)
-	if affect >= 0 && err == nil {
-		sess.Commit()
-		return true
+	if _, err := sess.ID(mod.Id).Cols(cols...).Update(mod); err != nil {
+		sess.Rollback()
+		return err
 	}
-	sess.Rollback()
-	return false
+	sess.Commit()
+	return nil
 }
 
-// CateDrop 删除分类
-func CateDrop(id int) bool {
+// CateDrop 删除单条分类
+func CateDrop(id int) error {
 	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
-	if affect, err := sess.ID(id).Delete(&Cate{}); affect > 0 && err == nil {
-		sess.Commit()
-		Db.ClearCacheBean(&Cate{}, strconv.Itoa(id))
-		return true
+	if _, err := sess.ID(id).Delete(&Cate{}); err != nil {
+		sess.Rollback()
+		return err
 	}
-	sess.Rollback()
-	return false
+	sess.Commit()
+	Db.ClearCacheBean(&Cate{}, strconv.Itoa(id))
+	return nil
 }
+
+// ------------------------------------------------------ 前台使用 ------------------------------------------------------
 
 // CatePostCount 通过标签查询文章分页总数
 // lmt 是否前台限制

@@ -1,9 +1,17 @@
 import fetch from "./fetch";
-// 分类信息
+// 所有分类
 export const apiCateAll = () => {
 	return fetch.request({
 		url: "/api/cate/all",
 		method: "get"
+	});
+};
+// 分类分页
+export const apiCatePage = data => {
+	return fetch.request({
+		url: "/api/cate/page",
+		method: "get",
+		params: data
 	});
 };
 // 添加分类
@@ -23,9 +31,10 @@ export const admCateEdit = data => {
 	});
 };
 // 删除分类
-export const admCateDrop = id => {
+export const admCateDrop = data => {
 	return fetch.request({
-		url: `/adm/cate/drop/${id}`,
-		method: "get"
+		url: `/adm/cate/drop`,
+		method: "get",
+		params: data
 	});
 };

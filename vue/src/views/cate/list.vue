@@ -18,7 +18,8 @@
 				<Button type="warning" @click="reCache" icon="ios-alert-outline" :title="'重新加载数据库缓存'+'\n'+'适用于直接修改数据库'">重载缓存</Button>
 			</FormItem> -->
 			</Form>
-			<Table stripe size="small" :columns="colCate" :data="dataCate"></Table>
+			<Table stripe size="small" :columns="tabCol" :data="tabData"></Table>
+			<Page :total="tabCount" :current.sync="tabPage.pi" :page-size="tabPage.ps" :page-size-opts="[8,10,12,15,20,30]" @on-change="onPiChange" @on-page-size-change="onPsChange" show-sizer show-elevator show-total></Page>
 		</Card>
 		<Modal v-model="showEdit" title="修改分类信息">
 			<Form ref="editForm" :model="editForm" label-position="top" :rules="editRules">
@@ -39,13 +40,15 @@
 	</div>
 </template>
 <script>
-import { apiCateAll, admCateEdit, admCateDrop } from "@/api/cate";
+import { apiCatePage, admCateEdit, admCateDrop } from "@/api/cate";
 export default {
 	data() {
 		return {
 			showEdit: false,
 			editLoading: false,
-			colCate: [
+			tabCount: 0,
+			tabPage: { pi: 1, ps: 12,},
+			tabCol: [
 				{ type: "index", minWidth: 60, maxWidth: 100, align: "center" },
 				{ title: "分类名", minWidth: 100, maxWidth: 300, key: "name" },
 				{ title: "分类介绍", minWidth: 100, maxWidth: 300, key: "intro" },
@@ -87,7 +90,7 @@ export default {
 					}
 				}
 			],
-			dataCate: [],
+			tabData: [],
 			editForm: { name: "", intro: "" },
 			editRules: {
 				name: [{ required: true, message: "请填写分类名", trigger: "blur", max: 64 }],
@@ -96,13 +99,24 @@ export default {
 		};
 	},
 	methods: {
+		onPiChange(pi) {
+			this.tabPage.pi = pi;
+			this.init();
+		},
+		onPsChange(ps) {
+			this.tabPage.pi = 1;
+			this.tabPage.ps = ps;
+			this.init();
+		},
 		init() {
-			apiCateAll().then((resp) => {
-				if (resp.code == 200) {
-					this.dataCate = resp.data;
+			apiCatePage(this.tabPage).then((resp) => {
+                if (resp.code == 200) {
+					this.tabData = resp.data.items;
+					this.tabCount = resp.data.count;
 				} else {
-					this.dataCate = [];
-					this.$Message.warning("未查询到分类信息,请重试！");
+					this.tabData = [];
+					this.tabCount = 0;
+					this.$Message.error({ content: resp.msg, duration: 3 });
 				}
 			});
 		},
@@ -130,12 +144,12 @@ export default {
 			});
 		},
 		delete(data) {
-			admCateDrop(data.row.id).then((resp) => {
+			admCateDrop({ id: data.row.id }).then((resp) => {
 				if (resp.code == 200) {
 					this.$Message.success({
 						content: "删除成功",
 						onClose: () => {
-							this.dataCate.splice(data.index, 1);
+							this.tabData.splice(data.index, 1);
 						}
 					});
 				} else {

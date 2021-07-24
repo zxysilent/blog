@@ -1,7 +1,6 @@
 import Vue from "vue";
 import Utils from "@/utils";
 import Storage from "@/utils/storage";
-import Store from "@/store";
 import ViewUI from "view-design";
 import VueRouter from "vue-router";
 import Layout from "@/views/Layout.vue";
@@ -126,13 +125,6 @@ const router = new VueRouter({
 router.beforeEach(async (to, from, next) => {
 	ViewUI.LoadingBar.start();
 	Utils.title(to.meta.title);
-	if (Storage.getToken() && !Utils.noAuth(to.name)) {
-		if (Storage.getGrant() != "granted") {
-			await Store.dispatch("fetchGrant");
-			console.log(Store.getters.AuthGrant);
-			Storage.setGrant("granted");
-		}
-	}
 	// 已经登陆 去登陆地方
 	if (Storage.getToken() && to.name == "login") {
 		Utils.title("主页");

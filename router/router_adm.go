@@ -17,7 +17,7 @@ func admRouter(adm *echo.Group) {
 	adm.POST("/upload/file", sysctl.UploadFile)      // 文件上传
 	adm.POST("/upload/image", sysctl.UploadImage)    // 图片上传
 	adm.POST("/global/edit", sysctl.GlobalEdit)      // 配置修改
-	adm.GET("/cate/drop/:id", appctl.CateDrop)       // 删除分类
+	adm.GET("/cate/drop", appctl.CateDrop)           // 删除分类
 	adm.POST("/cate/add", appctl.CateAdd)            // 添加分类
 	adm.POST("/cate/edit", appctl.CateEdit)          // 编辑分类
 	adm.POST("/post/opts", appctl.PostOpts)          // 文章/页面-编辑/添加
