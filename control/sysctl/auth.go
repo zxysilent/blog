@@ -116,7 +116,7 @@ func UserLogout(ctx echo.Context) error {
 // @Success 200 {object} model.Reply{data=string} "返回数据"
 // @Router /api/auth/vcode [post]
 func AuthVcode(ctx echo.Context) error {
-	rnd := utils.RandDigitStr(5)
+	rnd := utils.RandDigitStr(4)
 	out := struct {
 		Vcode string `json:"vcode"`
 		Vreal string `json:"vreal"`
