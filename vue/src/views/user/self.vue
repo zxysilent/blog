@@ -4,7 +4,7 @@
 			<p slot="title">
 				<Icon type="ios-person-outline" /> 个人信息
 			</p>
-			<div style="max-width:520px">
+			<div style="max-width:640px">
 				<Alert closable type="error">部分信息「用户名」修改后刷新后有效</Alert>
 				<Form ref="dataForm" :model="dataForm" :label-width="120" label-colon label-position="right" :rules="dataRules">
 					<FormItem label="登录账号" prop="num">
@@ -27,7 +27,7 @@
 					</FormItem>
 					<FormItem>
 						<Button type="warning" :loading="loading" @click="emitEdit">提交保存</Button>
-						<Button type="success" @click="init()" style="margin-left: 8px">重置填写</Button>
+						<Button type="success" @click="init()" style="margin-left: 10px">重置填写</Button>
 					</FormItem>
 				</Form>
 			</div>
@@ -49,8 +49,8 @@
 			</Form>
 			<div slot="footer">
 				<Button type="warning" :loading="loadingPasswd" @click="emitPasswd">提交保存</Button>
-				<Button type="success" @click="resetPasswd" style="margin-left: 8px">重置填写</Button>
-				<Button type="info" @click="cancelPasswd" style="margin-left: 8px">取消关闭</Button>
+				<Button type="success" @click="resetPasswd" style="margin-left: 10px">重置填写</Button>
+				<Button type="info" @click="cancelPasswd" style="margin-left: 10px">取消关闭</Button>
 			</div>
 		</Modal>
 	</div>

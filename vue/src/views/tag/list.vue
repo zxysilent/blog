@@ -33,7 +33,7 @@
 			<div slot="footer">
 				<ButtonGroup>
 					<Button type="warning" :loading="editLoading" @click="emitEdit">提交保存</Button>
-					<Button type="info" style="margin-left: 8px" @click="showEdit=false">取消关闭</Button>
+					<Button type="info" style="margin-left: 10px" @click="showEdit=false">取消关闭</Button>
 				</ButtonGroup>
 			</div>
 		</Modal>

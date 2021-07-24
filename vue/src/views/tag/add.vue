@@ -4,7 +4,7 @@
 		<p slot="title">
 			<Icon type="ios-add-circle-outline" /> 添加标签
 		</p>
-		<div style="max-width:520px">
+		<div style="max-width:640px">
 			<Form ref="dataForm" :model="dataForm" :rules="dataRules" label-position="top">
 				<FormItem label="标签名称" prop="name">
 					<Input v-model="dataForm.name" maxlength="64" show-word-limit placeholder="请填写标签名称"></Input>
@@ -14,8 +14,8 @@
 				</FormItem>
 				<FormItem>
 					<Button type="warning" :loading="loading" @click="emitAdd">提交保存</Button>
-					<Button type="success" @click="emitReset()" style="margin-left: 8px">重置填写</Button>
-					<Button :to="{name:'tag-list'}" style="margin-left: 8px">返回列表</Button>
+					<Button type="success" @click="emitReset()" style="margin-left: 10px">重置填写</Button>
+					<Button :to="{name:'tag-list'}" style="margin-left: 10px">返回列表</Button>
 				</FormItem>
 			</Form>
 		</div>

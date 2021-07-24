@@ -4,7 +4,7 @@
 			<p slot="title">
 				<Icon type="md-add" /> 添加用户
 			</p>
-			<div style="max-width:520px">
+			<div style="max-width:640px">
 				<Form ref="dataForm" :model="dataForm" :label-width="120" label-colon label-position="right" :rules="dataRules">
 					<FormItem label="登录账号" prop="num">
 						<Input v-model="dataForm.num"><span slot="append">不可修改</span></Input>
@@ -28,8 +28,8 @@
 					</FormItem>
 					<FormItem>
 						<Button type="warning" :loading="loading" @click="emitAdd">提交保存</Button>
-						<Button type="success" @click="emitReset()" style="margin-left: 8px">重置填写</Button>
-                        <Button :to="{name:'user-list'}" style="margin-left: 8px">返回列表</Button>
+						<Button type="success" @click="emitReset()" style="margin-left: 10px">重置填写</Button>
+                        <Button :to="{name:'user-list'}" style="margin-left: 10px">返回列表</Button>
 					</FormItem>
 				</Form>
 			</div>

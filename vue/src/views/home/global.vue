@@ -5,10 +5,10 @@
 			<Icon type="ios-cog-outline" /> 配置中心
 		</p>
 		<Tabs>
-			<TabPane label="系统配置" icon="md-cog">
-				<div style="max-width:520px">
+			<TabPane label="基础配置">
+				<div style="max-width:640px">
 					<Form ref="dataForm" :model="dataForm" :label-width="120" label-colon label-position="right" :rules="dataRules">
-						<FormItem label="小程序图" prop="mpg_cover">
+						<!-- <FormItem label="小程序图" prop="mpg_cover">
 							<Poptip v-if="denyEdit" trigger="hover" placement="right-start">
 								<div slot="content">
 									<img :src="dataForm.mpg_cover" style="max-height:300px" alt="加载失败">
@@ -16,54 +16,88 @@
 								<img :src="dataForm.mpg_cover" width="102" height="102" style="border-radius: 4px;" alt="加载失败">
 							</Poptip>
 							<uimage v-else v-model="dataForm.mpg_cover"></uimage>
+						</FormItem> -->
+						<FormItem label="网站地址" prop="site_url">
+							<Input v-model="dataForm.site_url" maxlength="64" show-word-limit placeholder="请填写网站地址"></Input>
 						</FormItem>
-						<FormItem label="小程序标题" prop="mpg_title">
-							<Input :disabled="denyEdit" v-model="dataForm.mpg_title" maxlength="20" show-word-limit placeholder="请填写小程序标题"></Input>
+						<FormItem label="Logo地址" prop="logo_url">
+							<Input v-model="dataForm.logo_url" maxlength="64" show-word-limit placeholder="请填写Logo地址"></Input>
 						</FormItem>
-						<FormItem label="报名限制" prop="app_allow">
-							<InputNumber :disabled="denyEdit" v-model="dataForm.app_allow" style="width:120px" :max="1000" :min="1" :step="1" placeholder="请填写报名限制"></InputNumber>&nbsp;通过年龄限制(有效信息填写人数)
+						<FormItem label="网站标题" prop="title">
+							<Input v-model="dataForm.title" maxlength="64" show-word-limit placeholder="请填写网站标题"></Input>
 						</FormItem>
-						<FormItem label="录取限制" prop="app_limit">
-							<InputNumber :disabled="denyEdit" v-model="dataForm.app_limit" style="width:120px" :max="1000" :min="1" :step="1" placeholder="请填写录取限制"></InputNumber>&nbsp;填报完后筛选(最终需要的人数)
+						<FormItem label="SEO关键词" prop="keywords">
+							<Input v-model="dataForm.keywords" maxlength="64" show-word-limit placeholder="请填写SEO关键词"></Input>
 						</FormItem>
-						<FormItem label="一批次">
-							<FormItem label="开始日期" prop="one_min">
-								<DatePicker :disabled="denyEdit" type="date" v-model="dataForm.one_min" :editable="false" :clearable="false" placeholder="开始日期"></DatePicker>&nbsp;0点开始
-							</FormItem>
-							<FormItem label="结束日期" prop="one_max">
-								<DatePicker :disabled="denyEdit" type="date" v-model="dataForm.one_max" :editable="false" :clearable="false" placeholder="结束日期"></DatePicker>&nbsp;0点之前
-							</FormItem>
+						<FormItem label="SEO描述" prop="description">
+							<Input v-model="dataForm.description" type="textarea" :autosize="{minRows: 2,maxRows: 4}" maxlength="128" show-word-limit placeholder="请填写SEO描述词"></Input>
 						</FormItem>
-						<FormItem label="二批次">
-							<FormItem label="开始日期" prop="two_min">
-								<DatePicker :disabled="denyEdit" type="date" v-model="dataForm.two_min" :editable="false" :clearable="false" placeholder="开始日期"></DatePicker>&nbsp;0点开始
-							</FormItem>
-							<FormItem label="结束日期" prop="two_max">
-								<DatePicker :disabled="denyEdit" type="date" v-model="dataForm.two_max" :editable="false" :clearable="false" placeholder="结束日期"></DatePicker>&nbsp;0点之前
-							</FormItem>
+						<FormItem label="ICO地址" prop="favicon_url">
+							<Input v-model="dataForm.favicon_url" maxlength="64" show-word-limit placeholder="请填写ICO地址"></Input>
 						</FormItem>
-						<FormItem label="报名通过人数" prop="app_count">
-							<span>{{ dataForm.app_count}}</span>
+						<FormItem label="ICP备案" prop="beian_miit">
+							<Input v-model="dataForm.beian_miit" maxlength="64" show-word-limit placeholder="请填写ICP备案"></Input>
 						</FormItem>
-						<FormItem label="系统状态" prop="show">
-							<i-Switch :disabled="denyEdit" size="large" v-model="dataForm.state"><span slot="open">开启</span>
-								<span slot="close">关闭</span>
-							</i-Switch>
+						<FormItem label="公安备案" prop="beian_nism">
+							<Input v-model="dataForm.beian_nism" maxlength="64" show-word-limit placeholder="请填写公安备案"></Input>
 						</FormItem>
-						<FormItem label="关闭提示信息" prop="close_msg">
-							<Input :disabled="denyEdit" v-model="dataForm.close_msg" maxlength="20" show-word-limit placeholder="请填写关闭提示信息"></Input>
+						<FormItem label="版权" prop="copyright">
+							<Input v-model="dataForm.copyright" type="textarea" :autosize="{minRows: 2,maxRows: 4}" maxlength="128" show-word-limit placeholder="请填写版权"></Input>
 						</FormItem>
 						<FormItem>
-							<Button type="success" @click="emitReset">取消刷新</Button>
-							<Button v-auth="'global_edit'" type="info" @click="denyEdit=false" style="margin-left: 5px">开启编辑</Button>
-							<Poptip v-auth="'global_edit'" confirm title="确定要修改吗？" @on-ok="emitEdit" @on-cancel="emitReset">
-								<Button type="warning" :loading="loading" :disabled="denyEdit" style="margin-left: 5px" @click="">提交保存</Button>
+							<Poptip confirm title="确定要修改吗？" @on-ok="emitEdit" @on-cancel="emitReset">
+								<Button type="warning" :loading="loading">提交保存</Button>
 							</Poptip>
+							<Button type="success" @click="emitReset" style="margin-left: 10px">重置填写</Button>
 						</FormItem>
 					</Form>
 				</div>
 			</TabPane>
-			<TabPane label="其它配置" icon="ios-cog">其它配置</TabPane>
+			<TabPane label="统计评论">
+				<div style="max-width:640px">
+					<Form :model="dataForm" :label-width="120" label-colon label-position="right">
+						<FormItem label="统计配置" prop="analytic">
+							<Input type="textarea" :autosize="{minRows: 8,maxRows: 12}" v-model="dataForm.analytic" maxlength="512" show-word-limit placeholder="请填写自定义css"></Input>
+						</FormItem>
+						<FormItem label="评论配置" prop="comment">
+							<Input type="textarea" :autosize="{minRows: 8,maxRows: 12}" v-model="dataForm.comment" maxlength="512" show-word-limit placeholder="请填写自定义js"></Input>
+						</FormItem>
+						<FormItem>
+							<Poptip confirm title="确定要修改吗？" @on-ok="emitEdit" @on-cancel="emitReset">
+								<Button type="warning" :loading="loading">提交保存</Button>
+							</Poptip>
+							<Button type="success" @click="emitReset" style="margin-left: 10px">重置填写</Button>
+						</FormItem>
+					</Form>
+				</div>
+			</TabPane>
+			<TabPane label="个性化配置">
+				<div style="max-width:640px">
+					<Form :model="dataForm" :label-width="120" label-colon label-position="right">
+						<FormItem label="githu地址" prop="github_url">
+							<Input v-model="dataForm.github_url" maxlength="64" show-word-limit placeholder="请填写githu地址"></Input>
+						</FormItem>
+						<FormItem label="微博地址" prop="weibo_url">
+							<Input v-model="dataForm.weibo_url" maxlength="64" show-word-limit placeholder="请填写微博地址"></Input>
+						</FormItem>
+						<FormItem label="分页大小" prop="page_size">
+							<Slider v-model="dataForm.page_size" :step="1" :min="1" :max="10"></Slider>
+						</FormItem>
+						<FormItem label="CSS" prop="site_css">
+							<Input type="textarea" :autosize="{minRows: 8,maxRows: 12}" v-model="dataForm.site_css" maxlength="512" show-word-limit placeholder="请填写自定义css"></Input>
+						</FormItem>
+						<FormItem label="JS" prop="site_js">
+							<Input type="textarea" :autosize="{minRows: 8,maxRows: 12}" v-model="dataForm.site_js" maxlength="512" show-word-limit placeholder="请填写自定义js"></Input>
+						</FormItem>
+						<FormItem>
+							<Poptip confirm title="确定要修改吗？" @on-ok="emitEdit" @on-cancel="emitReset">
+								<Button type="warning" :loading="loading">提交保存</Button>
+							</Poptip>
+							<Button type="success" @click="emitReset" style="margin-left: 10px">重置填写</Button>
+						</FormItem>
+					</Form>
+				</div>
+			</TabPane>
 		</Tabs>
 	</Card>
 </template>
@@ -78,24 +112,28 @@ export default {
 			denyEdit: true,
 			dataForm: {
 				id: 0,
-				mpg_cover: "",
-				mpg_title: "",
-				app_allow: 0,
-				app_limit: 0,
-				app_count: 0,
-				one_min: new Date(),
-				one_max: new Date(),
-				two_min: new Date(),
-				two_max: new Date(),
-				state: true,
-				close_msg: ""
+				site_url: "",
+				logo_url: "",
+				title: "",
+				keywords: "",
+				description: "",
+				favicon_url: "",
+				beian_miit: "",
+				beian_nism: "",
+				copyright: "",
+				site_js: "",
+				site_css: "",
+				page_size: 0,
+				analytic: "",
+				comment: "",
+				github_url: "",
+				weibo_url: ""
 			},
 			dataRules: {
-				mpg_cover: [{ required: true, message: "请填写小程序图", trigger: "blur", max: 200 }],
-				mpg_title: [{ required: true, message: "请填写小程序标题", trigger: "blur", max: 200 }],
-				app_allow: [{ type: "number", required: true, message: "请填写报名限制", trigger: "change", min: 1 }],
-				app_limit: [{ type: "number", required: true, message: "请填写录取限制", trigger: "change", min: 1 }],
-				close_msg: [{ required: true, message: "请填写小程序提示信息", trigger: "blur", max: 200 }]
+				site_url: [{ required: true, message: "请填写网站地址", trigger: "blur", max: 128 }],
+				logo_url: [{ required: true, message: "请填写Logo地址", trigger: "blur", max: 128 }],
+				title: [{ required: true, message: "请填写网站标题", trigger: "blur", max: 128 }],
+				favicon_url: [{ required: true, message: "请填写ICO地址", trigger: "blur", max: 128 }]
 			}
 		};
 	},
