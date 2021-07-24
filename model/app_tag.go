@@ -33,15 +33,6 @@ func TagGet(id interface{}) (*Tag, bool) {
 	}
 }
 
-// TagName 通过name 查询标签
-func TagName(nam string) (*Tag, bool) {
-	mod := &Tag{
-		Name: nam,
-	}
-	has, _ := Db.Get(mod)
-	return mod, has
-}
-
 // TagAll 所有标签
 func TagAll() ([]Tag, error) {
 	mods := make([]Tag, 0, 8)
