@@ -2,11 +2,11 @@ package model
 
 //PostTag 文章标签
 type PostTag struct {
-	Id     int   `xorm:"pk autoincr INT(11)" json:"id"`
-	PostId int   `xorm:"unique(post_tag) INT(11)" json:"post_id"`
-	TagId  int   `xorm:"unique(post_tag) INT(11)" json:"tag_id"`
-	Post   *Post `xorm:"-" json:"post"`
-	Tag    *Tag  `xorm:"-" json:"tag"`
+	Id     int   `xorm:"INT(11) PK AUTOINCR comment('主键')" json:"id"` //主键
+	PostId int   `xorm:"INT(11) UNIQUE(post_tag)" json:"post_id"`     //文章Id
+	TagId  int   `xorm:"INT(11) UNIQUE(post_tag)" json:"tag_id"`      //标签Id
+	Post   *Post `xorm:"-" swaggerignore:"true" json:"post"`          //文章
+	Tag    *Tag  `xorm:"-" swaggerignore:"true" json:"tag"`           //标签
 }
 
 // PostTags 文章对应的标签
