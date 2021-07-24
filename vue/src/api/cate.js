@@ -42,7 +42,7 @@ export const admCateEdit = data => {
 export const admCateDrop = data => {
 	return fetch.request({
 		url: `/adm/cate/drop`,
-		method: "get",
-		params: data
+		method: "post",
+		data: data
 	});
 };
