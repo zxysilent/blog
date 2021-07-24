@@ -7,14 +7,15 @@
 		<div style="max-width:520px">
 			<Form ref="dataForm" :model="dataForm" :rules="dataRules" label-position="top">
 				<FormItem label="标签名称" prop="name">
-					<Input v-model="dataForm.name" placeholder="请填写标签名称"></Input>
+					<Input v-model="dataForm.name" maxlength="64" show-word-limit placeholder="请填写标签名称"></Input>
 				</FormItem>
 				<FormItem label="标签介绍" prop="intro">
-					<Input v-model="dataForm.intro" placeholder="请填写标签介绍"></Input>
+					<Input v-model="dataForm.intro" type="textarea" :autosize="{minRows:2,maxRows:4}" maxlength="128" show-word-limit show-word-limit placeholder="请填写标签介绍"></Input>
 				</FormItem>
 				<FormItem>
 					<Button type="warning" :loading="loading" @click="emitAdd">提交保存</Button>
 					<Button type="success" @click="emitReset()" style="margin-left: 8px">重置填写</Button>
+					<Button :to="{name:'tag-list'}" style="margin-left: 8px">返回列表</Button>
 				</FormItem>
 			</Form>
 		</div>
@@ -28,7 +29,7 @@ export default {
 			dataForm: { name: "", intro: "" },
 			dataRules: {
 				name: [{ required: true, message: "请填写标签名", trigger: "blur", max: 64 }],
-				intro: [{ required: true, message: "请填写标签介绍", trigger: "blur", max: 64 }]
+				intro: [{ required: true, message: "请填写标签介绍", trigger: "blur", max: 128 }]
 			},
 			loading: false
 		};

@@ -11,22 +11,23 @@
 				</Select>
 			</FormItem> -->
 				<FormItem>
-					<Button :to="{name:'cate-add'}" style="margin-right: 8px">添加分类</Button>
+					<Button :to="{name:'tag-add'}" style="margin-right: 8px">添加标签</Button>
 					<Button type="info" @click="init" icon="md-refresh" title="刷新数据">刷&nbsp;&nbsp;新</Button>
 				</FormItem>
 				<!-- <FormItem>
 				<Button type="warning" @click="reCache" icon="ios-alert-outline" :title="'重新加载数据库缓存'+'\n'+'适用于直接修改数据库'">重载缓存</Button>
 			</FormItem> -->
 			</Form>
-			<Table stripe size="small" :columns="colTag" :data="dataTag"></Table>
+			<Table stripe size="small" :columns="tabCol" :data="tabData"></Table>
+			<Page :total="tabCount" :current.sync="tabPage.pi" :page-size="tabPage.ps" :page-size-opts="[8,10,12,15,20,30]" @on-change="onPiChange" @on-page-size-change="onPsChange" show-sizer show-elevator show-total></Page>
 		</Card>
 		<Modal v-model="showEdit" title="修改标签信息">
 			<Form ref="editForm" :model="editForm" label-position="top" :rules="editRules">
 				<FormItem label="标签名称" prop="name">
-					<Input v-model="editForm.name" placeholder="请填写标签名"></Input>
+					<Input v-model="editForm.name" maxlength="64" show-word-limit placeholder="请填写标签名"></Input>
 				</FormItem>
 				<FormItem label="标签介绍" prop="intro">
-					<Input v-model="editForm.intro" placeholder="请填写标签介绍"></Input>
+					<Input v-model="editForm.intro" type="textarea" :autosize="{minRows:2,maxRows:4}" maxlength="128" show-word-limit placeholder="请填写标签介绍"></Input>
 				</FormItem>
 			</Form>
 			<div slot="footer">
@@ -39,7 +40,7 @@
 	</div>
 </template>
 <script>
-import { apiTagAll, admTagEdit, admTagDrop } from "@/api/tag";
+import { apiTagPage, admTagEdit, admTagDrop } from "@/api/tag";
 export default {
 	data() {
 		return {
@@ -48,9 +49,12 @@ export default {
 			editForm: { name: "", intro: "" },
 			editRules: {
 				name: [{ required: true, message: "请填写标签名", trigger: "blur", max: 64 }],
-				intro: [{ required: true, message: "请填写标签介绍", trigger: "blur", max: 64 }]
+				intro: [{ required: true, message: "请填写标签介绍", trigger: "blur", max: 128 }]
 			},
-			colTag: [
+            /*-------------------------------- 分割线 -------------------------------- */
+			tabCount: 0,
+			tabPage: { pi: 1, ps: 12 },
+			tabCol: [
 				{ type: "index", minWidth: 60, maxWidth: 100, align: "center" },
 				{ title: "标签名", minWidth: 100, maxWidth: 300, key: "name" },
 				{ title: "标签介绍", minWidth: 100, maxWidth: 300, key: "intro" },
@@ -77,7 +81,7 @@ export default {
 									props: { confirm: true, title: "确定要删除吗？" },
 									on: {
 										"on-ok": () => {
-											this.delete(data);
+											this.emitDrop(data);
 										}
 									}
 								},
@@ -92,20 +96,32 @@ export default {
 					}
 				}
 			],
-			dataTag: []
+			tabData: []
 		};
 	},
 	methods: {
+		onPiChange(pi) {
+			this.tabPage.pi = pi;
+			this.init();
+		},
+		onPsChange(ps) {
+			this.tabPage.pi = 1;
+			this.tabPage.ps = ps;
+			this.init();
+		},
 		init() {
-			apiTagAll().then((resp) => {
+			apiTagPage(this.tabPage).then((resp) => {
 				if (resp.code == 200) {
-					this.dataTag = resp.data;
+					this.tabData = resp.data.items;
+					this.tabCount = resp.data.count;
 				} else {
-					this.dataTag = [];
-					this.$Message.warning("未查询到标签信息,请重试！");
+					this.tabData = [];
+					this.tabCount = 0;
+					this.$Message.error({ content: resp.msg, duration: 3 });
 				}
 			});
 		},
+        /*-------------------------------- 分割线 -------------------------------- */
 		emitEdit() {
 			this.$refs["editForm"].validate((valid) => {
 				if (valid) {
@@ -126,13 +142,13 @@ export default {
 				}
 			});
 		},
-		delete(data) {
+		emitDrop(data) {
 			admTagDrop(data.row.id).then((resp) => {
 				if (resp.code == 200) {
 					this.$Message.success({
 						content: "删除成功",
 						onClose: () => {
-							this.dataTag.splice(data.index, 1);
+							this.tabData.splice(data.index, 1);
 						}
 					});
 				} else {

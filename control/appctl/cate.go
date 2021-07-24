@@ -8,6 +8,25 @@ import (
 	"github.com/zxysilent/utils"
 )
 
+// CateGet doc
+// @Tags cate-分类
+// @Summary 通过id获取单条分类
+// @Param id query int true "id"
+// @Success 200 {object} model.Reply{data=model.Cate} "返回数据"
+// @Router /api/cate/get [get]
+func CateGet(ctx echo.Context) error {
+	ipt := &model.IptId{}
+	err := ctx.Bind(ipt)
+	if err != nil {
+		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
+	}
+	mod, has := model.CateGet(ipt.Id)
+	if !has {
+		return ctx.JSON(utils.ErrOpt("未查询到分类"))
+	}
+	return ctx.JSON(utils.Succ("succ", mod))
+}
+
 // CateAll doc
 // @Tags cate-分类
 // @Summary 获取所有分类

@@ -99,6 +99,12 @@ const routes = [
 				component: () => import("@/views/cate/add.vue")
 			},
 			{
+				path: "/cate/edit/:id(\\d+)",
+				name: "cate-edit",
+				meta: { module: "app", title: "修改分类" },
+				component: () => import("@/views/cate/edit.vue")
+			},
+			{
 				path: "/tag/list",
 				meta: { module: "app", title: "标签列表" },
 				name: "tag-list",

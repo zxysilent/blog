@@ -1,4 +1,12 @@
 import fetch from "./fetch";
+// 通过id获取单条分类
+export const apiCateGet = (data) => {
+    return fetch.request({
+		url: "/api/cate/get",
+		method: "get",
+		params: data,
+	});
+};
 // 所有分类
 export const apiCateAll = () => {
 	return fetch.request({

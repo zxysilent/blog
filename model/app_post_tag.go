@@ -20,7 +20,7 @@ func PostTags(pid int) ([]PostTag, error) {
 				ids = append(ids, mods[idx].TagId)
 			}
 		}
-		mapTag := tagIds(ids)
+		mapTag := TagIds(ids)
 		if mapTag != nil {
 			for idx := range mods {
 				mods[idx].Tag = mapTag[mods[idx].TagId]
