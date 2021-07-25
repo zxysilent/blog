@@ -53,8 +53,8 @@
 								<span slot="close">私密</span>
 							</i-switch>
 						</FormItem>
-						<FormItem label="评论" prop="allow_comment">
-							<Checkbox v-model="dataForm.allow_comment">允许评论</Checkbox>
+						<FormItem label="评论" prop="allow">
+							<Checkbox v-model="dataForm.allow">允许评论</Checkbox>
 						</FormItem>
 						<FormItem label="发布日期">
 							<DatePicker v-model="dataForm.create_time" type="datetime" placeholder="选择发布日期和时间" :clearable="false" :editable="false"></DatePicker>
@@ -99,7 +99,7 @@ export default {
 				summary: "",
 				cate_id: 0,
 				is_public: true,
-				allow_comment: false,
+				allow: false,
 				create_time: "",
 				content: "",
 				markdown_content: ""
@@ -164,7 +164,7 @@ export default {
 						cate_id: 0,
 						status: 0,
 						is_public: true,
-						allow_comment: false,
+						allow: false,
 						create_time: "",
 						content: "",
 						markdown_content: ""

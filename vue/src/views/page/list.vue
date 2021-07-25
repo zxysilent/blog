@@ -59,7 +59,7 @@ export default {
 					title: "修改日期",
 					width: 150,
 					render: (h, data) => {
-						return h("div", data.row.update_time.replace(/T|\+08:00/g, " "));
+						return h("div", data.row.updated.replace(/T|\+08:00/g, " "));
 					}
 				},
 				{

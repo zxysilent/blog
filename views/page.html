@@ -12,7 +12,7 @@
                 <article class="post page">
                     <h1 class="title">{{.Page.Title}}</h1>
                     <div class="entry-content">
-                        {{if .Show}}{{str2html .Page.Content}}{{else}}
+                        {{if .Show}}{{str2html .Page.Richtext}}{{else}}
                         <h3>
                             Sorry，主人还在思考 (●ˇ∀ˇ●) ！ <br />
                             [ =======> 60% ]
@@ -20,7 +20,7 @@
                         {{end}}
                     </div>
                 </article>
-                {{if .Page.AllowComment}}
+                {{if .Page.Allow}}
                 <div id="comments">
                     <h1 class="title">Comments</h1>
                     <div id="gitalk-container" data-identifier="{{md5 .Page.Path}}" data-config="{{str2js .global.Comment}}"></div>

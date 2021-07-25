@@ -145,9 +145,8 @@ func CatePostList(cid, pi, ps int, lmt bool) ([]Post, error) {
 			if !lmt {
 				mods[idx].Summary = ""
 			}
-			mods[idx].Options = ""
-			mods[idx].Content = ""
-			mods[idx].MarkdownContent = ""
+			mods[idx].Richtext = ""
+			mods[idx].Markdown = ""
 		}
 	}
 	return mods, err

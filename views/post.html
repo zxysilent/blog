@@ -11,30 +11,30 @@
             <div id="page-post">
                 <article class="post detail">
                     <div class="meta">
-                        <div class="date">{{ date .Post.CreateTime "2006-01-02 15:04:05" }}</div>
-                        {{if .Post.AllowComment}}
+                        <div class="date">{{ date .Post.Created "2006-01-02 15:04:05" }}</div>
+                        {{if .Post.Allow}}
                         <div class="comment"><a href="#comments">comments</a></div>
                         {{end}}
                     </div>
                     <h1 class="title">{{.Post.Title}}</h1>
-                    <div class="entry-content">{{str2html .Post.Content}}</div>
+                    <div class="entry-content">{{str2html .Post.Richtext}}</div>
                     <p>本文链接：<a href="{{.global.SiteUrl}}/post/{{.Post.Path}}.html">{{.global.SiteUrl}}/post/{{.Post.Path}}.html</a></p>
                     <p>-- <acronym title="End of File">EOF</acronym> --</p>
                     <div class="post-info">
                         <!-- <code class="notebook">zxysilent</code> -->
                         <p>
-                            发表于 <i>{{ date .Post.CreateTime "2006-01-02 15:04:05"}}</i>{{if .HasCate}}，添加在分类<a
+                            发表于 <i>{{ date .Post.Created "2006-01-02 15:04:05"}}</i>{{if .HasCate}}，添加在分类<a
                                 href="/cate/{{.Post.Cate.Name}}"
                                 data-cate="{{.Post.Cate.Name}}"
                                 ><code class="notebook">{{.Post.Cate.Intro}}</code></a
                             >下{{end}}{{if .HasTag}}，并被添加「{{range $k, $v := .Tags }}<a href="/tag/{{$v.Tag.Name}}" data-tag="{{$v.Tag.Name}}"
                                 ><code class="notebook">{{$v.Tag.Intro}}</code></a
-                            >{{end}}」标签{{end}}，最后修改于 <i>{{ date .Post.UpdateTime "2006-01-02 15:04:05"}}</i>
+                            >{{end}}」标签{{end}}，最后修改于 <i>{{ date .Post.Updated "2006-01-02 15:04:05"}}</i>
                         </p>
                     </div>
                 </article>
                 <nav class="pagination">{{ str2html .Naver.Prev }}{{ str2html .Naver.Next }}</nav>
-                {{if .Post.AllowComment}}
+                {{if .Post.Allow}}
                 <div id="comments">
                     <h1 class="title">Comments</h1>
                     <div id="gitalk-container" data-identifier="{{md5 .Post.Path}}" data-config="{{str2js .global.Comment}}"></div>

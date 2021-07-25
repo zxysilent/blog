@@ -65,20 +65,20 @@ func PostOpts(ctx echo.Context) error {
 		return ctx.JSON(utils.ErrIpt(`当前访问路径已经存在,请重新输入`))
 	}
 	// 同步类型
-	ipt.Post.Type = ipt.Type
-	if strings.Contains(ipt.Post.Content, "<!--more-->") {
-		ipt.Post.Summary = strings.Split(ipt.Post.Content, "<!--more-->")[0]
+	ipt.Post.Kind = ipt.Type
+	if strings.Contains(ipt.Post.Richtext, "<!--more-->") {
+		ipt.Post.Summary = strings.Split(ipt.Post.Richtext, "<!--more-->")[0]
 	}
 	// 生成目录
 	if ipt.Type == 0 {
-		ipt.Post.Content = getTocHTML(ipt.Post.Content)
+		ipt.Post.Richtext = getTocHTML(ipt.Post.Richtext)
 	}
 	// 编辑 文章/页面
 	if ipt.Edit {
 		// 修改日期在发布日期之前
-		if ipt.Post.UpdateTime.Before(ipt.Post.CreateTime) {
+		if ipt.Post.Updated.Before(ipt.Post.Created) {
 			// 修改时间再发布时间后1分钟
-			ipt.Post.UpdateTime = ipt.Post.CreateTime.Add(time.Minute * 2)
+			ipt.Post.Updated = ipt.Post.Created.Add(time.Minute * 2)
 		}
 		if model.PostEdit(&ipt.Post) {
 			if ipt.Type == 0 {
@@ -118,7 +118,7 @@ func PostOpts(ctx echo.Context) error {
 		return ctx.JSON(utils.Fail(`页面修改失败,请重试`))
 	}
 	// 添加 文章/页面
-	ipt.Post.UpdateTime = time.Now()
+	ipt.Post.Updated = time.Now()
 	if model.PostAdd(&ipt.Post) {
 		// 添加标签
 		// 文章

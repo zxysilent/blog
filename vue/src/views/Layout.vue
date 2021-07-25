@@ -82,11 +82,11 @@
 				</Menu>
 			</div>
 		</Sider>
-		<Content class="layout-content">
+		<Richtext class="layout-content">
 			<!-- <keep-alive> -->
 			<router-view :key="rkey" />
 			<!-- </keep-alive> -->
-		</Content>
+		</Richtext>
 	</Layout>
 </template>
 <script>

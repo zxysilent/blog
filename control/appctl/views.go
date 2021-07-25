@@ -148,7 +148,7 @@ func PostView(ctx echo.Context) error {
 			return ctx.Redirect(302, "/")
 		}
 		if paths[1] == "html" {
-			mod.Content = regImg.ReplaceAllString(mod.Content, `<img class="lazy-load" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="$1" alt="$2">`)
+			mod.Richtext = regImg.ReplaceAllString(mod.Richtext, `<img class="lazy-load" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="$1" alt="$2">`)
 			tags, _ := model.PostTags(mod.Id)
 			return ctx.Render(http.StatusOK, "post.html", map[string]interface{}{
 				"Post":    mod,

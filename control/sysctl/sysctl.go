@@ -64,8 +64,8 @@ func UploadImage(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt(`未发现文件,请重试`, err.Error()))
 	}
-	if !strings.Contains(file.Header.Get("Content-Type"), "image") {
-		return ctx.JSON(utils.ErrIpt("请选择图片文件", file.Header.Get("Content-Type")))
+	if !strings.Contains(file.Header.Get("Richtext-Type"), "image") {
+		return ctx.JSON(utils.ErrIpt("请选择图片文件", file.Header.Get("Richtext-Type")))
 	}
 	src, err := file.Open()
 	if err != nil {

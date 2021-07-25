@@ -38,7 +38,7 @@ db_passwd = "root"
 # 数据库名称
 db_name = "blog"
 # 数据库参数
-db_params = "charset=utf8&parseTime=true&loc=Local"
+db_params = "charset=utf8mb4&parseTime=true&loc=Local"
 
 # orm
 # https://gitea.com/xorm/xorm

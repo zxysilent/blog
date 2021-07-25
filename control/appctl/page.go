@@ -13,10 +13,10 @@ func AboutView(ctx echo.Context) error {
 	if !has {
 		return ctx.Redirect(302, "/")
 	}
-	mod.Content = regImg.ReplaceAllString(mod.Content, `<img class="lazy-load" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="$1" alt="$2">`)
+	mod.Richtext = regImg.ReplaceAllString(mod.Richtext, `<img class="lazy-load" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="$1" alt="$2">`)
 	return ctx.Render(http.StatusOK, "page.html", map[string]interface{}{
 		"Page": mod,
-		"Show": mod.IsPublic && mod.Status == 3,
+		"Show": mod.Status == 2,
 	})
 }
 
@@ -26,10 +26,10 @@ func LinksView(ctx echo.Context) error {
 	if !has {
 		return ctx.Redirect(302, "/")
 	}
-	mod.Content = regImg.ReplaceAllString(mod.Content, `<img class="lazy-load" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="$1" alt="$2">`)
+	mod.Richtext = regImg.ReplaceAllString(mod.Richtext, `<img class="lazy-load" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="$1" alt="$2">`)
 	return ctx.Render(http.StatusOK, "page.html", map[string]interface{}{
 		"Page": mod,
-		"Show": mod.IsPublic && mod.Status == 3,
+		"Show": mod.Status == 2,
 	})
 }
 
@@ -39,9 +39,9 @@ func PageView(ctx echo.Context) error {
 	if !has {
 		return ctx.Redirect(302, "/")
 	}
-	mod.Content = regImg.ReplaceAllString(mod.Content, `<img class="lazy-load" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="$1" alt="$2">`)
+	mod.Richtext = regImg.ReplaceAllString(mod.Richtext, `<img class="lazy-load" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="$1" alt="$2">`)
 	return ctx.Render(http.StatusOK, "page.html", map[string]interface{}{
 		"Page": mod,
-		"Show": mod.IsPublic && mod.Status == 3,
+		"Show": mod.Status == 2,
 	})
 }
