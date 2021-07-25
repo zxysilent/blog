@@ -29,7 +29,7 @@ func RunApp() {
 		return ctx.Redirect(302, "/dashboard/")
 	})
 	//--- 页面 -- start
-	engine.GET("/", appctl.IndexView)              // 首页
+	engine.GET("/", appctl.ViewIndex)              // 首页
 	engine.GET("/archives", appctl.ViewArchives)   // 归档
 	engine.GET("/tags", appctl.ViewTags)           // 标签
 	engine.GET("/tag/:tag", appctl.ViewTagPost)    // 具体某个标签

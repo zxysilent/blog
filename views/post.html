@@ -23,12 +23,12 @@
                     <div class="post-info">
                         <!-- <code class="notebook">zxysilent</code> -->
                         <p>
-                            发表于 <i>{{ date .Post.Created "2006-01-02 15:04:05"}}</i>{{if .HasCate}}，添加在分类<a
+                            发表于 <i>{{ date .Post.Created "2006-01-02 15:04:05"}}</i>{{if .Post.Cate}}，添加在分类<a
                                 href="/cate/{{.Post.Cate.Name}}"
                                 data-cate="{{.Post.Cate.Name}}"
                                 ><code class="notebook">{{.Post.Cate.Intro}}</code></a
-                            >下{{end}}{{if .HasTag}}，并被添加「{{range $k, $v := .Tags }}<a href="/tag/{{$v.Tag.Name}}" data-tag="{{$v.Tag.Name}}"
-                                ><code class="notebook">{{$v.Tag.Intro}}</code></a
+                            >下{{end}}{{if gt (len .Post.Tags) 0}}，并被添加「{{range $k, $v := .Post.Tags }}<a href="/tag/{{$v.Name}}" data-tag="{{$v.Name}}"
+                                ><code class="notebook">{{$v.Intro}}</code></a
                             >{{end}}」标签{{end}}，最后修改于 <i>{{ date .Post.Updated "2006-01-02 15:04:05"}}</i>
                         </p>
                     </div>

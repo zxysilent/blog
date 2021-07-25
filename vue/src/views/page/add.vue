@@ -52,7 +52,7 @@
 </template>
 <script>
 import Mavon from "@/components/markdown/Mavon.vue";
-import { eadmPageAdd } from "@/api/page";
+import { admPageAdd } from "@/api/page";
 export default {
 	components: {
 		Mavon
@@ -98,7 +98,7 @@ export default {
 					console.log(this.dataForm);
 					this.dataForm.status = 1; //草稿
 					this.draftLoading = true;
-					eadmPageAdd(this.dataForm).then((resp) => {
+					admPageAdd(this.dataForm).then((resp) => {
 						this.draftLoading = false;
 						if (resp.code == 200) {
 							this.$Message.success({
@@ -125,7 +125,7 @@ export default {
 					console.log(this.dataForm);
 					this.dataForm.status = 2; //发布
 					this.draftLoading = true;
-					eadmPageAdd(this.dataForm).then((resp) => {
+					admPageAdd(this.dataForm).then((resp) => {
 						this.draftLoading = false;
 						if (resp.code == 200) {
 							this.$Message.success({

@@ -9,27 +9,6 @@ type PostTag struct {
 	Tag    *Tag  `xorm:"-" swaggerignore:"true" json:"tag"`           //标签
 }
 
-// PostTags 文章对应的标签
-func PostTags(pid int) ([]PostTag, error) {
-	mods := make([]PostTag, 0, 4)
-	err := Db.Where("post_id = ? ", pid).Find(&mods)
-	if err == nil {
-		ids := make([]int, 0, len(mods))
-		for idx := range mods {
-			if !inOf(mods[idx].TagId, ids) {
-				ids = append(ids, mods[idx].TagId)
-			}
-		}
-		mapTag := TagIds(ids)
-		if mapTag != nil {
-			for idx := range mods {
-				mods[idx].Tag = mapTag[mods[idx].TagId]
-			}
-		}
-	}
-	return mods, nil
-}
-
 // TagPostCount 通过标签查询文章分页总数
 func TagPostCount(tid int) int {
 	var count int

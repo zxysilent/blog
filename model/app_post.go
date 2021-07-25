@@ -213,6 +213,11 @@ func PostPath(path string) (*Post, *Naver, bool) {
 	has, _ := Db.Get(mod)
 	if has {
 		mod.Cate, _ = CateGet(mod.CateId)
+		if mod.Kind == PostKindPost {
+			tags := make([]Tag, 0, 4)
+			Db.SQL("SELECT * FROM tag WHERE id IN (SELECT tag_id FROM post_tag WHERE post_id = ?)", mod.Id).Find(&tags)
+			mod.Tags = tags
+		}
 		naver := &Naver{}
 		p := Post{}
 		b, _ := Db.Where("kind = 1 and status = 2 and created <?", mod.Created.Format(utils.StdDateTime)).Desc("Created").Get(&p)

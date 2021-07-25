@@ -10,8 +10,9 @@ import (
 	"github.com/zxysilent/utils"
 )
 
-// IndexView 主页面
-func IndexView(ctx echo.Context) error {
+// ------------------------------------------------------ 主页面 ------------------------------------------------------
+// ViewIndex 主页面
+func ViewIndex(ctx echo.Context) error {
 	pi, _ := strconv.Atoi(ctx.FormValue("page"))
 	if pi == 0 {
 		pi = 1
@@ -32,7 +33,8 @@ func IndexView(ctx echo.Context) error {
 	})
 }
 
-// PostView 文章页面
+// ------------------------------------------------------ 文章页面 ------------------------------------------------------
+// ViewPost 文章页面
 func ViewPost(ctx echo.Context) error {
 	paths := strings.Split(ctx.Param("*"), ".")
 	if len(paths) == 2 {
@@ -42,13 +44,9 @@ func ViewPost(ctx echo.Context) error {
 		}
 		if paths[1] == "html" {
 			mod.Richtext = regImg.ReplaceAllString(mod.Richtext, `<img class="lazy-load" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="$1" alt="$2">`)
-			tags, _ := model.PostTags(mod.Id)
 			return ctx.Render(http.StatusOK, "post.html", map[string]interface{}{
-				"Post":    mod,
-				"Naver":   naver,
-				"Tags":    tags,
-				"HasTag":  len(tags) > 0,
-				"HasCate": mod.Cate != nil,
+				"Post":  mod,
+				"Naver": naver,
 			})
 		}
 		return ctx.JSON(utils.Succ("", mod))
