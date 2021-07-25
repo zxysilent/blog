@@ -92,13 +92,13 @@ export default {
 	},
 	watch: {
 		value: function (newValue) {
-			console.log(newValue);
+			// console.log(newValue);
 			this.markdown = newValue;
 		}
 	},
 	methods: {
 		onChange(value, html) {
-			console.log(value, html);
+			// console.log(value, html);
 			this.richtext = html;
 			this.$emit("input", value);
 			this.$emit("on-change", html);

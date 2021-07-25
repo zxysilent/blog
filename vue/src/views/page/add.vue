@@ -66,7 +66,7 @@ export default {
 				id: 0,
 				title: "",
 				path: "",
-				kind: 0,
+				kind: 2,
 				status: 0,
 				summary: "",
 				cate_id: 0,

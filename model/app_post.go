@@ -34,12 +34,14 @@ const (
 	PostStatusFinish = 2 //完成
 )
 
-//PostGet 一个
+// PostGet 单条文章/页面
 func PostGet(id int) (*Post, bool) {
 	mod := &Post{}
 	has, _ := Db.ID(id).Get(mod)
-	if has {
-		mod.Summary = ""
+	if has && mod.Kind == PostKindPost {
+		tags := make([]Tag, 0, 4)
+		Db.SQL("SELECT * FROM tag WHERE id IN (SELECT tag_id FROM post_tag WHERE post_id = ?)", mod.Id).Find(&tags)
+		mod.Tags = tags
 	}
 	return mod, has
 }

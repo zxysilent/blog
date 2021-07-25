@@ -30,20 +30,6 @@ func PostTags(pid int) ([]PostTag, error) {
 	return mods, nil
 }
 
-// PostTagGet 文章对应的标签id
-func PostTagGet(pid int) []int {
-	mods := make([]PostTag, 0, 4)
-	Db.Where("post_id = ? ", pid).Find(&mods)
-	if len(mods) > 0 {
-		ids := make([]int, 0, len(mods))
-		for i := range mods {
-			ids = append(ids, mods[i].TagId)
-		}
-		return ids
-	}
-	return nil
-}
-
 // TagPostCount 通过标签查询文章分页总数
 func TagPostCount(tid int) int {
 	var count int

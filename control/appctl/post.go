@@ -10,7 +10,7 @@ import (
 )
 
 // PostGet doc
-// @Tags post
+// @Tags post-文章
 // @Summary 通过id获取单条文章
 // @Param id query int true "id"
 // @Success 200 {object} model.Reply{data=model.Post} "返回数据"
@@ -29,7 +29,7 @@ func PostGet(ctx echo.Context) error {
 }
 
 // PostPage doc
-// @Tags post-文章页面
+// @Tags post-文章
 // @Summary 获取文章分页
 // @Param cate_id path int true "分类id" default(1)
 // @Param pi query int true "分页数" default(1)
@@ -63,21 +63,8 @@ func PostPage(ctx echo.Context) error {
 	return ctx.JSON(utils.Page("succ", mods, int(count)))
 }
 
-// PostTagGet 通过文章id 获取 标签ids
-func PostTagGet(ctx echo.Context) error {
-	id, err := strconv.Atoi(ctx.Param("id"))
-	if err != nil {
-		return ctx.JSON(utils.ErrIpt("数据输入错误,请重试", err.Error()))
-	}
-	mods := model.PostTagGet(id)
-	if mods == nil {
-		return ctx.JSON(utils.ErrOpt("未查询到标签信息"))
-	}
-	return ctx.JSON(utils.Succ("标签ids", mods))
-}
-
 // PostAdd doc
-// @Tags post
+// @Tags post-文章
 // @Summary 添加文章
 // @Param token query string true "token"
 // @Param body body model.Post true "请求数据"
@@ -98,7 +85,7 @@ func PostAdd(ctx echo.Context) error {
 }
 
 // PostEdit doc
-// @Tags post
+// @Tags post-文章
 // @Summary 修改文章
 // @Param token query string true "token"
 // @Param body body model.Post true "请求数据"
@@ -119,7 +106,7 @@ func PostEdit(ctx echo.Context) error {
 }
 
 // PostDrop doc
-// @Tags post
+// @Tags post-文章
 // @Summary 通过id删除单条文章
 // @Param id query int true "id"
 // @Param token query string true "token"

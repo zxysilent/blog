@@ -2,7 +2,7 @@
 	<Card dis-hover>
 		<Form inline>
 			<FormItem>
-				<Button :to="{name:'post-add'}" style="margin-right: 8px">添加页面</Button>
+				<Button :to="{name:'post-add'}" style="margin-right: 8px">添加文章</Button>
 				<Select v-model="cate_id" placeholder="请选择文章类别" style="width:200px">
 					<Option v-for="item in cateAll" :value="item.id" :key="item.id">{{ item.name }} [{{ item.intro }}]</Option>
 				</Select>
@@ -21,7 +21,7 @@
 </template>
 <script>
 import { apiCateAll } from "@/api/cate";
-import { apiPostPage, apiPostGet, admPostDrop } from "@/api/post";
+import { apiPostPage, admPostDrop } from "@/api/post";
 export default {
 	data() {
 		return {
@@ -105,7 +105,7 @@ export default {
 									props: { confirm: true, title: "确定要删除吗？" },
 									on: {
 										"on-ok": () => {
-											this.delete(data);
+											this.emitDrop(data);
 										}
 									}
 								},
@@ -169,8 +169,8 @@ export default {
 			this.init();
 		},
 		//删除
-		delete(data) {
-			admPostDrop(data.row.id).then((resp) => {
+		emitDrop(data) {
+			admPostDrop({ id: data.row.id }).then((resp) => {
 				if (resp.code == 200) {
 					this.$Message.success({
 						content: "删除成功",

@@ -114,7 +114,6 @@ export default {
 					this.user = resp.data;
 				}
 			});
-			console.log(this.getMenus);
 		},
 		logout() {
 			// this.$store.commit("logout", this);

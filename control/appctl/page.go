@@ -9,7 +9,7 @@ import (
 )
 
 // PageGet doc
-// @Tags page
+// @Tags page-页面
 // @Summary 通过id获取单条页面
 // @Param id query int true "id"
 // @Success 200 {object} model.Reply{data=model.Page} "返回数据"
@@ -59,7 +59,7 @@ func PagePage(ctx echo.Context) error {
 }
 
 // PageAdd doc
-// @Tags page
+// @Tags page-页面
 // @Summary 添加页面
 // @Param token query string true "token"
 // @Param body body model.Page true "请求数据"
@@ -79,7 +79,7 @@ func PageAdd(ctx echo.Context) error {
 }
 
 // PageEdit doc
-// @Tags page
+// @Tags page-页面
 // @Summary 修改页面
 // @Param token query string true "token"
 // @Param body body model.Page true "请求数据"
@@ -100,7 +100,7 @@ func PageEdit(ctx echo.Context) error {
 }
 
 // PageDrop doc
-// @Tags page
+// @Tags page-页面
 // @Summary 通过id删除单条页面
 // @Param id query int true "id"
 // @Param token query string true "token"
