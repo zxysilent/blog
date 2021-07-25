@@ -61,6 +61,7 @@ func (app *appcfg) IsDev() bool {
 	return app.Mode == dev
 }
 
+// mb4 most bytes 4
 // uid:pass@tcp(host:port)/dbname?charset=utf8mb4&parseTime=true&loc=Local
 // 用户名:密码@tcp(主机:端口)/数据库名称?charset=utf8mb4&parseTime=true&loc=Local
 const _dsn = "%s:%s@tcp(%s:%d)/%s?%s"
