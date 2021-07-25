@@ -2,6 +2,7 @@ package appctl
 
 import (
 	"blog/model"
+	"strings"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -71,6 +72,13 @@ func PageAdd(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
+	if model.PostExist(ipt.Path) {
+		return ctx.JSON(utils.ErrIpt("当前访问路径已经存在,请重新输入"))
+	}
+	if strings.Contains(ipt.Richtext, "<!--more-->") {
+		ipt.Summary = strings.Split(ipt.Richtext, "<!--more-->")[0]
+	}
+	ipt.Updated = ipt.Created
 	err = model.PostAdd(ipt)
 	if err != nil {
 		return ctx.JSON(utils.Fail("添加失败", err.Error()))

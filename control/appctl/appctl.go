@@ -81,3 +81,22 @@ func atoi(raw string, def int) (int, error) {
 	}
 	return out, nil
 }
+
+func similar(a, b string) int {
+	if a[:4] == b[:4] {
+		return 0
+	}
+	if a[:4] < b[:4] {
+		return 1
+	}
+	return -1
+}
+
+func inOf(goal int, arr []model.Tag) bool {
+	for idx := range arr {
+		if goal == arr[idx].Id {
+			return true
+		}
+	}
+	return false
+}

@@ -20,7 +20,7 @@
 							<Button type="info" @click="emitDraft" :loading="draftLoading">
 								<Icon type="ios-trash" size="20" />存草稿
 							</Button>&nbsp;
-							<Button type="warning" @click="emitFinish" :loading="publishLoading">
+							<Button type="warning" @click="emitFinish" :loading="finishLoading">
 								<Icon type="ios-send" size="20" />发 布
 							</Button>
 							<Button :to="{name:'post-list'}" style="margin-left: 10px">返回列表</Button>
@@ -50,7 +50,7 @@
 							<DatePicker v-model="dataForm.created" type="datetime" placeholder="选择发布日期和时间" :clearable="false" :editable="false"></DatePicker>
 						</FormItem>
 						<FormItem label="标签">
-							<Select v-model="dataForm.tags" multiple placeholder="请选择文章标签">
+							<Select v-model="tags" multiple placeholder="请选择文章标签">
 								<Option v-for="item in tagAll" :value="item.id" :key="item.id">{{ item.name }}</Option>
 							</Select>
 						</FormItem>
@@ -75,8 +75,9 @@ export default {
 		return {
 			cateAll: [],
 			tagAll: [],
+			tags: [],
 			draftLoading: false,
-			publishLoading: false,
+			finishLoading: false,
 			// 访问前缀
 			prefix: process.env.VUE_APP_SRV + "/post/",
 			dataForm: {
@@ -116,7 +117,8 @@ export default {
 		init() {
 			apiPostGet({ id: this.dataForm.id }).then((resp) => {
 				if (resp.code == 200) {
-					resp.data.tags = resp.data.tags.map((item) => {
+                    // 临时保存
+					this.tags = resp.data.tags.map((item) => {
 						return item.id;
 					});
 					this.dataForm = resp.data;
@@ -144,7 +146,8 @@ export default {
 					console.log(this.dataForm);
 					this.dataForm.status = 1; //草稿
 					this.draftLoading = true;
-					this.dataForm.tags = this.dataForm.tags.map((item) => {
+                    // 还原
+					this.dataForm.tags = this.tags.map((item) => {
 						return { id: item };
 					});
 					admPostEdit(this.dataForm).then((resp) => {
@@ -173,12 +176,13 @@ export default {
 					}
 					console.log(this.dataForm);
 					this.dataForm.status = 2; //发布
-					this.draftLoading = true;
-					this.dataForm.tags = this.dataForm.tags.map((item) => {
+					this.finishLoading = true;
+                    // 还原
+					this.dataForm.tags = this.tags.map((item) => {
 						return { id: item };
 					});
 					admPostEdit(this.dataForm).then((resp) => {
-						this.draftLoading = false;
+						this.finishLoading = false;
 						if (resp.code == 200) {
 							this.$Message.success({
 								content: "修改成功",

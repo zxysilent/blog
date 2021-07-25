@@ -18,7 +18,7 @@
 							<Button type="info" @click="emitDraft" :loading="draftLoading">
 								<Icon type="ios-trash" size="20" />存草稿
 							</Button>&nbsp;
-							<Button type="warning" @click="emitFinish" :loading="publishLoading">
+							<Button type="warning" @click="emitFinish" :loading="finishLoading">
 								<Icon type="ios-send" size="20" />发 布
 							</Button>
 							<Button :to="{name:'page-list'}" style="margin-left: 10px">返回列表</Button>
@@ -61,7 +61,7 @@ export default {
 		return {
 			prefix: process.env.VUE_APP_SRV + "/page/",
 			draftLoading: false,
-			publishLoading: false,
+			finishLoading: false,
 			dataForm: {
 				id: 0,
 				title: "",
@@ -124,9 +124,9 @@ export default {
 					}
 					console.log(this.dataForm);
 					this.dataForm.status = 2; //发布
-					this.draftLoading = true;
+					this.finishLoading = true;
 					admPageAdd(this.dataForm).then((resp) => {
-						this.draftLoading = false;
+						this.finishLoading = false;
 						if (resp.code == 200) {
 							this.$Message.success({
 								content: "修改成功",

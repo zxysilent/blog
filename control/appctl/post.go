@@ -76,11 +76,24 @@ func PostAdd(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
+	if model.PostExist(ipt.Path) {
+		return ctx.JSON(utils.ErrIpt("当前访问路径已经存在,请重新输入"))
+	}
+	ipt.Richtext = getTocHTML(ipt.Richtext)
 	ipt.Updated = ipt.Created
 	err = model.PostAdd(ipt)
 	if err != nil {
 		return ctx.JSON(utils.Fail("添加失败", err.Error()))
 	}
+	//添加标签
+	tagPosts := make([]model.PostTag, 0, len(ipt.Tags))
+	for _, itm := range ipt.Tags {
+		tagPosts = append(tagPosts, model.PostTag{
+			TagId:  itm.Id,
+			PostId: ipt.Id,
+		})
+	}
+	model.TagPostAdds(&tagPosts)
 	return ctx.JSON(utils.Succ("succ"))
 }
 
@@ -97,11 +110,42 @@ func PostEdit(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
+	mod, has := model.PostGet(ipt.Id)
+	if !has {
+		return ctx.JSON(utils.ErrOpt("未查询到文章"))
+	}
 	ipt.Updated = time.Now()
+	ipt.Richtext = getTocHTML(ipt.Richtext)
 	err = model.PostEdit(ipt)
 	if err != nil {
 		return ctx.JSON(utils.Fail("修改失败", err.Error()))
 	}
+	// 处理变动标签
+	old := mod.Tags
+	new := ipt.Tags
+	add := make([]int, 0, 4)
+	del := make([]int, 0, 4)
+	for _, item := range old {
+		if !inOf(item.Id, new) {
+			del = append(del, item.Id)
+		}
+	}
+	for _, item := range new {
+		if !inOf(item.Id, old) {
+			add = append(add, item.Id)
+		}
+	}
+	tagAdds := make([]model.PostTag, 0, len(add))
+	for _, itm := range add {
+		tagAdds = append(tagAdds, model.PostTag{
+			TagId:  itm,
+			PostId: ipt.Id,
+		})
+	}
+	// 删除标签
+	model.PostTagDrops(ipt.Id, del)
+	// 添加标签
+	model.TagPostAdds(&tagAdds)
 	return ctx.JSON(utils.Succ("succ"))
 }
 
@@ -125,115 +169,4 @@ func PostDrop(ctx echo.Context) error {
 	// 删除 文章对应的标签信息
 	model.PostTagDrop(ipt.Id)
 	return ctx.JSON(utils.Succ("succ"))
-}
-
-// PostOpts 文章操作
-func PostOpts(ctx echo.Context) error {
-	// ipt := &struct {
-	// 	Post model.Post "json:"post" form:"post"" // 文章信息
-	// 	Type int        "json:"type" form:"type"" // 0 文章 1 页面
-	// 	Tags []int      "json:"tags" form:"tags"" // 标签
-	// 	Edit bool       "json:"edit" form:"edit"" // 是否编辑
-	// }{}
-	// err := ctx.Bind(ipt)
-	// if err != nil {
-	// 	return ctx.JSON(utils.ErrIpt("数据输入错误,请重试", err.Error()))
-	// }
-	// if !ipt.Edit && model.PostExist(ipt.Post.Path) {
-	// 	return ctx.JSON(utils.ErrIpt("当前访问路径已经存在,请重新输入"))
-	// }
-	// // 同步类型
-	// ipt.Post.Kind = ipt.Type
-	// if strings.Contains(ipt.Post.Richtext, "<!--more-->") {
-	// 	ipt.Post.Summary = strings.Split(ipt.Post.Richtext, "<!--more-->")[0]
-	// }
-	// // 生成目录
-	// if ipt.Type == 0 {
-	// 	ipt.Post.Richtext = getTocHTML(ipt.Post.Richtext)
-	// }
-	// // 编辑 文章/页面
-	// if ipt.Edit {
-	// 	// 修改日期在发布日期之前
-	// 	if ipt.Post.Updated.Before(ipt.Post.Created) {
-	// 		// 修改时间再发布时间后1分钟
-	// 		ipt.Post.Updated = ipt.Post.Created.Add(time.Minute * 2)
-	// 	}
-	// 	if model.PostEdit(&ipt.Post, "cate_id", "status", "title", "summary", "markdown", "richtext", "allow", "created", "updated") {
-	// 		if ipt.Type == 0 {
-	// 			// 处理变动标签
-	// 			old := model.PostTagGet(ipt.Post.Id)
-	// 			new := ipt.Tags
-	// 			add := make([]int, 0)
-	// 			del := make([]int, 0)
-	// 			for _, itm := range old {
-	// 				if !inOf(itm, new) {
-	// 					del = append(del, itm)
-	// 				}
-	// 			}
-	// 			for _, itm := range new {
-	// 				if !inOf(itm, old) {
-	// 					add = append(add, itm)
-	// 				}
-	// 			}
-	// 			tagAdds := make([]model.PostTag, 0, len(add))
-	// 			for _, itm := range add {
-	// 				tagAdds = append(tagAdds, model.PostTag{
-	// 					TagId:  itm,
-	// 					PostId: ipt.Post.Id,
-	// 				})
-	// 			}
-	// 			// 删除标签
-	// 			model.PostTagDrops(ipt.Post.Id, del)
-	// 			// 添加标签
-	// 			model.TagPostAdds(&tagAdds)
-	// 			return ctx.JSON(utils.Succ("文章修改成功"))
-	// 		}
-	// 		return ctx.JSON(utils.Succ("页面修改成功"))
-	// 	}
-	// 	if ipt.Type == 0 {
-	// 		return ctx.JSON(utils.Fail("文章修改失败,请重试"))
-	// 	}
-	// 	return ctx.JSON(utils.Fail("页面修改失败,请重试"))
-	// }
-	// // 添加 文章/页面
-	// ipt.Post.Updated = time.Now()
-	// if model.PostAdd(&ipt.Post) {
-	// 	// 添加标签
-	// 	// 文章
-	// 	if ipt.Type == 0 {
-	// 		//添加标签
-	// 		tagPosts := make([]model.PostTag, 0, len(ipt.Tags))
-	// 		for _, itm := range ipt.Tags {
-	// 			tagPosts = append(tagPosts, model.PostTag{
-	// 				TagId:  itm,
-	// 				PostId: ipt.Post.Id,
-	// 			})
-	// 		}
-	// 		model.TagPostAdds(&tagPosts)
-	// 		return ctx.JSON(utils.Succ("文章添加成功"))
-	// 	}
-	// 	return ctx.JSON(utils.Succ("页面添加成功"))
-	// }
-	// if ipt.Type == 0 {
-	// 	return ctx.JSON(utils.Fail("文章添加失败,请重试"))
-	// }
-	return ctx.JSON(utils.Fail("页面添加失败,请重试"))
-}
-func similar(a, b string) int {
-	if a[:4] == b[:4] {
-		return 0
-	}
-	if a[:4] < b[:4] {
-		return 1
-	}
-	return -1
-}
-
-func inOf(goal int, arr []int) bool {
-	for idx := range arr {
-		if goal == arr[idx] {
-			return true
-		}
-	}
-	return false
 }
