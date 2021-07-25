@@ -24,8 +24,9 @@ import (
 // @Tags ctrl-系统相关
 // @Summary 上传文件
 // @Accept  mpfd
+// @Param token query string true "token"
 // @Param file formData file true "file"
-// @Router /api/upload/file [post]
+// @Router /adm/upload/file [post]
 func UploadFile(ctx echo.Context) error {
 	file, err := ctx.FormFile("file")
 	if err != nil {
@@ -57,15 +58,16 @@ func UploadFile(ctx echo.Context) error {
 // @Tags ctrl-系统相关
 // @Summary 上传图片并裁剪
 // @Accept  mpfd
+// @Param token query string true "token"
 // @Param file formData file true "file"
-// @Router /api/upload/image [post]
+// @Router /adm/upload/image [post]
 func UploadImage(ctx echo.Context) error {
 	file, err := ctx.FormFile("file")
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt(`未发现文件,请重试`, err.Error()))
 	}
-	if !strings.Contains(file.Header.Get("Richtext-Type"), "image") {
-		return ctx.JSON(utils.ErrIpt("请选择图片文件", file.Header.Get("Richtext-Type")))
+	if !strings.Contains(file.Header.Get("Content-Type"), "image") {
+		return ctx.JSON(utils.ErrIpt("请选择图片文件", file.Header.Get("Content-Type")))
 	}
 	src, err := file.Open()
 	if err != nil {
@@ -81,7 +83,7 @@ func UploadImage(ctx echo.Context) error {
 	dir := time.Now().Format("200601/02")
 	os.MkdirAll("./static/upload/"+dir[:6], 0755)
 	ext := path.Ext(file.Filename)
-	if attr.Cut || conf.App.ImageCut {
+	if conf.App.ImageCut && attr.Cut {
 		ext = ".jpg"
 	}
 	name := "static/upload/" + dir + utils.RandStr(10) + ext
@@ -90,12 +92,12 @@ func UploadImage(ctx echo.Context) error {
 		return ctx.JSON(utils.ErrIpt("目标文件创建失败,请重试", err.Error()))
 	}
 	defer dst.Close()
-	imgSrc, _, err := image.Decode(src)
-	// 图片解码
-	if err != nil {
-		return ctx.JSON(utils.ErrIpt("读取图片失败,请重试", err.Error()))
-	}
-	if attr.Cut || conf.App.ImageCut { //图片裁剪
+	if conf.App.ImageCut && attr.Cut { //图片裁剪
+		imgSrc, _, err := image.Decode(src)
+		// 图片解码
+		if err != nil {
+			return ctx.JSON(utils.ErrIpt("读取图片失败,请重试", err.Error()))
+		}
 		if attr.Wd <= 0 {
 			attr.Wd = conf.App.ImageWidth
 		}
@@ -112,10 +114,15 @@ func UploadImage(ctx echo.Context) error {
 		if dy > attr.Hd {
 			imgSrc = resize.Resize(0, uint(attr.Hd), imgSrc, resize.Lanczos3)
 		}
-	}
-	err = jpeg.Encode(dst, imgSrc, nil)
-	if err != nil {
-		return ctx.JSON(utils.ErrIpt("文件写入失败,请重试", err.Error()))
+		err = jpeg.Encode(dst, imgSrc, nil)
+		if err != nil {
+			return ctx.JSON(utils.ErrIpt("文件写入失败,请重试", err.Error()))
+		}
+	} else {
+		_, err = io.Copy(dst, src)
+		if err != nil {
+			return ctx.JSON(utils.ErrIpt("文件写入失败,请重试", err.Error()))
+		}
 	}
 	return ctx.JSON(utils.Succ("上传成功", conf.App.Srv+"/"+name))
 }

@@ -23,7 +23,7 @@ var loginLimiter = rate.NewLimiter(20, 5)
 const maxErrLogin = 5
 
 // UserLogin doc
-// @Tags auth-登陆相关
+// @Tags auth-登陆认证
 // @Summary 登陆
 // @Accept mpfd
 // @Param num formData string true "账号" default(zxysilent)
@@ -91,7 +91,7 @@ func AuthLogin(ctx echo.Context) error {
 }
 
 // AuthGet doc
-// @Tags auth-登陆相关
+// @Tags auth-登陆认证
 // @Summary 获取登录信息
 // @Param token query string true "凭证"
 // @Success 200 {object} model.Reply{data=model.User} "返回数据"
@@ -102,7 +102,7 @@ func AuthGet(ctx echo.Context) error {
 }
 
 // UserLogout doc
-// @Tags auth-登陆相关
+// @Tags auth-登陆认证
 // @Summary 注销登录
 // @Router /api/auth/logout [post]
 func UserLogout(ctx echo.Context) error {
@@ -110,7 +110,7 @@ func UserLogout(ctx echo.Context) error {
 }
 
 // AuthVcode doc
-// @Tags auth-登陆相关
+// @Tags auth-登陆认证
 // @Summary 验证码
 // @Accept mpfd
 // @Success 200 {object} model.Reply{data=string} "返回数据"
@@ -134,7 +134,7 @@ func hmc(raw, key string) string {
 }
 
 // AuthEdit doc
-// @Tags auth-登陆相关
+// @Tags auth-登陆认证
 // @Summary 修改个人信息
 // @Param name formData string true "名称"
 // @Param phone formData string true "号码"
@@ -155,7 +155,7 @@ func AuthEdit(ctx echo.Context) error {
 }
 
 // AuthPasswd doc
-// @Tags auth-登陆相关
+// @Tags auth-登陆认证
 // @Summary 修改自己的密码
 // @Param opasswd formData string true "旧密码"
 // @Param npasswd formData string true "新密码"

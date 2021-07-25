@@ -71,7 +71,7 @@ func CatePage(ctx echo.Context) error {
 }
 
 // CateAdd doc
-// @Tags cate-分类-分类
+// @Tags cate-分类
 // @Summary 添加分类
 // @Param token query string true "token"
 // @Param body body model.Cate true "请求数据"
