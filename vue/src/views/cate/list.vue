@@ -14,38 +14,20 @@
 					<Button :to="{name:'cate-add'}" style="margin-right: 8px">添加分类</Button>
 					<Button type="info" @click="init" icon="md-refresh" title="刷新数据">刷&nbsp;&nbsp;新</Button>
 				</FormItem>
-				<!-- <FormItem>
-				<Button type="warning" @click="reCache" icon="ios-alert-outline" :title="'重新加载数据库缓存'+'\n'+'适用于直接修改数据库'">重载缓存</Button>
-			</FormItem> -->
 			</Form>
-			<Table stripe size="small" :columns="colCate" :data="dataCate"></Table>
+			<Table stripe size="small" :columns="tabCol" :data="tabData"></Table>
+			<Page :total="tabCount" :current.sync="tabPage.pi" :page-size="tabPage.ps" :page-size-opts="[8,10,12,15,20,30]" @on-change="onPiChange" @on-page-size-change="onPsChange" show-sizer show-elevator show-total></Page>
 		</Card>
-		<Modal v-model="showEdit" title="修改分类信息">
-			<Form ref="editForm" :model="editForm" label-position="top" :rules="editRules">
-				<FormItem label="分类名称" prop="name">
-					<Input v-model="editForm.name" placeholder="请填写分类名"></Input>
-				</FormItem>
-				<FormItem label="分类介绍" prop="intro">
-					<Input v-model="editForm.intro" placeholder="请填写分类介绍"></Input>
-				</FormItem>
-			</Form>
-			<div slot="footer">
-				<ButtonGroup>
-					<Button type="warning" :loading="editLoading" @click="emitEdit">提交保存</Button>
-					<Button type="info" style="margin-left: 8px" @click="showEdit=false">取消关闭</Button>
-				</ButtonGroup>
-			</div>
-		</Modal>
 	</div>
 </template>
 <script>
-import { apiCateAll, admCateEdit, admCateDrop } from "@/api/cate";
+import { apiCatePage, admCateDrop } from "@/api/cate";
 export default {
 	data() {
 		return {
-			showEdit: false,
-			editLoading: false,
-			colCate: [
+			tabCount: 0,
+			tabPage: { pi: 1, ps: 12 },
+			tabCol: [
 				{ type: "index", minWidth: 60, maxWidth: 100, align: "center" },
 				{ title: "分类名", minWidth: 100, maxWidth: 300, key: "name" },
 				{ title: "分类介绍", minWidth: 100, maxWidth: 300, key: "intro" },
@@ -61,8 +43,10 @@ export default {
 								style: { marginRight: "15px" },
 								on: {
 									click: () => {
-										this.showEdit = true;
-										this.editForm = data.row;
+										this.$router.push({
+											name: "cate-edit",
+											params: { id: data.row.id }
+										});
 									}
 								}
 							}),
@@ -72,7 +56,7 @@ export default {
 									props: { confirm: true, title: "确定要删除吗？" },
 									on: {
 										"on-ok": () => {
-											this.delete(data);
+											this.emitDrop(data);
 										}
 									}
 								},
@@ -87,55 +71,38 @@ export default {
 					}
 				}
 			],
-			dataCate: [],
-			editForm: { name: "", intro: "" },
-			editRules: {
-				name: [{ required: true, message: "请填写分类名", trigger: "blur", max: 64 }],
-				intro: [{ required: true, message: "请填写分类介绍", trigger: "blur", max: 64 }]
-			}
+			tabData: []
 		};
 	},
 	methods: {
+		onPiChange(pi) {
+			this.tabPage.pi = pi;
+			this.init();
+		},
+		onPsChange(ps) {
+			this.tabPage.pi = 1;
+			this.tabPage.ps = ps;
+			this.init();
+		},
 		init() {
-			apiCateAll().then((resp) => {
+			apiCatePage(this.tabPage).then((resp) => {
 				if (resp.code == 200) {
-					this.dataCate = resp.data;
+					this.tabData = resp.data.items;
+					this.tabCount = resp.data.count;
 				} else {
-					this.dataCate = [];
-					this.$Message.warning("未查询到分类信息,请重试！");
+					this.tabData = [];
+					this.tabCount = 0;
+					this.$Message.error({ content: resp.msg, duration: 3 });
 				}
 			});
 		},
-		emitEdit() {
-			this.$refs["editForm"].validate((valid) => {
-				if (valid) {
-					this.editLoading = true;
-					admCateEdit(this.editForm).then((resp) => {
-						this.editLoading = false;
-						if (resp.code == 200) {
-							this.$Message.success({
-								content: "分类信息修改成功",
-								onClose: () => {
-									this.showEdit = false;
-								}
-							});
-						} else {
-							this.$Message.error({
-								content: `分类信息修改失败,请重试`,
-								duration: 3
-							});
-						}
-					});
-				}
-			});
-		},
-		delete(data) {
-			admCateDrop(data.row.id).then((resp) => {
+		emitDrop(data) {
+			admCateDrop({ id: data.row.id }).then((resp) => {
 				if (resp.code == 200) {
 					this.$Message.success({
 						content: "删除成功",
 						onClose: () => {
-							this.dataCate.splice(data.index, 1);
+							this.tabData.splice(data.index, 1);
 						}
 					});
 				} else {

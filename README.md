@@ -1,5 +1,9 @@
-## 一个 go语言实现的博客 
+## 一个go语言实现的博客 
 ## A blog written in the go programming language 
+
+##  **不忘初心**，此仓库只提供单用户版本方便拿来即用，不考虑权限，正在积极开发,多用户版正在规划中...敬请期待
+## **Never forget why you started**. This code repository only provides a single-user version for easy use out of the box, regardless of permissions, and is under active development. Multi-user version is being planned...
+
 
 ### 技术栈
 ### Technology stack 
@@ -14,22 +18,26 @@
 ## Preview address 
 [https://blog.zxysilent.com](https://blog.zxysilent.com)
 
+## 仓库地址
+## Repository  address 
+[github(https://github.com/zxysilent/blog)](https://github.com/zxysilent/blog)
+
+[gitee(https://gitee.com/zxysilent/blog)](https://gitee.com/zxysilent/blog)
 ## 开发原因 
 - 现在自己使用博客系统不方便管理、部署和二次开发
 - 渲染速度到不到想要的效果
 
 ## 计划功能
-实现```blog```功能和基本```cms```功能,提取快速开发框架和```通用后台管理```
+实现```blog```功能,方便二次开发
 - [x] 文章管理
 - [x] 页面管理
 - [x] 分类管理
 - [x] 标签管理
 - [x] 系统设置
 - [x] 管理主页
-- [x] 菜单权限
 ## 说明
 
-- 替换markdown 编辑器为富文本编辑器即可作为`CMS` 
+- 替换markdown 编辑器为富文本编辑器即可作为简单`CMS`,更多功能请二次开发
 [https://github.com/zxysilent/view-design-admin](https://github.com/zxysilent/view-design-admin)
 
 - 富文本预览地址  

@@ -2,7 +2,7 @@
 <template>
 	<Card :bordered="false" dis-hover>
 		<p slot="title">
-			<Icon type="ios-add-circle-outline" /> 添加分类
+			<Icon type="ios-create-outline" /> 修改分类
 		</p>
 		<div style="max-width:640px">
 			<Form ref="dataForm" :model="dataForm" :rules="dataRules" label-position="top">
@@ -13,8 +13,8 @@
 					<Input v-model="dataForm.intro" type="textarea" :autosize="{minRows:2,maxRows:4}" maxlength="128" show-word-limit placeholder="请填写分类介绍"></Input>
 				</FormItem>
 				<FormItem>
-					<Button type="warning" :loading="loading" @click="emitAdd">提交保存</Button>
-					<Button type="success" @click="emitReset()" style="margin-left: 10px">重置填写</Button>
+					<Button type="warning" :loading="loading" @click="emitEdit">提交保存</Button>
+					<Button type="success" @click="emitReset" style="margin-left: 10px">重置填写</Button>
 					<Button :to="{name:'cate-list'}" style="margin-left: 10px">返回列表</Button>
 				</FormItem>
 			</Form>
@@ -22,11 +22,11 @@
 	</Card>
 </template>
 <script>
-import { admCateAdd } from "@/api/cate";
+import { apiCateGet, admCateEdit } from "@/api/cate";
 export default {
 	data() {
 		return {
-			dataForm: { name: "", intro: "" },
+			dataForm: { id: 0, name: "", intro: "" },
 			dataRules: {
 				name: [{ required: true, message: "请填写分名称", trigger: "blur", max: 64 }],
 				intro: [{ required: true, message: "请填写分类介绍", trigger: "blur", max: 128 }]
@@ -35,20 +35,29 @@ export default {
 		};
 	},
 	methods: {
-		emitReset() {
-			this.$refs.dataForm.resetFields();
+		init() {
+			apiCateGet({ id: this.dataForm.id }).then((resp) => {
+				if (resp.code == 200) {
+					this.dataForm = resp.data;
+				} else {
+					this.$Message.error({ content: resp.msg, duration: 3 });
+				}
+			});
 		},
-		emitAdd() {
-			this.$refs["dataForm"].validate((valid) => {
+		emitReset() {
+			this.init();
+		},
+		emitEdit() {
+			this.$refs.dataForm.validate((valid) => {
 				if (valid) {
 					this.loading = true;
-					admCateAdd(this.dataForm).then((resp) => {
+					admCateEdit(this.dataForm).then((resp) => {
 						this.loading = false;
 						if (resp.code == 200) {
 							this.$Message.success({
-								content: "添加成功",
+								content: "修改成功",
 								onClose: () => {
-									this.$router.push({ name: "cate-list" });
+									this.init();
 								}
 							});
 						} else {
@@ -58,6 +67,10 @@ export default {
 				}
 			});
 		}
+	},
+	mounted() {
+		this.dataForm.id = parseInt(this.$route.params.id, 10);
+		this.init();
 	}
 };
 </script>

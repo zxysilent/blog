@@ -1,31 +1,42 @@
 import fetch from "./fetch";
-// 标签信息
-export const apiTagAll = () => {
-	return fetch.request({
+// 获取所有标签
+export const apiTagAll = (data) => {
+    return fetch.request({
 		url: "/api/tag/all",
-		method: "get"
+		method: "get",
+		params: data,
+	});
+};
+// 获取标签分页
+export const apiTagPage = (data) => {
+    return fetch.request({
+		url: "/api/tag/page",
+		method: "get",
+		params: data,
 	});
 };
 // 添加标签
-export const admTagAdd = data => {
-	return fetch.request({
+export const admTagAdd = (data) => {
+    return fetch.request({
 		url: "/adm/tag/add",
 		method: "post",
-		data: data
+		data: data,
 	});
 };
 // 修改标签
-export const admTagEdit = data => {
+export const admTagEdit = (data) => {
 	return fetch.request({
 		url: "/adm/tag/edit",
 		method: "post",
-		data: data
+		data: data,
 	});
 };
-// 删除标签
-export const admTagDrop = id => {
+// 通过id删除单条标签
+export const admTagDrop = (data) => {
 	return fetch.request({
-		url: `/adm/tag/drop/${id}`,
-		method: "get"
+		url: "/adm/tag/drop",
+		method: "post",
+		data: data,
 	});
 };
+

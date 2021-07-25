@@ -58,11 +58,8 @@ func Init() {
 			new(Post),
 			new(PostTag),
 			// sys
-			new(Role),
 			new(User),
-			new(Grant),
 			new(Global),
-			new(RoleGrant),
 		)
 		if err != nil {
 			logs.Fatal("数据库 sync:", err.Error())

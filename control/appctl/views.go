@@ -58,7 +58,7 @@ func CatePostView(ctx echo.Context) error {
 	if cate == "" {
 		return ctx.Redirect(302, "/")
 	}
-	mod, has := model.CateName(cate)
+	mod, has := model.CateGet(cate)
 	if !has {
 		return ctx.Redirect(302, "/")
 	}
@@ -110,7 +110,7 @@ func TagPostView(ctx echo.Context) error {
 	if tag == "" {
 		return ctx.Redirect(302, "/tags")
 	}
-	mod, has := model.TagGetName(tag)
+	mod, has := model.TagGet(tag)
 	if !has {
 		return ctx.Redirect(302, "/tags")
 	}

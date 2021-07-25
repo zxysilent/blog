@@ -1,2 +1,0 @@
-import fetch from "./fetch";
-

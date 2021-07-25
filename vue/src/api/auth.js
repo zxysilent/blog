@@ -1,12 +1,4 @@
 import fetch from "./fetch";
-
-// 获取登录信息
-export const admAuthGet = () => {
-	return fetch.request({
-		url: "/adm/auth/get",
-		method: "get"
-	});
-};
 // 登录
 export const apiAuthLogin = data => {
 	return fetch.request({
@@ -22,19 +14,11 @@ export const apiAuthVcode = () => {
 		method: "get"
 	});
 };
-// 获取当前用户的授权
-export const admAuthGrant = () => {
+// 获取登录信息
+export const admAuthGet = () => {
 	return fetch.request({
-		url: "/adm/auth/grant",
+		url: "/adm/auth/get",
 		method: "get"
-	});
-};
-// 修改自己密码
-export const admAuthPasswd = data => {
-	return fetch.request({
-		url: "/adm/auth/passwd",
-		method: "post",
-		data: data
 	});
 };
 // 修改自己信息
@@ -45,6 +29,15 @@ export const admAuthEdit = data => {
 		data: data
 	});
 };
+// 修改自己密码
+export const admAuthPasswd = data => {
+	return fetch.request({
+		url: "/adm/auth/passwd",
+		method: "post",
+		data: data
+	});
+};
+
 export const apiAuthLogoff = data => {
 	//   return fetch.post("/api/logoff", data);
 };

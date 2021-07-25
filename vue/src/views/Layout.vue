@@ -13,7 +13,7 @@
 						</Tooltip>
 						<Divider type="vertical" />
 						<Tooltip content="个人中心" placement="bottom">
-							<router-link to="/auth/self" tag="span">
+							<router-link to="/profile" tag="span">
 								<Icon type="ios-person" size="20" />
 							</router-link>
 						</Tooltip>
@@ -32,10 +32,8 @@
 						</template>
 						<MenuItem name="global" to="/global">
 						<Icon type="ios-cog-outline" />配置管理</MenuItem>
-						<MenuItem name="role" to="/role/list">
-						<Icon type="ios-contact-outline" />角色管理</MenuItem>
-						<MenuItem name="user" to="/user/list">
-						<Icon type="ios-person-outline" />用户管理</MenuItem>
+						<MenuItem name="profile" to="/profile">
+						<Icon type="ios-person-outline" />个人信息</MenuItem>
 					</Submenu>
 					<Submenu name="app">
 						<template slot="title">
