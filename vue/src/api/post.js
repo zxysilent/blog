@@ -1,44 +1,48 @@
 import fetch from "./fetch";
-// 分类文章列表
-export const apiCatePost = (cls, data) => {
+// 通过id获取单条文章
+export const apiPostGet = data => {
 	return fetch.request({
-		url: `/api/cate/post/${cls}`,
+		url: "/api/post/get",
 		method: "get",
 		params: data
 	});
 };
-// 页面信息
-export const apiPageAll = () => {
+// 获取所有文章
+export const apiPostAll = data => {
 	return fetch.request({
-		url: "/api/page/all",
-		method: "get"
+		url: "/api/post/all",
+		method: "get",
+		params: data
 	});
 };
-// 一条信息
-export const apiPostGet = id => {
+// 获取文章分页
+export const apiPostPage = data => {
 	return fetch.request({
-		url: `/api/post/get/${id}`,
-		method: "get"
+		url: "/api/post/page",
+		method: "get",
+		params: data
 	});
 };
-// 一条文章的tag信息列表
-export const apiPostTagGet = id => {
+// 添加文章
+export const admPostAdd = data => {
 	return fetch.request({
-		url: `/api/post/tag/get/${id}`,
-		method: "get"
+		url: "/adm/post/add",
+		method: "post",
+		data: data
 	});
 };
-//删除
-export const admPostDrop = id => {
+// 修改文章
+export const admPostEdit = data => {
 	return fetch.request({
-		url: `/adm/post/drop/${id}`,
-		method: "get"
+		url: "/adm/post/edit",
+		method: "post",
+		data: data
 	});
 };
-//文章操作
-export const admPostOpts = data => {
+// 通过id删除单条文章
+export const admPostDrop = data => {
 	return fetch.request({
-		url: "/adm/post/opts",
+		url: "/adm/post/drop",
 		method: "post",
 		data: data
 	});

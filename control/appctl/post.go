@@ -3,13 +3,14 @@ package appctl
 import (
 	"blog/model"
 	"strconv"
+	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/zxysilent/utils"
 )
 
 // PostGet doc
-// @Tags post-文章页面
+// @Tags post
 // @Summary 通过id获取单条文章
 // @Param id query int true "id"
 // @Success 200 {object} model.Reply{data=model.Post} "返回数据"
@@ -73,6 +74,70 @@ func PostTagGet(ctx echo.Context) error {
 		return ctx.JSON(utils.ErrOpt("未查询到标签信息"))
 	}
 	return ctx.JSON(utils.Succ("标签ids", mods))
+}
+
+// PostAdd doc
+// @Tags post
+// @Summary 添加文章
+// @Param token query string true "token"
+// @Param body body model.Post true "请求数据"
+// @Success 200 {object} model.Reply{data=string} "返回数据"
+// @Router /adm/post/add [post]
+func PostAdd(ctx echo.Context) error {
+	ipt := &model.Post{}
+	err := ctx.Bind(ipt)
+	if err != nil {
+		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
+	}
+	ipt.Updated = ipt.Created
+	err = model.PostAdd(ipt)
+	if err != nil {
+		return ctx.JSON(utils.Fail("添加失败", err.Error()))
+	}
+	return ctx.JSON(utils.Succ("succ"))
+}
+
+// PostEdit doc
+// @Tags post
+// @Summary 修改文章
+// @Param token query string true "token"
+// @Param body body model.Post true "请求数据"
+// @Success 200 {object} model.Reply{data=string} "返回数据"
+// @Router /adm/post/edit [post]
+func PostEdit(ctx echo.Context) error {
+	ipt := &model.Post{}
+	err := ctx.Bind(ipt)
+	if err != nil {
+		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
+	}
+	ipt.Updated = time.Now()
+	err = model.PostEdit(ipt)
+	if err != nil {
+		return ctx.JSON(utils.Fail("修改失败", err.Error()))
+	}
+	return ctx.JSON(utils.Succ("succ"))
+}
+
+// PostDrop doc
+// @Tags post
+// @Summary 通过id删除单条文章
+// @Param id query int true "id"
+// @Param token query string true "token"
+// @Success 200 {object} model.Reply{data=string} "返回数据"
+// @Router /adm/post/drop [post]
+func PostDrop(ctx echo.Context) error {
+	ipt := &model.IptId{}
+	err := ctx.Bind(ipt)
+	if err != nil {
+		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
+	}
+	err = model.PostDrop(ipt.Id)
+	if err != nil {
+		return ctx.JSON(utils.ErrOpt("删除失败", err.Error()))
+	}
+	// 删除 文章对应的标签信息
+	model.PostTagDrop(ipt.Id)
+	return ctx.JSON(utils.Succ("succ"))
 }
 
 // PostOpts 文章操作
@@ -177,28 +242,6 @@ func similar(a, b string) int {
 	return -1
 }
 
-// PostDrop doc
-// @Tags post-文章页面
-// @Summary 通过id删除单条文章
-// @Param id query int true "id"
-// @Param token query string true "token"
-// @Success 200 {object} model.Reply{data=string} "返回数据"
-// @Router /adm/post/drop [post]
-func PostDrop(ctx echo.Context) error {
-	ipt := &model.IptId{}
-	err := ctx.Bind(ipt)
-	if err != nil {
-		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
-	}
-	err = model.PostDrop(ipt.Id)
-	if err != nil {
-		return ctx.JSON(utils.ErrOpt("删除失败", err.Error()))
-	}
-	// 删除 文章对应的标签信息
-	model.PostTagDrop(ipt.Id)
-	return ctx.JSON(utils.Succ("succ"))
-}
-
 func inOf(goal int, arr []int) bool {
 	for idx := range arr {
 		if goal == arr[idx] {
@@ -206,17 +249,4 @@ func inOf(goal int, arr []int) bool {
 		}
 	}
 	return false
-}
-
-// ------------------------------------------------------ 页面相关 ------------------------------------------------------
-// PostPageAll 页面列表
-func PostPageAll(ctx echo.Context) error {
-	mods, err := model.PostAll(-1, model.PostKindPage)
-	if err != nil {
-		return ctx.JSON(utils.ErrOpt("未查询到页面信息", err.Error()))
-	}
-	if len(mods) < 1 {
-		return ctx.JSON(utils.ErrOpt("未查询到页面信息", "len"))
-	}
-	return ctx.JSON(utils.Succ("页面信息", mods))
 }

@@ -60,13 +60,13 @@ const routes = [
 				path: "/post/add",
 				name: "post-add",
 				meta: { module: "app", title: "添加文章" },
-				component: () => import("@/views/article/article.vue")
+				component: () => import("@/views/post/add.vue")
 			},
 			{
 				path: "/post/edit/:id(\\d+)",
 				name: "post-edit",
 				meta: { module: "app", title: "编辑文章" },
-				component: () => import("@/views/article/article.vue")
+				component: () => import("@/views/post/edit.vue")
 			},
 			{
 				path: "/page/list",
@@ -78,13 +78,13 @@ const routes = [
 				path: "/page/add",
 				meta: { module: "app", title: "添加页面" },
 				name: "page-add",
-				component: () => import("@/views/article/article.vue")
+				component: () => import("@/views/page/add.vue")
 			},
 			{
 				path: "/page/edit/:id(\\d+)",
 				name: "page-edit",
 				meta: { module: "app", title: "编辑页面" },
-				component: () => import("@/views/article/article.vue")
+				component: () => import("@/views/page/edit.vue")
 			},
 			{
 				path: "/cate/list",

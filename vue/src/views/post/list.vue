@@ -2,7 +2,7 @@
 	<Card dis-hover>
 		<Form inline>
 			<FormItem>
-                <Button :to="{name:'post-add'}" style="margin-right: 8px">添加页面</Button>
+				<Button :to="{name:'post-add'}" style="margin-right: 8px">添加页面</Button>
 				<Select v-model="cate_id" placeholder="请选择文章类别" style="width:200px">
 					<Option v-for="item in cateAll" :value="item.id" :key="item.id">{{ item.name }} [{{ item.intro }}]</Option>
 				</Select>
@@ -11,80 +11,78 @@
                         <Input type="text" v-model="mult" placeholder="标题关键词"></Input>
                     </FormItem> -->
 			<FormItem>
-				<Button type="primary" @click="search()">查&nbsp;询</Button>
+				<Button type="primary" icon="md-search" @click="search">查&nbsp;&nbsp;询</Button>
 			</FormItem>
 		</Form>
-		<Table size="small" stripe :columns="colPost" :data="dataPost"></Table>
+		<Table size="small" stripe :columns="tabCol" :data="tabData"></Table>
 		<br>
-		<Page :total="total" :current.sync="page.pi" :page-size="page.ps" :page-size-opts="[10,12,15,20,30]" @on-change="piChange" @on-page-size-change="psChange" show-sizer show-elevator show-total></Page>
+		<Page :total="tabCount" :current.sync="tabPage.pi" :page-size="tabPage.ps" :page-size-opts="[8,10,12,15,20,30]" @on-change="onPiChange" @on-page-size-change="onPsChange" show-sizer show-elevator show-total></Page>
 	</Card>
 </template>
 <script>
 import { apiCateAll } from "@/api/cate";
-import { apiCatePost, apiPostGet, admPostDrop } from "@/api/post";
+import { apiPostPage, apiPostGet, admPostDrop } from "@/api/post";
 export default {
 	data() {
 		return {
-			mult: "",
 			cateAll: [],
-			cate_id: 0, //all
-			post: {},
-			page: { pi: 1, ps: 15 },
-			total: 0,
-			colPost: [
+			cate_id: -1, //all
+			tabCount: 0,
+			tabPage: { pi: 1, ps: 12, mult: "" },
+			tabCol: [
 				{ type: "index", width: 60, align: "center" },
-				{
-					title: "标题",
-					ellipsis: true,
-					tooltip: true,
-					render: (h, data) => {
-						return h("div", data.row.title);
-					}
-				},
+				{ title: "标题", minWidth: 200, ellipsis: true, tooltip: true, key: "title" },
 				{
 					title: "状态",
-					width: 80,
+					width: 100,
 					render: (h, data) => {
-						if (data.row.status == 3) {
+						if (data.row.status == 2) {
 							return h("div", "已发布");
 						} else {
 							return h("div", "草稿");
 						}
 					}
 				},
+				// {
+				// 	title: "权限",
+				// 	width: 80,
+				// 	render: (h, data) => {
+				// 		if (data.row.is_public) {
+				// 			return h("div", "公开");
+				// 		} else {
+				// 			return h("div", "私有");
+				// 		}
+				// 	}
+				// },
+				// { title: "点击量", width: 80, key: "hits" },
 				{
-					title: "权限",
-					width: 80,
+					title: "创建日期",
+					width: 200,
 					render: (h, data) => {
-						if (data.row.is_public) {
-							return h("div", "公开");
-						} else {
-							return h("div", "私有");
-						}
+						return h("div", data.row.created.replace(/T|\+08:00/g, " "));
 					}
 				},
-				{ title: "点击量", width: 80, key: "hits" },
 				{
-					title: "日期",
-					width: 150,
+					title: "修改日期",
+					width: 200,
 					render: (h, data) => {
-						return h("div", data.row.create_time.replace(/T|\+08:00/g, " "));
+						return h("div", data.row.updated.replace(/T|\+08:00/g, " "));
 					}
 				},
 				{
 					title: "操作",
 					key: "action",
-					width: 150,
+					width: 200,
 					align: "center",
 					render: (h, data) => {
 						return h("a", [
-                             h("Icon", {
+							h("Icon", {
 								props: { type: "md-eye", size: "20", color: "#5FB878" },
 								attrs: { title: "预览" },
 								style: { marginRight: "15px" },
 								on: {
 									click: () => {
-										window.open(process.env.VUE_APP_SRV+"/post/"+data.row.path+".html")
+										window.open(process.env.VUE_APP_SRV + "/post/" + data.row.path + ".html");
 									}
 								}
 							}),
@@ -122,35 +120,44 @@ export default {
 					}
 				}
 			],
-			dataPost: []
+			tabData: []
 		};
 	},
 	methods: {
-		init_() {
-			apiCateAll().then(resp => {
+		preinit() {
+			apiCateAll().then((resp) => {
 				if (resp.code == 200) {
-					resp.data.unshift({ id: 0, name: " all ", intro: "全部分类" });
+					resp.data.unshift({ id: -1, name: " all ", intro: "全部分类" });
 					this.cateAll = resp.data;
 				} else {
 					this.cateAll = [];
-					this.$Message.warning("未查询到分类信息,请重试！");
+					this.$Message.error({ content: resp.msg, duration: 3 });
 				}
 			});
 		},
+		onPiChange(pi) {
+			this.tabPage.pi = pi;
+			this.init();
+		},
+		onPsChange(ps) {
+			this.tabPage.pi = 1;
+			this.tabPage.ps = ps;
+			this.init();
+		},
 		init() {
-			apiCatePost(this.cate_id, this.page).then(resp => {
+			apiPostPage({ ...this.tabPage, cate_id: this.cate_id }).then((resp) => {
 				if (resp.code == 200) {
-					this.dataPost = resp.data.items;
-					this.total = resp.data.count;
+					this.tabData = resp.data.items;
+					this.tabCount = resp.data.count;
 				} else {
-					this.dataPost = [];
-					this.total = 0;
-					this.$Message.warning("未查询到数据，请重试！");
+					this.tabData = [];
+					this.tabCount = 0;
+					this.$Message.error({ content: resp.msg, duration: 3 });
 				}
 			});
 		},
 		search() {
-			this.page.pi = 1;
+			this.tabPage.pi = 1;
 			this.init();
 		},
 		piChange(pi) {
@@ -163,12 +170,12 @@ export default {
 		},
 		//删除
 		delete(data) {
-			admPostDrop(data.row.id).then(resp => {
+			admPostDrop(data.row.id).then((resp) => {
 				if (resp.code == 200) {
 					this.$Message.success({
 						content: "删除成功",
 						onClose: () => {
-							this.dataPost.splice(data.index, 1);
+							this.tabData.splice(data.index, 1);
 						}
 					});
 				} else {
@@ -178,7 +185,7 @@ export default {
 		}
 	},
 	mounted() {
-		this.init_();
+		this.preinit();
 		this.init();
 	}
 };

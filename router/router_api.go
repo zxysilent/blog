@@ -16,10 +16,12 @@ func apiRouter(api *echo.Group) {
 	api.GET("/cate/get", appctl.CateGet)        // 单个分类
 	api.GET("/cate/all", appctl.CateAll)        // 所有分类
 	api.GET("/cate/page", appctl.CatePage)      // 分类分页
-	api.GET("/post/tag/get", appctl.PostTagGet) // 通过分类查询文章
-	api.GET("/post/get", appctl.PostGet)        // 文章
-	api.GET("/post/page", appctl.PostPage)      // 文章分页
-	api.GET("/page/all", appctl.PostPageAll)    // 页面
+	api.GET("/tag/get", appctl.TagGet)          // 单个标签
 	api.GET("/tag/all", appctl.TagAll)          // 所有标签
 	api.GET("/tag/page", appctl.TagPage)        // 标签分页
+	api.GET("/post/get", appctl.PostGet)        // 单个文章
+	api.GET("/post/page", appctl.PostPage)      // 文章分页
+	api.GET("/page/get", appctl.PageGet)        // 单个页面
+	api.GET("/page/page", appctl.PagePage)      // 页面分页
+
 }

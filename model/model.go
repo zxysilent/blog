@@ -105,7 +105,7 @@ type State struct {
 // Collect 统计信息
 func Collect() (*State, bool) {
 	mod := &State{}
-	has, _ := Db.SQL(`SELECT * FROM(SELECT COUNT(id) as post FROM post WHERE type=0)as a ,(SELECT COUNT(id) as page FROM post WHERE type=1) as b, (SELECT COUNT(id) as cate FROM cate) as c, (SELECT COUNT(id) as tag FROM tag) as d`).Get(mod)
+	has, _ := Db.SQL(`SELECT * FROM(SELECT COUNT(id) as post FROM post WHERE kind=1)as a ,(SELECT COUNT(id) as page FROM post WHERE kind=2) as b, (SELECT COUNT(id) as cate FROM cate) as c, (SELECT COUNT(id) as tag FROM tag) as d`).Get(mod)
 	return mod, has
 }
 func inOf(goal int, arr []int) bool {

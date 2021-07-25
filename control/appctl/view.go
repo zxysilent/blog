@@ -69,7 +69,12 @@ func ViewLinks(ctx echo.Context) error {
 
 // ViewPage 其它页面
 func ViewPage(ctx echo.Context) error {
-	return RenderPage(ctx.Param("*"), ctx)
+	paths := strings.Split(ctx.Param("*"), ".")
+	if len(paths) == 2 {
+		return RenderPage(paths[0], ctx)
+	}
+	return ctx.Redirect(302, "/404")
+
 }
 
 // ------------------------------------------------------ 归档页面 ------------------------------------------------------
