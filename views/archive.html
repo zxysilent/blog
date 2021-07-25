@@ -10,7 +10,7 @@
         <div id="main">
             <article class="post archive">
                 <h1 class="title">归档</h1>
-                {{ range $k, $v := .Posts }}
+                {{ range $k, $v := .Archives }}
                 <div class="entry-content">
                     <h3>{{ date $v.Time "2006年01月" }} ({{len $v.Posts }})</h3>
                     <ul>

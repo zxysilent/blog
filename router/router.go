@@ -29,17 +29,15 @@ func RunApp() {
 		return ctx.Redirect(302, "/dashboard/")
 	})
 	//--- 页面 -- start
-	engine.GET("/", appctl.IndexView)                 // 首页
-	engine.GET("/archives", appctl.ArchivesView)      // 归档
-	engine.GET("/archives.json", appctl.ArchivesJson) // 归档 json
-	engine.GET("/tags", appctl.TagsView)              // 标签
-	engine.GET("/tags.json", appctl.TagsJson)         // 标签 json
-	engine.GET("/tag/:tag", appctl.TagPostView)       // 具体某个标签
-	engine.GET("/cate/:cate", appctl.CatePostView)    // 分类
-	engine.GET("/about", appctl.AboutView)            // 关于
-	engine.GET("/links", appctl.LinksView)            // 友链
-	engine.GET("/post/*", appctl.PostView)            // 具体某个文章
-	engine.GET("/page/*", appctl.PageView)            // 具体某个页面
+	engine.GET("/", appctl.IndexView)              // 首页
+	engine.GET("/archives", appctl.ViewArchives)   // 归档
+	engine.GET("/tags", appctl.ViewTags)           // 标签
+	engine.GET("/tag/:tag", appctl.ViewTagPost)    // 具体某个标签
+	engine.GET("/cate/:cate", appctl.ViewCatePost) // 分类
+	engine.GET("/about", appctl.ViewAbout)         // 关于
+	engine.GET("/links", appctl.ViewLinks)         // 友链
+	engine.GET("/page/*", appctl.ViewPage)         // 具体某个页面
+	engine.GET("/post/*", appctl.ViewPost)         // 具体某个文章
 	//--- 页面 -- end
 	api := engine.Group("/api")          // api/
 	apiRouter(api)                       // 注册分组路由

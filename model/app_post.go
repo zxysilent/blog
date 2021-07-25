@@ -25,26 +25,148 @@ type Post struct {
 	Cate     *Cate     `xorm:"-" json:"cate"`                                          //分类
 }
 
-// Archive 归档
-type Archive struct {
-	Time  time.Time // 日期
-	Posts []Post    //文章
+const (
+	PostKindPost = 1 //文章
+	PostKindPage = 2 //页面
+)
+const (
+	PostStatusDraft  = 1 //草稿
+	PostStatusFinish = 2 //完成
+)
+
+//PostGet 一个
+func PostGet(id int) (*Post, bool) {
+	mod := &Post{}
+	has, _ := Db.ID(id).Get(mod)
+	if has {
+		mod.Summary = ""
+	}
+	return mod, has
 }
 
-// PostPage 分页
-func PostPage(pi, ps int) ([]Post, error) {
+// PostAll 所有文章/页面
+func PostAll(cateId int, kind int, cols ...string) ([]Post, error) {
+	mods := make([]Post, 0, 4)
+	sess := Db.NewSession()
+	defer sess.Close()
+	if cateId > 0 {
+		sess.Where("cate_id = ?", cateId)
+	}
+	if kind > 0 {
+		sess.Where("kind = ?", kind)
+	}
+	if len(cols) > 0 {
+		sess.Cols(cols...)
+	}
+	err := Db.Desc("created").Find(&mods)
+	return mods, err
+}
+
+//PostExist 判断是否存在
+func PostExist(ptah string) bool {
+	has, _ := Db.Exist(&Post{
+		Path: ptah,
+	})
+	return has
+}
+
+// PostPage 文章/页面分页
+func PostPage(cateId int, kind int, pi int, ps int, cols ...string) ([]Post, error) {
 	mods := make([]Post, 0, ps)
-	err := Db.Cols("id", "title", "path", "created", "summary").Where("kind = 1  and status = 2 ").Desc("created").Limit(ps, (pi-1)*ps).Find(&mods)
+	sess := Db.NewSession()
+	defer sess.Close()
+	if cateId > 0 {
+		sess.Where("cate_id = ?", cateId)
+	}
+	if kind > 0 {
+		sess.Where("kind = ?", kind)
+	}
+	if len(cols) > 0 {
+		sess.Cols(cols...)
+	}
+	err := sess.Desc("created").Limit(ps, (pi-1)*ps).Find(&mods)
 	return mods, err
 }
 
 // PostCount 返回总数
-func PostCount() int {
-	mod := &Post{
-		Kind: 1,
+func PostCount(cateId int, kind int) int {
+	mod := &Post{}
+	sess := Db.NewSession()
+	defer sess.Close()
+	if cateId > 0 {
+		sess.Where("cate_id = ?", cateId)
 	}
-	count, _ := Db.Count(mod)
+	if kind > 0 {
+		sess.Where("kind = ?", kind)
+	}
+	count, _ := sess.Count(mod)
 	return int(count)
+}
+
+// PostEdit 编辑文章
+func PostEdit(mod *Post, cols ...string) error {
+	sess := Db.NewSession()
+	defer sess.Close()
+	sess.Begin()
+	if _, err := sess.ID(mod.Id).Cols(cols...).Update(mod); err != nil {
+		sess.Rollback()
+		return err
+	}
+	sess.Commit()
+	return nil
+}
+
+// PostAdd 添加文章/页面
+func PostAdd(mod *Post) error {
+	sess := Db.NewSession()
+	defer sess.Close()
+	sess.Begin()
+	if _, err := sess.InsertOne(mod); err != nil {
+		sess.Rollback()
+		return err
+	}
+	sess.Commit()
+	return nil
+}
+
+// PostDrop 删除单条文章
+func PostDrop(id int) error {
+	sess := Db.NewSession()
+	defer sess.Close()
+	sess.Begin()
+	if _, err := sess.ID(id).Delete(&Post{}); err != nil {
+		sess.Rollback()
+		return err
+	}
+	sess.Commit()
+	Db.ClearCacheBean(&Post{}, strconv.Itoa(id))
+	return nil
+}
+
+// PostIds 通过id集合返回文章
+func PostIds(ids []int) map[int]*Post {
+	mods := make([]Post, 0, len(ids))
+	Db.Cols("id", "title", "path", "cate_id", "created", "summary").In("id", ids).Find(&mods)
+	mapSet := make(map[int]*Post, len(mods))
+	for idx := range mods {
+		mapSet[mods[idx].Id] = &mods[idx]
+	}
+	return mapSet
+}
+
+// ------------------------------------------------------ 页面使用 ------------------------------------------------------
+//PostSingle 单页面 page
+func PostSingle(path string) (*Post, bool) {
+	mod := &Post{}
+	has, _ := Db.Where("kind = 2 and path = ?", path).Get(mod)
+	return mod, has
+}
+
+// ------------------------------------------------------ 归档使用 ------------------------------------------------------
+// Archive 归档
+type Archive struct {
+	Time  time.Time `json:"time"`  // 日期
+	Posts []Post    `json:"posts"` //文章
 }
 
 // PostArchive 归档
@@ -105,97 +227,4 @@ func PostPath(path string) (*Post, *Naver, bool) {
 		return mod, naver, true
 	}
 	return nil, nil, has
-}
-
-//PostSingle 单页面 page
-func PostSingle(path string) (*Post, bool) {
-	mod := &Post{
-		Path: path,
-		Kind: 2,
-	}
-	has, _ := Db.Get(mod)
-	return mod, has
-}
-
-// PostPageAll 所有页面
-func PostPageAll() ([]Post, error) {
-	mods := make([]Post, 0, 4)
-	err := Db.Cols("id", "title", "path", "created", "summary", "comment_num", "options", "updated", "is_public", "status").Where("Type = 1").Desc("created").Find(&mods)
-	return mods, err
-}
-
-//PostGet 一个
-func PostGet(id int) (*Post, bool) {
-	mod := &Post{
-		Id: id,
-	}
-	has, _ := Db.Get(mod)
-	if has {
-		mod.Summary = ""
-	}
-	return mod, has
-}
-
-// postIds 通过id返回文章集合
-func postIds(ids []int) map[int]*Post {
-	mods := make([]Post, 0, 6)
-	Db.Cols("id", "title", "path", "cate_id", "created", "summary").In("id", ids).Find(&mods)
-	if len(mods) > 0 {
-		mapSet := make(map[int]*Post, len(mods))
-		for idx := range mods {
-			mapSet[mods[idx].Id] = &mods[idx]
-		}
-		return mapSet
-	}
-	return nil
-}
-
-//PostExist 判断是否存在
-func PostExist(ptah string) bool {
-	has, _ := Db.Exist(&Post{
-		Path: ptah,
-	})
-	return has
-}
-
-// PostEdit 修改文章/页面
-func PostEdit(mod *Post) bool {
-	sess := Db.NewSession()
-	defer sess.Close()
-	sess.Begin()
-	affect, err := sess.ID(mod.Id).Cols("cate_id", "status", "title", "summary", "markdown", "richtext", "allow", "created", "updated").Update(mod)
-	if affect >= 0 && err == nil {
-		sess.Commit()
-		return true
-	}
-	sess.Rollback()
-	return false
-}
-
-// PostAdd 添加文章/页面
-func PostAdd(mod *Post) bool {
-	sess := Db.NewSession()
-	defer sess.Close()
-	sess.Begin()
-	affect, _ := sess.InsertOne(mod)
-	if affect != 1 {
-		sess.Rollback()
-		return false
-	}
-	sess.Commit()
-	return true
-}
-
-// PostDrop 删除
-func PostDrop(id int) bool {
-	sess := Db.NewSession()
-	defer sess.Close()
-	sess.Begin()
-	if affect, err := sess.ID(id).Delete(&Post{}); affect > 0 && err == nil {
-		sess.Commit()
-		Db.ClearCacheBean(&Post{}, strconv.Itoa(id))
-		return true
-	}
-	sess.Rollback()
-	return false
 }

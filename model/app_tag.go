@@ -9,13 +9,6 @@ type Tag struct {
 	Intro string `xorm:"VARCHAR(255) comment('描述')" json:"intro"`        //描述
 }
 
-// TagState 统计
-type TagState struct {
-	Name  string `json:"name"`
-	Count int    `json:"count"`
-	Intro string `json:"intro"`
-}
-
 // TagGet 单条标签
 // int	==>	id
 // str	==>	name
@@ -26,7 +19,7 @@ func TagGet(id interface{}) (*Tag, bool) {
 		has, _ := Db.ID(val).Get(mod)
 		return mod, has
 	case string:
-		has, _ := Db.Where("Name = ?", val).Get(mod)
+		has, _ := Db.Where("name = ?", val).Get(mod)
 		return mod, has
 	default:
 		return mod, false
@@ -113,6 +106,14 @@ func TagDrop(id int) error {
 }
 
 // ------------------------------------------------------ 前台使用 ------------------------------------------------------
+
+// TagState 统计
+type TagState struct {
+	Name  string `json:"name"`
+	Count int    `json:"count"`
+	Intro string `json:"intro"`
+}
+
 // TagStateAll 所有标签统计 当前标签下有文章才显示
 func TagStateAll() ([]TagState, error) {
 	mods := make([]TagState, 0, 8)

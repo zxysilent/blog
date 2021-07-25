@@ -47,14 +47,14 @@ func PostTagGet(pid int) []int {
 // TagPostCount 通过标签查询文章分页总数
 func TagPostCount(tid int) int {
 	var count int
-	Db.SQL(`SELECT count(post_id) as count FROM post_tag LEFT JOIN post ON post_id=post.id WHERE is_public=1 and tag_id=?`, tid).Get(&count)
+	Db.SQL(`SELECT count(post_id) as count FROM post_tag WHERE tag_id=?`, tid).Get(&count)
 	return count
 }
 
-// TagPostList 通过标签查询文章分页
-func TagPostList(tid, pi, ps int) ([]PostTag, error) {
+// TagPostPage 通过标签查询文章分页
+func TagPostPage(tagId, pi, ps int) ([]PostTag, error) {
 	mods := make([]PostTag, 0, ps)
-	err := Db.SQL(`SELECT post.id id,post_id,tag_id FROM post_tag LEFT JOIN post ON post_id=post.id WHERE is_public=1 and tag_id=? limit ?,? `, tid, (pi-1)*ps, ps).Find(&mods)
+	err := Db.SQL(`SELECT id,post_id,tag_id FROM post_tag WHERE tag_id=? limit ?,? `, tagId, (pi-1)*ps, ps).Find(&mods)
 	if len(mods) > 0 {
 		ids := make([]int, 0, len(mods))
 		for idx := range mods {
@@ -62,11 +62,9 @@ func TagPostList(tid, pi, ps int) ([]PostTag, error) {
 				ids = append(ids, mods[idx].PostId)
 			}
 		}
-		mapSet := postIds(ids)
-		if mapSet != nil {
-			for idx := range mods {
-				mods[idx].Post = mapSet[mods[idx].PostId]
-			}
+		mapSet := PostIds(ids)
+		for idx := range mods {
+			mods[idx].Post = mapSet[mods[idx].PostId]
 		}
 	}
 	return mods, err

@@ -2,7 +2,6 @@ package appctl
 
 import (
 	"blog/model"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
 	"github.com/zxysilent/utils"
@@ -69,36 +68,6 @@ func CatePage(ctx echo.Context) error {
 		return ctx.JSON(utils.ErrOpt("未查询到数据", "len(mods) < 1"))
 	}
 	return ctx.JSON(utils.Page("succ", mods, int(count)))
-}
-
-// CatePost doc
-// @Tags cate-分类-分类
-// @Summary 分类文章列表
-// @Param cid path int true "分类id" default(1)
-// @Param pi query int true "分页页数pi" default(1)
-// @Param ps query int true "分页大小ps" default(6)
-// @Param token query string true "凭证jwt" default(jwt)
-// @Success 200 {object} model.Reply "返回数据"
-// @Router /api/cate/post/{cid} [get]
-func CatePost(ctx echo.Context) error {
-	cid, err := strconv.Atoi(ctx.Param("cid"))
-	if err != nil {
-		return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, err.Error()))
-	}
-	ipt := &model.Page{}
-	err = ctx.Bind(ipt)
-	if err != nil {
-		return ctx.JSON(utils.ErrIpt(`数据输入错误,请重试`, err.Error()))
-	}
-	count := model.CatePostCount(cid, false)
-	if count == 0 {
-		return ctx.JSON(utils.ErrOpt(`未查询到文章信息,请重试`))
-	}
-	mods, err := model.CatePostList(cid, ipt.Pi, ipt.Ps, false)
-	if err != nil {
-		return ctx.JSON(utils.ErrOpt(`未查询到文章信息,请重试`, err.Error()))
-	}
-	return ctx.JSON(utils.Page(`文章信息`, mods, count))
 }
 
 // CateAdd doc

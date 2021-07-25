@@ -21,7 +21,7 @@ func CateGet(id interface{}) (*Cate, bool) {
 		has, _ := Db.ID(val).Get(mod)
 		return mod, has
 	case string:
-		has, _ := Db.Where("Name = ?", val).Get(mod)
+		has, _ := Db.Where("name = ?", val).Get(mod)
 		return mod, has
 	default:
 		return mod, false
@@ -105,49 +105,4 @@ func CateDrop(id int) error {
 	sess.Commit()
 	Db.ClearCacheBean(&Cate{}, strconv.Itoa(id))
 	return nil
-}
-
-// ------------------------------------------------------ 前台使用 ------------------------------------------------------
-
-// CatePostCount 通过标签查询文章分页总数
-// lmt 是否前台限制
-func CatePostCount(cid int, lmt bool) int {
-	sess := Db.NewSession()
-	defer sess.Close()
-	if cid > 0 {
-		sess.Where("Cate_id = ?  ", cid)
-	}
-	if lmt {
-		sess.Where("Is_Public = 1 and Status = 3 ")
-	}
-	sess.Where("Type = 0")
-	mod := &Post{}
-	count, _ := sess.Count(mod)
-	return int(count)
-}
-
-// CatePostList 通过分类查询文章分页
-// lmt 是否前台限制
-func CatePostList(cid, pi, ps int, lmt bool) ([]Post, error) {
-	mods := make([]Post, 0, ps)
-	sess := Db.NewSession()
-	defer sess.Close()
-	if cid > 0 {
-		sess.Where("Cate_id = ? ", cid)
-	}
-	if lmt {
-		sess.Where("Is_Public = 1 and Status = 3 ")
-	}
-	sess.Where("Type = 0")
-	err := sess.Cols("id", "title", "path", "create_time", "summary", "comment_num", "options", "Status", "Is_Public").Desc("create_time").Limit(ps, (pi-1)*ps).Find(&mods)
-	if len(mods) > 0 {
-		for idx := range mods {
-			if !lmt {
-				mods[idx].Summary = ""
-			}
-			mods[idx].Richtext = ""
-			mods[idx].Markdown = ""
-		}
-	}
-	return mods, err
 }
