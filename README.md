@@ -72,7 +72,7 @@ git clone -b v0.1.0 --depth=1 https://github.com/zxysilent/blog.git
     - linux 普通方式```nohup ./blog>>nohup.log 2>&1 &```
 
 ### 评论配置
-- 配置项目 opts(表).comment(值) 
+- 配置项目 sys_global(表).comment(值) 
 - 配置说明 [https://github.com/gitalk/gitalk](https://github.com/gitalk/gitalk)
 
 ## 使用方式-自定义开发
