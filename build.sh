@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# 跟随系统build
 # 任何语句的执行结果不是true则应该退出
 set -e
 apphash=`git log --pretty=format:'%h' -1`
@@ -8,7 +9,7 @@ if [ $? -ne 0 ]; then
 fi
 appname="blog"
 echo "git log $apphash"
-# flags="-X 'main.Var=$apphashn'"
+# ldflags="-X 'main.Var=$apphashn'"
 # -w    去掉调试信息
 # -s    去掉符号表
 flags=""
@@ -18,10 +19,10 @@ flags=""
 # -race	开启竞态检测
 
 buildProd(){
-    go build -tags=prod -ldflags "$flags" -o $appname.exe main.go
+    go build -tags=prod -ldflags "$flags" main.go
 }
 buildDev(){
-    go build -ldflags "$flags" -o $appname.exe main.go
+    go build -ldflags "$flags" main.go
 }
 usage() {
   echo "Usage: $0 [-p <prod>] [-d <dev>]" 1>&2;

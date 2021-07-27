@@ -71,6 +71,11 @@ func Init() {
 	logs.Info("model init")
 }
 
+// xorm 缓存
+// 1. 当使用了Distinct,Having,GroupBy方法将不会使用缓存
+// 2. 在Get或者Find时使用了Cols,Omit方法，则在开启缓存后此方法无效，系统仍旧会取出这个表中的所有字段。
+// 3. 在使用Exec方法执行了方法之后，可能会导致缓存与数据库不一致的地方。因此如果启用缓存，尽量避免使用Exec。如果必须使用，则需要在使用了Exec之后调用ClearCache手动做缓存清除的工作
+
 // Page 分页基本数据
 type Page struct {
 	Pi   int    `json:"pi" form:"pi" query:"pi"`       //分页页码

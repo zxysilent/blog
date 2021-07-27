@@ -10,9 +10,9 @@ type PostTag struct {
 }
 
 // TagPostCount 通过标签查询文章分页总数
-func TagPostCount(tid int) int {
+func TagPostCount(tagId int) int {
 	var count int
-	Db.SQL(`SELECT count(post_id) as count FROM post_tag WHERE tag_id=?`, tid).Get(&count)
+	Db.SQL(`SELECT count(post_id) as count FROM post_tag WHERE tag_id=?`, tagId).Get(&count)
 	return count
 }
 
@@ -36,60 +36,62 @@ func TagPostPage(tagId, pi, ps int) ([]PostTag, error) {
 }
 
 // TagPostAdds 添加文章标签[]
-func TagPostAdds(mod *[]PostTag) bool {
+func TagPostAdds(mods *[]PostTag) error {
 	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
-	affect, _ := sess.Insert(mod)
-	if affect < 1 {
+	if _, err := sess.Insert(mods); err != nil {
 		sess.Rollback()
-		return false
+		return err
 	}
 	sess.Commit()
-	return true
+	return nil
 }
 
-// TagPostDrop 删除标签对应的标签_文章
-func TagPostDrop(tid int) bool {
+// TagPostDrop 删除标签时候
+// 删除对应的标签_文章
+func TagPostDrop(tagId int) error {
 	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
-	if affect, err := sess.Where("tag_id = ?", tid).Delete(&PostTag{}); affect > 0 && err == nil {
+	sess.Where("tag_id = ?", tagId)
+	if _, err := sess.Delete(&PostTag{}); err != nil {
 		sess.Commit()
-		Db.ClearCache(new(PostTag)) //清空缓存
-		return true
+		return err
 	}
 	sess.Rollback()
-	return false
+	return nil
 }
 
-// PostTagDrops 删除文章对应的标签_文章 修改的时候 变更
-func PostTagDrops(pid int, tids []int) bool {
-	if len(tids) < 1 {
-		return true
+// PostTagDrops 修改文章时候
+// 删除对应的标签_文章
+func PostTagDrops(postId int, tagIds []int) error {
+	if len(tagIds) < 1 {
+		return nil
 	}
 	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
-	if affect, err := sess.Where("post_id = ?", pid).In("tag_id", tids).Delete(&PostTag{}); affect > 0 && err == nil {
+	sess.Where("post_id = ?", postId).In("tag_id", tagIds)
+	if _, err := sess.Delete(&PostTag{}); err != nil {
 		sess.Commit()
-		Db.ClearCache(new(PostTag)) //清空缓存
-		return true
+		return err
 	}
 	sess.Rollback()
-	return false
+	return nil
 }
 
-// PostTagDrop 删除文章对应的标签_文章删除文章的时候
-func PostTagDrop(pid int) bool {
+// PostTagDrop 删除文章时候
+// 删除对应的标签_文章
+func PostTagDrop(postId int) error {
 	sess := Db.NewSession()
 	defer sess.Close()
 	sess.Begin()
-	if affect, err := sess.Where("post_id = ?", pid).Delete(&PostTag{}); affect > 0 && err == nil {
+	sess.Where("post_id = ?", postId)
+	if _, err := sess.Delete(&PostTag{}); err != nil {
 		sess.Commit()
-		Db.ClearCache(new(PostTag)) //清空缓存
-		return true
+		return err
 	}
 	sess.Rollback()
-	return false
+	return nil
 }
