@@ -116,7 +116,7 @@ func PostEdit(ctx echo.Context) error {
 	}
 	ipt.Updated = time.Now()
 	ipt.Richtext = getTocHTML(ipt.Richtext)
-	err = model.PostEdit(ipt)
+	err = model.PostEdit(ipt, "cate_id", "kind", "status", "title", "path", "summary", "markdown", "richtext", "allow", "created", "updated")
 	if err != nil {
 		return ctx.JSON(utils.Fail("修改失败", err.Error()))
 	}

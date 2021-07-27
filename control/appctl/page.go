@@ -100,7 +100,7 @@ func PageEdit(ctx echo.Context) error {
 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
 	ipt.Updated = time.Now()
-	err = model.PostEdit(ipt)
+	err = model.PostEdit(ipt, "cate_id", "kind", "status", "title", "path", "summary", "markdown", "richtext", "allow", "created", "updated")
 	if err != nil {
 		return ctx.JSON(utils.Fail("修改失败", err.Error()))
 	}
