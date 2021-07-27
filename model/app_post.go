@@ -220,13 +220,13 @@ func PostPath(path string) (*Post, *Naver, bool) {
 		}
 		naver := &Naver{}
 		p := Post{}
-		b, _ := Db.Where("kind = 1 and status = 2 and created <?", mod.Created.Format(utils.StdDateTime)).Desc("Created").Get(&p)
+		b, _ := Db.Where("kind = 1 and status = 2 and created >?", mod.Created.Format(utils.StdDateTime)).Asc("created").Get(&p)
 		if b {
 			// <a href="{{.Naver.Prev}}" class="prev">&laquo; 上一页</a>
 			naver.Prev = `<a href="/post/` + p.Path + `.html" class="prev">&laquo; ` + p.Title + `</a>`
 		}
 		n := Post{}
-		b1, _ := Db.Where("kind = 1  and status = 2 and created >?", mod.Created.Format(utils.StdDateTime)).Asc("Created").Get(&n)
+		b1, _ := Db.Where("kind = 1  and status = 2 and created <?", mod.Created.Format(utils.StdDateTime)).Desc("created").Get(&n)
 		if b1 {
 			//<a href="{{.Naver.Next}}" class="next">下一页 &raquo;</a>
 			naver.Next = `<a href="/post/` + n.Path + `.html" class="next"> ` + n.Title + ` &raquo;</a>`
