@@ -4,7 +4,7 @@
 		<p slot="title">
 			<Icon type="ios-cog-outline" /> 配置中心
 		</p>
-		<Tabs>
+		<Tabs :animated="false">
 			<TabPane label="基础配置">
 				<div style="max-width:640px">
 					<Form ref="dataForm" :model="dataForm" :label-width="120" label-colon label-position="right" :rules="dataRules">
@@ -81,7 +81,7 @@
 							<Input v-model="dataForm.weibo_url" maxlength="64" show-word-limit placeholder="请填写微博地址"></Input>
 						</FormItem>
 						<FormItem label="分页大小" prop="page_size">
-							<Slider v-model="dataForm.page_size" :step="1" :min="1" :max="10"></Slider>
+							<Slider v-model="dataForm.page_size" :step="1" :min="1" :max="10" show-stops></Slider>
 						</FormItem>
 						<FormItem label="CSS" prop="site_css">
 							<Input type="textarea" :autosize="{minRows: 8,maxRows: 12}" v-model="dataForm.site_css" maxlength="512" show-word-limit placeholder="请填写自定义css"></Input>
