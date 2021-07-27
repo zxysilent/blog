@@ -48,7 +48,7 @@
 
 ## 使用方式-直接部署
 ```
-git clone -b v0.3.0 --depth=1 https://github.com/zxysilent/blog.git
+git clone -b v0.3.1 --depth=1 https://github.com/zxysilent/blog.git
 ```
 若要部署，请修改关键信息[jwt、用户名、密码等]
 数据库自带文章内容请在部署前删除
