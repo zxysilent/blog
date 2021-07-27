@@ -3,6 +3,7 @@ package appctl
 import (
 	"blog/model"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -80,6 +81,9 @@ func PostAdd(ctx echo.Context) error {
 		return ctx.JSON(utils.ErrIpt("当前访问路径已经存在,请重新输入"))
 	}
 	ipt.Richtext = getTocHTML(ipt.Richtext)
+	if strings.Contains(ipt.Richtext, "<!--more-->") {
+		ipt.Summary = strings.Split(ipt.Richtext, "<!--more-->")[0]
+	}
 	ipt.Updated = ipt.Created
 	err = model.PostAdd(ipt)
 	if err != nil {
@@ -116,6 +120,9 @@ func PostEdit(ctx echo.Context) error {
 	}
 	ipt.Updated = time.Now()
 	ipt.Richtext = getTocHTML(ipt.Richtext)
+	if strings.Contains(ipt.Richtext, "<!--more-->") {
+		ipt.Summary = strings.Split(ipt.Richtext, "<!--more-->")[0]
+	}
 	err = model.PostEdit(ipt, "cate_id", "kind", "status", "title", "path", "summary", "markdown", "richtext", "allow", "created", "updated")
 	if err != nil {
 		return ctx.JSON(utils.Fail("修改失败", err.Error()))
