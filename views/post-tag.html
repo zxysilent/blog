@@ -29,7 +29,8 @@
                     {{ if ne .Naver.Next ""}}<a href="{{.Naver.Next}}" class="next">下一页 &raquo;</a>{{end}}
                 </nav>
             </section>
+            {{template "tpl-footer.html" .}}
         </div>
-        {{template "tpl-footer.html" .}}
+        {{template "tpl-script.html" .}}
     </body>
 </html>
