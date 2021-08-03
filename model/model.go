@@ -2,6 +2,7 @@ package model
 
 import (
 	"blog/conf"
+	"errors"
 	"log"
 	"strings"
 
@@ -87,6 +88,17 @@ type Page struct {
 func (p *Page) Trim() string {
 	p.Mult = strings.TrimSpace(p.Mult)
 	return p.Mult
+}
+
+// Stat 检查状态
+func (p *Page) Stat() error {
+	if p.Ps < conf.App.PageMin {
+		return errors.New("page size 过小")
+	}
+	if p.Ps > conf.App.PageMax {
+		return errors.New("page size 过大")
+	}
+	return nil
 }
 
 type IptId struct {

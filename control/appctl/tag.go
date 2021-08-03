@@ -42,9 +42,8 @@ func TagAll(ctx echo.Context) error {
 // TagPage doc
 // @Tags tag-标签
 // @Summary 获取标签分页
-// @Param cid path int true "分类id" default(1)
 // @Param pi query int true "分页数" default(1)
-// @Param ps query int true "每页条数[5,30]" default(5)
+// @Param ps query int true "每页条数" default(5)
 // @Success 200 {object} model.Reply{data=[]model.Tag} "返回数据"
 // @Router /api/tag/page [get]
 func TagPage(ctx echo.Context) error {
@@ -53,8 +52,8 @@ func TagPage(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
-	if ipt.Ps > 30 || ipt.Ps < 1 {
-		return ctx.JSON(utils.ErrIpt("分页大小输入错误", ipt.Ps))
+	if err = ipt.Stat(); err != nil {
+		return ctx.JSON(utils.ErrIpt("分页大小输入错误", err.Error()))
 	}
 	count := model.TagCount()
 	if count < 1 {

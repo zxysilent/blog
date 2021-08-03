@@ -31,9 +31,8 @@ func PageGet(ctx echo.Context) error {
 // PostPage doc
 // @Tags post-文章页面
 // @Summary 获取文章分页
-// @Param cate_id path int true "分类id" default(1)
 // @Param pi query int true "分页数" default(1)
-// @Param ps query int true "每页条数[5,30]" default(5)
+// @Param ps query int true "每页条数" default(5)
 // @Success 200 {object} model.Reply{data=[]model.Post} "返回数据"
 // @Router /api/post/page [get]
 func PagePage(ctx echo.Context) error {
@@ -42,8 +41,8 @@ func PagePage(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
-	if ipt.Ps > 30 || ipt.Ps < 1 {
-		return ctx.JSON(utils.ErrIpt("分页大小输入错误", ipt.Ps))
+	if err = ipt.Stat(); err != nil {
+		return ctx.JSON(utils.ErrIpt("分页大小输入错误", err.Error()))
 	}
 	count := model.PostCount(-1, model.PostKindPage)
 	if count < 1 {

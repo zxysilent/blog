@@ -46,6 +46,7 @@ func ViewPost(ctx echo.Context) error {
 			mod.Richtext = regImg.ReplaceAllString(mod.Richtext, `<img class="lazy-load" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="$1" alt="$2">`)
 			return ctx.Render(http.StatusOK, "post.html", map[string]interface{}{
 				"Post":  mod,
+				"Show":  mod.Status == 2,
 				"Naver": naver,
 			})
 		}
