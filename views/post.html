@@ -17,7 +17,14 @@
                         {{end}}
                     </div>
                     <h1 class="title">{{.Post.Title}}</h1>
-                    <div class="entry-content">{{str2html .Post.Richtext}}</div>
+                    <div class="entry-content">
+                        {{if .Show}}{{str2html .Page.Richtext}}{{else}}
+                        <h3>
+                            Sorry，主人还在思考 (●ˇ∀ˇ●) ！ <br />
+                            [ =======> 60% ]
+                        </h3>
+                        {{end}}
+                    </div>
                     <p>本文链接：<a href="{{.global.SiteUrl}}/post/{{.Post.Path}}.html">{{.global.SiteUrl}}/post/{{.Post.Path}}.html</a></p>
                     <p>-- <acronym title="End of File">EOF</acronym> --</p>
                     <div class="post-info">
