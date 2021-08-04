@@ -53,8 +53,8 @@ type appcfg struct {
 		WebAppid  string `toml:"web_appid"`  //web
 	} `toml:"wechat" json:"wechat"`
 	Qq struct {
-		WebAppid   string `toml:"web_appid"`  //web
-		WebAppkeyt string `toml:"web_appkey"` //web
+		WebAppid  string `toml:"web_appid"`  //web
+		WebAppkey string `toml:"web_appkey"` //web
 	} `toml:"qq" json:"qq"`
 }
 
