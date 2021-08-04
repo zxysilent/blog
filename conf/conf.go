@@ -52,6 +52,10 @@ type appcfg struct {
 		MpgSecret string `toml:"mpg_secret"` //小程序
 		WebAppid  string `toml:"web_appid"`  //web
 	} `toml:"wechat" json:"wechat"`
+	Qq struct {
+		WebAppid   string `toml:"web_appid"`  //web
+		WebAppkeyt string `toml:"web_appkey"` //web
+	} `toml:"qq" json:"qq"`
 }
 
 func (app *appcfg) IsProd() bool {

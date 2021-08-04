@@ -63,8 +63,8 @@ name = "zxysilent"
 website = "https://github.com/zxysilent"
 
 # 微信相关 
-# H5 网站 https://open.weixin.qq.com/cgi-bin/index
 # 公众号 小程序 https://mp.weixin.qq.com/
+# H5 网站 https://open.weixin.qq.com/cgi-bin/index
 [wechat]
 # 公众号
 # 请同时修改 conf.go
@@ -75,3 +75,10 @@ mpg_appid = "appid"
 mpg_secret = "secret"
 # web
 web_appid = "appid"
+
+# qq相关
+# H5 网站 https://connect.qq.com/
+[qq]
+# web
+web_appid = "appid"
+web_appkey = "appkey"
