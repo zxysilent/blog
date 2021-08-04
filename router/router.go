@@ -23,11 +23,16 @@ func RunApp() {
 	engine.Static("/static", "static")                // 静态目录
 	engine.File("/favicon.ico", "favicon.ico")        // ico
 	engine.File("/dashboard*", "dist/index.html")     // 前后端分离页面
-	engine.GET("/dashboard", func(ctx echo.Context) error {
-		// 301 永久重定向
+	// 后台登录
+	engine.GET("/login.html", func(ctx echo.Context) error {
 		// 302 临时重定向
 		return ctx.Redirect(302, "/dashboard/")
 	})
+	// qq登录
+	engine.GET("/login/qq.html", func(ctx echo.Context) error {
+		return ctx.Redirect(302, "https://graph.qq.com/oauth2.0/authorize?state=zxysilent&redirect_uri=https%3A%2F%2Fblog.zxysilent.com%2Fauth%2Flogin%2Fqq&response_type=code&client_id="+conf.App.Qq.WebAppid) //临时
+	})
+	engine.GET("/auth/login/qq.html", nil)
 	//--- 页面 -- start
 	engine.GET("/", appctl.ViewIndex)              // 首页
 	engine.GET("/archives", appctl.ViewArchives)   // 归档
