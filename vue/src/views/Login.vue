@@ -35,14 +35,14 @@
 					<Button size="large" @click="emitLogin" type="primary" long>登 录</Button>
 				</FormItem>
 			</Form>
-			<!-- <p class="other-login">
-				<a href="/" title="QQ登陆">
+			<p class="other-login">
+				<a href="/login/qq.html" title="QQ登陆">
 					<img :src="logins.qq" alt="加载失败" class="ivu-icon" style="width:20px">
 				</a>
 				<a @click="wechatLogin" disabled title="微信登陆">
 					<img :src="logins.wechat" alt="加载失败" class="ivu-icon" style="width:20px">
 				</a>
-			</p> -->
+			</p>
 			<div class="login-tips">
 				<span>系统推荐浏览器</span>&nbsp;<br><br>
 				<a href="https://www.microsoft.com/zh-cn/edge" target="_blank" title="微软 Edge">
