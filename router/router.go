@@ -3,6 +3,7 @@ package router
 import (
 	"blog/conf"
 	"blog/control/appctl"
+	"blog/control/sysctl"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -29,10 +30,8 @@ func RunApp() {
 		return ctx.Redirect(302, "/dashboard/")
 	})
 	// qq登录
-	engine.GET("/login/qq.html", func(ctx echo.Context) error {
-		return ctx.Redirect(302, "https://graph.qq.com/oauth2.0/authorize?state=zxysilent&redirect_uri=https%3A%2F%2Fblog.zxysilent.com%2Fauth%2Flogin%2Fqq&response_type=code&client_id="+conf.App.Qq.WebAppid) //临时
-	})
-	engine.GET("/auth/login/qq.html", nil)
+	engine.GET("/login/qq.html", sysctl.ViewLoginQq)
+	engine.GET("/auth/qq.html", sysctl.ViewAuthQq)
 	//--- 页面 -- start
 	engine.GET("/", appctl.ViewIndex)              // 首页
 	engine.GET("/archives", appctl.ViewArchives)   // 归档

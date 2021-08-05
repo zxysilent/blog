@@ -90,16 +90,6 @@ func AuthLogin(ctx echo.Context) error {
 	return ctx.JSON(utils.Succ("登陆成功", auth.Encode(conf.App.TokenSecret)))
 }
 
-// AuthLoginQq doc
-// @Tags auth-登陆认证
-// @Summary qq登录
-// @Accept mpfd
-// @Success 200 {object} model.Reply{data=string} "返回数据"
-// @Router /auth/login/qq.html [get]
-func AuthLoginQq(ctx echo.Context) error {
-	return nil
-}
-
 // AuthGet doc
 // @Tags auth-登陆认证
 // @Summary 获取登录信息
