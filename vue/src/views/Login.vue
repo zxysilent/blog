@@ -31,16 +31,16 @@
 						</Col>
 					</Row>
 				</FormItem>
-				<FormItem>
+				<FormItem :label-width="5">
 					<Button size="large" @click="emitLogin" type="primary" long>登 录</Button>
 				</FormItem>
 			</Form>
 			<p class="other-login">
 				<a href="/login/qq.html" title="QQ登陆">
-					<img :src="logins.qq" alt="加载失败" class="ivu-icon" style="width:20px">
+					<img :src="logins.qq" alt="加载失败" class="ivu-icon" style="width:30px">
 				</a>
-				<a @click="wechatLogin" disabled title="微信登陆">
-					<img :src="logins.wechat" alt="加载失败" class="ivu-icon" style="width:20px">
+				<a @click="wechatLogin" title="微信登陆">
+					<img :src="logins.wechat" alt="加载失败" class="ivu-icon" style="width:30px">
 				</a>
 			</p>
 			<div class="login-tips">
@@ -132,7 +132,7 @@ export default {
 	},
 	mounted() {
 		this.reload();
-        Storage.clear()
+		Storage.clear();
 	}
 };
 </script>
@@ -182,7 +182,7 @@ export default {
 		margin: 0 auto;
 		.login-tips {
 			text-align: left;
-			margin-top: 20px;
+			margin-top: 10px;
 			line-height: 22px;
 			font-size: 16px;
 			a {
