@@ -81,4 +81,5 @@ web_appid = "appid"
 [qq]
 # web
 web_appid = "appid"
-web_appkey = "appkey"
+# 申请名称appkey,对接名称secret
+web_secret = "appkey"
