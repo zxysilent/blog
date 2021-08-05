@@ -72,6 +72,10 @@ func Init() {
 	logs.Info("model init")
 }
 
+func Close() {
+	Db.Close()
+}
+
 // xorm 缓存
 // 1. 当使用了Distinct,Having,GroupBy方法将不会使用缓存
 // 2. 在Get或者Find时使用了Cols,Omit方法，则在开启缓存后此方法无效，系统仍旧会取出这个表中的所有字段。

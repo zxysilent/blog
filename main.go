@@ -27,6 +27,7 @@ func main() {
 	logs.Info("app running")
 	go router.RunApp()
 	<-quit
+	model.Close()
 	logs.Info("app quitted")
 	logs.Flush()
 }
