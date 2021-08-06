@@ -48,7 +48,7 @@
 							<DatePicker v-model="dataForm.created" type="datetime" placeholder="选择发布日期和时间" :clearable="false" :editable="false"></DatePicker>
 						</FormItem>
 						<FormItem label="标签">
-							<Select v-model="dataForm.tags" multiple placeholder="请选择文章标签">
+							<Select v-model="tags" multiple placeholder="请选择文章标签">
 								<Option v-for="item in tagAll" :value="item.id" :key="item.id">{{ item.name }}</Option>
 							</Select>
 						</FormItem>
@@ -64,7 +64,7 @@
 import Mavon from "@/components/markdown/Mavon.vue";
 import { apiCateAll } from "@/api/cate";
 import { apiTagAll } from "@/api/tag";
-import { admPostEdit } from "@/api/post";
+import { admPostAdd } from "@/api/post";
 export default {
 	components: {
 		Mavon
@@ -73,6 +73,7 @@ export default {
 		return {
 			cateAll: [],
 			tagAll: [],
+			tags: [],
 			draftLoading: false,
 			finishLoading: false,
 			// 访问前缀
@@ -85,7 +86,7 @@ export default {
 				summary: "",
 				cate_id: 0,
 				allow: false,
-				created: "",
+				created: new Date(),
 				richtext: "",
 				markdown: ""
 			},
@@ -129,17 +130,15 @@ export default {
 					console.log(this.dataForm);
 					this.dataForm.status = 1; //草稿
 					this.draftLoading = true;
-					this.dataForm.tags = this.dataForm.tags.map((item) => {
+					this.dataForm.tags = this.tags.map((item) => {
 						return { id: item };
 					});
-					admPostEdit(this.dataForm).then((resp) => {
+					admPostAdd(this.dataForm).then((resp) => {
 						this.draftLoading = false;
 						if (resp.code == 200) {
 							this.$Message.success({
-								content: "修改成功",
-								onClose: () => {
-									this.init();
-								}
+								content: "保存成功",
+								onClose: () => {}
 							});
 						} else {
 							this.$Message.error({ content: resp.msg, duration: 3 });
@@ -162,14 +161,12 @@ export default {
 					this.dataForm.tags = this.dataForm.tags.map((item) => {
 						return { id: item };
 					});
-					admPostEdit(this.dataForm).then((resp) => {
+					admPostAdd(this.dataForm).then((resp) => {
 						this.finishLoading = false;
 						if (resp.code == 200) {
 							this.$Message.success({
-								content: "修改成功",
-								onClose: () => {
-									this.init();
-								}
+								content: "保存成功",
+								onClose: () => {}
 							});
 						} else {
 							this.$Message.error({ content: resp.msg, duration: 3 });

@@ -154,7 +154,7 @@ export default {
 						this.draftLoading = false;
 						if (resp.code == 200) {
 							this.$Message.success({
-								content: "修改成功",
+								content: "保存成功",
 								onClose: () => {
 									this.init();
 								}
@@ -185,7 +185,7 @@ export default {
 						this.finishLoading = false;
 						if (resp.code == 200) {
 							this.$Message.success({
-								content: "修改成功",
+								content: "保存成功",
 								onClose: () => {
 									this.init();
 								}
