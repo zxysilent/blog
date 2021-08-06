@@ -80,7 +80,7 @@ func UploadFile(ctx echo.Context) error {
 	}
 	src.Close()
 	dst.Close()
-	return ctx.JSON(utils.Succ("上传成功", conf.App.Srv+"/"+name))
+	return ctx.JSON(utils.Succ("上传成功", "/"+name))
 }
 
 // UploadImage doc
@@ -153,5 +153,5 @@ func UploadImage(ctx echo.Context) error {
 			return ctx.JSON(utils.ErrIpt("文件写入失败,请重试", err.Error()))
 		}
 	}
-	return ctx.JSON(utils.Succ("上传成功", conf.App.Srv+"/"+name))
+	return ctx.JSON(utils.Succ("上传成功", "/"+name))
 }
