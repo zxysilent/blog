@@ -157,7 +157,7 @@ const html404 = `<!DOCTYPE html>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>404 Not Found</title>
         <style>
-        body,html{background:#f0f0f0;overflow:hidden;font-family:Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,微软雅黑,Arial,sans-serif}
+        body,html{background:#f0f0f0;font-family:Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,微软雅黑,Arial,sans-serif}
         .app{display:block;background:#fff;border-radius:4px;font-size:14px;position:relative;transition:all .2s ease-in-out}
         .app-body{padding:16px}
         .gap{padding-bottom:20px;padding-top:16px;margin-bottom:20px;margin-top:16px}
@@ -179,6 +179,11 @@ const html404 = `<!DOCTYPE html>
         .btn-primary{color:#fff;background-color:#2d8cf0;border-color:#2d8cf0}
         .btn-primary:hover{color:#fff;background-color:#57a3f3;border-color:#57a3f3}
         .btn-default:hover{color:#57a3f3;border-color:#57a3f3}
+        .footer{margin:28px 0 24px;padding:0 28px;text-align:center}
+        .footer-links{margin-bottom:8px}
+        .footer-copyright{color:#808695;font-size:14px}
+        .footer-links a{margin-right:20px;margin-left:20px;font-size:14px;color:#808695;-webkit-transition:all .2s ease-in-out;transition:all .2s ease-in-out}
+        a{color:#2d8cf0;background:0 0;text-decoration:none;outline:0;cursor:pointer;transition:color .2s ease}
         </style>
     </head>
     <body>
@@ -202,12 +207,19 @@ const html404 = `<!DOCTYPE html>
                             <div>
                                 <a href="/" class="btn btn-success" title="返回主页"> 返回主页 </a>
                                 <a href="javascript:history.go(-1)" class="btn btn-primary" title="返回主页"> 上一页 </a>
-                                <a href="https://github.com/zxysilent" target="_blank" title="查看作者" class="btn btn-default"> 查看作者 </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="footer">
+            <div class="footer-links">
+                <a href="https://blog.zxysilent.com"  target="_blank" title="blog">blog</a>
+                <a href="https://github.com/zxysilent/blog" target="_blank" title="github">github</a>
+                <a href="https://github.com/zxysilent" target="_blank" title="查看作者">作者</a>
+            </div>
+            <div class="footer-copyright">Copyright &copy; <script>document.write(new Date().getFullYear());</script>&nbsp;<a target="_blank" href="https://github.com/zxysilent">github.com/zxysilent</a></div>
         </div>
     </body>
 </html>`
