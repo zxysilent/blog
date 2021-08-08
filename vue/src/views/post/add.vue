@@ -158,7 +158,7 @@ export default {
 					console.log(this.dataForm);
 					this.dataForm.status = 2; //发布
 					this.finishLoading = true;
-					this.dataForm.tags = this.dataForm.tags.map((item) => {
+					this.dataForm.tags = this.tags.map((item) => {
 						return { id: item };
 					});
 					admPostAdd(this.dataForm).then((resp) => {
