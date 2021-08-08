@@ -10,7 +10,7 @@ Target Server Type    : MariaDB
 Target Server Version : 100505
 File Encoding         : 65001
 
-Date: 2021-07-25 17:30:57
+Date: 2021-08-08 20:00:07
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -193,6 +193,24 @@ INSERT INTO `post_tag` VALUES ('461', '76', '2');
 INSERT INTO `post_tag` VALUES ('460', '76', '21');
 
 -- ----------------------------
+-- Table structure for sys_dict
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_dict`;
+CREATE TABLE `sys_dict` (
+  `key` varchar(64) NOT NULL COMMENT '唯一Key',
+  `value` varchar(255) DEFAULT NULL COMMENT '值',
+  `inner` tinyint(4) DEFAULT NULL COMMENT '内部禁止删除',
+  `intro` varchar(255) DEFAULT NULL COMMENT '说明',
+  PRIMARY KEY (`key`),
+  UNIQUE KEY `UQE_sys_dict_key` (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of sys_dict
+-- ----------------------------
+INSERT INTO `sys_dict` VALUES ('tmp-mod', '{\"begin\":\"2021-08-08 19:18\",\"end\":\"2021-08-08 19:18\",\"span\":0.3}', '0', '');
+
+-- ----------------------------
 -- Table structure for sys_global
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_global`;
@@ -236,14 +254,16 @@ CREATE TABLE `sys_user` (
   `ecount` int(11) DEFAULT 0 COMMENT '错误次数',
   `ltime` datetime DEFAULT NULL COMMENT '上次登录时间',
   `ctime` datetime DEFAULT NULL COMMENT '创建时间',
+  `openid_qq` varchar(64) DEFAULT NULL COMMENT 'qq_openid',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UQE_sys_user_num` (`num`)
+  UNIQUE KEY `UQE_sys_user_num` (`num`),
+  UNIQUE KEY `UQE_sys_user_openid_qq` (`openid_qq`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES ('1', 'zxysilent', 'zxysilent', '3b861abeaa25fba9d03898324463f7', '', '', '1', '2021-07-24 22:36:23', '2021-04-06 17:47:16');
+INSERT INTO `sys_user` VALUES ('1', 'zxysilent', 'zxysilent', '3b861abeaa25fba9d03898324463f7', '', '', '1', '2021-07-24 22:36:23', '2021-04-06 17:47:16', null);
 
 -- ----------------------------
 -- Table structure for tag
