@@ -60,6 +60,7 @@ func Init() {
 			new(PostTag),
 			// sys
 			new(User),
+			new(Dict),
 			new(Global),
 		)
 		if err != nil {

@@ -41,6 +41,25 @@ const routes = [
 				meta: { module: "sys", title: "个人中心" },
 				name: "profile",
 				component: () => import("@/views/user/self.vue")
+			},
+
+			{
+				path: "/dict/list",
+				name: "dict-list",
+				meta: { module: "sys", title: "字典管理" },
+				component: () => import("@/views/dict/list.vue")
+			},
+			{
+				path: "/dict/add",
+				name: "dict-add",
+				meta: { module: "sys", title: "添加字典" },
+				component: () => import("@/views/dict/add.vue")
+			},
+			{
+				path: "/dict/edit/:key",
+				name: "dict-edit",
+				meta: { module: "sys", title: "编辑字典" },
+				component: () => import("@/views/dict/edit.vue")
 			}
 		]
 	},

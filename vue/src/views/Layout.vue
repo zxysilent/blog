@@ -32,6 +32,8 @@
 						</template>
 						<MenuItem name="global" to="/global">
 						<Icon type="ios-cog-outline" />配置管理</MenuItem>
+                        <MenuItem name="dict" to="/dict/list">
+						<Icon type="ios-key-outline" />字典管理</MenuItem>
 						<MenuItem name="profile" to="/profile">
 						<Icon type="ios-person-outline" />个人信息</MenuItem>
 					</Submenu>

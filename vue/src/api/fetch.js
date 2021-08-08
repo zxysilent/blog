@@ -45,6 +45,11 @@ fetch.interceptors.response.use(
 			return new Promise(() => {});
 		}
 		if (resp.data.code == 350) {
+            ViewUI.Notice.error({
+				duration: 3,
+				title: "系统提醒",
+				desc: resp.data.msg
+			});
 			Router.push({ name: "500" });
 			return new Promise(() => {});
 		}
