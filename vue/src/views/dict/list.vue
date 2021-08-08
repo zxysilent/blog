@@ -30,6 +30,24 @@ export default {
 			tabCol: [
 				{ type: "index", width: 80, align: "center" },
 				{ title: "字典名", minWidth: 100, maxWidth: 200, key: "key" },
+				{
+					title: "类型",
+					minWidth: 80,
+					maxWidth: 120,
+					key: "inner",
+					render: (h, params) => {
+						const row = params.row;
+						const color = row.inner ? "success" : "primary";
+						const text = row.inner ? "内置" : "普通";
+						return h(
+							"Tag",
+							{
+								props: {  color: color, }
+							},
+							text
+						);
+					}
+				},
 				{ title: "字典值", minWidth: 200, key: "value", tooltip: true },
 				{ title: "字典说明", minWidth: 150, key: "intro", tooltip: true },
 				{
