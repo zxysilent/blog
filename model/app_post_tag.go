@@ -19,7 +19,7 @@ func TagPostCount(tagId int) int {
 // TagPostPage 通过标签查询文章分页
 func TagPostPage(tagId, pi, ps int) ([]PostTag, error) {
 	mods := make([]PostTag, 0, ps)
-	err := Db.SQL(`SELECT id,post_id,tag_id FROM post_tag WHERE tag_id=? limit ?,? `, tagId, (pi-1)*ps, ps).Find(&mods)
+	err := Db.SQL(`SELECT id,post_id,tag_id FROM post_tag WHERE tag_id=? ORDER BY post_id DESC LIMIT ?,? `, tagId, (pi-1)*ps, ps).Find(&mods)
 	if len(mods) > 0 {
 		ids := make([]int, 0, len(mods))
 		for idx := range mods {
