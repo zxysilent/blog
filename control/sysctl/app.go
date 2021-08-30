@@ -35,7 +35,7 @@ func GlobalEdit(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
-	err = model.GlobalEdit(ipt, "site_url", "logo_url", "title", "keywords", "description", "favicon_url", "beian_miit", "beian_nism", "copyright", "site_js", "site_css", "page_size", "analytic", "comment", "github_url", "weibo_url")
+	err = model.GlobalEdit(ipt, "site_url", "logo_url", "title", "author", "keywords", "description", "favicon_url", "beian_miit", "beian_nism", "copyright", "site_js", "site_css", "page_size", "analytic", "comment", "github_url", "weibo_url")
 	if err != nil {
 		return ctx.JSON(utils.Fail("修改失败", err.Error()))
 	}

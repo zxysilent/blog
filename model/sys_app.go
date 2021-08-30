@@ -22,6 +22,7 @@ type Global struct {
 	Id          int    `xorm:"INT(11) PK AUTOINCR comment('主键')" json:"id"`          //主键
 	SiteUrl     string `xorm:"VARCHAR(255) comment('网站地址')" json:"site_url"`         //网站地址
 	LogoUrl     string `xorm:"VARCHAR(255) comment('Logo地址')" json:"logo_url"`       //Logo地址
+	Author      string `xorm:"VARCHAR(255) comment('网站作者')" json:"author"`           //网站作者
 	Title       string `xorm:"VARCHAR(255) comment('网站标题')" json:"title"`            //网站标题
 	Keywords    string `xorm:"VARCHAR(255) comment('网站关键词')" json:"keywords"`        //网站关键词
 	Description string `xorm:"VARCHAR(255) comment('网站描述')" json:"description"`      //网站描述

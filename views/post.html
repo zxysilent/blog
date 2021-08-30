@@ -28,7 +28,7 @@
                     <p>本文链接：<a href="{{.global.SiteUrl}}/post/{{.Post.Path}}.html">{{.global.SiteUrl}}/post/{{.Post.Path}}.html</a></p>
                     <p>-- <acronym title="End of File">EOF</acronym> --</p>
                     <div class="post-info">
-                        <!-- <code class="notebook">zxysilent</code> -->
+                        <!-- <code class="notebook">{{.global.Author}}</code> -->
                         <p>
                             发表于 <i>{{ date .Post.Created "2006-01-02 15:04:05"}}</i>{{if .Post.Cate}}，添加在分类<a
                                 href="/cate/{{.Post.Cate.Name}}"

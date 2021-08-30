@@ -26,6 +26,9 @@
 						<FormItem label="网站标题" prop="title">
 							<Input v-model="dataForm.title" maxlength="64" show-word-limit placeholder="请填写网站标题"></Input>
 						</FormItem>
+                        <FormItem label="网站作者" prop="author">
+							<Input v-model="dataForm.author" maxlength="64" show-word-limit placeholder="请填写网站作者"></Input>
+						</FormItem>
 						<FormItem label="SEO关键词" prop="keywords">
 							<Input v-model="dataForm.keywords" maxlength="64" show-word-limit placeholder="请填写SEO关键词"></Input>
 						</FormItem>
@@ -115,6 +118,7 @@ export default {
 				site_url: "",
 				logo_url: "",
 				title: "",
+                author:"",
 				keywords: "",
 				description: "",
 				favicon_url: "",
@@ -133,6 +137,7 @@ export default {
 				site_url: [{ required: true, message: "请填写网站地址", trigger: "blur", max: 128 }],
 				logo_url: [{ required: true, message: "请填写Logo地址", trigger: "blur", max: 128 }],
 				title: [{ required: true, message: "请填写网站标题", trigger: "blur", max: 128 }],
+                author: [{ required: true, message: "请填写网站作者", trigger: "blur", max: 128 }],
 				favicon_url: [{ required: true, message: "请填写ICO地址", trigger: "blur", max: 128 }]
 			}
 		};
