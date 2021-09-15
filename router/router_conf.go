@@ -167,7 +167,7 @@ const html404 = `<!DOCTYPE html>
         .result-title{margin-bottom:16px;color:#17233d;font-weight:500;font-size:24px;line-height:32px}
         .result-icon{display:inline-block;width:150px;border-radius:50%}
         .result-desc{margin-bottom:24px;color:#808695;font-size:14px;line-height:22px}
-        .result-extra{padding:24px 40px;text-align:left;background:#f8f8f9;border-radius:4px}
+        .result-extra{padding:24px 40px;text-align:center;background:#f8f8f9;border-radius:4px}
         .result-actions .btn:not(:last-child){margin-right:8px}
         .btn{display:inline-block;margin-bottom:0;font-weight:400;text-align:center;vertical-align:middle;touch-action:manipulation;cursor:pointer;background-image:none;border:1px solid transparent;white-space:nowrap;-webkit-user-select:none;-ms-user-select:none;user-select:none;height:32px;line-height:32px;text-decoration-line:none;padding:0 15px;font-size:14px;border-radius:4px;transition:color .2s linear,background-color .2s linear,border .2s linear,box-shadow .2s linear;color:#515a6e;background-color:#fff;border-color:#dcdee2}
         .btn-success{color:#fff;background-color:#19be6b;border-color:#19be6b}
