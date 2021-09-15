@@ -35,6 +35,7 @@
 - [x] 标签管理
 - [x] 系统设置
 - [x] 管理主页
+- [x] QQ扫码登录
 ## 说明
 
 - 替换markdown 编辑器为富文本编辑器即可作为简单`CMS`,更多功能请二次开发
@@ -43,14 +44,20 @@
 - 富文本预览地址  
 [http://qn.static.zxysilent.com/demos/view-design-admin/index.html#/pages/editor](http://qn.static.zxysilent.com/demos/view-design-admin/index.html#/pages/editor)
 
+- QQ扫码登录
+    - 申请应用 [https://connect.qq.com](https://connect.qq.com)
+    - 配置`conf/conf.toml`下面`[qq]`的`web_appid`和`web_secret`
+        ![image](./data/imgs/qqlogin.png)
+    - 配置数据库中 `user`表的`openid_qq`
+    - 修改 `control/sysctl/auth_qq.go`中 `redirectUrl`重定向地址，要保证和申请应用中填写的一致(生成方式见`control/sysctl/sysctl_test.go`中 `TestURLEncode`)
 ## 讨论群
 🐧🐧 1059282178
 
 ## 使用方式-直接部署
 ```
-git clone -b v0.3.2 --depth=1 https://github.com/zxysilent/blog.git
+git clone -b v0.4.0 --depth=1 https://github.com/zxysilent/blog.git
 ```
-若要部署，请修改关键信息[jwt、用户名、密码等]
+若要部署，请修改关键信息[token、用户名、密码等]
 数据库自带文章内容请在部署前删除
 
 ### 部署界面
@@ -79,7 +86,7 @@ git clone -b v0.3.2 --depth=1 https://github.com/zxysilent/blog.git
 ```
 git clone https://github.com/zxysilent/blog.git
 ```
-若要部署，请修改关键信息[jwt、用户名、密码等]
+若要部署，请修改关键信息[token、用户名、密码等]
 数据库自带文章内容请在部署前删除
 
 ### 开发界面
