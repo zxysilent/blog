@@ -11,8 +11,8 @@ import (
 func apiRouter(api *echo.Group) {
 	api.GET("/auth/vcode", sysctl.AuthVcode)    // 验证码
 	api.GET("/global/get", sysctl.GlobalGet)    // 全局配置
-	api.GET("/dict/get", sysctl.DictGet)        //单个字典
-	api.GET("/dict/page", sysctl.DictPage)      //字典分页
+	api.GET("/dict/get", sysctl.DictGet)        // 单个字典
+	api.GET("/dict/page", sysctl.DictPage)      // 字典分页
 	api.POST("/auth/login", sysctl.AuthLogin)   // 登陆
 	api.POST("/auth/logout", sysctl.UserLogout) // 注销
 	api.GET("/cate/get", appctl.CateGet)        // 单个分类
