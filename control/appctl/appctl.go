@@ -4,12 +4,12 @@ import (
 	"blog/model"
 	"net/http"
 	"regexp"
-	"strconv"
 	"strings"
 
 	"github.com/labstack/echo/v4"
 )
 
+// lazy-load 懒加载图片
 var regImg = regexp.MustCompile(`<img src="([^" ]+)" alt="([^" ]*)"\s?\/?>`)
 var regToc = regexp.MustCompile("<h[1-6]>.*?</h[1-6]>")
 var regH = regexp.MustCompile(`<h[1-6]><a id="(.*?)"></a>(.*?)</h[1-6]>`)
@@ -72,14 +72,6 @@ func getTocHTML(html string) string {
 		return sb.String() + html
 	}
 	return html
-}
-
-func atoi(raw string, def int) (int, error) {
-	out, err := strconv.Atoi(raw)
-	if err != nil {
-		return def, err
-	}
-	return out, nil
 }
 
 func similar(a, b string) int {
