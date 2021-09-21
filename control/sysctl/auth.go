@@ -114,7 +114,7 @@ func UserLogout(ctx echo.Context) error {
 // @Summary 验证码
 // @Accept mpfd
 // @Success 200 {object} model.Reply{data=string} "返回数据"
-// @Router /api/auth/vcode [post]
+// @Router /api/auth/vcode [get]
 func AuthVcode(ctx echo.Context) error {
 	rnd := utils.RandDigitStr(4)
 	out := struct {
