@@ -1,0 +1,23 @@
+@baseUrl = http://127.0.0.1:8085
+
+# @name login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json;charset=UTF-8
+
+{"num":"zxysilent","vcode":"3533","vreal":"T3wDNqjIGfOeHXGz5T6uLJFQNlY","passwd":"3b861abeaa25fba9d03898324463f7"}
+
+###
+@token = {{login.response.body.data}}
+# @name goinfo
+GET  {{baseUrl}}/adm/status/goinfo
+Authorization: {{token}}
+
+### 
+# @name createComment
+POST {{baseUrl}}/adm/status/g
+Authorization: {{token}}
+Content-Type: application/json;charset=UTF-8
+
+{
+    "content": "fake content"
+}
