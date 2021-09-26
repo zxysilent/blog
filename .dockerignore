@@ -1,0 +1,10 @@
+*.exe
+*.exe~
+static/dist/*
+vue/*
+dist/*
+logs/*
+gens/*
+blog
+blog.*
+publish*
