@@ -1,14 +1,13 @@
 # 构建：使用golang:1.16 latest版本
 FROM golang:1.16 as builder
-
+MAINTAINER https://github.com/zxysilent
 # 容器环境变量添加，会覆盖默认的变量值
 ENV GO111MODULE=on
 ENV GOPROXY=https://goproxy.cn,direct
-s
 # 设置工作区
 # GOPATH "/go"
 WORKDIR /go/cache
-
+# 复制文件下载依赖
 ADD go.mod .
 ADD go.sum .
 RUN go mod download
@@ -18,7 +17,7 @@ RUN go mod download
 # GOPATH "/go"
 WORKDIR /go/build
 
-# ADD src dest
+# ADD src dest(loacl->docker)
 ADD . .
 
 # 编译：把main.go编译成可执行的二进制文件，命名为app
