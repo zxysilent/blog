@@ -18,10 +18,10 @@ func CateGet(id interface{}) (*Cate, bool) {
 	mod := &Cate{}
 	switch val := id.(type) {
 	case int:
-		has, _ := Db.ID(val).Get(mod)
+		has, _ := db.ID(val).Get(mod)
 		return mod, has
 	case string:
-		has, _ := Db.Where("name = ?", val).Get(mod)
+		has, _ := db.Where("name = ?", val).Get(mod)
 		return mod, has
 	default:
 		return mod, false
@@ -31,14 +31,14 @@ func CateGet(id interface{}) (*Cate, bool) {
 // CateAll 所有分类
 func CateAll() ([]Cate, error) {
 	mods := make([]Cate, 0, 8)
-	err := Db.Find(&mods)
+	err := db.Find(&mods)
 	return mods, err
 }
 
 // CatePage 分类分页
 func CatePage(pi int, ps int, cols ...string) ([]Cate, error) {
 	mods := make([]Cate, 0, ps)
-	sess := Db.NewSession()
+	sess := db.NewSession()
 	defer sess.Close()
 	if len(cols) > 0 {
 		sess.Cols(cols...)
@@ -50,7 +50,7 @@ func CatePage(pi int, ps int, cols ...string) ([]Cate, error) {
 // CateCount 分类分页总数
 func CateCount() int {
 	mod := &Cate{}
-	sess := Db.NewSession()
+	sess := db.NewSession()
 	defer sess.Close()
 	count, _ := sess.Count(mod)
 	return int(count)
@@ -59,7 +59,7 @@ func CateCount() int {
 // CateIds 通过id集合返回分类
 func CateIds(ids []int) map[int]*Cate {
 	mods := make([]Cate, 0, len(ids))
-	Db.In("id", ids).Find(&mods)
+	db.In("id", ids).Find(&mods)
 	mapSet := make(map[int]*Cate, len(mods))
 	for idx := range mods {
 		mapSet[mods[idx].Id] = &mods[idx]
@@ -69,7 +69,7 @@ func CateIds(ids []int) map[int]*Cate {
 
 // CateAdd 添加分类
 func CateAdd(mod *Cate) error {
-	sess := Db.NewSession()
+	sess := db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	if _, err := sess.InsertOne(mod); err != nil {
@@ -82,7 +82,7 @@ func CateAdd(mod *Cate) error {
 
 // CateEdit 编辑分类
 func CateEdit(mod *Cate, cols ...string) error {
-	sess := Db.NewSession()
+	sess := db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	if _, err := sess.ID(mod.Id).Cols(cols...).Update(mod); err != nil {
@@ -95,7 +95,7 @@ func CateEdit(mod *Cate, cols ...string) error {
 
 // CateDrop 删除单条分类
 func CateDrop(id int) error {
-	sess := Db.NewSession()
+	sess := db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	if _, err := sess.ID(id).Delete(&Cate{}); err != nil {
@@ -103,6 +103,6 @@ func CateDrop(id int) error {
 		return err
 	}
 	sess.Commit()
-	Db.ClearCacheBean(&Cate{}, strconv.Itoa(id))
+	db.ClearCacheBean(&Cate{}, strconv.Itoa(id))
 	return nil
 }

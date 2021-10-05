@@ -25,27 +25,27 @@ func (User) TableName() string {
 //UserLogin 用户登录
 func UserLogin(num string) (*User, bool) {
 	mod := &User{}
-	has, _ := Db.Where("num = ?", num).Get(mod)
+	has, _ := db.Where("num = ?", num).Get(mod)
 	return mod, has
 }
 
 // UserGet 单条用户信息
 func UserGet(id int) (*User, bool) {
 	mod := &User{}
-	has, _ := Db.ID(id).Get(mod)
+	has, _ := db.ID(id).Get(mod)
 	return mod, has
 }
 
 // UserOpenidQq 单条用户信息
 func UserOpenidQq(openid string) (*User, bool) {
 	mod := &User{}
-	has, _ := Db.Where("openid_qq = ?", openid).Get(mod)
+	has, _ := db.Where("openid_qq = ?", openid).Get(mod)
 	return mod, has
 }
 
 // UserEdit 编辑用户信息
 func UserEdit(mod *User, cols ...string) error {
-	sess := Db.NewSession()
+	sess := db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	if _, err := sess.ID(mod.Id).Cols(cols...).Update(mod); err != nil {

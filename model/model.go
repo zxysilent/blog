@@ -15,15 +15,17 @@ import (
 	xlog "xorm.io/xorm/log"
 )
 
-// Db 数据库操作句柄
-var Db *xorm.Engine
+// db 数据库操作句柄
+var db *xorm.Engine
 
 func Init() {
 	// 初始化数据库操作的 Xorm
-	db, err := xorm.NewEngine("mysql", conf.App.Dsn())
+	var err error
+	db, err = xorm.NewEngine("mysql", conf.App.Dsn())
 	if err != nil {
 		logs.Fatal("数据库 dsn:", err.Error())
 	}
+	// 劫持xorm日志
 	if conf.App.OrmHijackLog {
 		sl := &xlog.SimpleLogger{
 			DEBUG: log.New(logs.Writer(), "", log.Ldate|log.Ltime),
@@ -52,7 +54,7 @@ func Init() {
 	}
 	// mysql int(11)、tinyint(4)、smallint(6)、mediumint(9)、bigint(20)
 	if conf.App.OrmSync {
-		err := db.Sync2(
+		err = db.Sync2(
 			// app
 			new(Cate),
 			new(Tag),
@@ -64,17 +66,17 @@ func Init() {
 			new(Global),
 		)
 		if err != nil {
+			db.Close()
 			logs.Fatal("数据库 sync:", err.Error())
 		}
 	}
-	Db = db
 	//缓存
 	initGlobal()
 	logs.Info("model init")
 }
 
 func Close() {
-	Db.Close()
+	db.Close()
 }
 
 // xorm 缓存
@@ -127,7 +129,7 @@ type State struct {
 // Collect 统计信息
 func Collect() (*State, bool) {
 	mod := &State{}
-	has, _ := Db.SQL(`SELECT * FROM(SELECT COUNT(id) as post FROM post WHERE kind=1)as a ,(SELECT COUNT(id) as page FROM post WHERE kind=2) as b, (SELECT COUNT(id) as cate FROM cate) as c, (SELECT COUNT(id) as tag FROM tag) as d`).Get(mod)
+	has, _ := db.SQL(`SELECT * FROM(SELECT COUNT(id) as post FROM post WHERE kind=1)as a ,(SELECT COUNT(id) as page FROM post WHERE kind=2) as b, (SELECT COUNT(id) as cate FROM cate) as c, (SELECT COUNT(id) as tag FROM tag) as d`).Get(mod)
 	return mod, has
 }
 func inOf(goal int, arr []int) bool {

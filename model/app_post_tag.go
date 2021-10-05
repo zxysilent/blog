@@ -12,14 +12,14 @@ type PostTag struct {
 // TagPostCount 通过标签查询文章分页总数
 func TagPostCount(tagId int) int {
 	var count int
-	Db.SQL(`SELECT count(post_id) as count FROM post_tag WHERE tag_id=?`, tagId).Get(&count)
+	db.SQL(`SELECT count(post_id) as count FROM post_tag WHERE tag_id=?`, tagId).Get(&count)
 	return count
 }
 
 // TagPostPage 通过标签查询文章分页
 func TagPostPage(tagId, pi, ps int) ([]PostTag, error) {
 	mods := make([]PostTag, 0, ps)
-	err := Db.SQL(`SELECT id,post_id,tag_id FROM post_tag WHERE tag_id=? ORDER BY post_id DESC LIMIT ?,? `, tagId, (pi-1)*ps, ps).Find(&mods)
+	err := db.SQL(`SELECT id,post_id,tag_id FROM post_tag WHERE tag_id=? ORDER BY post_id DESC LIMIT ?,? `, tagId, (pi-1)*ps, ps).Find(&mods)
 	if len(mods) > 0 {
 		ids := make([]int, 0, len(mods))
 		for idx := range mods {
@@ -37,7 +37,7 @@ func TagPostPage(tagId, pi, ps int) ([]PostTag, error) {
 
 // TagPostAdds 添加文章标签[]
 func TagPostAdds(mods *[]PostTag) error {
-	sess := Db.NewSession()
+	sess := db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	if _, err := sess.Insert(mods); err != nil {
@@ -51,7 +51,7 @@ func TagPostAdds(mods *[]PostTag) error {
 // TagPostDrop 删除标签时候
 // 删除对应的标签_文章
 func TagPostDrop(tagId int) error {
-	sess := Db.NewSession()
+	sess := db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	sess.Where("tag_id = ?", tagId)
@@ -69,7 +69,7 @@ func PostTagDrops(postId int, tagIds []int) error {
 	if len(tagIds) < 1 {
 		return nil
 	}
-	sess := Db.NewSession()
+	sess := db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	sess.Where("post_id = ?", postId).In("tag_id", tagIds)
@@ -84,7 +84,7 @@ func PostTagDrops(postId int, tagIds []int) error {
 // PostTagDrop 删除文章时候
 // 删除对应的标签_文章
 func PostTagDrop(postId int) error {
-	sess := Db.NewSession()
+	sess := db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	sess.Where("post_id = ?", postId)

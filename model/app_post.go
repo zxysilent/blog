@@ -37,10 +37,10 @@ const (
 // PostGet 单条文章/页面
 func PostGet(id int) (*Post, bool) {
 	mod := &Post{}
-	has, _ := Db.ID(id).Get(mod)
+	has, _ := db.ID(id).Get(mod)
 	if has && mod.Kind == PostKindPost {
 		tags := make([]Tag, 0, 4)
-		Db.SQL("SELECT * FROM tag WHERE id IN (SELECT tag_id FROM post_tag WHERE post_id = ?)", mod.Id).Find(&tags)
+		db.SQL("SELECT * FROM tag WHERE id IN (SELECT tag_id FROM post_tag WHERE post_id = ?)", mod.Id).Find(&tags)
 		mod.Tags = tags
 	}
 	return mod, has
@@ -49,7 +49,7 @@ func PostGet(id int) (*Post, bool) {
 // PostAll 所有文章/页面
 func PostAll(cateId int, kind int, cols ...string) ([]Post, error) {
 	mods := make([]Post, 0, 4)
-	sess := Db.NewSession()
+	sess := db.NewSession()
 	defer sess.Close()
 	if cateId > 0 {
 		sess.Where("cate_id = ?", cateId)
@@ -60,13 +60,13 @@ func PostAll(cateId int, kind int, cols ...string) ([]Post, error) {
 	if len(cols) > 0 {
 		sess.Cols(cols...)
 	}
-	err := Db.Desc("created").Find(&mods)
+	err := db.Desc("created").Find(&mods)
 	return mods, err
 }
 
 //PostExist 判断是否存在
 func PostExist(ptah string) bool {
-	has, _ := Db.Exist(&Post{
+	has, _ := db.Exist(&Post{
 		Path: ptah,
 	})
 	return has
@@ -75,7 +75,7 @@ func PostExist(ptah string) bool {
 // PostPage 文章/页面分页
 func PostPage(cateId int, kind int, pi int, ps int, cols ...string) ([]Post, error) {
 	mods := make([]Post, 0, ps)
-	sess := Db.NewSession()
+	sess := db.NewSession()
 	defer sess.Close()
 	if cateId > 0 {
 		sess.Where("cate_id = ?", cateId)
@@ -93,7 +93,7 @@ func PostPage(cateId int, kind int, pi int, ps int, cols ...string) ([]Post, err
 // PostCount 返回总数
 func PostCount(cateId int, kind int) int {
 	mod := &Post{}
-	sess := Db.NewSession()
+	sess := db.NewSession()
 	defer sess.Close()
 	if cateId > 0 {
 		sess.Where("cate_id = ?", cateId)
@@ -107,7 +107,7 @@ func PostCount(cateId int, kind int) int {
 
 // PostEdit 编辑文章
 func PostEdit(mod *Post, cols ...string) error {
-	sess := Db.NewSession()
+	sess := db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	if _, err := sess.ID(mod.Id).Cols(cols...).Update(mod); err != nil {
@@ -120,7 +120,7 @@ func PostEdit(mod *Post, cols ...string) error {
 
 // PostAdd 添加文章/页面
 func PostAdd(mod *Post) error {
-	sess := Db.NewSession()
+	sess := db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	if _, err := sess.InsertOne(mod); err != nil {
@@ -133,7 +133,7 @@ func PostAdd(mod *Post) error {
 
 // PostDrop 删除单条文章
 func PostDrop(id int) error {
-	sess := Db.NewSession()
+	sess := db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	if _, err := sess.ID(id).Delete(&Post{}); err != nil {
@@ -141,14 +141,14 @@ func PostDrop(id int) error {
 		return err
 	}
 	sess.Commit()
-	Db.ClearCacheBean(&Post{}, strconv.Itoa(id))
+	db.ClearCacheBean(&Post{}, strconv.Itoa(id))
 	return nil
 }
 
 // PostIds 通过id集合返回文章
 func PostIds(ids []int) map[int]*Post {
 	mods := make([]Post, 0, len(ids))
-	Db.Cols("id", "title", "path", "cate_id", "created", "summary").In("id", ids).Find(&mods)
+	db.Cols("id", "title", "path", "cate_id", "created", "summary").In("id", ids).Find(&mods)
 	mapSet := make(map[int]*Post, len(mods))
 	for idx := range mods {
 		mapSet[mods[idx].Id] = &mods[idx]
@@ -160,7 +160,7 @@ func PostIds(ids []int) map[int]*Post {
 //PostSingle 单页面 page
 func PostSingle(path string) (*Post, bool) {
 	mod := &Post{}
-	has, _ := Db.Where("kind = 2 and path = ?", path).Get(mod)
+	has, _ := db.Where("kind = 2 and path = ?", path).Get(mod)
 	return mod, has
 }
 
@@ -174,7 +174,7 @@ type Archive struct {
 // PostArchive 归档
 func PostArchive() ([]Archive, error) {
 	posts := make([]Post, 0, 8)
-	err := Db.Cols("id", "title", "path", "created").Where("kind = 1  and status = 2 ").Desc("created").Find(&posts)
+	err := db.Cols("id", "title", "path", "created").Where("kind = 1  and status = 2 ").Desc("created").Find(&posts)
 	if err != nil {
 		return nil, err
 	}
@@ -210,23 +210,23 @@ func PostPath(path string) (*Post, *Naver, bool) {
 		Path: path,
 		Kind: 1,
 	}
-	has, _ := Db.Get(mod)
+	has, _ := db.Get(mod)
 	if has {
 		mod.Cate, _ = CateGet(mod.CateId)
 		if mod.Kind == PostKindPost {
 			tags := make([]Tag, 0, 4)
-			Db.SQL("SELECT * FROM tag WHERE id IN (SELECT tag_id FROM post_tag WHERE post_id = ?)", mod.Id).Find(&tags)
+			db.SQL("SELECT * FROM tag WHERE id IN (SELECT tag_id FROM post_tag WHERE post_id = ?)", mod.Id).Find(&tags)
 			mod.Tags = tags
 		}
 		naver := &Naver{}
 		p := Post{}
-		b, _ := Db.Where("kind = 1 and status = 2 and created >?", mod.Created.Format(utils.StdDateTime)).Asc("created").Get(&p)
+		b, _ := db.Where("kind = 1 and status = 2 and created >?", mod.Created.Format(utils.StdDateTime)).Asc("created").Get(&p)
 		if b {
 			// <a href="{{.Naver.Prev}}" class="prev">&laquo; 上一页</a>
 			naver.Prev = `<a href="/post/` + p.Path + `.html" class="prev">&laquo; ` + p.Title + `</a>`
 		}
 		n := Post{}
-		b1, _ := Db.Where("kind = 1  and status = 2 and created <?", mod.Created.Format(utils.StdDateTime)).Desc("created").Get(&n)
+		b1, _ := db.Where("kind = 1  and status = 2 and created <?", mod.Created.Format(utils.StdDateTime)).Desc("created").Get(&n)
 		if b1 {
 			//<a href="{{.Naver.Next}}" class="next">下一页 &raquo;</a>
 			naver.Next = `<a href="/post/` + n.Path + `.html" class="next"> ` + n.Title + ` &raquo;</a>`

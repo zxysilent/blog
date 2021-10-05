@@ -15,14 +15,14 @@ func (Dict) TableName() string {
 // DictGet 单条字典
 func DictGet(key string) (*Dict, bool) {
 	mod := &Dict{}
-	has, _ := Db.ID(key).Get(mod)
+	has, _ := db.ID(key).Get(mod)
 	return mod, has
 }
 
 // DictPage 字典分页
 func DictPage(pi int, ps int, cols ...string) ([]Dict, error) {
 	mods := make([]Dict, 0, ps)
-	sess := Db.NewSession()
+	sess := db.NewSession()
 	defer sess.Close()
 	if len(cols) > 0 {
 		sess.Cols(cols...)
@@ -34,7 +34,7 @@ func DictPage(pi int, ps int, cols ...string) ([]Dict, error) {
 // DictCount 字典分页总数
 func DictCount() int {
 	mod := &Dict{}
-	sess := Db.NewSession()
+	sess := db.NewSession()
 	defer sess.Close()
 	count, _ := sess.Count(mod)
 	return int(count)
@@ -42,7 +42,7 @@ func DictCount() int {
 
 // DictAdd 添加字典
 func DictAdd(mod *Dict) error {
-	sess := Db.NewSession()
+	sess := db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	if _, err := sess.InsertOne(mod); err != nil {
@@ -55,7 +55,7 @@ func DictAdd(mod *Dict) error {
 
 // DictEdit 编辑字典
 func DictEdit(mod *Dict, cols ...string) error {
-	sess := Db.NewSession()
+	sess := db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	if _, err := sess.ID(mod.Key).Cols(cols...).Update(mod); err != nil {
@@ -68,7 +68,7 @@ func DictEdit(mod *Dict, cols ...string) error {
 
 // DictDrop 删除单条字典
 func DictDrop(key string) error {
-	sess := Db.NewSession()
+	sess := db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	if _, err := sess.ID(key).Delete(&Dict{}); err != nil {

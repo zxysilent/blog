@@ -49,7 +49,7 @@ var globalCache Global
 
 func initGlobal() error {
 	mod := Global{}
-	has, _ := Db.ID(1).Get(&mod)
+	has, _ := db.ID(1).Get(&mod)
 	if !has {
 		return errors.New("no")
 	}
@@ -60,7 +60,7 @@ func initGlobal() error {
 
 func GlobalGet() (*Global, bool) {
 	// mod := &Global{}
-	// has, _ := Db.ID(globalId).Get(mod)
+	// has, _ := db.ID(globalId).Get(mod)
 	return &globalCache, true
 }
 func Gcfg() Global {
@@ -70,7 +70,7 @@ func Gcfg() Global {
 
 // GlobalEdit 编辑global信息
 func GlobalEdit(mod *Global, cols ...string) error {
-	sess := Db.NewSession()
+	sess := db.NewSession()
 	defer sess.Close()
 	sess.Begin()
 	if _, err := sess.ID(globalId).Cols(cols...).Update(mod); err != nil {
