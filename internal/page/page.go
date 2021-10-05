@@ -16,11 +16,11 @@ type _page struct {
 type JS = template.JS
 
 const (
-	k404   = "404"
-	kSucc  = "succ"
-	kError = "error"
-	kInfo  = "info"
-	kWarn  = "warn"
+	k404   string = "404"
+	kSucc         = "succ"
+	kError        = "error"
+	kInfo         = "info"
+	kWarn         = "warn"
 )
 
 type context struct {
@@ -32,7 +32,7 @@ type context struct {
 	execJs JS     //可能执行的js
 }
 
-func new(kind string) *context {
+func newPage(kind string) *context {
 	ctx := &context{}
 	ctx.circle = true
 	ctx.kind = kind
@@ -92,7 +92,7 @@ func init() {
 
 //  Err404 404页面
 func Err404() *context {
-	ctx := new(k404)
+	ctx := newPage(k404)
 	ctx.title = "404 Not Found"
 	ctx.desc = "页面不存在,请确认后访问。"
 	ctx.extra = "暂无额外信息"
@@ -101,7 +101,7 @@ func Err404() *context {
 
 //  Succ 成功页面
 func Succ() *context {
-	ctx := new(kSucc)
+	ctx := newPage(kSucc)
 	ctx.title = "成功"
 	ctx.desc = "成功"
 	ctx.extra = "暂无额外信息"
@@ -110,7 +110,7 @@ func Succ() *context {
 
 //  Info 信息页面
 func Info() *context {
-	ctx := new(kInfo)
+	ctx := newPage(kInfo)
 	ctx.title = "提示"
 	ctx.desc = "提示信息"
 	ctx.extra = "暂无额外信息"
@@ -119,7 +119,7 @@ func Info() *context {
 
 // Warn 警告页面
 func Warn() *context {
-	ctx := new(kWarn)
+	ctx := newPage(kWarn)
 	ctx.title = "警告"
 	ctx.desc = "警告信息"
 	ctx.extra = "暂无额外信息"
@@ -128,7 +128,7 @@ func Warn() *context {
 
 // Error 错误页面
 func Error() *context {
-	ctx := new(kError)
+	ctx := newPage(kError)
 	ctx.title = "错误"
 	ctx.desc = "错误"
 	ctx.extra = "暂无额外信息"
@@ -218,7 +218,7 @@ var tmplHtml = `<!DOCTYPE html>
                 <a href="https://github.com/zxysilent/blog" target="_blank" title="github">github</a>
                 <a href="https://github.com/zxysilent" target="_blank" title="查看作者">作者</a>
             </div>
-            <div class="footer-copyright">Copyright &copy; <script>document.write(new Date().getFullYear());</script>&nbsp;<a target="_blank" href="https://github.com/zxysilent">github.com/zxysilent</a></div>
+            <div class="footer-copyright">Copyright &copy; <script>document.write(newPage Date().getFullYear());</script>&nbsp;<a target="_blank" href="https://github.com/zxysilent">github.com/zxysilent</a></div>
         </div>
         {{if ne .ExecJs ""}}<script>{{.ExecJs}}</script>{{end}}
     </body>
