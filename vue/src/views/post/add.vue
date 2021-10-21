@@ -65,7 +65,6 @@ import Mavon from "@/components/markdown/Mavon.vue";
 import { apiCateAll } from "@/api/cate";
 import { apiTagAll } from "@/api/tag";
 import { admPostAdd } from "@/api/post";
-import { set } from "vue/types/umd";
 export default {
 	components: {
 		Mavon
