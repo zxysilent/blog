@@ -103,7 +103,13 @@ export default {
 						if (resp.code == 200) {
 							this.$Message.success({
 								content: "保存成功",
-								onClose: () => {}
+								onClose: () => {
+									setTimeout(() => {
+										this.$router.push({
+											name: "page-list"
+										});
+									}, 1500);
+								}
 							});
 						} else {
 							this.$Message.error({ content: resp.msg, duration: 3 });

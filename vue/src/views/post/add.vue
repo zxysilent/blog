@@ -65,6 +65,7 @@ import Mavon from "@/components/markdown/Mavon.vue";
 import { apiCateAll } from "@/api/cate";
 import { apiTagAll } from "@/api/tag";
 import { admPostAdd } from "@/api/post";
+import { set } from "vue/types/umd";
 export default {
 	components: {
 		Mavon
@@ -166,7 +167,13 @@ export default {
 						if (resp.code == 200) {
 							this.$Message.success({
 								content: "保存成功",
-								onClose: () => {}
+								onClose: () => {
+									setTimeout(() => {
+										this.$router.push({
+											name: "post-list"
+										});
+									}, 1500);
+								}
 							});
 						} else {
 							this.$Message.error({ content: resp.msg, duration: 3 });
