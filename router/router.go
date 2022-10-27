@@ -7,11 +7,10 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/zxysilent/logs"
 )
 
-// RunApp 入口
-func RunApp() {
+// Init 入口
+func Init() *echo.Echo {
 	engine := echo.New()                              // 实例化echo
 	engine.Renderer = initRender()                    // 初始渲染引擎
 	engine.Use(midRecover, midLogger)                 // 恢复 日志记录
@@ -47,8 +46,5 @@ func RunApp() {
 	apiRouter(api)                       // 注册分组路由
 	adm := engine.Group("/adm", midAuth) // adm/ 需要登陆才能访问
 	admRouter(adm)                       // 注册分组路由
-	err := engine.Start(conf.App.Addr)
-	if err != nil {
-		logs.Fatal("run error :", err.Error())
-	}
+	return engine
 }

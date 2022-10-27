@@ -4,9 +4,12 @@ import (
 	"blog/conf"
 	"blog/model"
 	"blog/router"
+	"context"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/zxysilent/logs"
 )
@@ -22,12 +25,27 @@ func main() {
 	logs.Info("app initializing")
 	conf.Init()
 	model.Init()
+	defer model.Close()
+	defer logs.Flush()
 	quit := make(chan os.Signal)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL)
 	logs.Info("app running")
-	go router.RunApp()
+	app := router.Init()
+	go func() {
+		if err := app.Start(conf.App.Addr); err != nil {
+			logs.Fatal(err.Error())
+		}
+		// if err := app.StartTLS(conf.App.Addr, "./server.crt", "./server.key"); err != nil {
+		// 	logs.Fatal(err.Error())
+		// }
+	}()
 	<-quit
-	model.Close()
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	if err := app.Shutdown(ctx); err != nil {
+		if err != http.ErrServerClosed { //Normal exit
+			logs.Error("Server Shutdown:", err)
+		}
+	}
 	logs.Info("app quitted")
-	logs.Flush()
 }
