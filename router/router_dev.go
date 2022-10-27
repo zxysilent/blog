@@ -1,3 +1,4 @@
+//go:build !prod
 // +build !prod
 
 package router
@@ -21,8 +22,8 @@ const AppCssUrl = "/static/css/app.css"
 var pool *sync.Pool
 
 func init() {
-	logs.SetLevel(logs.DEBUG)
-	logs.SetCallInfo(true)
+	logs.SetLevel(logs.LDEBUG)
+	logs.SetCaller(true)
 	logs.SetConsole(true)
 	pool = &sync.Pool{
 		New: func() interface{} {

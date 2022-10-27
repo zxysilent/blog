@@ -1,3 +1,4 @@
+//go:build prod
 // +build prod
 
 package router
@@ -11,7 +12,7 @@ const AppJsUrl = "/static/js/app.min.js"
 const AppCssUrl = "/static/css/app.min.css"
 
 func init() {
-	logs.SetLevel(logs.WARN)
+	logs.SetLevel(logs.LWARN)
 }
 
 // RegDocs 注册文档
