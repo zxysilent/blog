@@ -60,12 +60,17 @@ func Init() *echo.Echo {
 	engine.GET("/links", view.ViewLinks)          // 友链
 	engine.GET("/pages/*", view.ViewPage)         // 具体某个页面
 	engine.GET("/posts/*", view.ViewPost)         // 具体某个文章
+	engine.File("/mgmt*", "dist/index.html")      // 前后端分离页面
 	engine.GET("/mgmt", func(ctx echo.Context) error {
 		return ctx.Redirect(http.StatusFound, "/mgmt/")
 	})
-	engine.File("/mgmt*", "dist/index.html") // 前后端分离页面
 	engine.GET("/ping", func(ctx echo.Context) error {
 		return ctx.JSON(utils.Succ("pong", "service is running"))
+	})
+	// 后台登录
+	engine.GET("/login.html", func(ctx echo.Context) error {
+		// 302 临时重定向
+		return ctx.Redirect(302, "/mgmt/")
 	})
 	apiRouter(engine)
 	return engine
