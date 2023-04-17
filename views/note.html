@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <title>{{.basic.Title}}·{{.Note.Title}}</title>
+        <link rel="canonical" href="{{.basic.SiteUrl}}/notes/{{.Note.Path}}.html" />
+        {{template "tpl-linker.html" .}}
+    </head>
+    <body>
+        {{template "tpl-naver.html" .}}
+        <div id="main">
+            <div id="page-post">
+                <article class="post detail">
+                    <div class="meta">
+                        <!-- <div class="date">创建：{{ unix .Note.Created "2006-01-02 15:04:05" }}</div> -->
+                        <div class="date">Expire At {{ unix .ExpAt "2006-01-02 15:04:05" }}</div>
+                    </div>
+                    <h1 class="title">{{.Note.Title}}</h1>
+                    <div class="entry-content">
+                        {{if .Show}}{{str2html .Note.Richtext}}{{else}}
+                        <h3>
+                            Sorry，主人还在思考 (●ˇ∀ˇ●) ！ <br />
+                            [ =======> 60% ]
+                        </h3>
+                        {{end}}
+                    </div>
+                    <p>本文链接：<a href="{{.basic.SiteUrl}}/notes/{{.Note.Path}}.html">{{.basic.SiteUrl}}/post/{{.Note.Path}}.html</a></p>
+                    <p>-- <acronym title="End of File">EOF</acronym> --</p>
+                    <div class="post-info">
+                        <p>
+                            <code class="notebook">{{$.basic.Author}}</code>发表于 <i>{{ unix .Note.Created "2006-01-02 15:04:05"}}</i>{{if .Note.Cate}}，添加在分类<a
+                                href="/cates/{{.Note.Cate.Name}}"
+                                data-cate="{{.Note.Cate.Name}}"
+                                ><code class="notebook">{{.Note.Cate.Intro}}</code></a
+                            >下{{end}}{{if gt (len .Note.Tags) 0}}，并被添加「{{range $k, $v := .Note.Tags }}<a href="/tags/{{$v.Name}}" data-tag="{{$v.Name}}"><code class="notebook">{{$v.Intro}}</code></a
+                            >{{end}}」标签{{end}}，最后修改于 <i>{{ unix .Note.Updated "2006-01-02 15:04:05"}}</i>
+                        </p>
+                    </div>
+                </article>
+            </div>
+            {{template "tpl-footer.html" .}}
+        </div>
+        {{template "tpl-script.html" .}}
+    </body>
+</html>

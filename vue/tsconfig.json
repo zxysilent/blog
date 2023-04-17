@@ -1,0 +1,27 @@
+{
+	"compilerOptions": {
+		"target": "esnext",
+		"module": "esnext",
+		"moduleResolution": "node",
+		"strict": true,
+		"jsx": "preserve",
+		"sourceMap": true,
+		"resolveJsonModule": true,
+		"esModuleInterop": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"experimentalDecorators": true,
+		"lib": ["esnext", "dom"],
+		"types": ["vite/client", "node"],// 增加对 vite 环境变量类型等支持，https://cn.vitejs.dev/guide/features.html#client-types
+		"incremental": true,
+		"noImplicitAny": false,
+		"skipLibCheck": true,
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["src/*"]
+		},
+		"plugins": [{ "name": "@vuedx/typescript-plugin-vue" }]
+	},
+	"include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+	"exclude": ["node_modules", "dist", ".husky"]
+}

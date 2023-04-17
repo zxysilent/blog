@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
     <head>
-        <title>{{.global.Title}}·{{.Page.Title}}</title>
-        <link rel="canonical" href="{{.global.SiteUrl}}/page/{{.Page.Path}}.html" />
+        <title>{{.basic.Title}}·{{.Page.Title}}</title>
+        <link rel="canonical" href="{{.basic.SiteUrl}}/pages/{{.Page.Path}}.html" />
         {{template "tpl-linker.html" .}}
     </head>
     <body>
@@ -23,7 +23,7 @@
                 {{if .Page.Allow}}
                 <div id="comments">
                     <h1 class="title">Comments</h1>
-                    <div id="gitalk-container" data-identifier="{{md5 .Page.Path}}" data-config="{{str2js .global.Comment}}"></div>
+                    <div id="gitalk-container" data-identifier="{{md5 .Page.Path}}" data-config="{{str2js .blog.Comment}}"></div>
                 </div>
                 {{end}}
             </div>

@@ -1,0 +1,54 @@
+
+title = "blog"
+mode = "dev"
+port = 8085
+host = "0.0.0.0"
+rpc_host = "0.0.0.0"
+rpc_port = 1994
+endpoint = ""
+
+# tokenkey一般不修改
+token_key = "token"
+# 过期时间 h
+token_exp = 24
+# 加密私钥-一般要修改
+token_secret ="secret"
+
+# 系统
+# 图片裁剪
+image_cut = false
+image_width = 1000
+image_height =800
+# 分页
+page_min = 5
+page_max = 30
+
+# 数据库
+[db]
+type = "sqlite"
+# uid:pass@tcp(host:port)/dbname?charset=utf8mb4&parseTime=true&loc=Local
+mysql = "root:root@tcp(127.0.0.1:3306)/blog?charset=utf8mb4&parseTime=true&loc=Local"
+sqlite = "file:blog.db"
+
+[orm]
+# https://gitea.com/xorm/xorm
+# 推荐cpu核心数
+idle = 4
+# 推荐cpu核心数*2
+open = 8
+# 显示sql
+show = true 
+# 同步表结构
+sync = true
+# 是否使用orm缓存
+cache_use = false 
+# orm缓存数量
+cache_size = 1024
+# orm劫持日志输出
+hijack_log = true
+
+# 作者
+[author]
+name = "zxysilent"
+website = "https://github.com/zxysilent"
+

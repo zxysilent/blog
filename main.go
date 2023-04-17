@@ -1,9 +1,12 @@
+//go:generate go test -timeout 30s -run ^TestGenRouter$ blog/internal/utils -count=1 -v -msg=路径相对于utils -rp=../router/router_api.go -rs=../service
 package main
 
 import (
 	"blog/conf"
-	"blog/model"
-	"blog/router"
+	"blog/internal/repo"
+	"blog/internal/router"
+	"blog/internal/service"
+	"blog/internal/utils"
 	"context"
 	"net/http"
 	"os"
@@ -14,38 +17,49 @@ import (
 	"github.com/zxysilent/logs"
 )
 
-// @Title Blog’s 接口文档
+// @Title blog’s Api文档
 // @Version 1.0
-// @Description token传递方式包括[get/post]token、[header]Authorization
-// @Description /api/* 公共访问
-// @Description /adm/* 必须传入 token
-// @Host 127.0.0.1:8085
-// @BasePath /
+// @Description 凭证传递方式包括 get、post、header、cookie
+// @Description /api/* 前后端api
 func main() {
-	logs.Info("app initializing")
+	ctx := logs.TrackCtx(context.Background())
+	defer logs.Close()
+	logs.Ctx(ctx).Info("app initializing")
 	conf.Init()
-	model.Init()
-	defer model.Close()
-	defer logs.Flush()
+	repo.Init(ctx)
+	defer repo.Close()
+	service.Init(ctx)
 	quit := make(chan os.Signal)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL)
 	logs.Info("app running")
+
+	if !utils.FileExist("./static") {
+		os.MkdirAll("./static", 0755)
+	}
+	if !utils.FileExist("./dist") {
+		os.MkdirAll("./dist", 0755)
+	}
+	if !utils.FileExist("./dist/index.html") {
+		logs.Warn("html not found")
+	}
 	app := router.Init()
+	// json.NewEncoder(os.Stdout).Encode(app.Routes())
 	go func() {
-		if err := app.Start(conf.App.Addr); err != nil {
-			logs.Fatal(err.Error())
+		if err := app.Start(conf.Addr()); err != nil {
+			if err != http.ErrServerClosed { //Normal exit
+				logs.Ctx(ctx).Error("Server Shutdown:", err)
+			}
 		}
-		// if err := app.StartTLS(conf.App.Addr, "./server.crt", "./server.key"); err != nil {
-		// 	logs.Fatal(err.Error())
-		// }
 	}()
 	<-quit
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	if err := app.Shutdown(ctx); err != nil {
 		if err != http.ErrServerClosed { //Normal exit
-			logs.Error("Server Shutdown:", err)
+			logs.Ctx(ctx).Error("Server Shutdown:", err)
 		}
 	}
-	logs.Info("app quitted")
+	logs.Ctx(ctx).Info("app quitted")
 }
+
+//

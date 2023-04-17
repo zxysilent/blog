@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # https://cn.vuejs.org/index.html
-cd vue/ && npm run serve
+cd vue/ && npm run dev

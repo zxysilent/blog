@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
     <head>
-        <title>{{.global.Title}}·标签</title>
-        <link rel="canonical" href="{{.global.SiteUrl}}/tags" />
+        <title>{{.basic.Title}}·标签</title>
+        <link rel="canonical" href="{{.basic.SiteUrl}}/tags" />
         {{template "tpl-linker.html" .}}
     </head>
     <body>
@@ -13,7 +13,7 @@
                 <div class="entry-content">
                     <section>
                         {{ range $k, $v := .Tags }}
-                        <a href="/tag/{{$v.Name}}" data-tag="{{$v.Name}}">{{$v.Intro}}({{$v.Count}})</a>
+                        <a href="/tags/{{$v.Name}}" data-tag="{{$v.Name}}">{{$v.Intro}}({{$v.Count}})</a>
                         {{end}}
                     </section>
                 </div>

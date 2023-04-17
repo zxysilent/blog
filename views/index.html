@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
     <head>
-        <title>{{.global.Title}}</title>
-        <link rel="canonical" href="{{.global.SiteUrl}}" />
+        <title>{{.basic.Title}}</title>
+        <link rel="canonical" href="{{.basic.SiteUrl}}" />
         {{template "tpl-linker.html" .}}
     </head>
     <body>
@@ -16,19 +16,19 @@
                             <!-- $. 在循环里面访问外部变量 -->
                             <span class="author">{{$.global.Author}}</span>
                             <span>发布于</span>
-                            <span class="date">{{ date $v.Created "2006-01-02" }}</span>
+                            <span class="date">{{ unix $v.Created "2006-01-02" }}</span>
                         </div>
                         <div class="comment">
-                            <a href="/post/{{$v.Path}}.html#comments">comments</a>
+                            <a href="/posts/{{$v.Path}}.html#comments">comments</a>
                         </div>
                     </div>
                     <h1 class="title">
-                        <a href="/post/{{$v.Path}}.html">{{$v.Title}}</a>
+                        <a href="/posts/{{$v.Path}}.html">{{$v.Title}}</a>
                     </h1>
                     <div class="entry-content">
                         {{ str2html $v.Summary }}
                         <p class="more">
-                            <a href="/post/{{$v.Path}}.html">阅读全文 »</a>
+                            <a href="/posts/{{$v.Path}}.html">阅读全文 »</a>
                         </p>
                     </div>
                 </article>

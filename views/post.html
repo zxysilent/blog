@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
     <head>
-        <title>{{.global.Title}}·{{.Post.Title}}</title>
-        <link rel="canonical" href="{{.global.SiteUrl}}/post/{{.Post.Path}}.html" />
+        <title>{{.basic.Title}}·{{.Post.Title}}</title>
+        <link rel="canonical" href="{{.basic.SiteUrl}}/posts/{{.Post.Path}}.html" />
         {{template "tpl-linker.html" .}}
     </head>
     <body>
@@ -11,7 +11,7 @@
             <div id="page-post">
                 <article class="post detail">
                     <div class="meta">
-                        <div class="date">{{ date .Post.Created "2006-01-02 15:04:05" }}</div>
+                        <div class="date">{{ unix .Post.Created "2006-01-02 15:04:05" }}</div>
                         {{if .Post.Allow}}
                         <div class="comment"><a href="#comments">comments</a></div>
                         {{end}}
@@ -25,17 +25,16 @@
                         </h3>
                         {{end}}
                     </div>
-                    <p>本文链接：<a href="{{.global.SiteUrl}}/post/{{.Post.Path}}.html">{{.global.SiteUrl}}/post/{{.Post.Path}}.html</a></p>
+                    <p>本文链接：<a href="{{.basic.SiteUrl}}/posts/{{.Post.Path}}.html">{{.basic.SiteUrl}}/post/{{.Post.Path}}.html</a></p>
                     <p>-- <acronym title="End of File">EOF</acronym> --</p>
                     <div class="post-info">
                         <p>
-                            <code class="notebook">{{$.global.Author}}</code>发表于 <i>{{ date .Post.Created "2006-01-02 15:04:05"}}</i>{{if .Post.Cate}}，添加在分类<a
-                                href="/cate/{{.Post.Cate.Name}}"
+                            <code class="notebook">{{$.basic.Author}}</code>发表于 <i>{{ unix .Post.Created "2006-01-02 15:04:05"}}</i>{{if .Post.Cate}}，添加在分类<a
+                                href="/cates/{{.Post.Cate.Name}}"
                                 data-cate="{{.Post.Cate.Name}}"
                                 ><code class="notebook">{{.Post.Cate.Intro}}</code></a
-                            >下{{end}}{{if gt (len .Post.Tags) 0}}，并被添加「{{range $k, $v := .Post.Tags }}<a href="/tag/{{$v.Name}}" data-tag="{{$v.Name}}"
-                                ><code class="notebook">{{$v.Intro}}</code></a
-                            >{{end}}」标签{{end}}，最后修改于 <i>{{ date .Post.Updated "2006-01-02 15:04:05"}}</i>
+                            >下{{end}}{{if gt (len .Post.Tags) 0}}，并被添加「{{range $k, $v := .Post.Tags }}<a href="/tags/{{$v.Name}}" data-tag="{{$v.Name}}"><code class="notebook">{{$v.Intro}}</code></a
+                            >{{end}}」标签{{end}}，最后修改于 <i>{{ unix .Post.Updated "2006-01-02 15:04:05"}}</i>
                         </p>
                     </div>
                 </article>
@@ -43,7 +42,7 @@
                 {{if .Post.Allow}}
                 <div id="comments">
                     <h1 class="title">Comments</h1>
-                    <div id="gitalk-container" data-identifier="{{md5 .Post.Path}}" data-config="{{str2js .global.Comment}}"></div>
+                    <div id="gitalk-container" data-identifier="{{md5 .Post.Path}}" data-config="{{str2js .blog.Comment}}"></div>
                 </div>
                 {{end}}
             </div>

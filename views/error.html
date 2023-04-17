@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <title>{{.basic.Title}}·Error</title>
+        {{template "tpl-linker.html" .}}
+    </head>
+    <body>
+        {{template "tpl-naver.html" .}}
+        <div id="main">
+            <article class="post tags">
+                <h1 class="title">一些不期望的事情发生了</h1>
+                <div class="entry-content">
+                    <h3>{{.Msg}}</h3>
+                    <br>
+                    <section>
+                        <a href="/">主页</a><a href="/about">关于</a>
+                    </section>
+                </div>
+            </article>
+            {{template "tpl-footer.html" .}}
+        </div>
+        {{template "tpl-script.html" .}}
+    </body>
+</html>

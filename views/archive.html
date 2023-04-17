@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
     <head>
-        <title>{{.global.Title}}·归档</title>
-        <link rel="canonical" href="{{.global.SiteUrl}}/archives" />
+        <title>{{.basic.Title}}·归档</title>
+        <link rel="canonical" href="{{.basic.SiteUrl}}/archives" />
         {{template "tpl-linker.html" .}}
     </head>
     <body>
@@ -15,7 +15,7 @@
                     <h3>{{ date $v.Time "2006年01月" }} ({{len $v.Posts }})</h3>
                     <ul>
                         {{ range $k1, $v1 := $v.Posts }}
-                        <li><a href="/post/{{$v1.Path}}.html" title="{{$v1.Title}}">{{$v1.Title}}</a>&nbsp;<span class="date">{{ date $v1.Created "2006-01-02" }}</span></li>
+                        <li><a href="/posts/{{$v1.Path}}.html" title="{{$v1.Title}}">{{$v1.Title}}</a>&nbsp;<span class="date">{{ unix $v1.Created "2006-01-02" }}</span></li>
                         {{end}}
                     </ul>
                 </div>

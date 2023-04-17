@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
     <head>
-        <title>{{.global.Title}}·{{.Cate.Name}}</title>
-        <link rel="canonical" href="{{.global.SiteUrl}}/cate/{{.Cate.Name}}" />
+        <title>{{.basic.Title}}·{{.Cate.Name}}</title>
+        <link rel="canonical" href="{{.basic.SiteUrl}}/cates/{{.Cate.Name}}" />
         {{template "tpl-linker.html" .}}
     </head>
     <body>
@@ -10,7 +10,7 @@
         <div id="main">
             <section id="page-index">
                 <h1 class="intro">
-                    分类<a href="/cate/{{.Cate.Name}}">
+                    分类<a href="/cates/{{.Cate.Name}}">
                         {{.Cate.Intro}}
                         <!--「{{.Cate.Intro}}」--></a
                     >下的文章
@@ -18,13 +18,13 @@
                 {{ range $k, $v := .CatePosts }}
                 <article class="post">
                     <div class="meta">
-                        <div><span class="author">{{$.global.Author}}</span><span>发布于</span><span class="date">{{ date $v.Created "2006-01-02" }}</span></div>
-                        <div class="comment"><a href="/post/{{$v.Path}}.html#comments">comments</a></div>
+                        <div><span class="author">{{$.basic.Author}}</span><span>发布于</span><span class="date">{{ unix $v.Created "2006-01-02" }}</span></div>
+                        <div class="comment"><a href="/posts/{{$v.Path}}.html#comments">comments</a></div>
                     </div>
-                    <h1 class="title"><a href="/post/{{$v.Path}}.html">{{$v.Title}}</a></h1>
+                    <h1 class="title"><a href="/posts/{{$v.Path}}.html">{{$v.Title}}</a></h1>
                     <div class="entry-content">
                         {{ str2html $v.Summary }}
-                        <p class="more"><a href="/post/{{$v.Path}}.html">阅读全文»</a></p>
+                        <p class="more"><a href="/posts/{{$v.Path}}.html">阅读全文»</a></p>
                     </div>
                 </article>
                 {{ end }}

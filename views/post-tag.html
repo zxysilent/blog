@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
     <head>
-        <title>{{.global.Title}}·{{.Tag.Name}}</title>
-        <link rel="canonical" href="{{.global.SiteUrl}}/tag/{{.Tag.Name}}" />
+        <title>{{.basic.Title}}·{{.Tag.Name}}</title>
+        <link rel="canonical" href="{{.basic.SiteUrl}}/tags/{{.Tag.Name}}" />
         {{template "tpl-linker.html" .}}
     </head>
     <body>
         {{template "tpl-naver.html" .}}
         <div id="main">
             <section id="page-index">
-                <h1 class="intro">标签<a href="/tag/{{.Tag.Name}}">「{{.Tag.Intro}}」</a>下的文章</h1>
+                <h1 class="intro">标签<a href="/tags/{{.Tag.Name}}">「{{.Tag.Intro}}」</a>下的文章</h1>
                 {{ range $k, $v := .TagPosts }}
                 <article class="post">
                     <div class="meta">
-                        <div><span class="author">{{$.global.Author}}</span><span>发布于</span><span class="date">{{ date $v.Post.Created "2006-01-02" }}</span></div>
-                        <div class="comment"><a href="/post/{{$v.Post.Path}}.html#comments">comments</a></div>
+                        <div><span class="author">{{$.basic.Author}}</span><span>发布于</span><span class="date">{{ unix $v.Post.Created "2006-01-02" }}</span></div>
+                        <div class="comment"><a href="/posts/{{$v.Post.Path}}.html#comments">comments</a></div>
                     </div>
-                    <h1 class="title"><a href="/post/{{$v.Post.Path}}.html">{{$v.Post.Title}}</a></h1>
+                    <h1 class="title"><a href="/posts/{{$v.Post.Path}}.html">{{$v.Post.Title}}</a></h1>
                     <div class="entry-content">
                         {{ str2html $v.Post.Summary }}
-                        <p class="more"><a href="/post/{{$v.Post.Path}}.html">阅读全文»</a></p>
+                        <p class="more"><a href="/posts/{{$v.Post.Path}}.html">阅读全文»</a></p>
                     </div>
                 </article>
                 {{ end }}

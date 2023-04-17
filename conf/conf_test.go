@@ -6,15 +6,14 @@ import (
 )
 
 func TestConf(t *testing.T) {
-	defConfig = "./conf.toml"
-	conf, err := initCfg()
+	defer os.RemoveAll("logs")
+	defConfig = "../conf.toml"
+	conf, err := initConfig()
 	if err != nil {
 		t.Fatal(err)
 	} else {
-		t.Log(conf)
-		t.Log(conf.Dsn())
+		t.Logf("%+v", conf)
+		t.Log(conf.Db.Mysql)
+		t.Log(conf.Db.Sqlite)
 	}
-	t.Cleanup(func() {
-		os.RemoveAll("logs")
-	})
 }
