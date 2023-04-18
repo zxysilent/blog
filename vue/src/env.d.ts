@@ -9,9 +9,9 @@ declare module "*.vue" {
 
 declare interface Window {
     $loadingBar: any;
-    $message: any;
-    $notify: any;
-    $dialog: any;
+    // $message: any;
+    // $notify: any;
+    // $dialog: any;
 }
 interface Meta {
     title: string;//标题

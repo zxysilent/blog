@@ -5,17 +5,14 @@
         </div>
         <div class="text-center">
             <h1 class="text-base text-gray-500">抱歉，你访问的页面不存在</h1>
-            <n-button type="info" @click="goHome">回到首页</n-button>
+            <n-space justify="center">
+                <n-button type="info" @click="$router.push({ name: 'home' })">回到首页</n-button>
+                <n-button type="success" @click="$router.push({ name: 'login' })">登录</n-button>
+            </n-space>
         </div>
     </div>
 </template>
-<script lang="ts" setup>
-import { useRouter } from "vue-router";
-const router = useRouter();
-const goHome = () => {
-    router.push("/");
-};
-</script>
+<script lang="ts" setup></script>
 <style lang="less" scoped>
 .page-container {
     width: 100%;

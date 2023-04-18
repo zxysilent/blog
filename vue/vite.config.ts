@@ -67,7 +67,7 @@ export default ({ mode }) => {
             assetsDir: "static",
             minify: "esbuild",
             emptyOutDir: true,
-            chunkSizeWarningLimit: 1792,
+            chunkSizeWarningLimit: 1600,
 
         },
         css: {
