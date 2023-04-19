@@ -31,7 +31,10 @@ func CateList(filter *model.CateFilterList) ([]model.Cate, error) {
 	mods := make([]model.Cate, 0, 8)
 	sess := db.NewSession()
 	defer sess.Close()
-	err := sess.Find(&mods)
+	if filter.Kind != nil && *filter.Kind > 0 {
+		sess.And("kind = ?", *filter.Kind)
+	}
+	err := sess.Omit("updated", "created").Find(&mods)
 	return mods, err
 }
 
@@ -46,6 +49,9 @@ func CatePage(filter *model.CateFilterPage, cols ...string) ([]model.Cate, int, 
 	// if filter.Mult != "" {
 	// 	sess.And("field like concat('%',?,'%')", filter.Mult)
 	// }
+	if filter.Kind != nil && *filter.Kind > 0 {
+		sess.And("kind = ?", *filter.Kind)
+	}
 	sess.Limit(filter.Ps, (filter.Pi-1)*filter.Ps)
 	count, err := sess.Desc("id").FindAndCount(&mods)
 	return mods, int(count), err

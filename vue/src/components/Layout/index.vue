@@ -12,17 +12,14 @@
             :width="leftMenuWidth"
             :native-scrollbar="false"
             :inverted="inverted"
-            class="layout-sider"
-        >
+            class="layout-sider">
             <Logo :collapsed="collapsed" />
             <AsideMenu v-model:collapsed="collapsed" />
         </n-layout-sider>
-
         <n-layout :inverted="inverted">
             <n-layout-header :inverted="getHeaderInverted" :position="fixedHeader">
                 <PageHeader v-model:collapsed="collapsed" :inverted="inverted" />
             </n-layout-header>
-
             <n-layout-content class="layout-content" :class="{ 'layout-default-background': setting.darkTheme === false }">
                 <div class="layout-content-main" :class="{ 'fluid-header': fixedHeader === 'static' }">
                     <div class="main-view mt-3">
@@ -30,9 +27,9 @@
                     </div>
                 </div>
                 <!--1.15废弃，没啥用，占用操作空间-->
-                <NLayoutFooter v-if="setting.showFooter" position="static">
+                <n-layout-footer v-if="setting.showFooter" position="static">
                     <PageFooter />
-                </NLayoutFooter>
+                </n-layout-footer>
             </n-layout-content>
             <n-back-top :bottom="60" />
         </n-layout>
@@ -91,7 +88,6 @@ onMounted(() => {
     display: flex;
     flex-direction: row;
     flex: auto;
-
     &-default-background {
         background: #f5f7f9;
     }

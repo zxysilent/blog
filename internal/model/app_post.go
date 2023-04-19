@@ -6,7 +6,7 @@ import "time"
 type Post struct {
 	Id       int    `xorm:"INT(11) PK AUTOINCR" json:"id"`   //主键
 	CateId   int    `xorm:"INT(11)" json:"cate_id"`          //分类Id
-	Kind     int    `xorm:"INT(11)" json:"kind"`             //类型1-文章，2-页面
+	Kind     int    `xorm:"INT(11)" json:"kind"`             //类型1-文章，2-页面，3-笔记
 	Status   int    `xorm:"INT(11)" json:"status"`           //状态1-草稿，2-已发布
 	Title    string `xorm:"VARCHAR(255)" json:"title"`       //标题
 	Path     string `xorm:"VARCHAR(255) UNIQUE" json:"path"` //访问路径
@@ -47,9 +47,9 @@ func (PostPart) TableName() string {
 }
 
 const (
-	PostKindPost = 1 //文章
-	PostKindPage = 2 //页面
-	PostKindNote = 3 //笔记
+	KindPost = 1 //文章
+	KindPage = 2 //页面
+	KindNote = 3 //笔记
 )
 const (
 	PostStatusDraft  = 1 //草稿

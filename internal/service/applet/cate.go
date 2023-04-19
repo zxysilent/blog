@@ -118,7 +118,7 @@ func CateEdit(ctx echo.Context) error {
 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
 	ipt.Updated = time.Now().UnixMilli()
-	err = repo.CateEdit(ipt)
+	err = repo.CateEdit(ipt, "pid", "name", "color", "intro", "updated")
 	if err != nil {
 		return ctx.JSON(utils.Fail("修改失败", err.Error()))
 	}

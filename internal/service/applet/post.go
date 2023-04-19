@@ -97,7 +97,7 @@ func PostAdd(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
-	if ipt.Kind == model.PostKindNote {
+	if ipt.Kind == model.KindNote {
 		ipt.Path = utils.UUID()
 	}
 	if repo.PostExist(&model.Post{Path: ipt.Path}) {
@@ -133,7 +133,7 @@ func PostSave(ctx echo.Context) error {
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
-	if ipt.Kind == model.PostKindNote && ipt.Path == "" {
+	if ipt.Kind == model.KindNote && ipt.Path == "" {
 		ipt.Path = utils.UUID()
 	}
 	if ipt.Id == 0 {

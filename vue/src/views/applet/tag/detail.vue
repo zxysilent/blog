@@ -2,7 +2,7 @@
     <n-card :bordered="false" title="标签详情" class="mt-4 proCard" size="small" :segmented="{ content: 'hard' }">
         <n-grid cols="1 s:2 m:2 l:3 xl:3 xxl:3" responsive="screen">
             <n-grid-item>
-                <n-form :label-width="100" :model="dataForm" disabled label-placement="left" require-mark-placement="left" :rules="dataRules" ref="dataRef">
+                <n-form :label-width="100" :model="dataForm" disabled label-placement="left" require-mark-placement="left" ref="dataRef">
                     <n-form-item label="标签名称" path="name">
                         <n-input v-model:value="dataForm.name" />
                     </n-form-item>
@@ -49,10 +49,6 @@ const dataForm = ref({
     created: 0,
 });
 
-const dataRules = {
-    name: { required: true, message: "请输入标签名称", trigger: "blur" },
-    intro: { required: true, message: "请输入标签描述", trigger: "blur" },
-};
 const dataRef = ref();
 const init = () => {
     apiTagGet({ id: route.params.id }).then((resp) => {

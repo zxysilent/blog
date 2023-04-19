@@ -3,6 +3,9 @@
         <n-grid cols="1 s:2 m:2 l:3 xl:3 xxl:3" responsive="screen">
             <n-grid-item>
                 <n-form :label-width="100" :model="dataForm" label-placement="left" require-mark-placement="left" :rules="dataRules" ref="dataRef">
+                    <n-form-item label="类型" path="kind">
+                        <n-select v-model:value="dataForm.kind" :options="kindAll" />
+                    </n-form-item>
                     <n-form-item label="分类名称" path="name">
                         <n-input v-model:value="dataForm.name" />
                     </n-form-item>
@@ -35,17 +38,27 @@ import { apiCateGet, apiCateEdit } from "@/api";
 import { ref, onMounted } from "vue";
 import { useMessage } from "naive-ui";
 import { useRoute } from "vue-router";
+const kindAll = [
+    { label: "请选择", value: 0 },
+    { label: "文章", value: 1 },
+    { label: "页面", value: 2 },
+    { label: "笔记", value: 3 },
+];
 const route = useRoute();
 const dataForm = ref({
     id: 0,
+    kind: 0,
     name: "",
     color: "#333639",
     intro: "",
+    updated: 0,
+    created: 0,
 });
 
 const dataRules = {
     name: { required: true, message: "请输入分类名称", trigger: "blur" },
     intro: { required: true, message: "请输入分类描述", trigger: "blur" },
+    kind: { required: true, type: "number", min: 1, message: "请选择类型", trigger: ["blur", "change"] },
 };
 const dataRef = ref();
 const message = useMessage();
@@ -57,9 +70,12 @@ const init = () => {
         } else {
             dataForm.value = {
                 id: 0,
+                kind: 0,
                 name: "",
-                color: "color",
+                color: "#333639",
                 intro: "",
+                updated: 0,
+                created: 0,
             };
         }
     });

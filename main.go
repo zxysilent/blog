@@ -32,15 +32,11 @@ func main() {
 	quit := make(chan os.Signal)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL)
 	logs.Info("app running")
-
 	if !utils.FileExist("./static") {
 		os.MkdirAll("./static", 0755)
 	}
 	if !utils.FileExist("./dist") {
 		os.MkdirAll("./dist", 0755)
-	}
-	if !utils.FileExist("./dist/index.html") {
-		logs.Warn("html not found")
 	}
 	app := router.Init()
 	// json.NewEncoder(os.Stdout).Encode(app.Routes())

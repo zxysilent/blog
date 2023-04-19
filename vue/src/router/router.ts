@@ -36,7 +36,7 @@ const appRoutes: Array<RouteRecordRaw> = [
     {
         path: "/note",
         name: "note",
-        component: () => import("@/views/applet/post/note.vue"),
+        component: () => import("@/views/applet/note/index.vue"),
         meta: { title: "笔记模式", hidden: true, icon: renderIcon(PencilOutline) },
     },
     /*

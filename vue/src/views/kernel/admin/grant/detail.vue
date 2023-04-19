@@ -2,7 +2,7 @@
     <n-card :bordered="false" title="权限详情" class="mt-4 proCard" size="small" :segmented="{ content: 'hard' }">
         <n-grid cols="1 s:2 m:2 l:3 xl:3 xxl:3" responsive="screen">
             <n-grid-item>
-                <n-form :label-width="100" :model="dataForm" disabled label-placement="left" require-mark-placement="left" :rules="dataRules" ref="dataRef">
+                <n-form :label-width="100" :model="dataForm" disabled label-placement="left" require-mark-placement="left" ref="dataRef">
                     <n-form-item label="权限名称" path="name">
                         <n-input v-model:value="dataForm.name" />
                     </n-form-item>
@@ -16,11 +16,11 @@
                         <n-input-number v-model:value="dataForm.sort" :min="0" :max="2000" />
                     </n-form-item>
                     <n-form-item label="更新时间" :show-feedback="false">
-                    <n-time :time="dataForm.updated" />
-                </n-form-item>
-                <n-form-item label="创建时间" :show-feedback="false">
-                    <n-time :time="dataForm.created" />
-                </n-form-item>
+                        <n-time :time="dataForm.updated" />
+                    </n-form-item>
+                    <n-form-item label="创建时间" :show-feedback="false">
+                        <n-time :time="dataForm.created" />
+                    </n-form-item>
                     <div>
                         <n-space justify="center">
                             <n-button type="success" @click="init">信息刷新</n-button>
@@ -47,10 +47,6 @@ const dataForm = ref({
     created: 0,
 });
 
-const dataRules = {
-    name: { required: true, message: "请输入权限名称", trigger: "blur" },
-    intro: { required: true, message: "请输入权限描述", trigger: "blur" },
-};
 const dataRef = ref();
 const init = () => {
     apiGrantGet({ id: route.params.id }).then((resp) => {

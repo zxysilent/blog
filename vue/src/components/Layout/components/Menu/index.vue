@@ -1,5 +1,5 @@
 <template>
-    <NMenu
+    <n-menu
         :options="menus"
         :inverted="inverted"
         :mode="mode"

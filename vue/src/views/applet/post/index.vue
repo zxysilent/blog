@@ -16,7 +16,7 @@
                     <n-select style="width: 80px" v-model:value="filter.kind" :options="kindAll" />
                 </n-form-item>
                 <n-form-item label="分类">
-                    <n-select style="width: 120px" v-model:value="filter.cate_id" :options="cateAll" />
+                    <Cate style="width: 209px" search v-model:value="filter.cate_id" />
                 </n-form-item>
                 <n-form-item label="标题">
                     <n-input placeholder="标题" v-model:value="filter.mult" clearable />
@@ -90,6 +90,7 @@ import { Refresh, AddCircleOutline, FilterSharp, Search, CopyOutline } from "@vi
 import { useRouter } from "vue-router";
 import { useAdminStore } from "@/store/admin";
 import { apiPostPage, apiPostDrop, apiCateList, apiPostShare } from "@/api";
+import { Cate } from "@/components/Applet";
 const kindAll = [
     { label: "所有", value: 0 },
     { label: "文章", value: 1 },
@@ -287,22 +288,24 @@ const tabCol = [
                     )
                 );
             }
-            actios.push(
-                h(
-                    NButton,
-                    {
-                        size: "tiny",
-                        block: true,
-                        quaternary: true,
-                        onClick: () => {
-                            router.push({ name: "post-detail", params: { id: row.id } });
+            if (row.kind == 1 || row.kind == 2) {
+                actios.push(
+                    h(
+                        NButton,
+                        {
+                            size: "tiny",
+                            block: true,
+                            quaternary: true,
+                            onClick: () => {
+                                router.push({ name: "post-detail", params: { id: row.id } });
+                            },
                         },
-                    },
-                    { default: () => "查看" }
-                )
-            );
-            if (adminStore.Authed("role_edit")) {
-                actios.push(h(NButton, { block: true, quaternary: true, size: "tiny", onClick: () => router.push({ name: "post-edit", params: { id: row.id } }) }, { default: () => "编辑" }));
+                        { default: () => "查看" }
+                    )
+                );
+                if (adminStore.Authed("role_edit")) {
+                    actios.push(h(NButton, { block: true, quaternary: true, size: "tiny", onClick: () => router.push({ name: "post-edit", params: { id: row.id } }) }, { default: () => "编辑" }));
+                }
             }
             if (adminStore.Authed("role_drop")) {
                 actios.push(

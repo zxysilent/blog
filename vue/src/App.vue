@@ -1,4 +1,5 @@
 <template>
+    <!-- inline-theme-disabled -->
     <n-config-provider :theme="theme" :theme-overrides="themeOverrides" :locale="zhCN" :date-locale="dateZhCN" inline-theme-disabled>
         <n-dialog-provider>
             <n-notification-provider>

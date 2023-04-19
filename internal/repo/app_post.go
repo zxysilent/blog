@@ -44,6 +44,9 @@ func PostList(filter *model.PostFilterList, cols ...string) ([]model.PostPart, e
 	if filter.Status != nil && *filter.Status > 0 {
 		sess.And("status = ?", *filter.Status)
 	}
+	if filter.CateId != nil && *filter.CateId > 0 {
+		sess.And("cate_id = ?", *filter.CateId)
+	}
 	if filter.Limit > 0 {
 		sess.Limit(filter.Limit)
 	}

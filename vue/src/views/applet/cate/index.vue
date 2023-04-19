@@ -30,7 +30,7 @@
 
 <script lang="ts" setup>
 import { h, ref, reactive, onMounted } from "vue";
-import { NButton, NPopconfirm, useMessage, NTime, NPopover, NSpace } from "naive-ui";
+import { NButton, NPopconfirm, useMessage, NTime, NPopover, NSpace, NTag } from "naive-ui";
 import { Refresh, AddCircleOutline, FilterSharp } from "@vicons/ionicons5";
 import { useRouter } from "vue-router";
 import { useAdminStore } from "@/store/admin";
@@ -80,6 +80,7 @@ onMounted(() => {
 });
 const tabCol = [
     { title: "分类名称", key: "name", width: 200, ellipsis: { tooltip: { width: "trigger" } } },
+    { title: "分类说明", key: "intro", width: 200, ellipsis: { tooltip: { width: "trigger" } } },
     {
         title: "分类颜色",
         width: 100,
@@ -89,7 +90,20 @@ const tabCol = [
             return h(NButton, { color: row.color, size: "tiny" }, { default: () => row.color });
         },
     },
-    { title: "分类说明", key: "intro", width: 200, ellipsis: { tooltip: { width: "trigger" } } },
+    {
+        title: "类型",
+        width: 80,
+        render(row) {
+            if (row.kind == 1) {
+                return h(NTag, { size: "small", type: "info" }, { default: () => "文章" });
+            } else if (row.kind == 3) {
+                return h(NTag, { size: "small", type: "success" }, { default: () => "笔记" });
+            } else {
+                return h(NTag, { size: "small" }, { default: () => "页面" });
+            }
+        },
+    },
+
     {
         title: "修改时间",
         key: "updated",

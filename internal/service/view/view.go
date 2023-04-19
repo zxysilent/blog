@@ -6,7 +6,6 @@ import (
 	"blog/internal/repo"
 	"blog/internal/utils"
 	"blog/pkg/token"
-	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -24,7 +23,7 @@ func ViewIndex(ctx echo.Context) error {
 		filter.Pi = 1
 	}
 	filter.Ps = repo.CfgBlog().PageSize
-	post := model.PostKindPost
+	post := model.KindPost
 	filter.Kind = &post
 	mods, total, _ := repo.PostPage(filter, "id", "title", "path", "created", "summary")
 	naver := model.Naver{}
@@ -45,7 +44,7 @@ func ViewIndex(ctx echo.Context) error {
 func ViewPost(ctx echo.Context) error {
 	paths := strings.Split(ctx.Param("*"), ".")
 	if len(paths) >= 1 {
-		mod := &model.Post{Path: paths[0], Kind: model.PostKindPost}
+		mod := &model.Post{Path: paths[0], Kind: model.KindPost}
 		err := repo.PostGet(mod)
 		if err != nil {
 			return ctx.Render(http.StatusOK, "error.html", map[string]interface{}{
@@ -73,9 +72,8 @@ func ViewNote(ctx echo.Context) error {
 		})
 	}
 	paths := strings.Split(ctx.Param("*"), ".")
-	log.Println(paths)
 	if len(paths) >= 1 {
-		mod := &model.Post{Path: paths[0], Kind: model.PostKindNote}
+		mod := &model.Post{Path: paths[0], Kind: model.KindNote}
 		err := repo.PostGet(mod)
 		if err != nil {
 			return ctx.Render(http.StatusOK, "error.html", map[string]interface{}{
@@ -95,7 +93,7 @@ func ViewNote(ctx echo.Context) error {
 // // ------------------------------------------------------ 单个页面 ------------------------------------------------------
 // ViewAbout 关于页面
 func ViewAbout(ctx echo.Context) error {
-	mod := &model.Post{Path: "about", Kind: model.PostKindPage}
+	mod := &model.Post{Path: "about", Kind: model.KindPage}
 	err := repo.PostGet(mod)
 	if err != nil {
 		return ctx.Redirect(302, "/")
@@ -109,7 +107,7 @@ func ViewAbout(ctx echo.Context) error {
 
 // ViewLinks 友链页面
 func ViewLinks(ctx echo.Context) error {
-	mod := &model.Post{Path: "links", Kind: model.PostKindPage}
+	mod := &model.Post{Path: "links", Kind: model.KindPage}
 	err := repo.PostGet(mod)
 	if err != nil {
 		return ctx.Redirect(302, "/")
@@ -125,7 +123,7 @@ func ViewLinks(ctx echo.Context) error {
 func ViewPage(ctx echo.Context) error {
 	paths := strings.Split(ctx.Param("*"), ".")
 	if len(paths) >= 1 {
-		mod := &model.Post{Path: paths[0], Kind: model.PostKindPage}
+		mod := &model.Post{Path: paths[0], Kind: model.KindPage}
 		err := repo.PostGet(mod)
 		if err != nil {
 			return ctx.Render(http.StatusOK, "error.html", map[string]interface{}{
@@ -154,7 +152,7 @@ func archInOf(time time.Time, mods []model.PostArchive) int {
 // ViewArchives 归档页面
 func ViewArchives(ctx echo.Context) error {
 	filter := &model.PostFilterList{}
-	post := model.PostKindPost
+	post := model.KindPost
 	filter.Kind = &post
 	status := model.PostStatusFinish
 	filter.Status = &status
@@ -199,7 +197,7 @@ func ViewCatePost(ctx echo.Context) error {
 		filter.Pi = 1
 	}
 	filter.Ps = repo.CfgBlog().PageSize
-	post := model.PostKindPost
+	post := model.KindPost
 	filter.CateId = &mod.Id
 	filter.Kind = &post
 	mods, total, err := repo.PostPage(filter, "id", "title", "path", "created", "summary", "updated", "status")

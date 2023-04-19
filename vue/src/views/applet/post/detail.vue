@@ -1,6 +1,6 @@
 <template>
     <n-card :bordered="false" class="mt-4 proCard" size="small" :segmented="{ content: 'hard' }">
-        <n-form disabled :label-width="100" :model="dataForm" label-placement="left" require-mark-placement="left" :rules="dataRules" ref="dataRef">
+        <n-form disabled :label-width="100" :model="dataForm" label-placement="left" require-mark-placement="left" ref="dataRef">
             <n-grid responsive="screen" cols="4 s:8 m:12 l:16 xl:20 xxl:24" :x-gap="4" :y-gap="12">
                 <!-- <n-grid-item span="12"> </n-grid-item> -->
                 <n-form-item-gi :show-feedback="false" :span="12" path="title"> <n-input v-model:value="dataForm.title" placeholder="请输入标题" /> </n-form-item-gi>
@@ -58,10 +58,6 @@ const dataForm = ref({
     created: 0,
 });
 
-const dataRules = {
-    title: { required: true, message: "请输入标题", trigger: "blur" },
-    path: { required: true, message: "请输入访问路径", trigger: "blur" },
-};
 const dataRef = ref();
 const init = () => {
     apiPostGet({ id: route.params.id }).then((resp) => {
