@@ -62,7 +62,7 @@ git clone -b next --depth=1 https://github.com/zxysilent/blog.git
 - 友链里面第一个为后台登陆地址默认用户名```zxysilent```,密码```zxyslt```，可自行数据库修改
 ### 部署服务
 - 配置```conf.toml```数据库信息
-- 还原```data```目录下```db.sql```数据库
+- 还原```data```目录下```blog.sql```数据库
 *数据库自带文章内容请在部署前删除*
 - 安装依赖```go mod tidy```
 - 编译可执行程序 
@@ -91,7 +91,7 @@ git clone https://github.com/zxysilent/blog.git
 - 友链里面第一个为后台登陆地址默认用户名```zxysilent```,密码```zxyslt```，可自行数据库修改
 ###  开发服务
 - 配置```conf.toml```数据库信息
-- 还原```data```目录下```db.dev.sql```数据库
+- 还原```data```目录下```blog.sql```数据库
 *数据库自带文章内容请在部署前删除*
 - 安装依赖```go mod tidy```
 - 安装 swag   
