@@ -41,6 +41,7 @@ const props = defineProps({
     padding-left: 10px;
     transition: width 0.5s;
     opacity: 0.6;
+    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     // background-color: #2d8cf0;

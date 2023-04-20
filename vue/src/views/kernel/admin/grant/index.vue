@@ -1,6 +1,6 @@
 <template>
     <div>
-        <n-card :bordered="false" title="权限列表" class="mt-4 proCard" size="small" :segmented="{ content: 'hard' }">
+        <n-card :bordered="false" title="权限列表" size="small" :segmented="{ content: 'hard' }">
             <n-form inline label-placement="left" require-mark-placement="left" label-width="auto" ref="formRef">
                 <n-form-item v-auth="'grant_add'">
                     <n-button ghost attr-type="button" @click="$router.push({ name: 'grant-add' })">

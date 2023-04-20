@@ -1,6 +1,6 @@
 <template>
     <div>
-        <n-card :bordered="false" title="日志列表" class="mt-4 proCard" size="small" :segmented="{ content: 'hard' }">
+        <n-card :bordered="false" title="日志列表" size="small" :segmented="{ content: 'hard' }">
             <n-form inline label-placement="left" require-mark-placement="left" label-width="auto" ref="formRef">
                 <n-form-item>
                     <n-button type="info" attr-type="button" @click="init">

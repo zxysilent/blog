@@ -1,5 +1,5 @@
 <template>
-    <n-card :bordered="false" title="添加分类" class="mt-4 proCard" size="small" :segmented="{ content: 'hard' }">
+    <n-card :bordered="false" title="添加分类" size="small" :segmented="{ content: 'hard' }">
         <n-grid cols="1 s:2 m:2 l:3 xl:3 xxl:3" responsive="screen">
             <n-grid-item>
                 <n-form :label-width="100" :model="dataForm" label-placement="left" require-mark-placement="left" :rules="dataRules" ref="dataRef">

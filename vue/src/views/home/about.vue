@@ -1,7 +1,7 @@
 <template>
     <div>
         <n-card :bordered="false" title="关于"> <strong>管理后台</strong></n-card>
-        <!-- <n-card :bordered="false" title="应用信息" class="mt-4 proCard" size="small" :segmented="{ content: 'hard' }">
+        <!-- <n-card :bordered="false" title="应用信息" size="small" :segmented="{ content: 'hard' }">
             <n-descriptions bordered label-placement="top" :column="3" class="py-2">
                 <n-descriptions-item label="系统架构">
                     <n-tag type="info"> {{ StateGo.arch }} </n-tag>

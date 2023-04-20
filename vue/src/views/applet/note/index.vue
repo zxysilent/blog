@@ -23,6 +23,7 @@
 </style>
 <template>
     <n-layout position="absolute" has-sider>
+        <!-- <Menu :options="cateAll"></Menu> -->
         <!-- <n-layout-sider collapsed position="static" collapse-mode="width" :collapsed-width="64" inverted class="layout-sider">
             <n-menu inverted key-field="id" label-field="name" :collapsed-width="64" :collapsed-icon-size="22" :options="cateAll"  />
         </n-layout-sider> -->
@@ -83,6 +84,7 @@ import Floating from "./floating.vue";
 import { useRouter } from "vue-router";
 import Card from "./card.vue";
 import Cates from "./cate.vue";
+import Menu from "./menu.vue";
 import { ref, onMounted, nextTick } from "vue";
 import { useMessage, NIcon } from "naive-ui";
 const router = useRouter();

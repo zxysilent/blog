@@ -1,5 +1,5 @@
 <template>
-    <n-card :bordered="false" class="mt-4 proCard" size="small" :segmented="{ content: 'hard' }">
+    <n-card :bordered="false" size="small" :segmented="{ content: 'hard' }">
         <n-form :label-width="100" :model="dataForm" label-placement="left" require-mark-placement="left" :rules="dataRules" ref="dataRef">
             <n-grid responsive="screen" cols="4 s:8 m:12 l:16 xl:20 xxl:24" :x-gap="4" :y-gap="12">
                 <!-- <n-grid-item span="12"> </n-grid-item> -->

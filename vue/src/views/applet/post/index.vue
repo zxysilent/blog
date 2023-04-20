@@ -1,6 +1,6 @@
 <template>
     <div>
-        <n-card :bordered="false" title="博文列表" class="mt-4 proCard" size="small" :segmented="{ content: 'hard' }">
+        <n-card :bordered="false" title="博文列表" size="small" :segmented="{ content: 'hard' }">
             <n-form inline label-placement="left" require-mark-placement="left" label-width="auto" ref="formRef">
                 <n-form-item v-auth="'role_add'">
                     <n-button ghost attr-type="button" @click="$router.push({ name: 'post-add' })">

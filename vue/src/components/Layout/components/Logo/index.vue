@@ -22,7 +22,9 @@ defineProps({ collapsed: Boolean });
         height: 32px;
     }
     .title {
-        margin-bottom: 0;
+        margin: 0;
+        font-size: inherit;
+        font-weight: inherit;
     }
 }
 </style>
