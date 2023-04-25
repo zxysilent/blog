@@ -170,17 +170,17 @@ const notePage = () => {
 //     },
 // ];
 const avatarOptions = [
-    { label: "个人设置", key: 1 },
-    { label: "退出登录", key: 2 },
+    { label: "个人设置", key: "setting" },
+    { label: "退出登录", key: "logout" },
 ];
 
 //头像下拉菜单
 const avatarSelect = (key) => {
     switch (key) {
-        case 1:
+        case "setting":
             router.push({ name: "account" });
             break;
-        case 2:
+        case "logout":
             dialog.info({
                 title: "提示",
                 content: "您确定要退出登录吗",

@@ -213,7 +213,9 @@ const init = (cateId = 0) => {
     apiPostList({ kind: 3, mult: mult.value, cate_id: cateId }).then((resp) => {
         if (resp.code == 200) {
             noteAll.value = resp.data;
-            noteActive.value = noteAll.value[0].id;
+            if (noteAll.value.length > 0) {
+                noteActive.value = noteAll.value[0].id;
+            }
             detail();
         } else {
             noteAll.value = [];
@@ -224,6 +226,9 @@ const preInit = () => {
     apiCateList({ kind: 3 }).then((resp) => {
         if (resp.code == 200) {
             cateAll.value = resp.data;
+            if(cateAll.value.length>0){
+                cateActive.value = cateAll.value[0].id;
+            }
         } else {
             cateAll.value = [];
         }
