@@ -84,7 +84,7 @@ import Floating from "./floating.vue";
 import { useRouter } from "vue-router";
 import Card from "./card.vue";
 import Cates from "./cate.vue";
-import Menu from "./menu.vue";
+// import Menu from "./menu.vue";
 import { ref, onMounted, nextTick } from "vue";
 import { useMessage, NIcon } from "naive-ui";
 const router = useRouter();

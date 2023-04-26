@@ -19,3 +19,15 @@ export const apiDictVal = (key: string): Promise<Reply> => {
         method: "get",
     });
 };
+
+
+
+/**
+ * 获取Basic配置值
+ */
+export const apiDictBasic = (): Promise<Reply> => {
+    return fetch.request({
+        url: "/api/dict/basic",
+        method: "get",
+    });
+};

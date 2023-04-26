@@ -90,6 +90,7 @@ import { Refresh, AddCircleOutline, FilterSharp, Search, CopyOutline } from "@vi
 import { useRouter } from "vue-router";
 import { useAdminStore } from "@/store/admin";
 import { apiPostPage, apiPostDrop, apiCateList, apiPostShare } from "@/api";
+import { apiDictBasic } from "@/api/ext";
 import { Cate } from "@/components/Applet";
 const kindAll = [
     { label: "所有", value: 0 },
@@ -147,7 +148,13 @@ const copyURL = () => {
             message.error("复制失败,请手动复制");
         });
 };
+const siteURL = ref("");
 const preInit = () => {
+    apiDictBasic().then((resp) => {
+        if (resp.code == 200) {
+            siteURL.value = resp.data.site_url;
+        }
+    });
     apiCateList({}).then((resp) => {
         if (resp.code == 200) {
             resp.data.unshift({ id: 0, name: "所有" });
@@ -184,7 +191,7 @@ const emitShare = () => {
     }
     apiPostShare(data).then((resp) => {
         if (resp.code == 200) {
-            noteShare.url = `${import.meta.env.VITE_APP_SRV}/notes/${noteShare.path}.html?s=${resp.data}`;
+            noteShare.url = `${siteURL.value}/notes/${noteShare.path}.html?s=${resp.data}`;
         } else {
             noteShare.url = "";
             message.warning("分享失败,请重试");

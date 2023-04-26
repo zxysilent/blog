@@ -40,11 +40,17 @@ const init = () => {
     apiCateList({ kind: props.kind }).then((resp) => {
         loading.value = false;
         if (resp.code == 200) {
-            resp.data.unshift({ id: 0, name: props.search ? "所有" : "请选择" });
-            valall.value = resp.data;
-            // .map((item) => {
-            //     return { label: item.name, key: item.id };
-            // });
+            resp.data.unshift({ id: 0, name: props.search ? "所有" : "请选择", kind: 0 });
+            valall.value = resp.data.map((item) => {
+                if (item.kind == 1) {
+                    item.name += "(文章)";
+                } else if (item.kind == 3) {
+                    item.name += "(笔记)";
+                } else if (item.kind == 2) {
+                    item.name += "(页面)";
+                }
+                return item;
+            });
         } else {
             valall.value = [];
         }

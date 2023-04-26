@@ -6,18 +6,15 @@
                 <n-form-item-gi :show-feedback="false" :span="12" path="title"> <n-input v-model:value="dataForm.title" placeholder="请输入标题" /> </n-form-item-gi>
                 <n-form-item-gi :show-feedback="false" :span="12" path="path">
                     <n-input v-model:value="dataForm.path" placeholder="请输入访问路径">
-                        <template #prefix> https://www. </template>
+                        <template #prefix> {{ siteURL }}/{{ kind }}/</template>
                         <template #suffix> .html </template>
                     </n-input>
                 </n-form-item-gi>
                 <n-form-item-gi :show-feedback="false" :span="1"> <n-checkbox v-model:checked="dataForm.allow"> 评论 </n-checkbox> </n-form-item-gi>
                 <n-form-item-gi :show-feedback="false" :span="1"> <n-checkbox v-model:checked="dataForm.status" :checked-value="1" :unchecked-value="2"> 草稿 </n-checkbox> </n-form-item-gi>
                 <n-form-item-gi :show-feedback="false" :span="3"> <n-date-picker style="width: 100%" v-model:value="dataForm.created" type="datetime" /> </n-form-item-gi>
-                <n-form-item-gi :show-feedback="false" :span="1">
-                    <n-switch size="large" :round="false" v-model:value="dataForm.kind" :checked-value="1" :unchecked-value="2"> <template #checked>文章 </template> <template #unchecked> 页面 </template> </n-switch>
-                </n-form-item-gi>
-                <n-form-item-gi :show-feedback="false" :span="2">
-                    <n-select placeholder="分类" max-tag-count="responsive" style="width: 100%" remote v-model:value="dataForm.cate_id" :options="cateAll" />
+                <n-form-item-gi :show-feedback="false" path="cate_id" :span="3">
+                    <Cate v-model:value="dataForm.cate_id" disabled></Cate>
                 </n-form-item-gi>
                 <n-form-item-gi :show-feedback="false" :span="5">
                     <n-select placeholder="标签" max-tag-count="responsive" style="width: 100%" multiple remote v-model:value="dataForm.tags" :options="tagAll" />
@@ -36,10 +33,12 @@
 </template>
 <script lang="ts" setup>
 import { apiPostGet, apiCateList, apiTagList, apiPostEdit } from "@/api";
-import { ref, onMounted } from "vue";
+import { apiDictBasic } from "@/api/ext";
+import { ref, onMounted, computed } from "vue";
 import { useMessage } from "naive-ui";
 import { Markdown } from "@/components/Editor";
 import { useRoute } from "vue-router";
+import { Cate } from "@/components/Applet";
 const route = useRoute();
 const cateAll = ref([]);
 const tagAll = ref([]);
@@ -62,6 +61,9 @@ const dataRules = {
     title: { required: true, message: "请输入标题", trigger: "blur" },
     path: { required: true, message: "请输入访问路径", trigger: "blur" },
 };
+const kind = computed(() => {
+    return dataForm.value.kind == 1 ? "posts" : "pages";
+});
 const message = useMessage();
 const loading = ref(false);
 const dataRef = ref();
@@ -88,7 +90,13 @@ const init = () => {
         }
     });
 };
+const siteURL = ref("");
 const preInit = () => {
+    apiDictBasic().then((resp) => {
+        if (resp.code == 200) {
+            siteURL.value = resp.data.site_url;
+        }
+    });
     apiCateList({}).then((resp) => {
         if (resp.code == 200) {
             cateAll.value = resp.data.map((item) => {
