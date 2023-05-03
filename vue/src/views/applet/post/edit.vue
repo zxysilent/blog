@@ -26,7 +26,7 @@
                         <n-button type="tertiary" @click="$router.push({ name: 'post-index' })">取消返回</n-button>
                     </n-space>
                 </n-grid-item>
-                <n-grid-item :show-feedback="false" span="24"> <Markdown v-model:value="dataForm.markdown" /> </n-grid-item>
+                <n-grid-item :show-feedback="false" span="24"> <Markdown v-model:value="dataForm.markdown" @change="onChange"/> </n-grid-item>
             </n-grid>
         </n-form>
     </n-card>
@@ -67,6 +67,10 @@ const kind = computed(() => {
 const message = useMessage();
 const loading = ref(false);
 const dataRef = ref();
+const onChange = (val) => {
+    console.log(val);
+    dataForm.value.richtext = val;
+};
 const init = () => {
     apiPostGet({ id: route.params.id }).then((resp) => {
         if (resp.code == 200) {
