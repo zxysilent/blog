@@ -36,10 +36,10 @@
 import { apiPostAdd, apiCateList, apiTagList } from "@/api";
 import { apiDictBasic } from "@/api/ext";
 import { Markdown } from "@/components/Editor";
-import { reactive, ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useMessage } from "naive-ui";
 import { Cate } from "@/components/Applet";
-const dataForm = reactive({
+const dataForm = ref({
     id: 0,
     title: "",
     path: "",
@@ -54,7 +54,7 @@ const dataForm = reactive({
     tags: [],
 });
 const kind = computed(() => {
-    return dataForm.kind == 1 ? "posts" : "pages";
+    return dataForm.value.kind == 1 ? "posts" : "pages";
 });
 const cateAll = ref([]);
 const tagAll = ref([]);
@@ -69,11 +69,11 @@ const message = useMessage();
 const loading = ref(false);
 const onChange = (val) => {
     console.log(val);
-    dataForm.richtext = val;
+    dataForm.value.richtext = val;
 };
 const onCate = (raw) => {
     console.log(raw);
-    dataForm.kind = raw.kind;
+    dataForm.value.kind = raw.kind;
 };
 const siteURL = ref("");
 const preInit = () => {
@@ -82,7 +82,7 @@ const preInit = () => {
             siteURL.value = resp.data.site_url;
         }
     });
-    apiCateList({ kind: dataForm.kind }).then((resp) => {
+    apiCateList({ kind: dataForm.value.kind }).then((resp) => {
         if (resp.code == 200) {
             cateAll.value = resp.data.map((item) => {
                 return {
@@ -111,7 +111,7 @@ onMounted(() => {
     preInit();
 });
 const emitReset = () => {
-    dataForm.id = 0;
+    dataForm.value.id = 0;
     dataRef.value.restoreValidation();
 };
 const emitAdd = () => {

@@ -32,9 +32,9 @@
 </template>
 <script lang="ts" setup>
 import { apiTagAdd } from "@/api";
-import { reactive, ref, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { useMessage } from "naive-ui";
-const dataForm = reactive({
+const dataForm = ref({
     id: 0,
     name: "",
     color: "#333639",
@@ -50,17 +50,19 @@ const loading = ref(false);
 
 onMounted(() => {});
 const emitReset = () => {
-    dataForm.id = 0;
-    dataForm.name = "";
-    dataForm.color = "#333639";
-    dataForm.intro = "";
+    dataForm.value = {
+        id: 0,
+        name: "",
+        color: "#333639",
+        intro: "",
+    };
     dataRef.value.restoreValidation();
 };
 const emitAdd = () => {
-    console.log(dataForm);
+    console.log(dataForm.value);
     dataRef.value.validate((errors) => {
         if (!errors) {
-            apiTagAdd(dataForm).then((resp) => {
+            apiTagAdd(dataForm.value).then((resp) => {
                 if (resp.code == 200) {
                     message.success("添加成功", {
                         onAfterLeave() {

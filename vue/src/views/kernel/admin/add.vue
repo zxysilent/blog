@@ -45,7 +45,7 @@
 </template>
 <script lang="ts" setup>
 import { apiAdminAdd, apiAdminExist } from "@/api";
-import { reactive, ref, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { useMessage } from "naive-ui";
 import { apiRoleAll } from "@/api";
 import { useRouter } from "vue-router";
@@ -55,7 +55,7 @@ interface Role {
 }
 const router = useRouter();
 const roleAll = ref<Role[]>([]);
-const dataForm = reactive({
+const dataForm = ref({
     id: 0,
     num: "",
     name: "",
@@ -108,20 +108,24 @@ onMounted(() => {
     init();
 });
 const emitReset = () => {
-    dataForm.id = 0;
-    dataForm.num = "";
-    dataForm.name = "";
-    dataForm.phone = "";
-    dataForm.email = "";
-    dataForm.passwd = "1q2w3e4r";
-    dataForm.role_id = 0;
+    dataForm.value = {
+        id: 0,
+        num: "",
+        name: "",
+        passwd: "1q2w3e4r",
+        passwd_enc: "",
+        avatar: "",
+        phone: "",
+        email: "",
+        role_id: 0,
+    };
     dataRef.value.restoreValidation();
 };
 const emitAdd = () => {
-    console.log(dataForm);
+    console.log(dataForm.value);
     dataRef.value.validate((errors) => {
         if (!errors) {
-            apiAdminAdd(dataForm).then((resp) => {
+            apiAdminAdd(dataForm.value).then((resp) => {
                 if (resp.code == 200) {
                     message.success("添加成功", {
                         onAfterLeave() {

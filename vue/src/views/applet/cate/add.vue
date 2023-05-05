@@ -29,7 +29,7 @@
 </template>
 <script lang="ts" setup>
 import { apiCateAdd } from "@/api";
-import { reactive, ref, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { useMessage } from "naive-ui";
 const kindAll = [
     { label: "请选择", value: 0 },
@@ -37,7 +37,7 @@ const kindAll = [
     { label: "页面", value: 2 },
     { label: "笔记", value: 3 },
 ];
-const dataForm = reactive({
+const dataForm = ref({
     id: 0,
     kind: 0,
     name: "",
@@ -54,18 +54,20 @@ const message = useMessage();
 const loading = ref(false);
 onMounted(() => {});
 const emitReset = () => {
-    dataForm.id = 0;
-    dataForm.kind = 0;
-    dataForm.name = "";
-    dataForm.color = "#333639";
-    dataForm.intro = "";
+    dataForm.value = {
+        id: 0,
+        kind: 0,
+        name: "",
+        color: "#333639",
+        intro: "",
+    };
     dataRef.value.restoreValidation();
 };
 const emitAdd = () => {
-    console.log(dataForm);
+    console.log(dataForm.value);
     dataRef.value.validate((errors) => {
         if (!errors) {
-            apiCateAdd(dataForm).then((resp) => {
+            apiCateAdd(dataForm.value).then((resp) => {
                 if (resp.code == 200) {
                     message.success("添加成功", {
                         onAfterLeave() {

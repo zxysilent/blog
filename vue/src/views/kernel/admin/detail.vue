@@ -27,11 +27,11 @@
                         </n-radio-group>
                     </n-form-item>
                     <n-form-item label="更新时间" :show-feedback="false">
-                    <n-time :time="dataForm.updated" />
-                </n-form-item>
-                <n-form-item label="创建时间" :show-feedback="false">
-                    <n-time :time="dataForm.created" />
-                </n-form-item>
+                        <n-time :time="dataForm.updated" />
+                    </n-form-item>
+                    <n-form-item label="创建时间" :show-feedback="false">
+                        <n-time :time="dataForm.created" />
+                    </n-form-item>
                     <br />
                     <div>
                         <n-space justify="center">

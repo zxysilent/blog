@@ -13,8 +13,7 @@
                             :autosize="{
                                 minRows: 3,
                                 maxRows: 5,
-                            }"
-                        />
+                            }" />
                     </n-form-item>
                     <div>
                         <n-space justify="center">
@@ -30,9 +29,9 @@
 </template>
 <script lang="ts" setup>
 import { apiRoleAdd } from "@/api";
-import { reactive, ref, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { useMessage } from "naive-ui";
-const dataForm = reactive({
+const dataForm = ref({
     id: 0,
     name: "",
     intro: "",
@@ -47,16 +46,18 @@ const loading = ref(false);
 
 onMounted(() => {});
 const emitReset = () => {
-    dataForm.id = 0;
-    dataForm.name = "";
-    dataForm.intro = "";
+    dataForm.value = {
+        id: 0,
+        name: "",
+        intro: "",
+    };
     dataRef.value.restoreValidation();
 };
 const emitAdd = () => {
-    console.log(dataForm);
+    console.log(dataForm.value);
     dataRef.value.validate((errors) => {
         if (!errors) {
-            apiRoleAdd(dataForm).then((resp) => {
+            apiRoleAdd(dataForm.value).then((resp) => {
                 if (resp.code == 200) {
                     message.success("添加成功", {
                         onAfterLeave() {
