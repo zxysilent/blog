@@ -206,10 +206,10 @@ func ViewCatePost(ctx echo.Context) error {
 	}
 	naver := model.Naver{}
 	if filter.Pi > 1 {
-		naver.Prev = "/cate/" + mod.Name + "?page=" + strconv.Itoa(filter.Pi-1)
+		naver.Prev = "/cates/" + mod.Name + "?page=" + strconv.Itoa(filter.Pi-1)
 	}
 	if total > (filter.Pi * filter.Ps) {
-		naver.Next = "/cate/" + mod.Name + "?page=" + strconv.Itoa(filter.Pi+1)
+		naver.Next = "/cates/" + mod.Name + "?page=" + strconv.Itoa(filter.Pi+1)
 	}
 	return ctx.Render(http.StatusOK, "post-cate.html", map[string]interface{}{
 		"Cate":      mod,
@@ -259,10 +259,10 @@ func ViewTagPost(ctx echo.Context) error {
 	total := repo.TagPostCount(tag.Id)
 	naver := model.Naver{}
 	if filter.Pi > 1 {
-		naver.Prev = "/tag/" + tag.Name + "?page=" + strconv.Itoa(filter.Pi-1)
+		naver.Prev = "/tags/" + tag.Name + "?page=" + strconv.Itoa(filter.Pi-1)
 	}
 	if total > (filter.Pi * filter.Ps) {
-		naver.Next = "/tag/" + tag.Name + "?page=" + strconv.Itoa(filter.Pi+1)
+		naver.Next = "/tags/" + tag.Name + "?page=" + strconv.Itoa(filter.Pi+1)
 	}
 	return ctx.Render(http.StatusOK, "post-tag.html", map[string]interface{}{
 		"Tag":      tag,
