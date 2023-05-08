@@ -51,7 +51,7 @@ func ViewPost(ctx echo.Context) error {
 				"Msg": err.Error(),
 			})
 		}
-		naver := model.Naver{}
+		naver := repo.PostNaver(mod.CateId, mod.Created)
 		mod.Richtext = utils.GenLazyLoad(mod.Richtext)
 		return ctx.Render(http.StatusOK, "post.html", map[string]interface{}{
 			"Post":  mod,

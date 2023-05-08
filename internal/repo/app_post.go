@@ -150,35 +150,17 @@ func PostMapIds(ids []int) map[int]*model.Post {
 	}
 	return mapSet
 }
-
-// PostPath 一条post
-// func PostPath(path string) (*Post, *Naver, bool) {
-// 	mod := &Post{
-// 		Path: path,
-// 		Kind: 1,
-// 	}
-// 	has, _ := Db.Get(mod)
-// 	if has {
-// 		mod.Cate, _ = CateGet(mod.CateId)
-// 		if mod.Kind == PostKindPost {
-// 			tags := make([]Tag, 0, 4)
-// 			Db.SQL("SELECT * FROM tag WHERE id IN (SELECT tag_id FROM post_tag WHERE post_id = ?)", mod.Id).Find(&tags)
-// 			mod.Tags = tags
-// 		}
-// 		naver := &Naver{}
-// 		p := Post{}
-// 		b, _ := Db.Where("kind = 1 and status = 2 and created >?", mod.Created.Format(utils.StdDateTime)).Asc("created").Get(&p)
-// 		if b {
-// 			// <a href="{{.Naver.Prev}}" class="prev">&laquo; 上一页</a>
-// 			naver.Prev = `<a href="/post/` + p.Path + `.html" class="prev">&laquo; ` + p.Title + `</a>`
-// 		}
-// 		n := Post{}
-// 		b1, _ := Db.Where("kind = 1  and status = 2 and created <?", mod.Created.Format(utils.StdDateTime)).Desc("created").Get(&n)
-// 		if b1 {
-// 			//<a href="{{.Naver.Next}}" class="next">下一页 &raquo;</a>
-// 			naver.Next = `<a href="/post/` + n.Path + `.html" class="next"> ` + n.Title + ` &raquo;</a>`
-// 		}
-// 		return mod, naver, true
-// 	}
-// 	return nil, nil, has
-// }
+func PostNaver(cateId int, crated int64) *model.Naver {
+	naver := &model.Naver{}
+	prev := &model.Post{}
+	if has, _ := db.Where("kind = ? and status = ? and created >?", model.KindPost, model.PostStatusFinish, crated).Asc("created").Get(prev); has {
+		// <a href="{{.Naver.Prev}}" class="prev">&laquo; 上一页</a>
+		naver.Prev = `<a href="/posts/` + prev.Path + `.html" class="prev">&laquo; ` + prev.Title + `</a>`
+	}
+	next := &model.Post{}
+	if has, _ := db.Where("kind = ? and status = ? and created <?", model.KindPost, model.PostStatusFinish, crated).Desc("created").Get(next); has {
+		//<a href="{{.Naver.Next}}" class="next">下一页 &raquo;</a>
+		naver.Next = `<a href="/posts/` + next.Path + `.html" class="next"> ` + next.Title + ` &raquo;</a>`
+	}
+	return naver
+}
