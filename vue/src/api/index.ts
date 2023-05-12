@@ -12,6 +12,50 @@ export const apiAuthVcode = (params): Promise<Reply> => {
 };
 
 /**
+ * 通过id获取单条字典
+ */
+export const apiDictKey = (params): Promise<Reply> => {
+    return fetch.request({
+        url: "/api/dict/:key",
+        method: "get",
+		params: params
+    });
+};
+
+/**
+ * 通过id获取单条字典
+ */
+export const apiDictGetKey = (params): Promise<Reply> => {
+    return fetch.request({
+        url: "/api/dict/get/:key",
+        method: "get",
+		params: params
+    });
+};
+
+/**
+ * 登陆
+ */
+export const apiAuthLogin = (data): Promise<Reply> => {
+    return fetch.request({
+        url: "/api/auth/login",
+        method: "post",
+        data: data
+    });
+};
+
+/**
+ * 获取当前用户的授权
+ */
+export const apiAuthGrant = (params): Promise<Reply> => {
+    return fetch.request({
+        url: "/api/auth/grant",
+        method: "get",
+		params: params
+    });
+};
+
+/**
  * 分类单条数据
  */
 export const apiCateGet = (params): Promise<Reply> => {
@@ -39,28 +83,6 @@ export const apiCateList = (params): Promise<Reply> => {
 export const apiCatePage = (params): Promise<Reply> => {
     return fetch.request({
         url: "/api/cate/page",
-        method: "get",
-		params: params
-    });
-};
-
-/**
- * 通过id获取单条字典
- */
-export const apiDictKey = (params): Promise<Reply> => {
-    return fetch.request({
-        url: "/api/dict/:key",
-        method: "get",
-		params: params
-    });
-};
-
-/**
- * 通过id获取单条字典
- */
-export const apiDictGetKey = (params): Promise<Reply> => {
-    return fetch.request({
-        url: "/api/dict/get/:key",
         method: "get",
 		params: params
     });
@@ -100,6 +122,28 @@ export const apiPostPage = (params): Promise<Reply> => {
 };
 
 /**
+ * 获取服务器go信息
+ */
+export const apiStatusApp = (params): Promise<Reply> => {
+    return fetch.request({
+        url: "/api/status/app",
+        method: "get",
+		params: params
+    });
+};
+
+/**
+ * 获取服务器go信息
+ */
+export const apiStatusGo = (params): Promise<Reply> => {
+    return fetch.request({
+        url: "/api/status/go",
+        method: "get",
+		params: params
+    });
+};
+
+/**
  * 标签单条数据
  */
 export const apiTagGet = (params): Promise<Reply> => {
@@ -129,17 +173,6 @@ export const apiTagPage = (params): Promise<Reply> => {
         url: "/api/tag/page",
         method: "get",
 		params: params
-    });
-};
-
-/**
- * 登陆
- */
-export const apiAuthLogin = (data): Promise<Reply> => {
-    return fetch.request({
-        url: "/api/auth/login",
-        method: "post",
-        data: data
     });
 };
 
@@ -261,39 +294,6 @@ export const apiTagEdit = (data): Promise<Reply> => {
         url: "/api/tag/edit",
         method: "post",
         data: data
-    });
-};
-
-/**
- * 获取当前用户的授权
- */
-export const apiAuthGrant = (params): Promise<Reply> => {
-    return fetch.request({
-        url: "/api/auth/grant",
-        method: "get",
-		params: params
-    });
-};
-
-/**
- * 获取服务器go信息
- */
-export const apiStatusApp = (params): Promise<Reply> => {
-    return fetch.request({
-        url: "/api/status/app",
-        method: "get",
-		params: params
-    });
-};
-
-/**
- * 获取服务器go信息
- */
-export const apiStatusGo = (params): Promise<Reply> => {
-    return fetch.request({
-        url: "/api/status/go",
-        method: "get",
-		params: params
     });
 };
 

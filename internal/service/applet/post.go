@@ -13,7 +13,7 @@ import (
 )
 
 // PostGet doc
-// Auth
+// @Auth
 // @Tags post
 // @Summary 博文单条数据
 // @Param id query int true "id"
@@ -34,7 +34,7 @@ func PostGet(ctx echo.Context) error {
 }
 
 // PostList doc
-// Auth
+// @Auth
 // @Tags post
 // @Summary 博文列表数据
 // @Param query query model.PostFilterList true "请求数据"
@@ -54,7 +54,7 @@ func PostList(ctx echo.Context) error {
 }
 
 // PostPage doc
-// Auth
+// @Auth
 // @Tags post
 // @Summary 获取博文分页
 // @Param query query model.PostFilterPage true "请求数据"
@@ -84,7 +84,7 @@ func PostPage(ctx echo.Context) error {
 }
 
 // PostAdd doc
-// Auth
+// @Auth
 // @Tags post
 // @Summary 博文添加数据
 // @Param token query string true "token"
@@ -117,7 +117,7 @@ func PostAdd(ctx echo.Context) error {
 }
 
 // PostAdd doc
-// Auth
+// @Auth
 // @Tags post
 // @Summary 博文笔记类型保存
 // @Param token query string true "token"
@@ -154,7 +154,7 @@ func PostSave(ctx echo.Context) error {
 }
 
 // PostShare doc
-// Auth
+// @Auth
 // @Tags post
 // @Summary 博文分享
 // @Param token query string true "token"
@@ -175,7 +175,7 @@ func PostShare(ctx echo.Context) error {
 }
 
 // PostEdit doc
-// Auth
+// @Auth
 // @Tags post
 // @Summary 博文修改数据
 // @Param token query string true "token"
@@ -201,7 +201,7 @@ func PostEdit(ctx echo.Context) error {
 }
 
 // PostDrop doc
-// Auth
+// @Auth
 // @Tags post
 // @Summary 博文删除数据
 // @Param token query string true "token"

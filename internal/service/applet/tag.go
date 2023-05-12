@@ -10,7 +10,7 @@ import (
 )
 
 // TagGet doc
-// Auth
+// @Auth
 // @Tags tag
 // @Summary 标签单条数据
 // @Param id query int true "id"
@@ -31,7 +31,7 @@ func TagGet(ctx echo.Context) error {
 }
 
 // TagList doc
-// Auth
+// @Auth
 // @Tags tag
 // @Summary 标签列表数据
 // @Param query query model.TagFilterList true "请求数据"
@@ -51,7 +51,7 @@ func TagList(ctx echo.Context) error {
 }
 
 // TagPage doc
-// Auth
+// @Auth
 // @Tags tag
 // @Summary 获取标签分页
 // @Param query query model.TagFilterPage true "请求数据"
@@ -81,7 +81,7 @@ func TagPage(ctx echo.Context) error {
 }
 
 // TagAdd doc
-// Auth
+// @Auth
 // @Tags tag
 // @Summary 标签添加数据
 // @Param token query string true "token"
@@ -104,7 +104,7 @@ func TagAdd(ctx echo.Context) error {
 }
 
 // TagEdit doc
-// Auth
+// @Auth
 // @Tags tag
 // @Summary 标签修改数据
 // @Param token query string true "token"
@@ -126,7 +126,7 @@ func TagEdit(ctx echo.Context) error {
 }
 
 // TagDrop doc
-// Auth
+// @Auth
 // @Tags tag
 // @Summary 标签删除数据
 // @Param token query string true "token"

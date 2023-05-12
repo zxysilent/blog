@@ -10,7 +10,7 @@ import (
 )
 
 // CateGet doc
-// Auth
+// @Auth
 // @Tags cate
 // @Summary 分类单条数据
 // @Param id query int true "id"
@@ -31,7 +31,7 @@ func CateGet(ctx echo.Context) error {
 }
 
 // CateList doc
-// Auth
+// @Auth
 // @Tags cate
 // @Summary 分类列表数据
 // @Param query query model.CateFilterList true "请求数据"
@@ -51,7 +51,7 @@ func CateList(ctx echo.Context) error {
 }
 
 // CatePage doc
-// Auth
+// @Auth
 // @Tags cate
 // @Summary 获取分类分页
 // @Param query query model.CateFilterPage true "请求数据"
@@ -81,7 +81,7 @@ func CatePage(ctx echo.Context) error {
 }
 
 // CateAdd doc
-// Auth
+// @Auth
 // @Tags cate
 // @Summary 分类添加数据
 // @Param token query string true "token"
@@ -104,7 +104,7 @@ func CateAdd(ctx echo.Context) error {
 }
 
 // CateEdit doc
-// Auth
+// @Auth
 // @Tags cate
 // @Summary 分类修改数据
 // @Param token query string true "token"
@@ -126,7 +126,7 @@ func CateEdit(ctx echo.Context) error {
 }
 
 // CateDrop doc
-// Auth
+// @Auth
 // @Tags cate
 // @Summary 分类删除数据
 // @Param token query string true "token"
