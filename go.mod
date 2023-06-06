@@ -3,7 +3,7 @@ module blog
 go 1.20
 
 require (
-	github.com/BurntSushi/toml v1.2.1
+	github.com/BurntSushi/toml v1.3.0
 	github.com/boltdb/bolt v1.3.1
 	github.com/go-sql-driver/mysql v1.7.1
 	github.com/labstack/echo/v4 v4.10.2
