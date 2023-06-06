@@ -44,7 +44,14 @@
 ## 说明
 
 - 替换markdown 编辑器为富文本编辑器`web/src/components/Editor/Richtext`即可作为简单`CMS`
-
+- 注意配置使用的数据库
+    ```
+    # mysql\sqlite
+    type = "sqlite"
+    # uid:pass@tcp(host:port)/dbname?charset=utf8mb4&parseTime=true&loc=Local
+    mysql = "root:root@tcp(127.0.0.1:3306)/blog?charset=utf8mb4&parseTime=true&loc=Local"
+    sqlite = "file:blog.db"
+    ```
 ## 讨论群
 🐧🐧 1059282178
 
