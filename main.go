@@ -22,8 +22,9 @@ import (
 // @Description 凭证传递方式包括 get、post、header、cookie
 // @Description /api/* 前后端api
 func main() {
-	ctx := logs.TrackCtx(context.Background())
+	ctx := logs.TraceCtx(context.Background())
 	defer logs.Close()
+	logs.SetText()
 	logs.Ctx(ctx).Info("app initializing")
 	conf.Init()
 	repo.Init(ctx)

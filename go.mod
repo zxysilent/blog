@@ -11,7 +11,7 @@ require (
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/swaggo/echo-swagger v1.4.0
 	github.com/swaggo/swag v1.8.12
-	github.com/zxysilent/logs v0.6.8
+	github.com/zxysilent/logs v0.7.0
 	golang.org/x/image v0.7.0
 	golang.org/x/tools v0.7.0
 	modernc.org/sqlite v1.22.1
