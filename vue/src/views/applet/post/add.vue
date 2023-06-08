@@ -118,7 +118,7 @@ const emitAdd = () => {
     console.log(dataForm);
     dataRef.value.validate((errors) => {
         if (!errors) {
-            apiPostAdd(dataForm).then((resp) => {
+            apiPostAdd(dataForm.value).then((resp) => {
                 if (resp.code == 200) {
                     message.success("添加成功", {
                         onAfterLeave() {
