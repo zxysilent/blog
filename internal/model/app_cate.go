@@ -25,7 +25,9 @@ type CateFilterList struct {
 	List
 	CateFilter
 }
-
+type CateFilterTree struct {
+	CateFilter
+}
 type CateFilterPage struct {
 	Page
 	CateFilter

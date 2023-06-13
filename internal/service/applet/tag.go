@@ -14,6 +14,7 @@ import (
 // @Tags tag
 // @Summary 标签单条数据
 // @Param id query int true "id"
+// @Param token query string true "token"
 // @Success 200 {object} utils.Reply{data=model.Tag} "返回数据"
 // @Router /api/tag/get [get]
 func TagGet(ctx echo.Context) error {
@@ -34,6 +35,7 @@ func TagGet(ctx echo.Context) error {
 // @Auth
 // @Tags tag
 // @Summary 标签列表数据
+// @Param token query string true "token"
 // @Param query query model.TagFilterList true "请求数据"
 // @Success 200 {object} utils.Reply{data=[]model.Tag} "返回数据"
 // @Router /api/tag/list [get]
@@ -54,6 +56,7 @@ func TagList(ctx echo.Context) error {
 // @Auth
 // @Tags tag
 // @Summary 获取标签分页
+// @Param token query string true "token"
 // @Param query query model.TagFilterPage true "请求数据"
 // @Success 200 {object} utils.Reply{data=[]model.Tag} "返回数据"
 // @Router /api/tag/page [get]

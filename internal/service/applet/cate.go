@@ -14,6 +14,7 @@ import (
 // @Tags cate
 // @Summary 分类单条数据
 // @Param id query int true "id"
+// @Param token query string true "token"
 // @Success 200 {object} utils.Reply{data=model.Cate} "返回数据"
 // @Router /api/cate/get [get]
 func CateGet(ctx echo.Context) error {
@@ -30,10 +31,32 @@ func CateGet(ctx echo.Context) error {
 	return ctx.JSON(utils.Succ("succ", mod))
 }
 
+// CateTree doc
+// @Auth
+// @Tags cate
+// @Summary 分类树形数据
+// @Param token query string true "token"
+// @Param query query model.CateFilterList true "请求数据"
+// @Success 200 {object} utils.Reply{data=[]model.Cate} "返回数据"
+// @Router /api/cate/tree [get]
+func CateTree(ctx echo.Context) error {
+	ipt := &model.CateFilterList{}
+	err := ctx.Bind(ipt)
+	if err != nil {
+		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
+	}
+	mods, err := repo.CateList(ipt)
+	if err != nil {
+		return ctx.JSON(utils.ErrOpt("未查询到数据", err.Error()))
+	}
+	return ctx.JSON(utils.Succ("succ", mods))
+}
+
 // CateList doc
 // @Auth
 // @Tags cate
 // @Summary 分类列表数据
+// @Param token query string true "token"
 // @Param query query model.CateFilterList true "请求数据"
 // @Success 200 {object} utils.Reply{data=[]model.Cate} "返回数据"
 // @Router /api/cate/list [get]
@@ -54,6 +77,7 @@ func CateList(ctx echo.Context) error {
 // @Auth
 // @Tags cate
 // @Summary 获取分类分页
+// @Param token query string true "token"
 // @Param query query model.CateFilterPage true "请求数据"
 // @Success 200 {object} utils.Reply{data=[]model.Cate} "返回数据"
 // @Router /api/cate/page [get]

@@ -17,6 +17,7 @@ import (
 // @Tags post
 // @Summary 博文单条数据
 // @Param id query int true "id"
+// @Param token query string true "token"
 // @Success 200 {object} utils.Reply{data=model.Post} "返回数据"
 // @Router /api/post/get [get]
 func PostGet(ctx echo.Context) error {
@@ -37,6 +38,7 @@ func PostGet(ctx echo.Context) error {
 // @Auth
 // @Tags post
 // @Summary 博文列表数据
+// @Param token query string true "token"
 // @Param query query model.PostFilterList true "请求数据"
 // @Success 200 {object} utils.Reply{data=[]model.Post} "返回数据"
 // @Router /api/post/list [get]
@@ -57,6 +59,7 @@ func PostList(ctx echo.Context) error {
 // @Auth
 // @Tags post
 // @Summary 获取博文分页
+// @Param token query string true "token"
 // @Param query query model.PostFilterPage true "请求数据"
 // @Success 200 {object} utils.Reply{data=[]model.Post} "返回数据"
 // @Router /api/post/page [get]

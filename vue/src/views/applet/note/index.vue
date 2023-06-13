@@ -264,7 +264,7 @@ const onSave = () => {
         if (!errors) {
             apiPostSave(dataForm.value).then((resp) => {
                 if (resp.code == 200) {
-                    init(cateActive.value);
+                    // init(cateActive.value);
                     message.success("保存成功");
                 } else {
                     message.error(resp.msg);

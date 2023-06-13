@@ -38,6 +38,18 @@ func CateList(filter *model.CateFilterList) ([]model.Cate, error) {
 	return mods, err
 }
 
+// CateList 分类列表数据
+func CateTree(filter *model.CateFilterTree) ([]model.Cate, error) {
+	mods := make([]model.Cate, 0, 8)
+	sess := db.NewSession()
+	defer sess.Close()
+	if filter.Kind != nil && *filter.Kind > 0 {
+		sess.And("kind = ?", *filter.Kind)
+	}
+	err := sess.Omit("updated", "created").Find(&mods)
+	return mods, err
+}
+
 // CatePage 分类分页数据
 func CatePage(filter *model.CateFilterPage, cols ...string) ([]model.Cate, int, error) {
 	mods := make([]model.Cate, 0, filter.Ps)
