@@ -16,9 +16,8 @@ router.beforeEach(async (to, _, next) => {
     window.$loadingBar && window.$loadingBar.start();
     // 已经登陆 去登陆地方
     if (storage.getToken() && to.name == "login") {
-        // next({ name: "home" })
-        // return
-        to.name = "home"
+        next({ name: "root" })
+        return
     }
     if (storage.getToken() && !whiteRouter.includes(to.name as string)) {
         const adminStore = useAdminStore();
