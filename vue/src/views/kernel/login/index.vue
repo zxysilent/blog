@@ -226,7 +226,7 @@ onMounted(() => {
         width: 368px;
         margin: 0 auto;
         .login-tips {
-            text-align: left;
+            text-align: center;
             margin-top: 10px;
             line-height: 22px;
             font-size: 16px;
