@@ -10,8 +10,6 @@ type config struct {
 	Mode        string `toml:"mode"`
 	Host        string `toml:"host"`
 	Port        int    `toml:"port"`
-	RpcHost     string `toml:"rpc_host"`
-	RpcPort     int    `toml:"rpc_port"`
 	Endpoint    string `toml:"endpoint"`     //
 	TokenKey    string `toml:"token_key"`    //token关键词
 	TokenExp    int    `toml:"token_exp"`    //过期时间 h

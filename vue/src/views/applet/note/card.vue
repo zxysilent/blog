@@ -11,7 +11,7 @@
     border-radius: 3px;
     position: relative;
     transition: background-color 0.3s cubic-bezier(4, 0, 0.2, 1);
-    background-color: #f1f2f3;
+    background-color: #f4f6f7;
     text-align: start;
     word-break: break-word;
     padding: 8px;
@@ -22,11 +22,13 @@
     cursor: pointer;
 }
 .note-card:hover {
-    background-color: #eaf3fd;
+    background-color: #d2d5d9;
+    transform: translate(0, 0);
+    transition: all 0.2s ease-in 0s;
 }
 .active {
-    color: #333639;
-    background-color: #eaf3fd;
+    color: #232d47;
+    background-color: #d2d5d9;
     border-color: #2d8cf0;
 }
 .note-card-body {

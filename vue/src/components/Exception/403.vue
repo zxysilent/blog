@@ -6,7 +6,7 @@
         <div class="text-center">
             <h1 class="text-base">抱歉，你无权访问该页面</h1>
             <n-space justify="center">
-                <n-button type="info" @click="$router.push({ name: 'home' })">回到首页</n-button>
+                <n-button type="info" @click="$router.push({ name: 'root' })">回到首页</n-button>
                 <n-button type="success" @click="$router.push({ name: 'login' })">登录</n-button>
             </n-space>
         </div>

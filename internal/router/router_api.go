@@ -19,11 +19,13 @@ func apiRouter(engine *echo.Echo) {
 	api.GET("/auth/vcode", kernel.AuthVcode)              //验证码
 	api.GET("/dict/:key", kernel.DictVal)                 //通过id获取单条字典
 	api.GET("/dict/get/:key", kernel.DictGet)             //通过id获取单条字典
+	api.GET("/note/list", applet.NoteList)                //笔记目录&列表数据
 	api.POST("/auth/login", kernel.AuthLogin)             //登陆
 	auth.GET("/auth/grant", kernel.AuthGrant)             //获取当前用户的授权
 	auth.GET("/cate/get", applet.CateGet)                 //分类单条数据
 	auth.GET("/cate/list", applet.CateList)               //分类列表数据
 	auth.GET("/cate/page", applet.CatePage)               //获取分类分页
+	auth.GET("/cate/tree", applet.CateTree)               //分类树形数据
 	auth.GET("/post/get", applet.PostGet)                 //博文单条数据
 	auth.GET("/post/list", applet.PostList)               //博文列表数据
 	auth.GET("/post/page", applet.PostPage)               //获取博文分页
@@ -35,11 +37,11 @@ func apiRouter(engine *echo.Echo) {
 	auth.POST("/cate/add", applet.CateAdd)                //分类添加数据
 	auth.POST("/cate/drop", applet.CateDrop)              //分类删除数据
 	auth.POST("/cate/edit", applet.CateEdit)              //分类修改数据
+	auth.POST("/note/save", applet.NoteSave)              //笔记保存
+	auth.POST("/note/share", applet.NoteShare)            //笔记分享
 	auth.POST("/post/add", applet.PostAdd)                //博文添加数据
 	auth.POST("/post/drop", applet.PostDrop)              //博文删除数据
 	auth.POST("/post/edit", applet.PostEdit)              //博文修改数据
-	auth.POST("/post/save", applet.PostSave)              //博文笔记类型保存
-	auth.POST("/post/share", applet.PostShare)            //博文分享
 	auth.POST("/tag/add", applet.TagAdd)                  //标签添加数据
 	auth.POST("/tag/drop", applet.TagDrop)                //标签删除数据
 	auth.POST("/tag/edit", applet.TagEdit)                //标签修改数据

@@ -17,6 +17,8 @@ import (
 	xlog "xorm.io/xorm/log"
 )
 
+var ErrNotFound = errors.New("No records found")
+
 // db 数据库操作句柄
 var db *xorm.Engine
 

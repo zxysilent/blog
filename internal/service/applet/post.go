@@ -1,11 +1,9 @@
 package applet
 
 import (
-	"blog/conf"
 	"blog/internal/model"
 	"blog/internal/repo"
 	"blog/internal/utils"
-	"blog/pkg/token"
 	"strings"
 	"time"
 
@@ -117,64 +115,6 @@ func PostAdd(ctx echo.Context) error {
 		return ctx.JSON(utils.Fail("添加失败", err.Error()))
 	}
 	return ctx.JSON(utils.Succ("succ"))
-}
-
-// PostAdd doc
-// @Auth
-// @Tags post
-// @Summary 博文笔记类型保存
-// @Param token query string true "token"
-// @Param body body model.Post true "请求数据"
-// @Success 200 {object} utils.Reply{data=string} "返回数据"
-// @Router /api/post/save [post]
-func PostSave(ctx echo.Context) error {
-	ipt := &struct {
-		model.Post
-		Tags []int `json:"tags"`
-	}{}
-	err := ctx.Bind(ipt)
-	if err != nil {
-		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
-	}
-	if ipt.Kind == model.KindNote && ipt.Path == "" {
-		ipt.Path = utils.UUID()
-	}
-	if ipt.Id == 0 {
-		ipt.Updated = time.Now().UnixMilli()
-		ipt.Created = ipt.Updated
-		err = repo.PostAdd(&ipt.Post)
-		if err != nil {
-			return ctx.JSON(utils.Fail("添加失败", err.Error()))
-		}
-		return ctx.JSON(utils.Succ("succ"))
-	}
-	ipt.Updated = time.Now().UnixMilli()
-	err = repo.PostEdit(&ipt.Post)
-	if err != nil {
-		return ctx.JSON(utils.Fail("修改失败", err.Error()))
-	}
-	return ctx.JSON(utils.Succ("succ"))
-}
-
-// PostShare doc
-// @Auth
-// @Tags post
-// @Summary 博文分享
-// @Param token query string true "token"
-// @Param body body model.PostShareArgs true "请求数据"
-// @Success 200 {object} utils.Reply{data=string} "返回数据"
-// @Router /api/post/share [post]
-func PostShare(ctx echo.Context) error {
-	ipt := &model.PostShareArgs{}
-	err := ctx.Bind(ipt)
-	if err != nil {
-		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
-	}
-	s := token.Token[token.Share]{Claim: token.Share{PostId: ipt.PostId}}
-	if ipt.Day > 0 {
-		s.ExpAt = time.Now().AddDate(0, 0, ipt.Day).Unix()
-	}
-	return ctx.JSON(utils.Succ("succ", s.Encode(conf.App.TokenSecret)))
 }
 
 // PostEdit doc

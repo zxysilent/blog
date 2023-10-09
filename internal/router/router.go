@@ -16,7 +16,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
-	"runtime"
+	"runtime/debug"
 	"strings"
 	"time"
 
@@ -95,9 +95,7 @@ func midRecover(next echo.HandlerFunc) echo.HandlerFunc {
 				if !ok {
 					err = fmt.Errorf("%v", r)
 				}
-				stack := make([]byte, 1<<10)
-				length := runtime.Stack(stack, false)
-				logs.Error("recover ", string(stack[:length]))
+				logs.With().Caller(false).Str("trace", ctx.Request().Header.Get(echo.HeaderXRequestID)).Str("caller", "echo").Raw("panic", debug.Stack()).Err(err).Error("recover")
 				ctx.Error(err)
 			}
 		}()
@@ -109,10 +107,17 @@ func midRecover(next echo.HandlerFunc) echo.HandlerFunc {
 func midLogger(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(ctx echo.Context) (err error) {
 		start := time.Now()
+		rid := ctx.Request().Header.Get(echo.HeaderXRequestID)
+		if rid == "" {
+			rid = logs.TraceId()
+		}
+		ctx.Request().Header.Set(echo.HeaderXRequestID, rid)
+		ctx.Response().Header().Set(echo.HeaderXRequestID, rid)
 		if err = next(ctx); err != nil {
 			ctx.Error(err)
 		}
-		logs.With().Caller(false).Str("caller", "echo").Str("ip", ctx.RealIP()).Str(ctx.Request().Method, ctx.Request().RequestURI).Str("span", time.Now().Sub(start).String()).Info()
+		stop := time.Now()
+		logs.With().Caller(false).Str("trace", rid).Str("caller", "echo").Str("ip", ctx.RealIP()).Str(ctx.Request().Method, ctx.Request().RequestURI).Str("span", stop.Sub(start).String()).Debug()
 		return
 	}
 }

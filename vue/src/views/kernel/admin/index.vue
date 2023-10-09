@@ -56,7 +56,7 @@ const adminStore = useAdminStore();
 const router = useRouter();
 const message = useMessage();
 const roleAll = ref([]);
-const filter = reactive({ role_id: 0, mult: "", pi: 1, ps: 12 });
+const filter = reactive({ role_id: 0, mult: "", pi: 1, ps: 15 });
 const tabPage = reactive({
     page: 1,
     itemCount: 0,

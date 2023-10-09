@@ -1,6 +1,8 @@
 package model
 
-import "time"
+import (
+	"time"
+)
 
 // Post 文章
 type Post struct {
@@ -72,7 +74,19 @@ type PostFilterPage struct {
 	PostFilter
 }
 
-type PostShareArgs struct {
+type NoteShareArgs struct {
 	PostId int `json:"post_id"`
 	Day    int `json:"day"`
+}
+
+type NoteReply struct {
+	Cates []Cate     `json:"cates"`
+	Posts []PostPart `json:"posts"`
+	Empty bool       `json:"empty"`
+}
+
+type NoteFilterList struct {
+	CateId *int `form:"cate_id" query:"cate_id" json:"cate_id"`
+	Newest bool `form:"newest" query:"newest" json:"newest"`
+	List
 }

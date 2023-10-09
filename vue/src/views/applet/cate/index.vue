@@ -34,11 +34,11 @@ import { NButton, NPopconfirm, useMessage, NTime, NPopover, NSpace, NTag } from 
 import { Refresh, AddCircleOutline, FilterSharp } from "@vicons/ionicons5";
 import { useRouter } from "vue-router";
 import { useAdminStore } from "@/store/admin";
-import { apiCatePage, apiCateDrop } from "@/api";
+import { apiCateTree, apiCateDrop } from "@/api";
 const adminStore = useAdminStore();
 const router = useRouter();
 const message = useMessage();
-const filter = reactive({ mult: "", pi: 1, ps: 12 });
+const filter = reactive({ mult: "", pi: 1, ps: 15 });
 const tabPage = reactive({
     page: filter.pi,
     itemCount: 0,
@@ -64,10 +64,9 @@ const tabPage = reactive({
 });
 const tabData = ref([]);
 const init = () => {
-    apiCatePage(filter).then((resp) => {
+    apiCateTree(filter).then((resp) => {
         if (resp.code == 200) {
-            tabData.value = resp.data.items;
-            tabPage.itemCount = resp.data.count;
+            tabData.value = resp.data;
         } else {
             tabData.value = [];
             tabPage.page = 1;

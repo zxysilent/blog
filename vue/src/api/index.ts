@@ -34,6 +34,17 @@ export const apiDictGetKey = (params): Promise<Reply> => {
 };
 
 /**
+ * 笔记目录&列表数据
+ */
+export const apiNoteList = (params): Promise<Reply> => {
+    return fetch.request({
+        url: "/api/note/list",
+        method: "get",
+		params: params
+    });
+};
+
+/**
  * 登陆
  */
 export const apiAuthLogin = (data): Promise<Reply> => {
@@ -83,6 +94,17 @@ export const apiCateList = (params): Promise<Reply> => {
 export const apiCatePage = (params): Promise<Reply> => {
     return fetch.request({
         url: "/api/cate/page",
+        method: "get",
+		params: params
+    });
+};
+
+/**
+ * 分类树形数据
+ */
+export const apiCateTree = (params): Promise<Reply> => {
+    return fetch.request({
+        url: "/api/cate/tree",
         method: "get",
 		params: params
     });
@@ -210,6 +232,28 @@ export const apiCateEdit = (data): Promise<Reply> => {
 };
 
 /**
+ * 笔记保存
+ */
+export const apiNoteSave = (data): Promise<Reply> => {
+    return fetch.request({
+        url: "/api/note/save",
+        method: "post",
+        data: data
+    });
+};
+
+/**
+ * 笔记分享
+ */
+export const apiNoteShare = (data): Promise<Reply> => {
+    return fetch.request({
+        url: "/api/note/share",
+        method: "post",
+        data: data
+    });
+};
+
+/**
  * 博文添加数据
  */
 export const apiPostAdd = (data): Promise<Reply> => {
@@ -237,28 +281,6 @@ export const apiPostDrop = (data): Promise<Reply> => {
 export const apiPostEdit = (data): Promise<Reply> => {
     return fetch.request({
         url: "/api/post/edit",
-        method: "post",
-        data: data
-    });
-};
-
-/**
- * 博文笔记类型保存
- */
-export const apiPostSave = (data): Promise<Reply> => {
-    return fetch.request({
-        url: "/api/post/save",
-        method: "post",
-        data: data
-    });
-};
-
-/**
- * 博文分享
- */
-export const apiPostShare = (data): Promise<Reply> => {
-    return fetch.request({
-        url: "/api/post/share",
         method: "post",
         data: data
     });

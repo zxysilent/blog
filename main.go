@@ -24,7 +24,6 @@ import (
 func main() {
 	ctx := logs.TraceCtx(context.Background())
 	defer logs.Close()
-	logs.SetText()
 	logs.Ctx(ctx).Info("app initializing")
 	conf.Init()
 	repo.Init(ctx)

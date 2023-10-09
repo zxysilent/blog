@@ -39,7 +39,7 @@ import { apiDictPage, apiDictDrop } from "@/api";
 const adminStore = useAdminStore();
 const router = useRouter();
 const message = useMessage();
-const filter = reactive({ mult: "", pi: 1, ps: 12 });
+const filter = reactive({ mult: "", pi: 1, ps: 15 });
 const tabPage = reactive({
     page: 1,
     itemCount: 0,

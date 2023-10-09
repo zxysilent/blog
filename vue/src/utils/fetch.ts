@@ -15,7 +15,7 @@ export interface ReplyPage {
 //添加一个请求拦截器
 //@ts-ignore
 fetch.interceptors.request.use((config: AxiosRequestConfig) => {
-    window.$loadingBar && window.$loadingBar.start();
+    // window.$loadingBar && window.$loadingBar.start();
     //在请求发出之前进行一些操作
     console.log("send");
     //@ts-ignore
@@ -31,7 +31,7 @@ fetch.interceptors.request.use((config: AxiosRequestConfig) => {
 //添加一个响应拦截器
 //@ts-ignore
 fetch.interceptors.response.use((resp: AxiosResponse<Reply>): Promise<Reply> => {
-    window.$loadingBar && window.$loadingBar.finish();
+    // window.$loadingBar && window.$loadingBar.finish();
     //在这里对返回的数据进行处理
     console.log("recv");
     if (resp.data.code == 330) {

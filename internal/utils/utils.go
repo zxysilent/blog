@@ -16,3 +16,7 @@ const (
 	// 最小Int
 	MinInt = -1 << (intSize - 1)
 )
+
+func Any2Ptr[T any](u T) *T {
+	return &u
+}

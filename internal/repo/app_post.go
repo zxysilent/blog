@@ -2,7 +2,6 @@ package repo
 
 import (
 	"blog/internal/model"
-	"errors"
 )
 
 // PostExist 博文是否存在
@@ -22,7 +21,7 @@ func PostGet(mod *model.Post) error {
 		sess.NoAutoCondition()
 	}
 	if has, _ := sess.Get(mod); !has {
-		return errors.New("No records found")
+		return ErrNotFound
 	}
 	return nil
 }
@@ -163,4 +162,26 @@ func PostNaver(cateId int, crated int64) *model.Naver {
 		naver.Next = `<a href="/posts/` + next.Path + `.html" class="next"> ` + next.Title + ` &raquo;</a>`
 	}
 	return naver
+}
+
+// NoteList 笔记列表数据
+func NoteList(filter *model.NoteFilterList, cols ...string) ([]model.PostPart, error) {
+	mods := make([]model.PostPart, 0, 8)
+	sess := db.NewSession()
+	defer sess.Close()
+	if len(cols) > 0 {
+		sess.Cols(cols...)
+	}
+	if filter.Mult != "" {
+		sess.And("title like ?", filter.SafeMult())
+	}
+	sess.And("kind = ?", model.KindNote)
+	if !filter.Newest && filter.CateId != nil {
+		sess.And("cate_id = ?", *filter.CateId)
+	}
+	if filter.Limit > 0 {
+		sess.Limit(filter.Limit)
+	}
+	err := sess.Desc("id").Find(&mods)
+	return mods, err
 }

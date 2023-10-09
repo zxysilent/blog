@@ -2,7 +2,6 @@ package repo
 
 import (
 	"blog/internal/model"
-	"errors"
 )
 
 // CateExist 分类是否存在
@@ -21,7 +20,7 @@ func CateGet(mod *model.Cate) error {
 		sess.ID(mod.Id)
 	}
 	if has, _ := sess.Get(mod); !has {
-		return errors.New("No records found")
+		return ErrNotFound
 	}
 	return nil
 }
@@ -31,6 +30,12 @@ func CateList(filter *model.CateFilterList) ([]model.Cate, error) {
 	mods := make([]model.Cate, 0, 8)
 	sess := db.NewSession()
 	defer sess.Close()
+	if filter.Mult != "" {
+		sess.And("name like ?", filter.SafeMult())
+	}
+	if filter.Pid != nil && *filter.Pid > -1 {
+		sess.And("pid = ?", *filter.Pid)
+	}
 	if filter.Kind != nil && *filter.Kind > 0 {
 		sess.And("kind = ?", *filter.Kind)
 	}

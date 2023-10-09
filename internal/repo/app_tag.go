@@ -2,7 +2,6 @@ package repo
 
 import (
 	"blog/internal/model"
-	"errors"
 )
 
 // TagExist 标签是否存在
@@ -21,7 +20,7 @@ func TagGet(mod *model.Tag) error {
 		sess.ID(mod.Id)
 	}
 	if has, _ := sess.Get(mod); !has {
-		return errors.New("No records found")
+		return ErrNotFound
 	}
 	return nil
 }

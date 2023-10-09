@@ -89,7 +89,7 @@ import { NButton, NPopconfirm, useMessage, NTime, NPopover, NSpace, NTag } from 
 import { Refresh, AddCircleOutline, FilterSharp, Search, CopyOutline } from "@vicons/ionicons5";
 import { useRouter } from "vue-router";
 import { useAdminStore } from "@/store/admin";
-import { apiPostPage, apiPostDrop, apiCateList, apiPostShare } from "@/api";
+import { apiPostPage, apiPostDrop, apiCateList, apiNoteShare } from "@/api";
 import { apiDictBasic } from "@/api/ext";
 import { Cate } from "@/components/Applet";
 const kindAll = [
@@ -113,7 +113,7 @@ const showDiy = computed(() => {
 const adminStore = useAdminStore();
 const router = useRouter();
 const message = useMessage();
-const filter = reactive({ kind: 0, cate_id: 0, mult: "", pi: 1, ps: 12 });
+const filter = reactive({ kind: 0, cate_id: 0, mult: "", pi: 1, ps: 15 });
 const tabPage = reactive({
     page: 1,
     itemCount: 0,
@@ -189,7 +189,7 @@ const emitShare = () => {
     if (noteShare.day == 0) {
         data.day = noteShare.diy_day;
     }
-    apiPostShare(data).then((resp) => {
+    apiNoteShare(data).then((resp) => {
         if (resp.code == 200) {
             noteShare.url = `${siteURL.value}/notes/${noteShare.path}.html?s=${resp.data}`;
         } else {

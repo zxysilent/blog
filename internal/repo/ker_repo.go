@@ -3,7 +3,6 @@ package repo
 import (
 	"blog/internal/model"
 	"encoding/json"
-	"errors"
 	"strconv"
 	"sync"
 	"time"
@@ -31,7 +30,7 @@ func initBasic() error {
 	defer memBasic.lock.Unlock()
 	mod, has := DictGet(model.DictKeyBasic)
 	if !has {
-		return errors.New("Not found")
+		return ErrNotFound
 	}
 	memBasic.mem = mod.ToBasic()
 	logs.Info("basic cache")
@@ -55,7 +54,7 @@ func initBlog() error {
 	defer memBlog.lock.Unlock()
 	mod, has := DictGet(model.DictKeyBlog)
 	if !has {
-		return errors.New("Not found")
+		return ErrNotFound
 	}
 	memBlog.mem = mod.ToBlog()
 	logs.Info("blog cache")

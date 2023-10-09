@@ -12,7 +12,7 @@ const AppJsUrl = "/static/js/app.min.js"
 const AppCssUrl = "/static/css/app.min.css"
 
 func init() {
-	logs.SetLevel(logs.LDEBUG)
+	logs.SetLevel(logs.LINFO)
 	logs.SetCaller(true)
 	logs.SetSep("/blog")
 	logs.SetFile("./logs/app.log")
