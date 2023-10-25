@@ -20,3 +20,12 @@ func BenchmarkSUID(b *testing.B) {
 func TestSUID(t *testing.T) {
 	t.Log(SUID())
 }
+
+func BenchmarkMUID(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		MUID()
+	}
+}
+func TestMUID(t *testing.T) {
+	t.Log(MUID())
+}

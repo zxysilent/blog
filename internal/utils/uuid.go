@@ -9,58 +9,54 @@ import (
 const (
 	suuidStr  = "23456789abcdefghijkmnpqrstuvwxyz" //32
 	suuidMask = 1<<5 - 1                           //11111
+	_suid     = 8                                  //LEQ 12
+	_muid     = 16                                 //LEQ 16
 
 	uuidStr  = "0123456789abcdef" //16
 	uuidMask = 1<<4 - 1           //1111
 
 )
 
-// UUID UUID生成-16bit
-// 10-times '-' 6-random string '-' 6-random string
+// SUID SUID生成
 func SUID() string {
-	buf := make([]byte, 16)
-	idx := 15
-	// 15-begin 32*32*32*32*32*32==1073741824
-	rand := fastRand() //6
-	for ; idx > 9; idx-- {
-		buf[idx] = suuidStr[rand&suuidMask]
-		rand >>= 5
+	buf := make([]byte, _suid)
+	for idx, cache := 0, fastRand(); idx < _suid; {
+		buf[idx] = suuidStr[cache&suuidMask]
+		cache >>= 5
+		idx++
 	}
-	now := Now() //10
-	// 50bit
-	// 10000-01-01 01:00:00 =>  253402246800000 ms
-	// 111001100111011111001110111001111110001010000000 48bit
-	for idx = 9; idx >= 0; idx-- {
-		buf[idx] = suuidStr[now&suuidMask]
-		now >>= 5
+	return unsafe.String(&buf[0], len(buf))
+}
+
+// MUID MUID生成
+func MUID() string {
+	buf := make([]byte, _muid)
+	for idx, cache := 0, fastRand(); idx < _muid; {
+		buf[idx] = uuidStr[cache&uuidMask]
+		cache >>= 4
+		idx++
 	}
-	return *(*string)(unsafe.Pointer(&buf))
+	return unsafe.String(&buf[0], len(buf))
 }
 
 // UUID
 // xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.
 func UUID() string {
 	buf := make([]byte, 36)
-	for idx, cache, remain := 12, fastRand(), 8; idx < 36; {
+	for idx, cache, remain := 0, fastRand(), 16; idx < 32; {
 		if remain == 0 {
-			cache, remain = fastRand(), 8
+			cache, remain = fastRand(), 16
 		}
 		buf[idx] = uuidStr[cache&uuidMask]
 		cache >>= 4
 		remain--
 		idx++
 	}
-	// 50bit
-	// 10000-01-01 01:00:00 =>  253402246800000 ms
-	// 111001100111011111001110111001111110001010000000 48bit
-	now := Now() >> 4
-	for idx := 9; idx >= 0; idx-- {
-		buf[idx] = uuidStr[now&uuidMask]
-		now >>= 4
-	}
+	buf[32] = buf[8]
+	buf[33] = buf[13]
+	buf[34] = buf[18]
+	buf[35] = buf[23]
 	buf[8] = '-'
-	buf[10] = buf[13]
-	buf[11] = buf[14]
 	buf[13] = '-'
 	buf[14] = '4'
 	buf[18] = '-'
@@ -69,8 +65,8 @@ func UUID() string {
 	return unsafe.String(&buf[0], len(buf))
 }
 
-//go:linkname fastRand runtime.fastrand
-func fastRand() uint32
+//go:linkname fastRand runtime.fastrand64
+func fastRand() uint64
 
 //go:noescape
 //go:linkname now time.now
