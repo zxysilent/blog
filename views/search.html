@@ -8,8 +8,8 @@
     <body>
         {{template "tpl-naver.html" .}}
         <div id="main">
-            <div id="page-post">
-                <article class="post detail">
+            <article id="page-post" style="border-bottom: none">
+                <div class="post detail">
                     <h1 class="title">站内搜索</h1>
                     <div class="entry-content">
                       <div id="search">
@@ -67,7 +67,7 @@
                         </div>
                       {{end}}
                     </div>
-                  </article>
+                </div>
                   {{if ne .Mult ""}}
                   <nav class="pagination">
                     {{ if ne .Naver.Prev ""}}
@@ -76,11 +76,11 @@
                     {{ if ne .Naver.Next ""}}
                     <a href="{{.Naver.Next}}" class="next">下一页 &raquo;</a>
                     {{end}}
-                </nav>
+                    </nav>
                 {{end}}
-              </div>
+            </article>
               {{template "tpl-footer.html" .}}
-          </div>
+        </div>
           {{template "tpl-script.html" .}}
       </body>
   </html>
