@@ -56,6 +56,7 @@ func Init() *echo.Echo {
 	engine.GET("/tags/:tag", view.ViewTagPost)    // 具体某个标签
 	engine.GET("/cates/:cate", view.ViewCatePost) // 分类
 	engine.GET("/notes/*", view.ViewNote)         // 笔记
+	engine.GET("/search", view.ViewSearch)        // 搜索
 	engine.GET("/about", view.ViewAbout)          // 关于
 	engine.GET("/links", view.ViewLinks)          // 友链
 	engine.GET("/pages/*", view.ViewPage)         // 具体某个页面

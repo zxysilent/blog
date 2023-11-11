@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <title>{{.basic.Title}}·{{.Post.Title}}</title>
+        <link rel="canonical" href="{{.basic.SiteUrl}}/search?mult={{.Mult}}&page=1" />
+        {{template "tpl-linker.html" .}}
+    </head>
+    <body>
+        {{template "tpl-naver.html" .}}
+        <div id="main">
+            <div id="page-post">
+                <article class="post detail">
+                    <h1 class="title">站内搜索</h1>
+                    <div class="entry-content">
+                      <div id="search">
+                        <form action="/search">
+                          <div class="wrapper">
+                            <input maxlength="80" placeholder="请输入关键字..." id="mult" name="mult" value="{{.Mult}}" type="search"  />
+                          </div>
+                          <input class="submit" type="submit" value="搜索" />
+                        </form>
+                      </div>
+                  
+                      {{if ne .Mult ""}}
+                        <div id="searchResult">
+                            <div class="info">
+                              本次搜索找到结果 {{.Count}} 条
+                            </div>
+                            <!-- {{ range $k, $v := .Posts }}
+                            <div class="item">
+                                <h1 class="title">
+                                    <a href="/posts/{{$v.Path}}.html">{{$v.Title}}</a>
+                                </h1>
+                              <div class="desc">{{ str2html $v.Summary }}</div>
+                            </div>
+                            {{ end }} -->
+                          {{ range $k, $v := .Posts }}
+                            <article class="post">
+                                <div class="meta">
+                                    <div>
+                                        <!-- $. 在循环里面访问外部变量 -->
+                                        <span class="author">{{$.global.Author}}</span>
+                                        <span>发布于</span>
+                                        <span class="date">{{unix $v.Created "2006-01-02"}}</span>
+                                    </div>
+                                </div>
+                                <h1 class="title">
+                                    <a href="/posts/{{$v.Path}}.html">{{$v.Title}}</a>
+                                </h1>
+                                <div class="entry-content">
+                                    {{ str2html $v.Summary }}
+                                    <p class="more">
+                                        <a href="/posts/{{$v.Path}}.html">阅读全文 »</a>
+                                    </p>
+                                </div>
+                            </article>
+                            {{ end }}
+                        </div>
+                      {{else}}
+                        <div id="searchResult">
+                          <div class="hot-words">
+                            热搜词：
+                            {{ range $k, $v := .Tags }}
+                              <a href="?mult={{$v.Name}}&page=1">{{$v.Name}}</a>
+                            {{ end }}
+                          </div>
+                        </div>
+                      {{end}}
+                    </div>
+                  </article>
+                  {{if ne .Mult ""}}
+                  <nav class="pagination">
+                    {{ if ne .Naver.Prev ""}}
+                    <a href="{{.Naver.Prev}}" class="prev">&laquo; 上一页</a>
+                    {{end}}
+                    {{ if ne .Naver.Next ""}}
+                    <a href="{{.Naver.Next}}" class="next">下一页 &raquo;</a>
+                    {{end}}
+                </nav>
+                {{end}}
+              </div>
+              {{template "tpl-footer.html" .}}
+          </div>
+          {{template "tpl-script.html" .}}
+      </body>
+  </html>
+  

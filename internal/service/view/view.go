@@ -39,6 +39,43 @@ func ViewIndex(ctx echo.Context) error {
 	})
 }
 
+// ViewSearch 搜索页面
+func ViewSearch(ctx echo.Context) error {
+
+	mult := ctx.FormValue("mult")
+	count := 0
+	tags := []model.Tag{}
+	naver := model.Naver{}
+	mods := []model.PostPart{}
+	if mult != "" {
+		filter := &model.PostFilterPage{}
+		filter.Pi, _ = strconv.Atoi(ctx.FormValue("page"))
+		if filter.Pi == 0 {
+			filter.Pi = 1
+		}
+		filter.Ps = repo.CfgBlog().PageSize
+		post := model.KindPost
+		filter.Kind = &post
+		filter.Mult = mult
+		mods, count, _ = repo.PostPage(filter, "id", "title", "path", "created", "summary")
+		if filter.Pi > 1 {
+			naver.Prev = "/search?mult=" + mult + "&page=" + strconv.Itoa(filter.Pi-1)
+		}
+		if count > (filter.Pi * filter.Ps) {
+			naver.Next = "/search?mult=" + mult + "&page=" + strconv.Itoa(filter.Pi+1)
+		}
+	} else {
+		tags, _ = repo.TagList(&model.TagFilterList{})
+	}
+	return ctx.Render(http.StatusOK, "search.html", map[string]interface{}{
+		"Posts": mods,
+		"Mult":  mult,
+		"Count": count,
+		"Naver": naver,
+		"Tags":  tags,
+	})
+}
+
 // ------------------------------------------------------ 文章页面 ------------------------------------------------------
 // ViewPost 文章页面
 func ViewPost(ctx echo.Context) error {
