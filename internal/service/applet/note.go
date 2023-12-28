@@ -15,7 +15,7 @@ import (
 // @Auth
 // @Tags note
 // @Summary 笔记保存
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Param body body model.Post true "请求数据"
 // @Success 200 {object} utils.Reply{data=string} "返回数据"
 // @Router /api/note/save [post]
@@ -29,7 +29,7 @@ func NoteSave(ctx echo.Context) error {
 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
 	if ipt.Kind == model.KindNote && ipt.Path == "" {
-		ipt.Path = utils.UUID()
+		ipt.Path = utils.SUID()
 	}
 	if ipt.Id == 0 {
 		ipt.Updated = time.Now().UnixMilli()
@@ -52,7 +52,7 @@ func NoteSave(ctx echo.Context) error {
 // @Auth
 // @Tags note
 // @Summary 笔记分享
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Param body body model.NoteShareArgs true "请求数据"
 // @Success 200 {object} utils.Reply{data=string} "返回数据"
 // @Router /api/note/share [post]
@@ -72,7 +72,7 @@ func NoteShare(ctx echo.Context) error {
 // NoteList doc
 // @Tags note
 // @Summary 笔记目录&列表数据
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Param query query model.NoteFilterList true "请求数据"
 // @Success 200 {object} utils.Reply{data=[]model.NoteReply} "返回数据"
 // @Router /api/note/list [get]

@@ -93,7 +93,7 @@ func AuthVcode(ctx echo.Context) error {
 // @Tags kernel
 // @Auth mgmt
 // @Summary 当前登录信息
-// @Param Authorization header string true "登录凭证"
+// @Security ApiKeyAuth
 // @Success 200 {object} utils.Reply{data=model.Admin} "返回数据"
 // @Router /api/auth/get [get]
 func AuthGet(ctx echo.Context) error {
@@ -105,7 +105,7 @@ func AuthGet(ctx echo.Context) error {
 // @Tags kernel,auth
 // @Auth
 // @Summary 获取当前用户的授权
-// @Param Authorization header string true "登录凭证"
+// @Security ApiKeyAuth
 // @Success 200 {object} utils.Reply{data=[]string} "返回数据"
 // @Router /api/auth/grant [get]
 func AuthGrant(ctx echo.Context) error {
@@ -126,7 +126,7 @@ func AuthGrant(ctx echo.Context) error {
 // @Tags kernel,auth
 // @Auth mgmt
 // @Summary 修改自己的密码
-// @Param Authorization header string true "登录凭证"
+// @Security ApiKeyAuth
 // @Param body body model.PasswdArgs true "请求数据"
 // @Success 200 {object} utils.Reply "返回数据"
 // @Router /api/auth/edit/passwd [post]
@@ -155,7 +155,7 @@ func AuthEditPasswd(ctx echo.Context) error {
 // @Tags kernel,auth
 // @Auth mgmt
 // @Summary 修改自己的信息
-// @Param Authorization header string true "登录凭证"
+// @Security ApiKeyAuth
 // @Success 200 {object} utils.Reply "返回数据"
 // @Param body body model.Admin true "request"
 // @Router /api/auth/edit [post]

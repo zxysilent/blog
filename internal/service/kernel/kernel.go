@@ -28,7 +28,7 @@ import (
 // @Summary 上传文件
 // @Accept  mpfd
 // @Param file formData file true "file"
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Success 200 {object} utils.Reply{data=string} "返回数据"
 // @Router /api/upload/file [post]
 func UploadFile(ctx echo.Context) error {
@@ -64,7 +64,7 @@ func UploadFile(ctx echo.Context) error {
 // @Summary 上传图片并裁剪
 // @Accept  mpfd
 // @Param file formData file true "file"
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Success 200 {object} utils.Reply{data=string} "返回数据"
 // @Router /api/upload/image [post]
 func UploadImage(ctx echo.Context) error {
@@ -137,7 +137,7 @@ func UploadImage(ctx echo.Context) error {
 // @Auth
 // @Tags kernel
 // @Summary 获取服务器go信息
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Success 200 {object} utils.Reply{data=model.StateGo} "返回数据"
 // @Router /api/status/go [get]
 // @Router /api/status/app [get]

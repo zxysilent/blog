@@ -21,6 +21,11 @@ import (
 // @Version 1.0
 // @Description 凭证传递方式包括 get、post、header、cookie
 // @Description /api/* 前后端api
+//
+// @securityDefinitions.apikey	ApiKeyAuth
+// @in							header
+// @name						Authorization
+// @description					Description for what is this security definition being used
 func main() {
 	ctx := logs.TraceCtx(context.Background())
 	defer logs.Close()

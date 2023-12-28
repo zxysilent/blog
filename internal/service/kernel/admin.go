@@ -14,7 +14,7 @@ import (
 // @Tags kernel
 // @Summary 通过id获取admin信息
 // @Param id query int true "id"
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Success 200 {object} utils.Reply{data=model.Admin} "返回数据"
 // @Router /api/admin/get [get]
 func AdminGet(ctx echo.Context) error {
@@ -49,7 +49,7 @@ func AdminExist(ctx echo.Context) error {
 // @Auth mgmt
 // @Tags kernel
 // @Summary 添加admin信息
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Param body body model.Admin true "请求数据"
 // @Success 200 {object} utils.Reply "返回数据"
 // @Router /api/admin/add [post]
@@ -81,7 +81,7 @@ func AdminAdd(ctx echo.Context) error {
 // @Auth mgmt
 // @Tags kernel
 // @Summary 修改admin信息
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Param body body model.Admin true "请求数据"
 // @Success 200 {object} utils.Reply "返回数据"
 // @Router /api/admin/edit [post]
@@ -117,7 +117,7 @@ func AdminEdit(ctx echo.Context) error {
 // @Auth mgmt mgmt
 // @Tags kernel
 // @Summary 修改用户锁定状态
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Param body body object{id=int,lock=bool} true "json"
 // @Success 200 {object} utils.Reply{data=string} "返回数据"
 // @Router /api/admin/edit/lock [post]
@@ -151,7 +151,7 @@ func AdminEditLock(ctx echo.Context) error {
 // @Tags kernel
 // @Summary 删除admin信息
 // @Param id query int true "id"
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Success 200 {object} utils.Reply "返回数据"
 // @Router /api/admin/drop [post]
 func AdminDrop(ctx echo.Context) error {
@@ -180,7 +180,7 @@ func AdminDrop(ctx echo.Context) error {
 // @Auth mgmt
 // @Tags kernel
 // @Summary 获取admin分页数据
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Param query query model.AdminRolePageArgs true "请求数据"
 // @Success 200 {object} utils.Reply "返回数据"
 // @Router /api/admin/page [get]
@@ -209,7 +209,7 @@ func AdminPage(ctx echo.Context) error {
 // @Tags kernel
 // @Summary 获取admin分页数据
 // @Param query query model.AdminMultArgs true "请求数据"
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Success 200 {object} utils.Reply "返回数据"
 // @Router /api/admin/all [get]
 func AdminAll(ctx echo.Context) error {

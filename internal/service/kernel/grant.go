@@ -13,7 +13,7 @@ import (
 // @Auth mgmt
 // @Tags kernel
 // @Summary 获取所有授权树
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Success 200 {object} utils.Reply{data=[]model.Grant} "返回数据"
 // @Router /api/grant/tree [get]
 func GrantTree(ctx echo.Context) error {
@@ -31,7 +31,7 @@ func GrantTree(ctx echo.Context) error {
 // @Tags kernel
 // @Summary 通过id获取单条授权信息
 // @Param id query int true "id"
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Success 200 {object} utils.Reply{data=model.Grant} "返回数据"
 // @Router /api/grant/get [get]
 func GrantGet(ctx echo.Context) error {
@@ -51,10 +51,10 @@ func GrantGet(ctx echo.Context) error {
 // @Auth mgmt
 // @Tags kernel
 // @Summary 获取授权分页信息
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Param query query model.Page true "请求数据"
 // @Success 200 {object} utils.Reply{data=[]model.Grant} "返回数据"
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Router /api/grant/page [get]
 func GrantPage(ctx echo.Context) error {
 	ipt := &model.Page{}
@@ -83,7 +83,7 @@ func GrantPage(ctx echo.Context) error {
 // @Auth mgmt
 // @Tags kernel
 // @Summary 添加授权信息
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Param body body model.Grant true "请求数据"
 // @Success 200 {object} utils.Reply{data=string} "返回数据"
 // @Router /api/grant/add [post]
@@ -106,7 +106,7 @@ func GrantAdd(ctx echo.Context) error {
 // @Auth mgmt
 // @Tags kernel
 // @Summary 修改授权信息
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Param body body model.Grant true "请求数据"
 // @Success 200 {object} utils.Reply{data=string} "返回数据"
 // @Router /api/grant/edit [post]
@@ -128,7 +128,7 @@ func GrantEdit(ctx echo.Context) error {
 // @Auth mgmt
 // @Tags kernel
 // @Summary 通过id删除单条授权信息
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Param body body model.IptId true "json"
 // @Success 200 {object} utils.Reply{data=string} "返回数据"
 // @Router /api/grant/drop [post]

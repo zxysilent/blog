@@ -14,7 +14,7 @@ import (
 // @Tags kernel
 // @Summary 通过id获取单条角色信息
 // @Param id query int true "id"
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Success 200 {object} utils.Reply{data=model.Role} "返回数据"
 // @Router /api/role/get [get]
 func RoleGet(ctx echo.Context) error {
@@ -34,7 +34,7 @@ func RoleGet(ctx echo.Context) error {
 // @Auth mgmt
 // @Tags kernel
 // @Summary 获取所有角色信息
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Success 200 {object} utils.Reply{data=[]model.Role} "返回数据"
 // @Router /api/role/all [get]
 func RoleAll(ctx echo.Context) error {
@@ -54,10 +54,10 @@ func RoleAll(ctx echo.Context) error {
 // @Auth mgmt
 // @Tags kernel
 // @Summary 获取角色分页信息
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Param query query model.Page true "请求数据"
 // @Success 200 {object} utils.Reply{data=[]model.Role} "返回数据"
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Router /api/role/page [get]
 func RolePage(ctx echo.Context) error {
 	ipt := &model.Page{}
@@ -91,7 +91,7 @@ func RolePage(ctx echo.Context) error {
 // @Auth mgmt
 // @Tags kernel
 // @Summary 添加角色信息
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Param body body model.Role true "请求数据"
 // @Success 200 {object} utils.Reply{data=string} "返回数据"
 // @Router /api/role/add [post]
@@ -114,7 +114,7 @@ func RoleAdd(ctx echo.Context) error {
 // @Auth mgmt
 // @Tags kernel
 // @Summary 修改角色信息
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Param body body model.Role true "请求数据"
 // @Success 200 {object} utils.Reply{data=string} "返回数据"
 // @Router /api/role/edit [post]
@@ -136,7 +136,7 @@ func RoleEdit(ctx echo.Context) error {
 // @Auth mgmt
 // @Tags kernel
 // @Summary 通过id删除单条角色信息
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Param body body model.IptId true "json"
 // @Success 200 {object} utils.Reply{data=string} "返回数据"
 // @Router /api/role/drop [post]
@@ -165,7 +165,7 @@ func RoleDrop(ctx echo.Context) error {
 // @Tags kernel
 // @Summary 通过角色id获取所有角色授权信息
 // @Param role_id query int true "id"
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Success 200 {object} utils.Reply{data=model.Role} "返回数据"
 // @Router /api/role/grant/all [get]
 func RoleGrantAll(ctx echo.Context) error {
@@ -188,7 +188,7 @@ func RoleGrantAll(ctx echo.Context) error {
 // @Tags kernel
 // @Summary 修改角色授权信息
 // @Param id query int true "id"
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Success 200 {object} utils.Reply{data=string} "返回数据"
 // @Router /api/role/grant/edit [post]
 func RoleGrantEdit(ctx echo.Context) error {

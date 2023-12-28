@@ -15,7 +15,7 @@ import (
 // @Tags post
 // @Summary 博文单条数据
 // @Param id query int true "id"
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Success 200 {object} utils.Reply{data=model.Post} "返回数据"
 // @Router /api/post/get [get]
 func PostGet(ctx echo.Context) error {
@@ -36,7 +36,7 @@ func PostGet(ctx echo.Context) error {
 // @Auth
 // @Tags post
 // @Summary 博文列表数据
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Param query query model.PostFilterList true "请求数据"
 // @Success 200 {object} utils.Reply{data=[]model.Post} "返回数据"
 // @Router /api/post/list [get]
@@ -57,7 +57,7 @@ func PostList(ctx echo.Context) error {
 // @Auth
 // @Tags post
 // @Summary 获取博文分页
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Param query query model.PostFilterPage true "请求数据"
 // @Success 200 {object} utils.Reply{data=[]model.Post} "返回数据"
 // @Router /api/post/page [get]
@@ -88,7 +88,7 @@ func PostPage(ctx echo.Context) error {
 // @Auth
 // @Tags post
 // @Summary 博文添加数据
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Param body body model.Post true "请求数据"
 // @Success 200 {object} utils.Reply{data=string} "返回数据"
 // @Router /api/post/add [post]
@@ -121,7 +121,7 @@ func PostAdd(ctx echo.Context) error {
 // @Auth
 // @Tags post
 // @Summary 博文修改数据
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Param body body model.Post true "请求数据"
 // @Success 200 {object} utils.Reply{data=string} "返回数据"
 // @Router /api/post/edit [post]
@@ -147,7 +147,7 @@ func PostEdit(ctx echo.Context) error {
 // @Auth
 // @Tags post
 // @Summary 博文删除数据
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Param query query model.IptId true "请求数据"
 // @Success 200 {object} utils.Reply{data=string} "返回数据"
 // @Router /api/post/drop [post]

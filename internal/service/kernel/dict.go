@@ -74,7 +74,7 @@ func DictPage(ctx echo.Context) error {
 // @Auth mgmt
 // @Tags kernel
 // @Summary 添加字典
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Param body body model.Dict true "请求数据"
 // @Success 200 {object} utils.Reply{data=string} "返回数据"
 // @Router /api/dict/add [post]
@@ -100,7 +100,7 @@ func DictAdd(ctx echo.Context) error {
 // @Auth mgmt
 // @Tags kernel
 // @Summary 修改字典
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Param body body model.Dict true "请求数据"
 // @Success 200 {object} utils.Reply{data=string} "返回数据"
 // @Router /api/dict/edit [post]
@@ -126,7 +126,7 @@ func DictEdit(ctx echo.Context) error {
 // @Tags kernel
 // @Summary 通过key删除单条字典
 // @Param key query string true "key"
-// @Param token query string true "token"
+// @Security ApiKeyAuth
 // @Success 200 {object} utils.Reply{data=string} "返回数据"
 // @Router /api/dict/drop [post]
 func DictDrop(ctx echo.Context) error {
