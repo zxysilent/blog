@@ -7,7 +7,6 @@ import (
 	_ "blog/docs"
 
 	"github.com/labstack/echo/v4"
-	echoSwagger "github.com/swaggo/echo-swagger"
 	"github.com/zxysilent/logs"
 )
 
@@ -25,6 +24,6 @@ func init() {
 // RegDocs 注册文档
 // dev[开发] 模式需要文档
 func RegDocs(engine *echo.Echo) {
-	swagger := echoSwagger.EchoWrapHandler(echoSwagger.URL("/swagger/doc.json"), echoSwagger.DocExpansion("none"))
+	swagger := EchoWrapHandler(DocExpansion("none"))
 	engine.GET("/swagger/*", swagger)
 }
