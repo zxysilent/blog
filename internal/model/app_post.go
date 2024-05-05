@@ -7,6 +7,7 @@ import (
 // Post 文章
 type Post struct {
 	Id       int    `xorm:"INT(11) PK AUTOINCR" json:"id"`   //主键
+	Pid      int    `xorm:"INT(11)" json:"pid"`              //父Id for note
 	CateId   int    `xorm:"INT(11)" json:"cate_id"`          //分类Id
 	Kind     int    `xorm:"INT(11)" json:"kind"`             //类型1-文章，2-页面，3-笔记
 	Status   int    `xorm:"INT(11)" json:"status"`           //状态1-草稿，2-已发布
@@ -27,15 +28,18 @@ func (Post) TableName() string {
 }
 
 type PostPart struct {
-	Id      int    `xorm:"INT(11) PK AUTOINCR" json:"id"`   //主键
-	Kind    int    `xorm:"INT(11)" json:"kind"`             //类型1-文章，2-页面
-	Status  int    `xorm:"INT(11)" json:"status"`           //状态1-草稿，2-已发布
-	Title   string `xorm:"VARCHAR(255)" json:"title"`       //标题
-	Path    string `xorm:"VARCHAR(255) UNIQUE" json:"path"` //访问路径
-	Summary string `xorm:"TEXT" json:"summary"`             //摘要
-	Tags    []Tag  `xorm:"-" json:"tags"`                   //标签
-	Updated int64  `xorm:"BIGINT INDEX" json:"updated"`     //修改时间
-	Created int64  `xorm:"BIGINT" json:"created"`           //创建时间
+	Id       int        `xorm:"INT(11) PK AUTOINCR" json:"id"`   //主键
+	Pid      int        `xorm:"INT(11)" json:"pid"`              //父Id for note
+	Kind     int        `xorm:"INT(11)" json:"kind"`             //类型1-文章，2-页面
+	Status   int        `xorm:"INT(11)" json:"status"`           //状态1-草稿，2-已发布
+	Title    string     `xorm:"VARCHAR(255)" json:"title"`       //标题
+	Path     string     `xorm:"VARCHAR(255) UNIQUE" json:"path"` //访问路径
+	Summary  string     `xorm:"TEXT" json:"summary"`             //摘要
+	Level    int        `xorm:"-" json:"level"`                  //
+	Tags     []Tag      `xorm:"-" json:"tags"`                   //标签
+	Updated  int64      `xorm:"BIGINT INDEX" json:"updated"`     //修改时间
+	Created  int64      `xorm:"BIGINT" json:"created"`           //创建时间
+	Children []PostPart `xorm:"-" json:"children,omitempty"`     //笔记使用
 }
 
 // PostArchive 归档
@@ -77,16 +81,4 @@ type PostFilterPage struct {
 type NoteShareArgs struct {
 	PostId int `json:"post_id"`
 	Day    int `json:"day"`
-}
-
-type NoteReply struct {
-	Cates []Cate     `json:"cates"`
-	Posts []PostPart `json:"posts"`
-	Empty bool       `json:"empty"`
-}
-
-type NoteFilterList struct {
-	CateId *int `form:"cate_id" query:"cate_id" json:"cate_id"`
-	Newest bool `form:"newest" query:"newest" json:"newest"`
-	List
 }

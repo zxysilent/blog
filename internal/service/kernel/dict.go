@@ -10,12 +10,13 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// DictGet doc
-// @Tags kernel
+// DictVal doc
+// @Tags kernel,dict
+// @Alias DictVal
 // @Summary 通过id获取单条字典
 // @Param key path string true "key"
 // @Success 200 {object} utils.Reply{data=model.Dict} "返回数据"
-// @Router /api/dict/:key [get]
+// @Router /api/dict/{key} [get]
 func DictVal(ctx echo.Context) error {
 	key := ctx.Param("key")
 	mod, has := repo.DictGet(key)
@@ -26,11 +27,12 @@ func DictVal(ctx echo.Context) error {
 }
 
 // DictGet doc
-// @Tags kernel
+// @Tags kernel,dict
+// @Alias DictGet
 // @Summary 通过id获取单条字典
 // @Param key path string true "key"
 // @Success 200 {object} utils.Reply{data=model.Dict} "返回数据"
-// @Router /api/dict/get/:key [get]
+// @Router /api/dict/get/{key} [get]
 func DictGet(ctx echo.Context) error {
 	key := ctx.Param("key")
 	mod, has := repo.DictGet(key)
@@ -42,7 +44,7 @@ func DictGet(ctx echo.Context) error {
 
 // DictPage doc
 // @Auth mgmt
-// @Tags kernel
+// @Tags kernel,dict
 // @Summary 获取字典分页
 // @Param query query model.Page true "请求数据"
 // @Success 200 {object} utils.Reply{data=[]model.Dict} "返回数据"
@@ -72,7 +74,7 @@ func DictPage(ctx echo.Context) error {
 
 // DictAdd doc
 // @Auth mgmt
-// @Tags kernel
+// @Tags kernel,dict
 // @Summary 添加字典
 // @Security ApiKeyAuth
 // @Param body body model.Dict true "请求数据"
@@ -98,7 +100,7 @@ func DictAdd(ctx echo.Context) error {
 
 // DictEdit doc
 // @Auth mgmt
-// @Tags kernel
+// @Tags kernel,dict
 // @Summary 修改字典
 // @Security ApiKeyAuth
 // @Param body body model.Dict true "请求数据"
@@ -123,7 +125,7 @@ func DictEdit(ctx echo.Context) error {
 
 // DictDrop doc
 // @Auth mgmt
-// @Tags kernel
+// @Tags kernel,dict
 // @Summary 通过key删除单条字典
 // @Param key query string true "key"
 // @Security ApiKeyAuth

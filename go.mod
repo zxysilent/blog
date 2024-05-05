@@ -6,14 +6,14 @@ go 1.22
 
 require (
 	github.com/BurntSushi/toml v1.3.2
+	github.com/disintegration/imaging v1.6.2
 	github.com/go-sql-driver/mysql v1.8.1
 	github.com/labstack/echo/v4 v4.12.0
-	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/swaggo/swag v1.16.3
 	github.com/zxysilent/logs v0.7.2
 	golang.org/x/image v0.15.0
-	golang.org/x/tools v0.20.0
+	golang.org/x/tools v0.19.0
 	modernc.org/sqlite v1.29.8
 	xorm.io/xorm v1.3.9
 )

@@ -97,7 +97,7 @@ import { reactive, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAdminStore } from "@/store/admin";
 import { useMessage } from "naive-ui";
-import { apiDictVal } from "@/api/ext";
+import { apiDictVal } from "@/api";
 import { apiAuthLogin, apiAuthVcode } from "@/api";
 import { PersonOutline, LockClosedOutline, LogoEdge, LogoChrome, LogoFirefox } from "@vicons/ionicons5";
 import storage from "@/utils/storage";
@@ -187,17 +187,22 @@ onMounted(() => {
     background-size: 100%;
     padding: 110px 0 144px;
     position: relative;
+
     a {
         text-decoration: none;
     }
+
     img {
         display: inline-block;
     }
+
     .top {
         text-align: center;
+
         .header {
             height: 44px;
             line-height: 44px;
+
             .logo {
                 height: 44px;
                 vertical-align: top;
@@ -205,6 +210,7 @@ onMounted(() => {
                 border-style: none;
                 border-radius: 50%;
             }
+
             .title {
                 font-size: 30px;
                 color: rgba(0, 0, 0, 0.85);
@@ -214,6 +220,7 @@ onMounted(() => {
                 top: 2px;
             }
         }
+
         .desc {
             font-size: 16px;
             color: rgba(0, 0, 0, 0.45);
@@ -221,31 +228,38 @@ onMounted(() => {
             margin-bottom: 30px;
         }
     }
+
     .main {
         min-width: 260px;
         width: 368px;
         margin: 0 auto;
+
         .login-tips {
             text-align: center;
             margin-top: 10px;
             line-height: 22px;
             font-size: 16px;
+
             a {
                 color: rgba(0, 0, 0, 0.45);
                 transition: all 0.3s;
+
                 &:not(:last-child) {
                     margin-right: 40px;
                 }
             }
         }
+
         .other-login {
             text-align: center;
             color: #c3c3c3;
+
             a {
                 margin: 10px;
             }
         }
     }
+
     .footer {
         position: absolute;
         width: 100%;
@@ -253,21 +267,24 @@ onMounted(() => {
         padding: 0 16px;
         margin: 48px 0 24px;
         text-align: center;
+
         .links {
             margin-bottom: 8px;
             font-size: 14px;
+
             a {
                 color: rgba(0, 0, 0, 0.45);
                 transition: all 0.3s;
+
                 &:not(:last-child) {
                     margin-right: 40px;
                 }
             }
         }
+
         .copyright {
             color: rgba(0, 0, 0, 0.45);
             font-size: 14px;
         }
     }
-}
-</style>
+}</style>

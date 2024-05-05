@@ -17,14 +17,14 @@ import (
 	"strings"
 	"time"
 
+	"github.com/disintegration/imaging"
 	"github.com/labstack/echo/v4"
-	"github.com/nfnt/resize"
 	_ "golang.org/x/image/bmp"
 )
 
 // UploadFile doc
 // @Auth
-// @Tags kernel
+// @Tags kernel,upload
 // @Summary 上传文件
 // @Accept  mpfd
 // @Param file formData file true "file"
@@ -60,7 +60,7 @@ func UploadFile(ctx echo.Context) error {
 
 // UploadImage doc
 // @Auth
-// @Tags kernel
+// @Tags kernel,upload
 // @Summary 上传图片并裁剪
 // @Accept  mpfd
 // @Param file formData file true "file"
@@ -113,12 +113,12 @@ func UploadImage(ctx echo.Context) error {
 		// 宽度>指定宽度 防止负调整
 		dx := imgSrc.Bounds().Dx()
 		if dx > attr.Wd {
-			imgSrc = resize.Resize(uint(attr.Wd), 0, imgSrc, resize.Lanczos3)
+			imgSrc = imaging.Resize(imgSrc, attr.Wd, 0, imaging.Lanczos)
 		}
 		//高度>指定高度 防止负调整
 		dy := imgSrc.Bounds().Dy()
 		if dy > attr.Hd {
-			imgSrc = resize.Resize(0, uint(attr.Hd), imgSrc, resize.Lanczos3)
+			imgSrc = imaging.Resize(imgSrc, 0, attr.Hd, imaging.Lanczos)
 		}
 		err = jpeg.Encode(dst, imgSrc, nil)
 		if err != nil {
@@ -135,7 +135,7 @@ func UploadImage(ctx echo.Context) error {
 
 // StatusGo doc
 // @Auth
-// @Tags kernel
+// @Tags kernel,app
 // @Summary 获取服务器go信息
 // @Security ApiKeyAuth
 // @Success 200 {object} utils.Reply{data=model.StateGo} "返回数据"
@@ -156,7 +156,7 @@ func StatusGo(ctx echo.Context) error {
 // ------------------------------------------------------ 记录 ------------------------------------------------------
 // LogPage doc
 // @Auth mgmt
-// @Tags kernel
+// @Tags kernel,log
 // @Summary 获取日志分页
 // @Param query query model.Page true "请求数据"
 // @Success 200 {object} utils.Reply{data=[]model.Log} "返回数据"

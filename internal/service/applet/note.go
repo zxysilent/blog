@@ -73,28 +73,15 @@ func NoteShare(ctx echo.Context) error {
 // @Tags note
 // @Summary 笔记目录&列表数据
 // @Security ApiKeyAuth
-// @Param query query model.NoteFilterList true "请求数据"
-// @Success 200 {object} utils.Reply{data=[]model.NoteReply} "返回数据"
+// @Param query query model.List true "请求数据"
+// @Success 200 {object} utils.Reply{data=[]model.PostPart} "返回数据"
 // @Router /api/note/list [get]
 func NoteList(ctx echo.Context) error {
-	ipt := &model.NoteFilterList{}
+	ipt := &model.List{}
 	err := ctx.Bind(ipt)
 	if err != nil {
 		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
 	}
-	mod := model.NoteReply{}
-	if !ipt.Newest {
-		cateFilter := &model.CateFilterList{}
-		cateFilter.Kind = utils.Any2Ptr[int](model.KindNote)
-		cateFilter.Mult = ipt.Mult
-		cateFilter.Pid = ipt.CateId
-		mod.Cates, _ = repo.CateList(cateFilter)
-	}
-	postFilter := &model.PostFilterList{}
-	if ipt.Newest {
-		postFilter.Limit = 20
-	}
-	mod.Posts, _ = repo.NoteList(ipt)
-	mod.Empty = len(mod.Cates) == 0 && len(mod.Posts) == 0
-	return ctx.JSON(utils.Succ("succ", mod))
+	pp, _ := repo.NoteList(ipt)
+	return ctx.JSON(utils.Succ("succ", pp))
 }

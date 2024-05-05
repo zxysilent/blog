@@ -40,7 +40,6 @@ func Init() *echo.Echo {
 	engine.HideBanner = true
 	// 自定义错误处理
 	engine.HTTPErrorHandler = HTTPErrorHandler
-	engine.Debug = conf.IsDebug()
 	// ico
 	engine.File("/favicon.ico", "favicon.ico")
 	// 注册文档

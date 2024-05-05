@@ -11,7 +11,7 @@ import (
 
 // GrantAll doc
 // @Auth mgmt
-// @Tags kernel
+// @Tags kernel,grant
 // @Summary 获取所有授权树
 // @Security ApiKeyAuth
 // @Success 200 {object} utils.Reply{data=[]model.Grant} "返回数据"
@@ -28,7 +28,7 @@ func GrantTree(ctx echo.Context) error {
 
 // GrantGet doc
 // @Auth mgmt
-// @Tags kernel
+// @Tags kernel,grant
 // @Summary 通过id获取单条授权信息
 // @Param id query int true "id"
 // @Security ApiKeyAuth
@@ -49,7 +49,7 @@ func GrantGet(ctx echo.Context) error {
 
 // GrantPage doc
 // @Auth mgmt
-// @Tags kernel
+// @Tags kernel,grant
 // @Summary 获取授权分页信息
 // @Security ApiKeyAuth
 // @Param query query model.Page true "请求数据"
@@ -81,7 +81,7 @@ func GrantPage(ctx echo.Context) error {
 
 // GrantAdd doc
 // @Auth mgmt
-// @Tags kernel
+// @Tags kernel,grant
 // @Summary 添加授权信息
 // @Security ApiKeyAuth
 // @Param body body model.Grant true "请求数据"
@@ -104,7 +104,7 @@ func GrantAdd(ctx echo.Context) error {
 
 // GrantEdit doc
 // @Auth mgmt
-// @Tags kernel
+// @Tags kernel,grant
 // @Summary 修改授权信息
 // @Security ApiKeyAuth
 // @Param body body model.Grant true "请求数据"
@@ -126,7 +126,7 @@ func GrantEdit(ctx echo.Context) error {
 
 // GrantDrop doc
 // @Auth mgmt
-// @Tags kernel
+// @Tags kernel,grant
 // @Summary 通过id删除单条授权信息
 // @Security ApiKeyAuth
 // @Param body body model.IptId true "json"

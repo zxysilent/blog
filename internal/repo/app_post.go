@@ -165,8 +165,8 @@ func PostNaver(cateId int, crated int64) *model.Naver {
 }
 
 // NoteList 笔记列表数据
-func NoteList(filter *model.NoteFilterList, cols ...string) ([]model.PostPart, error) {
-	mods := make([]model.PostPart, 0, 8)
+func NoteList(filter *model.List, cols ...string) ([]model.PostPart, error) {
+	arr := make([]model.PostPart, 0, 8)
 	sess := db.NewSession()
 	defer sess.Close()
 	if len(cols) > 0 {
@@ -176,12 +176,45 @@ func NoteList(filter *model.NoteFilterList, cols ...string) ([]model.PostPart, e
 		sess.And("title like ?", filter.SafeMult())
 	}
 	sess.And("kind = ?", model.KindNote)
-	if !filter.Newest && filter.CateId != nil {
-		sess.And("cate_id = ?", *filter.CateId)
+	sess.Desc("created").Find(&arr)
+	mp := make(map[int][]model.PostPart, len(arr))
+	for _, val := range arr {
+		if _, ok := mp[val.Pid]; !ok {
+			mp[val.Pid] = make([]model.PostPart, 0, 4)
+		}
+		mp[val.Pid] = append(mp[val.Pid], val)
 	}
-	if filter.Limit > 0 {
-		sess.Limit(filter.Limit)
+	level := 1
+	var getChildren func(pid int, mp map[int][]model.PostPart) []model.PostPart
+	getChildren = func(pid int, mp map[int][]model.PostPart) []model.PostPart {
+		lv := level
+		mods, ok := mp[pid]
+		if !ok {
+			return nil
+		}
+		level++
+		for idx := range mods {
+			mods[idx].Level = lv
+			mods[idx].Children = getChildren(mods[idx].Id, mp)
+		}
+		return mods
 	}
-	err := sess.Desc("id").Find(&mods)
-	return mods, err
+	mods := getChildren(0, mp)
+	// for idx := range mods {
+	// 	mods[idx].Children = getChildren(&mods[idx], mp)
+	// }
+	// for _, sub1 := range first {
+	// 	second := mp[sub1.Id]
+	// 	sub1.Children = make([]model.PostPart, 0, len(second))
+	// 	for _, sub2 := range second {
+	// 		third := mp[sub2.Id]
+	// 		sub2.Children = make([]model.PostPart, 0, len(third))
+	// 		for _, sub3 := range third {
+	// 			sub2.Children = append(sub2.Children, sub3)
+	// 		}
+	// 		sub1.Children = append(sub1.Children, sub2)
+	// 	}
+	// 	mods = append(mods, sub1)
+	// }
+	return mods, nil
 }

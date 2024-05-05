@@ -11,7 +11,7 @@ import (
 
 // AdminGet doc
 // @Auth mgmt
-// @Tags kernel
+// @Tags kernel,admin
 // @Summary 通过id获取admin信息
 // @Param id query int true "id"
 // @Security ApiKeyAuth
@@ -32,7 +32,7 @@ func AdminGet(ctx echo.Context) error {
 
 // AdminExist doc
 // @Auth mgmt
-// @Tags kernel
+// @Tags kernel,admin
 // @Summary 获取某个用户信息
 // @Param num query string true "账号"
 // @Success 200 {object} utils.Reply "返回数据"
@@ -47,7 +47,7 @@ func AdminExist(ctx echo.Context) error {
 
 // AdminAdd doc
 // @Auth mgmt
-// @Tags kernel
+// @Tags kernel,admin
 // @Summary 添加admin信息
 // @Security ApiKeyAuth
 // @Param body body model.Admin true "请求数据"
@@ -79,7 +79,7 @@ func AdminAdd(ctx echo.Context) error {
 
 // AdminEdit doc
 // @Auth mgmt
-// @Tags kernel
+// @Tags kernel,admin
 // @Summary 修改admin信息
 // @Security ApiKeyAuth
 // @Param body body model.Admin true "请求数据"
@@ -114,8 +114,8 @@ func AdminEdit(ctx echo.Context) error {
 }
 
 // AdminEditLock doc
-// @Auth mgmt mgmt
-// @Tags kernel
+// @Auth mgmt
+// @Tags kernel,admin
 // @Summary 修改用户锁定状态
 // @Security ApiKeyAuth
 // @Param body body object{id=int,lock=bool} true "json"
@@ -148,7 +148,7 @@ func AdminEditLock(ctx echo.Context) error {
 
 // AdminDrop doc
 // @Auth mgmt
-// @Tags kernel
+// @Tags kernel,admin
 // @Summary 删除admin信息
 // @Param id query int true "id"
 // @Security ApiKeyAuth
@@ -178,7 +178,7 @@ func AdminDrop(ctx echo.Context) error {
 
 // AdminPage doc
 // @Auth mgmt
-// @Tags kernel
+// @Tags kernel,admin
 // @Summary 获取admin分页数据
 // @Security ApiKeyAuth
 // @Param query query model.AdminRolePageArgs true "请求数据"
@@ -206,7 +206,7 @@ func AdminPage(ctx echo.Context) error {
 
 // AdminPage doc
 // @Auth mgmt
-// @Tags kernel
+// @Tags kernel,admin
 // @Summary 获取admin分页数据
 // @Param query query model.AdminMultArgs true "请求数据"
 // @Security ApiKeyAuth

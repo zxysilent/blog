@@ -17,8 +17,8 @@ func apiRouter(engine *echo.Echo) {
 	api.Any("", echo.NotFoundHandler)
 	api.Any("/*", echo.NotFoundHandler)
 	api.GET("/auth/vcode", kernel.AuthVcode)              //验证码
-	api.GET("/dict/:key", kernel.DictVal)                 //通过id获取单条字典
 	api.GET("/dict/get/:key", kernel.DictGet)             //通过id获取单条字典
+	api.GET("/dict/:key", kernel.DictVal)                 //通过id获取单条字典
 	api.GET("/note/list", applet.NoteList)                //笔记目录&列表数据
 	api.POST("/auth/login", kernel.AuthLogin)             //登陆
 	auth.GET("/auth/grant", kernel.AuthGrant)             //获取当前用户的授权
