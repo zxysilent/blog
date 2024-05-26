@@ -29,7 +29,6 @@ type Config struct {
 	DeepLinking          bool
 	PersistAuthorization bool
 	SyntaxHighlight      bool
-
 	// The information for OAuth2 integration, if any.
 	OAuth *OAuthConfig
 }
@@ -39,10 +38,8 @@ type Config struct {
 type OAuthConfig struct {
 	// The ID of the client sent to the OAuth2 IAM provider.
 	ClientId string
-
 	// The OAuth2 realm that the client should operate in. If not applicable, use empty string.
 	Realm string
-
 	// The name to display for the application in the authentication popup.
 	AppName string
 }
@@ -113,27 +110,21 @@ func newConfig(configFns ...func(*Config)) *Config {
 		PersistAuthorization: false,
 		SyntaxHighlight:      true,
 	}
-
 	for _, fn := range configFns {
 		fn(&config)
 	}
-
 	if config.InstanceName == "" {
 		config.InstanceName = swag.Name
 	}
-
 	return &config
 }
 
 // EchoWrapHandler wraps `http.Handler` into `echo.HandlerFunc`.
 func EchoWrapHandler(options ...func(*Config)) echo.HandlerFunc {
 	config := newConfig(options...)
-
 	// create a template with name
 	index, _ := template.New("swagger_index.html").Parse(indexTemplate)
-
 	var re = regexp.MustCompile(`^(.*/)([^?].*)?[?|.]*$`)
-
 	return func(ctx echo.Context) error {
 		if ctx.Request().Method != http.MethodGet {
 			return echo.NewHTTPError(http.StatusMethodNotAllowed, http.StatusText(http.StatusMethodNotAllowed))

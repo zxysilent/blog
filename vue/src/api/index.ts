@@ -7,7 +7,7 @@ export const apiAuthVcode = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/auth/vcode`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -18,7 +18,7 @@ export const apiDictGet = (key, params = null): Promise<Reply> => {
     return fetch.request({
         url: `/api/dict/get/${key}`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -29,7 +29,7 @@ export const apiDictVal = (key, params = null): Promise<Reply> => {
     return fetch.request({
         url: `/api/dict/${key}`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -40,7 +40,7 @@ export const apiNoteList = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/note/list`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -62,7 +62,7 @@ export const apiAuthGrant = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/auth/grant`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -73,7 +73,7 @@ export const apiCateGet = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/cate/get`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -84,7 +84,7 @@ export const apiCateList = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/cate/list`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -95,7 +95,7 @@ export const apiCatePage = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/cate/page`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -106,7 +106,7 @@ export const apiCateTree = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/cate/tree`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -117,7 +117,7 @@ export const apiPostGet = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/post/get`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -128,7 +128,7 @@ export const apiPostList = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/post/list`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -139,7 +139,7 @@ export const apiPostPage = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/post/page`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -150,7 +150,7 @@ export const apiStatusApp = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/status/app`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -161,7 +161,7 @@ export const apiStatusGo = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/status/go`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -172,7 +172,7 @@ export const apiTagGet = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/tag/get`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -183,7 +183,7 @@ export const apiTagList = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/tag/list`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -194,7 +194,7 @@ export const apiTagPage = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/tag/page`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -348,7 +348,7 @@ export const apiAdminAll = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/admin/all`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -359,7 +359,7 @@ export const apiAdminExist = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/admin/exist`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -370,7 +370,7 @@ export const apiAdminGet = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/admin/get`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -381,7 +381,7 @@ export const apiAdminPage = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/admin/page`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -392,7 +392,7 @@ export const apiAuthGet = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/auth/get`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -403,7 +403,7 @@ export const apiDictPage = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/dict/page`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -414,7 +414,7 @@ export const apiGrantGet = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/grant/get`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -425,7 +425,7 @@ export const apiGrantPage = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/grant/page`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -436,7 +436,7 @@ export const apiGrantTree = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/grant/tree`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -447,7 +447,7 @@ export const apiLogPage = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/log/page`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -458,7 +458,7 @@ export const apiRoleAll = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/role/all`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -469,7 +469,7 @@ export const apiRoleGet = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/role/get`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -480,7 +480,7 @@ export const apiRoleGrantAll = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/role/grant/all`,
         method: "get",
-        params: params
+		params: params
     });
 };
 
@@ -491,7 +491,7 @@ export const apiRolePage = (params): Promise<Reply> => {
     return fetch.request({
         url: `/api/role/page`,
         method: "get",
-        params: params
+		params: params
     });
 };
 

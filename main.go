@@ -1,4 +1,4 @@
-//go:generate go test -timeout 30s -run ^TestGenRouter$ blog/internal/utils -count=1 -v -msg=路径相对于utils -rp=../router/router_api.go -rs=../service
+//go:generate go test -timeout 30s -run ^TestGenRouter$ blog/internal/utils -count=1 -v -msg=路径相对于utils -rp=../router/api.go -rs=../service
 package main
 
 import (
