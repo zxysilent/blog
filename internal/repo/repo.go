@@ -9,12 +9,13 @@ import (
 
 	"xorm.io/xorm"
 	"xorm.io/xorm/caches"
+	"xorm.io/xorm/contexts"
+	"xorm.io/xorm/log"
 
 	// 数据库驱动
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/zxysilent/logs"
 	_ "modernc.org/sqlite"
-	xlog "xorm.io/xorm/log"
 )
 
 var ErrNotFound = errors.New("No records found")
@@ -40,11 +41,8 @@ func Init(ctx context.Context) {
 	// 劫持xorm日志
 	logs.Ctx(ctx).Info("orm hijack log :", conf.App.Orm.HijackLog)
 	if conf.App.Orm.HijackLog {
-		sl := logs.Xorm(xlog.LOG_INFO)
-		if conf.IsDebug() {
-			sl.SetLevel(xlog.LOG_DEBUG)
-		}
-		db.SetLogger(sl)
+		db.SetLogLevel(log.LOG_OFF)
+		db.AddHook(&repoHook{showSql: conf.App.Orm.Show})
 	}
 	if err = db.Ping(); err != nil {
 		panic("数据库 ping:" + err.Error())
@@ -140,4 +138,23 @@ type IRepo interface {
 	Add(mod *model.Admin) error
 	Edit(mod *model.Admin, cols ...string) error
 	Drop(id string) error
+}
+
+type repoHook struct {
+	showSql bool
+}
+
+func (rh *repoHook) BeforeProcess(ctx *contexts.ContextHook) (context.Context, error) {
+	return ctx.Ctx, nil
+}
+
+func (rh *repoHook) AfterProcess(ctx *contexts.ContextHook) error {
+	if ctx.Err != nil {
+		logs.Ctx(ctx.Ctx).Caller(false).Err(ctx.Err).Str("SQL", ctx.SQL).Any("args", ctx.Args).Dur("dur", ctx.ExecuteTime).Error()
+	} else if ctx.ExecuteTime > 200*time.Millisecond {
+		logs.Ctx(ctx.Ctx).Caller(false).Str("SlowSQL", ctx.SQL).Any("args", ctx.Args).Dur("dur", ctx.ExecuteTime).Warn()
+	} else if rh.showSql {
+		logs.Ctx(ctx.Ctx).Caller(false).Str("SQL", ctx.SQL).Any("args", ctx.Args).Dur("dur", ctx.ExecuteTime).Debug()
+	}
+	return ctx.Err
 }
