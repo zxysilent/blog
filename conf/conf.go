@@ -1,8 +1,14 @@
 package conf
 
 import (
+	"context"
+
 	"github.com/BurntSushi/toml"
 	"github.com/zxysilent/logs"
+)
+
+const (
+	TokenKey = "token"
 )
 
 type config struct {
@@ -11,28 +17,14 @@ type config struct {
 	Host        string `toml:"host"`
 	Port        int    `toml:"port"`
 	Endpoint    string `toml:"endpoint"`     //
-	TokenKey    string `toml:"token_key"`    //token关键词
 	TokenExp    int    `toml:"token_exp"`    //过期时间 h
 	TokenSecret string `toml:"token_secret"` //加密私钥
-	ImageCut    bool   `toml:"image_cut"`    //图片裁剪
-	ImageWidth  int    `toml:"image_width"`  //图片宽度
-	ImageHeight int    `toml:"image_height"` //图片高度
-	PageMin     int    `toml:"page_min"`     //最小分页大小
-	PageMax     int    `toml:"page_max"`     //最大分页大小
 	Db          struct {
-		Type   string `toml:"type"`   //数据库类型 mysql sqlite
-		Mysql  string `toml:"mysql"`  //uid:pass@tcp(host:port)/dbname?charset=utf8mb4&parseTime=true&loc=Local
-		Sqlite string `toml:"sqlite"` //"file:sqlite.db?journal_mode=WAL"
+		Type    string `toml:"type"`     //数据库类型 mysql sqlite
+		Mysql   string `toml:"mysql"`    //uid:pass@tcp(host:port)/dbname?charset=utf8mb4&parseTime=true&loc=Local
+		Sqlite  string `toml:"sqlite"`   //"file:sqlite.db?journal_mode=WAL"
+		ShowSql bool   `toml:"show_sql"` //显示sql
 	} `toml:"db"`
-	Orm struct {
-		Idle      int  `toml:"idle"`       //
-		Open      int  `toml:"open"`       //
-		Show      bool `toml:"show"`       //显示sql
-		Sync      bool `toml:"sync"`       //同步表结构
-		CacheUse  bool `toml:"cache_use"`  //是否使用缓存
-		CacheSize int  `toml:"cache_size"` //缓存数量
-		HijackLog bool `toml:"hijack_log"` //劫持日志
-	} `toml:"orm"`
 	Author struct {
 		Name    string `toml:"name"`
 		Website string `toml:"website"`
@@ -51,7 +43,7 @@ var (
 	defConfig = "./conf.toml"
 )
 
-func Init(path ...string) {
+func Init(ctx context.Context, path ...string) {
 	var err error
 	// 方便调试
 	if len(path) > 0 {
@@ -61,7 +53,7 @@ func Init(path ...string) {
 	if err != nil {
 		panic("config init error : " + err.Error())
 	}
-	logs.Info("conf init")
+	logs.Ctx(ctx).Info("conf init")
 }
 
 func initConfig() (*config, error) {

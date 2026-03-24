@@ -7,7 +7,9 @@ import (
 	"blog/internal/service/view"
 	"blog/internal/utils"
 	"blog/pkg/page"
+	"blog/pkg/reply"
 	"blog/pkg/token"
+	"context"
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
@@ -31,7 +33,7 @@ func Init() *echo.Echo {
 	// 初始渲染引擎
 	engine.Renderer = initRender()
 	// 恢复 日志记录
-	engine.Use(midRecover, midLogger)
+	engine.Use(Recover, Logger)
 	// engine.Use(middleware.LoggerWithConfig(logConfig))
 	// 跨域设置
 	engine.Use(middleware.CORSWithConfig(crosConfig))
@@ -65,7 +67,7 @@ func Init() *echo.Echo {
 		return ctx.Redirect(http.StatusFound, "/mgmt/")
 	})
 	engine.GET("/ping", func(ctx echo.Context) error {
-		return ctx.JSON(utils.Succ("pong", "service is running"))
+		return reply.Succ(ctx, "pong")
 	})
 	// 后台登录
 	engine.GET("/login.html", func(ctx echo.Context) error {
@@ -87,7 +89,7 @@ func Init() *echo.Echo {
 // 	}
 // }
 
-func midRecover(next echo.HandlerFunc) echo.HandlerFunc {
+func Recover(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(ctx echo.Context) error {
 		defer func() {
 			if r := recover(); r != nil {
@@ -95,7 +97,8 @@ func midRecover(next echo.HandlerFunc) echo.HandlerFunc {
 				if !ok {
 					err = fmt.Errorf("%v", r)
 				}
-				logs.With().Caller(false).Str("trace", ctx.Request().Header.Get(echo.HeaderXRequestID)).Str("caller", "echo").Raw("panic", debug.Stack()).Err(err).Error("recover")
+				tctx := logs.TraceCtx(context.Background(), ctx.Request().Header.Get(echo.HeaderXRequestID))
+				logs.Ctx(tctx).Raw("panic", debug.Stack()).Err(err).Error("recover")
 				ctx.Error(err)
 			}
 		}()
@@ -103,8 +106,8 @@ func midRecover(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-// midLogger 中间件-日志记录
-func midLogger(next echo.HandlerFunc) echo.HandlerFunc {
+// Logger 中间件-日志记录
+func Logger(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(ctx echo.Context) (err error) {
 		start := time.Now()
 		rid := ctx.Request().Header.Get(echo.HeaderXRequestID)
@@ -113,11 +116,11 @@ func midLogger(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 		ctx.Request().Header.Set(echo.HeaderXRequestID, rid)
 		ctx.Response().Header().Set(echo.HeaderXRequestID, rid)
+		logs.With().Caller(false).Str("trace", rid).Str("caller", "api-begin").Str("ip", ctx.RealIP()).Str(ctx.Request().Method, ctx.Request().RequestURI).Debug()
 		if err = next(ctx); err != nil {
 			ctx.Error(err)
 		}
-		stop := time.Now()
-		logs.With().Caller(false).Str("trace", rid).Str("caller", "echo").Str("ip", ctx.RealIP()).Str(ctx.Request().Method, ctx.Request().RequestURI).Str("span", stop.Sub(start).String()).Debug()
+		logs.With().Caller(false).Str("trace", rid).Str("caller", "api-end").Int("status", ctx.Response().Status).Int64("size", ctx.Response().Size).Dur("dur", time.Since(start)).Info()
 		return
 	}
 }
@@ -130,13 +133,13 @@ func HTTPErrorHandler(err error, ctx echo.Context) {
 				if strings.HasPrefix(ctx.Request().URL.Path, "/static") || strings.HasPrefix(ctx.Request().URL.Path, "/dist") {
 					ctx.NoContent(404)
 				} else if strings.HasPrefix(ctx.Request().URL.Path, "/api") {
-					ctx.JSON(utils.ErrSvr("系统错误", he.Message))
+					reply.Fail(ctx, "系统错误", he.Message)
 				} else {
 					ctx.HTML(404, page.Err404().SetExtra("404").Render())
 				}
 			} else {
 				if strings.HasPrefix(ctx.Request().URL.Path, "/api") {
-					ctx.JSON(utils.ErrSvr("系统错误", he.Message))
+					reply.Fail(ctx, "系统错误", he.Message)
 				} else {
 					ctx.HTML(502, page.Error().SetExtra(fmt.Sprint(he.Message)).Render())
 				}
@@ -167,10 +170,10 @@ var rateConfig = middleware.RateLimiterConfig{
 		return path, nil
 	},
 	ErrorHandler: func(ctx echo.Context, err error) error {
-		return ctx.JSON(utils.ErrOpt("请求错误,请稍后重试"))
+		return reply.Fail(ctx, "请求错误,请稍后重试", err)
 	},
 	DenyHandler: func(ctx echo.Context, identifier string, err error) error {
-		return ctx.JSON(utils.ErrOpt("当前请求过多,请稍后重试", identifier))
+		return reply.Fail(ctx, "当前请求过多,请稍后重试", identifier)
 	},
 }
 
@@ -185,8 +188,8 @@ func (tmpl *TplRender) Render(w io.Writer, name string, data interface{}, ctx ec
 	if mp, is := data.(map[string]interface{}); is {
 		mp["appjs"] = AppJsUrl
 		mp["appcss"] = AppCssUrl
-		mp["basic"] = repo.CfgBasic()
-		mp["blog"] = repo.CfgBlog()
+		// mp["basic"] = repo.CfgBasic()
+		// mp["blog"] = repo.CfgBlog()
 	}
 	//开发模式
 	//每次强制读取模板
@@ -241,21 +244,21 @@ func initRender() *TplRender {
 	}
 }
 
-func midToken(next echo.HandlerFunc) echo.HandlerFunc {
+func AuthToken(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(ctx echo.Context) error {
+		rctx := utils.WrapCtx(ctx)
 		tokenRaw := ctx.Request().Header.Get(echo.HeaderAuthorization) // header 查找token--方便前端约定
 		if tokenRaw == "" {
-			tokenRaw = ctx.FormValue(conf.App.TokenKey) // query/form 查找 token
+			tokenRaw = ctx.FormValue(conf.TokenKey) // query/form 查找 token
 			if tokenRaw == "" {
-				cookie, _ := ctx.Cookie(conf.App.TokenKey)
+				cookie, _ := ctx.Cookie(conf.TokenKey)
 				if cookie != nil {
 					tokenRaw = cookie.Value
 				}
 			}
 		}
 		if tokenRaw == "" {
-			ctx.JSON(utils.ErrToken("请重新登陆", "未发现token"))
-			return nil
+			return reply.ErrToken(ctx, "请重新登陆", "未发现token")
 		}
 		auth := token.Token[token.Auth]{}
 		err := auth.Decode(tokenRaw, conf.App.TokenSecret)
@@ -267,7 +270,7 @@ func midToken(next echo.HandlerFunc) echo.HandlerFunc {
 			if claim.RoleId != model.RootRoleId {
 				// 判断权限
 				allow := false
-				grants, er := repo.RoleGrantAll(claim.RoleId)
+				grants, er := repo.RoleGrantAll(rctx, claim.RoleId)
 				logs.Debug(er)
 				path := ctx.Request().URL.Path
 				for _, grant := range grants {
@@ -279,43 +282,42 @@ func midToken(next echo.HandlerFunc) echo.HandlerFunc {
 					}
 				}
 				if !allow {
-					return ctx.JSON(utils.ErrDeny("没有权限"))
+					return reply.ErrDeny(ctx, "没有权限")
 				}
 			}
 		} else {
-			return ctx.JSON(utils.ErrToken("请重新登陆", "token验证失败,"+err.Error()))
+			return reply.ErrToken(ctx, "请重新登陆", err)
 		}
 		return next(ctx)
 	}
 }
-func midAdmin(next echo.HandlerFunc) echo.HandlerFunc {
+func MgmtToken(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(ctx echo.Context) error {
 		tokenRaw := ctx.Request().Header.Get(echo.HeaderAuthorization) // header 查找token--方便前端约定
 		if tokenRaw == "" {
-			tokenRaw = ctx.FormValue(conf.App.TokenKey) // query/form 查找 token
+			tokenRaw = ctx.FormValue(conf.TokenKey) // query/form 查找 token
 			if tokenRaw == "" {
-				cookie, _ := ctx.Cookie(conf.App.TokenKey)
+				cookie, _ := ctx.Cookie(conf.TokenKey)
 				if cookie != nil {
 					tokenRaw = cookie.Value
 				}
 			}
 		}
 		if tokenRaw == "" {
-			ctx.JSON(utils.ErrToken("请重新登陆", "未发现token"))
-			return nil
+			return reply.ErrToken(ctx, "请重新登陆", "未发现token")
 		}
 		auth := token.Token[token.Auth]{}
 		err := auth.Decode(tokenRaw, conf.App.TokenSecret)
 		if err == nil {
 			claim := auth.Claim
 			if !claim.Admin {
-				return ctx.JSON(utils.ErrDeny("没有权限"))
+				return reply.ErrDeny(ctx, "没有权限")
 			}
 			ctx.Set("auth", claim)
 			ctx.Set("uid", claim.UserId)
 			ctx.Set("rid", claim.RoleId)
 		} else {
-			return ctx.JSON(utils.ErrToken("请重新登陆", "token验证失败,"+err.Error()))
+			return reply.ErrToken(ctx, "请重新登陆", err)
 		}
 		return next(ctx)
 	}

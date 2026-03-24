@@ -1,7 +1,7 @@
 package vcode
 
 import (
-	"blog/internal/utils"
+	"blog/pkg/rndm"
 	"bytes"
 	"crypto/hmac"
 	"crypto/md5"
@@ -40,7 +40,7 @@ type Field struct {
 }
 
 func New(ln int, secret string) *Field {
-	str := utils.Digit(ln)
+	str := rndm.Digit(ln)
 	fmt.Println(str)
 	v := &Field{}
 	v.Image = newImage(str).Base64()

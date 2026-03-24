@@ -2,7 +2,7 @@ package model
 
 // Tag 标签
 type Tag struct {
-	Id      int    `xorm:"INT(11) PK AUTOINCR" json:"id"`   //主键
+	Id      string `xorm:"VARCHAR(64) PK" json:"id"`        //主键
 	Name    string `xorm:"UNIQUE VARCHAR(255)" json:"name"` //标签名
 	Intro   string `xorm:"VARCHAR(255)" json:"intro"`       //描述
 	Color   string `xorm:"VARCHAR(255)" json:"color"`       //颜色
@@ -14,6 +14,10 @@ func (Tag) TableName() string {
 	return "tag"
 }
 
+func (t *Tag) IsPkZero() bool {
+	return t.Id == ""
+}
+
 // TagState 统计
 type TagState struct {
 	Name  string `json:"name"`
@@ -21,13 +25,6 @@ type TagState struct {
 	Intro string `json:"intro"`
 }
 
-type TagFilter struct {
-}
-
-type TagFilterList struct {
+type TagListArgs struct {
 	List
-}
-
-type TagFilterPage struct {
-	Page
 }

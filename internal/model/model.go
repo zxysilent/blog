@@ -1,52 +1,49 @@
 package model
 
 import (
-	"blog/conf"
-	"errors"
 	"strings"
 )
 
-type IptId struct {
-	Id int `query:"id" form:"id" json:"id"` //仅包含Id的请求
-}
-
 // Page 分页基本数据
-type Page struct {
+type List struct {
 	Pi   int    `json:"pi" form:"pi" query:"pi"`       //分页页码
 	Ps   int    `json:"ps" form:"ps" query:"ps"`       //分页大小
 	Mult string `json:"mult" form:"mult" query:"mult"` //多条件信息
 }
 
-func (p *Page) SafeMult() string {
+func (p *List) SafeMult() string {
 	return safeMult(p.Mult)
 }
 
-// Stat 检查状态
-func (p *Page) Stat() error {
-	if p.Ps < conf.App.PageMin {
-		return errors.New("page size 过小")
+func (l *List) GetLimit() int {
+	if l.Ps < 1 {
+		l.Ps = 1
 	}
-	if p.Ps > conf.App.PageMax {
-		return errors.New("page size 过大")
-	}
-	return nil
+	return l.Ps
 }
 
-const (
-	StatusEnable  = 1 //启用
-	StatusDisable = 2 //禁用
-)
-
-const Zero = 0 //忽略
-const All = -1 //所有
-
-type List struct {
-	Mult  string `form:"mult" query:"mult" json:"mult"`    //多条件信息
-	Limit int    `form:"limit" query:"limit" json:"limit"` //条数限制(<=0不限制)
+func (l *List) GetOffset() int {
+	if l.Ps < 1 {
+		l.Ps = 1
+	}
+	if l.Pi < 1 {
+		l.Pi = 1
+	}
+	return (l.Pi - 1) * l.Ps
 }
 
-func (l *List) SafeMult() string {
-	return safeMult(l.Mult)
+func (l *List) GetCap() int {
+	if l.Ps >= 32 {
+		return 32
+	}
+	if l.Ps < 8 {
+		return 8
+	}
+	return l.Ps
+}
+
+func (l *List) IsZero() bool {
+	return l.Pi == 0 && l.Ps == 0
 }
 
 func safeMult(s string) string {

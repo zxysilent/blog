@@ -1,32 +1,34 @@
 package repo
 
-import "blog/internal/model"
+import (
+	"blog/internal/model"
+)
 
 // TagPostCount 通过标签查询文章分页总数
-func TagPostCount(tagId int) int {
+func TagPostCount(tagId string) int {
 	var count int
 	db.SQL(`SELECT count(post_id) as count FROM post_tag WHERE tag_id=?`, tagId).Get(&count)
 	return count
 }
 
-// TagPostPage 通过标签查询文章分页
-func TagPostPage(filter *model.PostTagFilter) ([]model.PostTag, error) {
-	mods := make([]model.PostTag, 0, filter.Ps)
-	err := db.SQL(`SELECT id,post_id,tag_id FROM post_tag WHERE tag_id=? ORDER BY post_id DESC LIMIT ?,? `, filter.TagId, (filter.Pi-1)*filter.Ps, filter.Ps).Find(&mods)
-	if len(mods) > 0 {
-		ids := make([]int, 0, len(mods))
-		for idx := range mods {
-			if !inOf(mods[idx].PostId, ids) {
-				ids = append(ids, mods[idx].PostId)
-			}
-		}
-		mapSet := PostMapIds(ids)
-		for idx := range mods {
-			mods[idx].Post = mapSet[mods[idx].PostId]
-		}
-	}
-	return mods, err
-}
+// // TagPostPage 通过标签查询文章分页
+// func TagPostPage(filter *model.PostTagFilter) ([]model.PostTag, error) {
+// 	mods := make([]model.PostTag, 0, filter.Ps)
+// 	err := db.SQL(`SELECT id,post_id,tag_id FROM post_tag WHERE tag_id=? ORDER BY post_id DESC LIMIT ?,? `, filter.TagId, (filter.Pi-1)*filter.Ps, filter.Ps).Find(&mods)
+// 	if len(mods) > 0 {
+// 		ids := make([]string, 0, len(mods))
+// 		for idx := range mods {
+// 			if !slices.Contains(ids, mods[idx].PostId) {
+// 				ids = append(ids, mods[idx].PostId)
+// 			}
+// 		}
+// 		mapSet := PostMapIds(ids)
+// 		for idx := range mods {
+// 			mods[idx].Post = mapSet[mods[idx].PostId]
+// 		}
+// 	}
+// 	return mods, err
+// }
 
 // TagPostAdds 添加文章标签[]
 func TagPostAdds(mods *[]model.PostTag) error {

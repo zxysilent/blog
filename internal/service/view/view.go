@@ -1,11 +1,10 @@
 package view
 
 import (
-	"blog/conf"
 	"blog/internal/model"
 	"blog/internal/repo"
 	"blog/internal/utils"
-	"blog/pkg/token"
+	"context"
 	"net/http"
 	"strconv"
 	"strings"
@@ -22,7 +21,7 @@ func ViewIndex(ctx echo.Context) error {
 	if filter.Pi == 0 {
 		filter.Pi = 1
 	}
-	filter.Ps = repo.CfgBlog().PageSize
+	filter.Ps = repo.GetCfg().Blog.PageSize
 	post := model.KindPost
 	filter.Kind = &post
 	mods, total, _ := repo.PostPage(filter, "id", "title", "path", "created", "summary")
@@ -33,7 +32,7 @@ func ViewIndex(ctx echo.Context) error {
 	if total > (filter.Pi * filter.Ps) {
 		naver.Next = "/?page=" + strconv.Itoa(filter.Pi+1)
 	}
-	return ctx.Render(http.StatusOK, "index.html", map[string]interface{}{
+	return ctx.Render(http.StatusOK, "index.html", map[string]any{
 		"Posts": mods,
 		"Naver": naver,
 	})
@@ -41,7 +40,7 @@ func ViewIndex(ctx echo.Context) error {
 
 // ViewSearch 搜索页面
 func ViewSearch(ctx echo.Context) error {
-
+	rctx := utils.WrapCtx(ctx)
 	mult := ctx.FormValue("mult")
 	count := 0
 	tags := []model.Tag{}
@@ -53,7 +52,7 @@ func ViewSearch(ctx echo.Context) error {
 		if filter.Pi == 0 {
 			filter.Pi = 1
 		}
-		filter.Ps = repo.CfgBlog().PageSize
+		filter.Ps = repo.GetCfg().Blog.PageSize
 		post := model.KindPost
 		filter.Kind = &post
 		filter.Mult = mult
@@ -65,9 +64,9 @@ func ViewSearch(ctx echo.Context) error {
 			naver.Next = "/search?mult=" + mult + "&page=" + strconv.Itoa(filter.Pi+1)
 		}
 	} else {
-		tags, _ = repo.TagList(&model.TagFilterList{})
+		tags, _, _ = repo.TagList(rctx, &model.TagListArgs{})
 	}
-	return ctx.Render(http.StatusOK, "search.html", map[string]interface{}{
+	return ctx.Render(http.StatusOK, "search.html", map[string]any{
 		"Posts": mods,
 		"Mult":  mult,
 		"Count": count,
@@ -79,18 +78,19 @@ func ViewSearch(ctx echo.Context) error {
 // ------------------------------------------------------ 文章页面 ------------------------------------------------------
 // ViewPost 文章页面
 func ViewPost(ctx echo.Context) error {
+	rctx := utils.WrapCtx(ctx)
 	paths := strings.Split(ctx.Param("*"), ".")
 	if len(paths) >= 1 {
 		mod := &model.Post{Path: paths[0], Kind: model.KindPost}
-		err := repo.PostGet(mod)
+		err := repo.PostGet(rctx, mod)
 		if err != nil {
-			return ctx.Render(http.StatusOK, "error.html", map[string]interface{}{
+			return ctx.Render(http.StatusOK, "error.html", map[string]any{
 				"Msg": err.Error(),
 			})
 		}
 		naver := repo.PostNaver(mod.CateId, mod.Created)
 		mod.Richtext = utils.GenLazyLoad(mod.Richtext)
-		return ctx.Render(http.StatusOK, "post.html", map[string]interface{}{
+		return ctx.Render(http.StatusOK, "post.html", map[string]any{
 			"Post":  mod,
 			"Show":  mod.Status == 2,
 			"Naver": naver,
@@ -101,80 +101,81 @@ func ViewPost(ctx echo.Context) error {
 
 // ViewPost 文章页面
 func ViewNote(ctx echo.Context) error {
-	share := token.Token[token.Share]{}
-	err := share.Decode(ctx.QueryParam("s"), conf.App.TokenSecret)
-	if err != nil {
-		return ctx.Render(http.StatusOK, "error.html", map[string]interface{}{
-			"Msg": "分享失败",
-		})
-	}
-	paths := strings.Split(ctx.Param("*"), ".")
-	if len(paths) >= 1 {
-		mod := &model.Post{Path: paths[0], Kind: model.KindNote}
-		err := repo.PostGet(mod)
-		if err != nil {
-			return ctx.Render(http.StatusOK, "error.html", map[string]interface{}{
-				"Msg": err.Error(),
-			})
-		}
-		mod.Richtext = utils.GenLazyLoad(mod.Richtext)
-		return ctx.Render(http.StatusOK, "note.html", map[string]interface{}{
-			"Note":  mod,
-			"ExpAt": share.ExpAt * 1000,
-			"Show":  share.Claim.PostId == mod.Id,
-		})
-	}
+	// share := token.Token[token.Share]{}
+	// err := share.Decode(ctx.QueryParam("s"), conf.App.TokenSecret)
+	// if err != nil {
+	// 	return ctx.Render(http.StatusOK, "error.html", map[string]any{
+	// 		"Msg": "分享失败",
+	// 	})
+	// }
+	// paths := strings.Split(ctx.Param("*"), ".")
+	// if len(paths) >= 1 {
+	// 	mod := &model.Post{Path: paths[0], Kind: model.KindNote}
+	// 	err := repo.PostGet(mod)
+	// 	if err != nil {
+	// 		return ctx.Render(http.StatusOK, "error.html", map[string]any{
+	// 			"Msg": err.Error(),
+	// 		})
+	// 	}
+	// 	mod.Richtext = utils.GenLazyLoad(mod.Richtext)
+	// 	return ctx.Render(http.StatusOK, "note.html", map[string]any{
+	// 		"Note":  mod,
+	// 		"ExpAt": share.ExpAt * 1000,
+	// 		"Show":  share.Claim.PostId == mod.Id,
+	// 	})
+	// }
 	return ctx.Redirect(302, "/404")
 }
 
 // // ------------------------------------------------------ 单个页面 ------------------------------------------------------
 // ViewAbout 关于页面
 func ViewAbout(ctx echo.Context) error {
-	mod := &model.Post{Path: "about", Kind: model.KindPage}
-	err := repo.PostGet(mod)
-	if err != nil {
-		return ctx.Redirect(302, "/")
-	}
-	mod.Richtext = utils.GenLazyLoad(mod.Richtext)
-	return ctx.Render(http.StatusOK, "page.html", map[string]interface{}{
-		"Page": mod,
-		"Show": mod.Status == 2,
-	})
+	// mod := &model.Post{Path: "about", Kind: model.KindPage}
+	// err := repo.PostGet(mod)
+	// if err != nil {
+	// 	return ctx.Redirect(302, "/")
+	// }
+	// mod.Richtext = utils.GenLazyLoad(mod.Richtext)
+	// return ctx.Render(http.StatusOK, "page.html", map[string]any{
+	// 	"Page": mod,
+	// 	"Show": mod.Status == 2,
+	// })
+	return nil
 }
 
 // ViewLinks 友链页面
 func ViewLinks(ctx echo.Context) error {
-	mod := &model.Post{Path: "links", Kind: model.KindPage}
-	err := repo.PostGet(mod)
-	if err != nil {
-		return ctx.Redirect(302, "/")
-	}
-	mod.Richtext = utils.GenLazyLoad(mod.Richtext)
-	return ctx.Render(http.StatusOK, "page.html", map[string]interface{}{
-		"Page": mod,
-		"Show": mod.Status == 2,
-	})
+	// mod := &model.Post{Path: "links", Kind: model.KindPage}
+	// err := repo.PostGet(mod)
+	// if err != nil {
+	// 	return ctx.Redirect(302, "/")
+	// }
+	// mod.Richtext = utils.GenLazyLoad(mod.Richtext)
+	// return ctx.Render(http.StatusOK, "page.html", map[string]any{
+	// 	"Page": mod,
+	// 	"Show": mod.Status == 2,
+	// })
+	return nil
 }
 
 // ViewPage 其它页面
 func ViewPage(ctx echo.Context) error {
-	paths := strings.Split(ctx.Param("*"), ".")
-	if len(paths) >= 1 {
-		mod := &model.Post{Path: paths[0], Kind: model.KindPage}
-		err := repo.PostGet(mod)
-		if err != nil {
-			return ctx.Render(http.StatusOK, "error.html", map[string]interface{}{
-				"Msg": err.Error(),
-			})
-		}
-		mod.Richtext = utils.GenLazyLoad(mod.Richtext)
-		return ctx.Render(http.StatusOK, "page.html", map[string]interface{}{
-			"Page": mod,
-			"Show": mod.Status == 2,
-		})
-	}
+	// paths := strings.Split(ctx.Param("*"), ".")
+	// if len(paths) >= 1 {
+	// 	mod := &model.Post{Path: paths[0], Kind: model.KindPage}
+	// 	err := repo.PostGet(mod)
+	// 	if err != nil {
+	// 		return ctx.Render(http.StatusOK, "error.html", map[string]any{
+	// 			"Msg": err.Error(),
+	// 		})
+	// 	}
+	// 	mod.Richtext = utils.GenLazyLoad(mod.Richtext)
+	// 	return ctx.Render(http.StatusOK, "page.html", map[string]any{
+	// 		"Page": mod,
+	// 		"Show": mod.Status == 2,
+	// 	})
+	// }
 	return ctx.Redirect(302, "/404")
-
 }
 func archInOf(time time.Time, mods []model.PostArchive) int {
 	for idx := 0; idx < len(mods); idx++ {
@@ -188,30 +189,31 @@ func archInOf(time time.Time, mods []model.PostArchive) int {
 // ------------------------------------------------------ 归档页面 ------------------------------------------------------
 // ViewArchives 归档页面
 func ViewArchives(ctx echo.Context) error {
-	filter := &model.PostFilterList{}
-	post := model.KindPost
-	filter.Kind = &post
-	status := model.PostStatusFinish
-	filter.Status = &status
-	mods, err := repo.PostList(filter, "id", "title", "path", "created")
-	if err != nil {
-		return ctx.Redirect(302, "/")
-	}
-	archives := make([]model.PostArchive, 0, 8)
-	for _, v := range mods {
-		created := time.UnixMilli(v.Created)
-		if idx := archInOf(created, archives); idx == -1 { //没有
-			archives = append(archives, model.PostArchive{
-				Time:  created,
-				Posts: []model.PostPart{v},
-			})
-		} else { //有
-			archives[idx].Posts = append(archives[idx].Posts, v)
-		}
-	}
-	return ctx.Render(http.StatusOK, "archive.html", map[string]interface{}{
-		"Archives": archives,
-	})
+	// filter := &model.PostFilterList{}
+	// post := model.KindPost
+	// filter.Kind = &post
+	// status := model.StatusFinish
+	// filter.Status = &status
+	// mods, err := repo.PostList(filter, "id", "title", "path", "created")
+	// if err != nil {
+	// 	return ctx.Redirect(302, "/")
+	// }
+	// archives := make([]model.PostArchive, 0, 8)
+	// for _, v := range mods {
+	// 	created := time.UnixMilli(v.Created)
+	// 	if idx := archInOf(created, archives); idx == -1 { //没有
+	// 		archives = append(archives, model.PostArchive{
+	// 			Time:  created,
+	// 			Posts: []model.PostPart{v},
+	// 		})
+	// 	} else { //有
+	// 		archives[idx].Posts = append(archives[idx].Posts, v)
+	// 	}
+	// }
+	// return ctx.Render(http.StatusOK, "archive.html", map[string]any{
+	// 	"Archives": archives,
+	// })
+	return nil
 }
 
 // ------------------------------------------------------ 分类页面 ------------------------------------------------------
@@ -224,7 +226,7 @@ func ViewCatePost(ctx echo.Context) error {
 	mod := &model.Cate{
 		Name: cateName,
 	}
-	err := repo.CateGet(mod)
+	err := repo.CateGet(context.Background(), mod)
 	if err != nil {
 		return ctx.Redirect(302, "/")
 	}
@@ -233,7 +235,7 @@ func ViewCatePost(ctx echo.Context) error {
 	if filter.Pi == 0 {
 		filter.Pi = 1
 	}
-	filter.Ps = repo.CfgBlog().PageSize
+	filter.Ps = repo.GetCfg().Blog.PageSize
 	post := model.KindPost
 	filter.CateId = &mod.Id
 	filter.Kind = &post
@@ -248,7 +250,7 @@ func ViewCatePost(ctx echo.Context) error {
 	if total > (filter.Pi * filter.Ps) {
 		naver.Next = "/cates/" + mod.Name + "?page=" + strconv.Itoa(filter.Pi+1)
 	}
-	return ctx.Render(http.StatusOK, "post-cate.html", map[string]interface{}{
+	return ctx.Render(http.StatusOK, "post-cate.html", map[string]any{
 		"Cate":      mod,
 		"CatePosts": mods,
 		"Naver":     naver,
@@ -260,50 +262,51 @@ func ViewCatePost(ctx echo.Context) error {
 func ViewTags(ctx echo.Context) error {
 	mods, err := repo.TagStatus()
 	if err != nil {
-		return ctx.Render(http.StatusOK, "error.html", map[string]interface{}{
+		return ctx.Render(http.StatusOK, "error.html", map[string]any{
 			"Msg": err.Error(),
 		})
 	}
-	return ctx.Render(http.StatusOK, "tags.html", map[string]interface{}{
+	return ctx.Render(http.StatusOK, "tags.html", map[string]any{
 		"Tags": mods,
 	})
 }
 
 // ViewTagPost 标签下的文章列表
 func ViewTagPost(ctx echo.Context) error {
-	tagName := ctx.Param("tag")
-	if tagName == "" {
-		return ctx.Redirect(302, "/tags")
-	}
-	tag := &model.Tag{
-		Name: tagName,
-	}
-	err := repo.TagGet(tag)
-	if err != nil {
-		return ctx.Redirect(302, "/tags")
-	}
-	filter := &model.PostTagFilter{}
-	filter.TagId = tag.Id
-	filter.Pi, _ = strconv.Atoi(ctx.FormValue("page"))
-	if filter.Pi == 0 {
-		filter.Pi = 1
-	}
-	filter.Ps = repo.CfgBlog().PageSize
-	mods, err := repo.TagPostPage(filter)
-	if err != nil || len(mods) < 1 {
-		return ctx.Redirect(302, "/tags")
-	}
-	total := repo.TagPostCount(tag.Id)
-	naver := model.Naver{}
-	if filter.Pi > 1 {
-		naver.Prev = "/tags/" + tag.Name + "?page=" + strconv.Itoa(filter.Pi-1)
-	}
-	if total > (filter.Pi * filter.Ps) {
-		naver.Next = "/tags/" + tag.Name + "?page=" + strconv.Itoa(filter.Pi+1)
-	}
-	return ctx.Render(http.StatusOK, "post-tag.html", map[string]interface{}{
-		"Tag":      tag,
-		"TagPosts": mods,
-		"Naver":    naver,
-	})
+	// tagName := ctx.Param("tag")
+	// if tagName == "" {
+	// 	return ctx.Redirect(302, "/tags")
+	// }
+	// tag := &model.Tag{
+	// 	Name: tagName,
+	// }
+	// err := repo.TagGet(tag)
+	// if err != nil {
+	// 	return ctx.Redirect(302, "/tags")
+	// }
+	// filter := &model.PostTagFilter{}
+	// filter.TagId = tag.Id
+	// filter.Pi, _ = strconv.Atoi(ctx.FormValue("page"))
+	// if filter.Pi == 0 {
+	// 	filter.Pi = 1
+	// }
+	// filter.Ps = repo.GetCfg().Blog.PageSize
+	// mods, err := repo.TagPostPage(filter)
+	// if err != nil || len(mods) < 1 {
+	// 	return ctx.Redirect(302, "/tags")
+	// }
+	// total := repo.TagPostCount(tag.Id)
+	// naver := model.Naver{}
+	// if filter.Pi > 1 {
+	// 	naver.Prev = "/tags/" + tag.Name + "?page=" + strconv.Itoa(filter.Pi-1)
+	// }
+	// if total > (filter.Pi * filter.Ps) {
+	// 	naver.Next = "/tags/" + tag.Name + "?page=" + strconv.Itoa(filter.Pi+1)
+	// }
+	// return ctx.Render(http.StatusOK, "post-tag.html", map[string]any{
+	// 	"Tag":      tag,
+	// 	"TagPosts": mods,
+	// 	"Naver":    naver,
+	// })
+	return nil
 }

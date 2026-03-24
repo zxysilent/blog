@@ -19,8 +19,8 @@ func TestBaseVerify(t *testing.T) {
 func TestAuthEncode(t *testing.T) {
 	mod := &Token[Auth]{
 		Claim: Auth{
-			UserId: 1,
-			RoleId: 1000,
+			UserId: "",
+			RoleId: "1000",
 		},
 	}
 	mod.ExpAt = time.Now().Add(time.Hour * 24).Unix()
@@ -35,8 +35,8 @@ func TestAuthVerify(t *testing.T) {
 func BenchmarkEncode(b *testing.B) {
 	mod := &Token[Auth]{
 		Claim: Auth{
-			UserId: 1,
-			RoleId: 1000,
+			UserId: "",
+			RoleId: "1000",
 		},
 	}
 	mod.ExpAt = time.Now().Add(time.Hour * 24).Unix()
@@ -53,7 +53,7 @@ func BenchmarkVerify(b *testing.B) {
 }
 func TestShareEncode(t *testing.T) {
 	mod := &Token[Share]{
-		Claim: Share{PostId: 84},
+		Claim: Share{PostId: "84"},
 	}
 	mod.ExpAt = time.Now().Add(time.Hour * 24).Unix()
 	t.Log(mod.Encode("key"))

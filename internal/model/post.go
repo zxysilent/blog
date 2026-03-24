@@ -6,9 +6,9 @@ import (
 
 // Post 文章
 type Post struct {
-	Id       int    `xorm:"INT(11) PK AUTOINCR" json:"id"`   //主键
-	Pid      int    `xorm:"INT(11)" json:"pid"`              //父Id for note
-	CateId   int    `xorm:"INT(11)" json:"cate_id"`          //分类Id
+	Id       string `xorm:"VARCHAR(64) PK" json:"id"`        //主键
+	Pid      string `xorm:"VARCHAR(64)" json:"pid"`          //父Id for note
+	CateId   string `xorm:"VARCHAR(64)" json:"cate_id"`      //分类Id
 	Kind     int    `xorm:"INT(11)" json:"kind"`             //类型1-文章，2-页面，3-笔记
 	Status   int    `xorm:"INT(11)" json:"status"`           //状态1-草稿，2-已发布
 	Title    string `xorm:"VARCHAR(255)" json:"title"`       //标题
@@ -58,14 +58,14 @@ const (
 	KindNote = 3 //笔记
 )
 const (
-	PostStatusDraft  = 1 //草稿
-	PostStatusFinish = 2 //完成
+	StatusDraft  = 1 //草稿
+	StatusFinish = 2 //完成
 )
 
 type PostFilter struct {
-	Kind   *int `query:"kind" form:"kind" json:"kind"`
-	CateId *int `query:"cate_id" form:"cate_id" json:"cate_id"`
-	Status *int `query:"status" form:"status" json:"status"`
+	Kind   *int    `query:"kind" form:"kind" json:"kind"`
+	CateId *string `query:"cate_id" form:"cate_id" json:"cate_id"`
+	Status *int    `query:"status" form:"status" json:"status"`
 }
 
 type PostFilterList struct {
@@ -74,11 +74,15 @@ type PostFilterList struct {
 }
 
 type PostFilterPage struct {
-	Page
+	List
 	PostFilter
 }
 
 type NoteShareArgs struct {
 	PostId int `json:"post_id"`
 	Day    int `json:"day"`
+}
+
+type PostListArgs struct {
+	List
 }

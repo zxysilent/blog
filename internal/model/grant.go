@@ -2,7 +2,7 @@ package model
 
 // Grant 授权
 type Grant struct {
-	Id      int      `xorm:"INT PK AUTOINCR" json:"id"`         //主键
+	Id      string   `xorm:"VARCHAR(64) PK" json:"id"`          //主键
 	Guid    string   `xorm:"VARCHAR(64) UNIQUE" json:"guid"`    //全局唯一标识符（GUID，Globally Unique Identifier）
 	Name    string   `xorm:"VARCHAR(255)" json:"name"`          //名称
 	Group   string   `xorm:"VARCHAR(255)" json:"group"`         //组
@@ -13,9 +13,10 @@ type Grant struct {
 	Created int64    `xorm:"BIGINT" json:"created"`             //创建时间
 }
 
-// 根角色
-const RootRoleId = 1
-
 func (Grant) TableName() string {
-	return sysPrefix + "grant"
+	return "grant"
+}
+
+type GrantListArgs struct {
+	List
 }

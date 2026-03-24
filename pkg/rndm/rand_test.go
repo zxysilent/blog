@@ -1,4 +1,4 @@
-package utils
+package rndm
 
 import (
 	"testing"
@@ -34,5 +34,5 @@ func BenchmarkRandDigitStr16(b *testing.B) {
 }
 
 func TestStr(t *testing.T) {
-	Str(16)
+	t.Log(Str(16))
 }

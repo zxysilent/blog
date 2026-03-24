@@ -5,6 +5,7 @@ import (
 	"blog/internal/model"
 	"blog/internal/repo"
 	"blog/internal/utils"
+	"blog/pkg/reply"
 	"blog/pkg/token"
 	"time"
 
@@ -15,7 +16,7 @@ import (
 // @Auth
 // @Tags note
 // @Summary 笔记保存
-// @Security ApiKeyAuth
+// @Security KeyAuth
 // @Param body body model.Post true "请求数据"
 // @Success 200 {object} utils.Reply{data=string} "返回数据"
 // @Router /api/note/save [post]
@@ -26,7 +27,7 @@ func NoteSave(ctx echo.Context) error {
 	}{}
 	err := ctx.Bind(ipt)
 	if err != nil {
-		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
+		return reply.Fail(ctx, "输入有误", err)
 	}
 	if ipt.Kind == model.KindNote && ipt.Path == "" {
 		ipt.Path = utils.SUID()
@@ -36,23 +37,23 @@ func NoteSave(ctx echo.Context) error {
 		ipt.Created = ipt.Updated
 		err = repo.PostAdd(&ipt.Post)
 		if err != nil {
-			return ctx.JSON(utils.Fail("添加失败", err.Error()))
+			return reply.Fail(ctx, "添加失败", err)
 		}
-		return ctx.JSON(utils.Succ("succ"))
+		return reply.Succ(ctx, "succ")
 	}
 	ipt.Updated = time.Now().UnixMilli()
 	err = repo.PostEdit(&ipt.Post)
 	if err != nil {
-		return ctx.JSON(utils.Fail("修改失败", err.Error()))
+		return reply.Fail(ctx, "修改失败", err)
 	}
-	return ctx.JSON(utils.Succ("succ"))
+	return reply.Succ(ctx, "succ")
 }
 
 // NoteShare doc
 // @Auth
 // @Tags note
 // @Summary 笔记分享
-// @Security ApiKeyAuth
+// @Security KeyAuth
 // @Param body body model.NoteShareArgs true "请求数据"
 // @Success 200 {object} utils.Reply{data=string} "返回数据"
 // @Router /api/note/share [post]
@@ -60,7 +61,7 @@ func NoteShare(ctx echo.Context) error {
 	ipt := &model.NoteShareArgs{}
 	err := ctx.Bind(ipt)
 	if err != nil {
-		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
+		return reply.Fail(ctx, "输入有误", err)
 	}
 	s := token.Token[token.Share]{Claim: token.Share{PostId: ipt.PostId}}
 	if ipt.Day > 0 {
@@ -72,7 +73,7 @@ func NoteShare(ctx echo.Context) error {
 // NoteList doc
 // @Tags note
 // @Summary 笔记目录&列表数据
-// @Security ApiKeyAuth
+// @Security KeyAuth
 // @Param query query model.List true "请求数据"
 // @Success 200 {object} utils.Reply{data=[]model.PostPart} "返回数据"
 // @Router /api/note/list [get]
@@ -80,7 +81,7 @@ func NoteList(ctx echo.Context) error {
 	ipt := &model.List{}
 	err := ctx.Bind(ipt)
 	if err != nil {
-		return ctx.JSON(utils.ErrIpt("输入有误", err.Error()))
+		return reply.Fail(ctx, "输入有误", err)
 	}
 	pp, _ := repo.NoteList(ipt)
 	return ctx.JSON(utils.Succ("succ", pp))

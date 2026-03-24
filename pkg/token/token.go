@@ -16,14 +16,14 @@ type Token[T Share | Auth | string] struct {
 }
 
 type Share struct {
-	PostId int `json:"p"`
+	PostId string `json:"p"`
 }
 
 // Auth 凭证载体
 type Auth struct {
-	UserId int  `json:"u"`
-	RoleId int  `json:"r"`
-	Admin  bool `json:"a"`
+	UserId string `json:"u"`
+	RoleId string `json:"r"`
+	Admin  bool   `json:"a"`
 }
 
 // Encode 生成 token

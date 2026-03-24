@@ -23,7 +23,5 @@ type Log struct {
 }
 
 func (*Log) TableName() string {
-	return sysPrefix + "log"
+	return "log"
 }
-
-const sysPrefix = ""

@@ -54,8 +54,8 @@ func RoleGrantEdit(mods []model.RoleGrant, grantIds []int) error {
 	return nil
 }
 
-func getGrantsByRole(roleId int) []int {
-	mods := make([]int, 0, 8)
+func getGrantsByRole(roleId string) []string {
+	mods := make([]string, 0, 8)
 	db.Table("role_grant").Cols("grant_id").Where("role_id = ?", roleId).Find(&mods)
 	return mods
 }
