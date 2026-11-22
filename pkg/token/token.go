@@ -20,10 +20,10 @@ type Share struct {
 }
 
 // Auth 凭证载体
+// 只携带身份信息，权限判定统一由服务端按角色查询 grant.Routes 完成
 type Auth struct {
-	UserId string `json:"u"`
-	RoleId string `json:"r"`
-	Admin  bool   `json:"a"`
+	UserId string `json:"u"` //用户id
+	RoleId string `json:"r"` //角色id
 }
 
 // Encode 生成 token

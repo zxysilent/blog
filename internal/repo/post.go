@@ -3,34 +3,134 @@ package repo
 import (
 	"blog/internal/model"
 	"context"
-	"reflect"
+
+	"xorm.io/xorm"
 )
 
-// PostExist 博文是否存在
-func PostExist(ctx context.Context, mod *model.Post) bool {
+// PostNeighbor 相邻内容，供管理端预览使用
+// 只看同栏目、已发布、前台可见的内容，与前台上一篇/下一篇的选取口径一致
+// 找不到时返回零值结构，由调用方按 Id 是否为空判断
+func PostNeighbor(ctx context.Context, cateId string, created int64) *model.PostNeighbor {
+	naver := &model.PostNeighbor{Prev: &model.PostPart{}, Next: &model.PostPart{}}
 	sess := db.NewSession()
 	defer sess.Close()
 	sess.Context(ctx)
-	exist, _ := sess.Exist(mod)
+
+	prevSess := sess.Where("kind = ? AND status = ? AND `show` = ? AND created > ?",
+		model.KindPost, model.StatusFinish, true, created)
+	if cateId != "" {
+		prevSess.And("cate_id = ?", cateId)
+	}
+	if has, _ := prevSess.Asc("created").Get(naver.Prev); !has {
+		naver.Prev = &model.PostPart{}
+	}
+
+	nextSess := sess.Where("kind = ? AND status = ? AND `show` = ? AND created < ?",
+		model.KindPost, model.StatusFinish, true, created)
+	if cateId != "" {
+		nextSess.And("cate_id = ?", cateId)
+	}
+	if has, _ := nextSess.Desc("created").Get(naver.Next); !has {
+		naver.Next = &model.PostPart{}
+	}
+	return naver
+}
+
+// PostGet 内容详情（含栏目）
+func PostGet(ctx context.Context, id string) (*model.Post, error) {
+	mod, err := GetAny[model.Post](ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	PostFillCate(&mod)
+	return &mod, nil
+}
+
+// PostFillCate 从栏目缓存填充栏目信息，不额外查库
+func PostFillCate(mod *model.Post) {
+	if mod.CateId == "" {
+		return
+	}
+	cate, ok := CateCached(mod.CateId)
+	if !ok {
+		return
+	}
+	copied := *cate
+	copied.Children = nil
+	mod.Cate = &copied
+}
+
+// PostGetPath 按公开路径读取已发布且可见的内容
+// 前台详情页使用，未发布或已隐藏一律视为不存在
+func PostGetPath(ctx context.Context, path string) (*model.Post, error) {
+	mod := &model.Post{}
+	sess := db.NewSession()
+	defer sess.Close()
+	sess.Context(ctx)
+	has, err := sess.Where("path = ? AND status = ? AND `show` = ?", path, model.StatusFinish, true).Get(mod)
+	if err != nil {
+		return nil, err
+	}
+	if !has {
+		return nil, ErrNotExist
+	}
+	PostFillCate(mod)
+	return mod, nil
+}
+
+// PostHits 浏览量自增
+// 用 SQL 自增而不是先读后写，并发下不会丢计数
+func PostHits(ctx context.Context, id string) error {
+	sess := db.NewSession()
+	defer sess.Close()
+	sess.Context(ctx)
+	_, err := sess.Exec("UPDATE post SET hits = hits + 1 WHERE id = ?", id)
+	return err
+}
+
+// PostExistPath 访问路径是否已被占用，excludeId 用于编辑时排除自身
+func PostExistPath(ctx context.Context, path, excludeId string) bool {
+	sess := db.NewSession()
+	defer sess.Close()
+	sess.Context(ctx)
+	sess.Where("path = ?", path)
+	if excludeId != "" {
+		sess.And("id <> ?", excludeId)
+	}
+	exist, _ := sess.Exist(&model.Post{})
 	return exist
 }
 
-// PostGet 博文单条数据
-func PostGet(ctx context.Context, mod *model.Post) error {
-	sess := db.NewSession()
-	defer sess.Close()
-	sess.Context(ctx)
-	if !reflect.ValueOf(mod.Id).IsZero() {
-		sess.ID(mod.Id)
-		sess.NoAutoCondition()
+// postCondition 组装内容查询条件，管理端与前台共用同一套语义
+func postCondition(sess *xorm.Session, filter *model.PostFilter) {
+	if filter.Kind != nil && *filter.Kind > 0 {
+		sess.And("kind = ?", *filter.Kind)
 	}
-	if has, _ := sess.Get(mod); !has {
-		return ErrNotExist
+	if filter.Status != nil && *filter.Status > 0 {
+		sess.And("status = ?", *filter.Status)
 	}
-	return nil
+	if filter.Show != nil {
+		sess.And("`show` = ?", *filter.Show)
+	}
+	if filter.Istop != nil {
+		sess.And("istop = ?", *filter.Istop)
+	}
+	if filter.Uid != nil && *filter.Uid != "" {
+		sess.And("uid = ?", *filter.Uid)
+	}
+	if filter.Pid != nil && *filter.Pid != "" {
+		sess.And("pid = ?", *filter.Pid)
+	}
+	// CateIds 由服务层按「栏目 + 子树」展开，优先于单个栏目条件
+	if len(filter.CateIds) > 0 {
+		sess.In("cate_id", filter.CateIds)
+	} else if filter.CateId != nil && *filter.CateId != "" {
+		sess.And("cate_id = ?", *filter.CateId)
+	}
 }
 
-// PostList 博文列表数据
+// PostList 管理端内容列表
+// 默认不返回 markdown / richtext 两个大字段，需要时通过 cols 显式指定
 func PostList(ctx context.Context, filter *model.PostListArgs, cols ...string) ([]model.Post, int, error) {
 	mods := make([]model.Post, 0, filter.GetCap())
 	sess := db.NewSession()
@@ -38,240 +138,168 @@ func PostList(ctx context.Context, filter *model.PostListArgs, cols ...string) (
 	sess.Context(ctx)
 	if len(cols) > 0 {
 		sess.Cols(cols...)
+	} else {
+		sess.Omit("markdown", "richtext")
 	}
-	sess.Asc("created")
+	postCondition(sess, &filter.PostFilter)
+	if filter.Mult != "" {
+		sess.And("(title like ? or path like ? or summary like ?)",
+			filter.SafeMult(), filter.SafeMult(), filter.SafeMult())
+	}
+	sess.Desc("istop").Desc("created").Desc("id")
 	if filter.IsZero() {
 		err := sess.Find(&mods)
 		return mods, len(mods), err
 	}
-	sess.Limit(filter.GetLimit(), filter.GetOffset())
-	count, err := sess.FindAndCount(&mods)
+	count, err := sess.Limit(filter.GetLimit(), filter.GetOffset()).FindAndCount(&mods)
 	return mods, int(count), err
 }
 
-// PostCount 博文数据总数
-func PostCount(ctx context.Context, filter *model.PostListArgs) int {
+// PostCount 内容计数
+func PostCount(ctx context.Context, filter *model.PostFilter) int {
 	sess := db.NewSession()
 	defer sess.Close()
 	sess.Context(ctx)
-	// if filter.Mult != "" {
-	// 	sess.And("field like concat('%',?,'%')", filter.Mult)
-	// }
+	postCondition(sess, filter)
 	count, _ := sess.Count(&model.Post{})
 	return int(count)
 }
 
-// PostAdd 博文添加数据
+// PostAdd 内容添加
 func PostAdd(ctx context.Context, mod *model.Post) error {
-	sess := db.NewSession()
-	defer sess.Close()
-	sess.Context(ctx)
-	if _, err := sess.InsertOne(mod); err != nil {
-		sess.Rollback()
-		return err
-	}
-	sess.Commit()
-	return nil
+	return AddAny(ctx, mod)
 }
 
-// PostEdit 博文修改数据
+// PostEdit 内容修改
 func PostEdit(ctx context.Context, mod *model.Post, cols ...string) error {
+	return EditAny(ctx, mod, cols...)
+}
+
+// PostEditTop 修改置顶
+func PostEditTop(ctx context.Context, id string, istop bool) error {
+	return PostEdit(ctx, &model.Post{Id: id, Istop: istop}, "istop")
+}
+
+// PostDrop 内容删除
+// 与标签关联的清理放在同一个事务里，避免出现「文章已删、关联还在」的中间态
+func PostDrop(ctx context.Context, id string) error {
 	sess := db.NewSession()
 	defer sess.Close()
 	sess.Context(ctx)
-	sess.Begin()
-	if _, err := sess.ID(mod.Id).Cols(cols...).Update(mod); err != nil {
+	if err := sess.Begin(); err != nil {
+		return err
+	}
+	if _, err := sess.Where("post_id = ?", id).Delete(&model.PostTag{}); err != nil {
 		sess.Rollback()
 		return err
 	}
-	sess.Commit()
-	return nil
-}
-
-// PostDrop 博文删除数据
-func PostDrop(ctx context.Context, mod *model.Post) error {
-	sess := db.NewSession()
-	defer sess.Close()
-	sess.Context(ctx)
-	sess.Begin()
-	if !reflect.ValueOf(mod.Id).IsZero() {
-		sess.ID(mod.Id)
-		sess.NoAutoCondition()
-	}
-	if _, err := sess.Delete(mod); err != nil {
+	if _, err := sess.ID(id).NoAutoCondition().Delete(&model.Post{}); err != nil {
 		sess.Rollback()
 		return err
 	}
-	sess.Commit()
-	return nil
+	return sess.Commit()
 }
 
-// PostIds 博文id集合查询
-func PostIds(ctx context.Context, ids []string) []model.Post {
-	mods := make([]model.Post, 0, len(ids))
-	sess := db.NewSession()
-	defer sess.Close()
-	sess.Context(ctx)
-	sess.In("id", ids).Find(&mods)
-	return mods
-}
-
-// PostMapIds 博文id集合查询
-func PostMapIds(ctx context.Context, ids []string) map[string]*model.Post {
-	mods := make([]model.Post, 0, len(ids))
-	sess := db.NewSession()
-	defer sess.Close()
-	sess.Context(ctx)
-	sess.In("id", ids).Find(&mods)
-	set := make(map[string]*model.Post, len(mods))
-	for idx := range mods {
-		set[mods[idx].Id] = &mods[idx]
-	}
-	return set
-}
-
-// PostList 博文列表数据
-func PostList1(filter *model.PostFilterList, cols ...string) ([]model.PostPart, error) {
-	mods := make([]model.PostPart, 0, 8)
-	sess := db.NewSession()
-	defer sess.Close()
-	if len(cols) > 0 {
-		sess.Cols(cols...)
-	}
-	if filter.Mult != "" {
-		sess.And("title like ?", filter.SafeMult())
-	}
-	if filter.Kind != nil && *filter.Kind > 0 {
-		sess.And("kind = ?", *filter.Kind)
-	}
-	if filter.Status != nil && *filter.Status > 0 {
-		sess.And("status = ?", *filter.Status)
-	}
-	if filter.CateId != nil && *filter.CateId != "" {
-		sess.And("cate_id = ?", *filter.CateId)
-	}
-	// if filter.Limit > 0 {
-	// 	sess.Limit(filter.Limit)
-	// }
-	err := sess.Desc("id").Find(&mods)
-	return mods, err
-}
-
-// PostPage 博文分页数据
+// PostPage 摘要列表，分页
 func PostPage(filter *model.PostFilterPage, cols ...string) ([]model.PostPart, int, error) {
-	mods := make([]model.PostPart, 0, filter.Ps)
+	mods := make([]model.PostPart, 0, filter.GetCap())
 	sess := db.NewSession()
 	defer sess.Close()
 	if len(cols) > 0 {
 		sess.Cols(cols...)
 	}
+	postCondition(sess, &filter.PostFilter)
 	if filter.Mult != "" {
 		sess.And("title like ?", filter.SafeMult())
 	}
-	if filter.Kind != nil && *filter.Kind > 0 {
-		sess.And("kind = ?", *filter.Kind)
-	}
-	if filter.Status != nil && *filter.Status > 0 {
-		sess.And("status = ?", *filter.Status)
-	}
-	if filter.CateId != nil && *filter.CateId != "" {
-		sess.And("cate_id = ?", *filter.CateId)
-	}
-	sess.Limit(filter.Ps, (filter.Pi-1)*filter.Ps)
-	count, err := sess.Desc("id").FindAndCount(&mods)
+	count, err := sess.Limit(filter.GetLimit(), filter.GetOffset()).
+		Desc("istop").Desc("created").Desc("id").FindAndCount(&mods)
 	return mods, int(count), err
 }
 
+// PostTree 摘要树形列表，按 Pid 自关联组装
+// 笔记类内容依赖它做目录树；非树形内容平铺返回即可
 func PostTree(filter *model.PostFilterPage, cols ...string) ([]model.PostPart, int, error) {
-	mods := make([]model.PostPart, 0, filter.Ps)
+	mods := make([]model.PostPart, 0, filter.GetCap())
 	sess := db.NewSession()
 	defer sess.Close()
 	if len(cols) > 0 {
 		sess.Cols(cols...)
 	}
+	postCondition(sess, &filter.PostFilter)
 	if filter.Mult != "" {
 		sess.And("title like ?", filter.SafeMult())
 	}
-	if filter.Kind != nil && *filter.Kind > 0 {
-		sess.And("kind = ?", *filter.Kind)
+	count, err := sess.Desc("istop").Desc("created").Desc("id").FindAndCount(&mods)
+	if err != nil {
+		return nil, 0, err
 	}
-	if filter.Status != nil && *filter.Status > 0 {
-		sess.And("status = ?", *filter.Status)
-	}
-	if filter.CateId != nil && *filter.CateId != "" {
-		sess.And("cate_id = ?", *filter.CateId)
-	}
-	sess.Limit(filter.Ps, (filter.Pi-1)*filter.Ps)
-	count, err := sess.Desc("id").FindAndCount(&mods)
-	return mods, int(count), err
+	return postBuildTree(mods), int(count), nil
 }
 
-func PostNaver(cateId string, crated int64) *model.Naver {
+// postBuildTree 把平铺结果组装成树
+// 父级不在结果集中的节点提升为顶层，避免数据被藏起来
+func postBuildTree(mods []model.PostPart) []model.PostPart {
+	byId := make(map[string]*model.PostPart, len(mods))
+	for idx := range mods {
+		mods[idx].Children = nil
+		byId[mods[idx].Id] = &mods[idx]
+	}
+	tree := make([]model.PostPart, 0, len(mods))
+	for idx := range mods {
+		mod := mods[idx]
+		if mod.Pid != "" {
+			if parent, ok := byId[mod.Pid]; ok && parent.Id != mod.Id {
+				parent.Children = append(parent.Children, mod)
+				continue
+			}
+		}
+		tree = append(tree, mod)
+	}
+	// 上一步 append 的是值拷贝，这里按 id 回填子级
+	var fill func(nodes []model.PostPart, level int) []model.PostPart
+	fill = func(nodes []model.PostPart, level int) []model.PostPart {
+		out := make([]model.PostPart, 0, len(nodes))
+		seen := make(map[string]struct{}, len(nodes))
+		for _, node := range nodes {
+			if _, ok := seen[node.Id]; ok {
+				continue
+			}
+			seen[node.Id] = struct{}{}
+			node.Level = level
+			if parent, ok := byId[node.Id]; ok {
+				node.Children = fill(parent.Children, level+1)
+			} else {
+				node.Children = nil
+			}
+			out = append(out, node)
+		}
+		return out
+	}
+	return fill(tree, 1)
+}
+
+// PostNaver 上下篇
+// cateId 非空时只在同一栏目内找，避免跨栏目跳转
+func PostNaver(cateId string, created int64) *model.Naver {
 	naver := &model.Naver{}
 	prev := &model.Post{}
-	if has, _ := db.Where("kind = ? and status = ? and created >?", model.KindPost, model.StatusFinish, crated).Asc("created").Get(prev); has {
-		// <a href="{{.Naver.Prev}}" class="prev">&laquo; 上一页</a>
+	prevSess := db.Where("kind = ? AND status = ? AND `show` = ? AND created > ?",
+		model.KindPost, model.StatusFinish, true, created)
+	if cateId != "" {
+		prevSess.And("cate_id = ?", cateId)
+	}
+	if has, _ := prevSess.Asc("created").Get(prev); has {
 		naver.Prev = `<a href="/posts/` + prev.Path + `.html" class="prev">&laquo; ` + prev.Title + `</a>`
 	}
 	next := &model.Post{}
-	if has, _ := db.Where("kind = ? and status = ? and created <?", model.KindPost, model.StatusFinish, crated).Desc("created").Get(next); has {
-		//<a href="{{.Naver.Next}}" class="next">下一页 &raquo;</a>
+	nextSess := db.Where("kind = ? AND status = ? AND `show` = ? AND created < ?",
+		model.KindPost, model.StatusFinish, true, created)
+	if cateId != "" {
+		nextSess.And("cate_id = ?", cateId)
+	}
+	if has, _ := nextSess.Desc("created").Get(next); has {
 		naver.Next = `<a href="/posts/` + next.Path + `.html" class="next"> ` + next.Title + ` &raquo;</a>`
 	}
 	return naver
-}
-
-// NoteList 笔记列表数据
-func NoteList(filter *model.List, cols ...string) ([]model.PostPart, error) {
-	arr := make([]model.PostPart, 0, 8)
-	sess := db.NewSession()
-	defer sess.Close()
-	if len(cols) > 0 {
-		sess.Cols(cols...)
-	}
-	if filter.Mult != "" {
-		sess.And("title like ?", filter.SafeMult())
-	}
-	sess.And("kind = ?", model.KindNote)
-	sess.Desc("created").Find(&arr)
-	mp := make(map[int][]model.PostPart, len(arr))
-	for _, val := range arr {
-		if _, ok := mp[val.Pid]; !ok {
-			mp[val.Pid] = make([]model.PostPart, 0, 4)
-		}
-		mp[val.Pid] = append(mp[val.Pid], val)
-	}
-	level := 1
-	var getChildren func(pid int, mp map[int][]model.PostPart) []model.PostPart
-	getChildren = func(pid int, mp map[int][]model.PostPart) []model.PostPart {
-		lv := level
-		mods, ok := mp[pid]
-		if !ok {
-			return nil
-		}
-		level++
-		for idx := range mods {
-			mods[idx].Level = lv
-			mods[idx].Children = getChildren(mods[idx].Id, mp)
-		}
-		return mods
-	}
-	mods := getChildren(0, mp)
-	// for idx := range mods {
-	// 	mods[idx].Children = getChildren(&mods[idx], mp)
-	// }
-	// for _, sub1 := range first {
-	// 	second := mp[sub1.Id]
-	// 	sub1.Children = make([]model.PostPart, 0, len(second))
-	// 	for _, sub2 := range second {
-	// 		third := mp[sub2.Id]
-	// 		sub2.Children = make([]model.PostPart, 0, len(third))
-	// 		for _, sub3 := range third {
-	// 			sub2.Children = append(sub2.Children, sub3)
-	// 		}
-	// 		sub1.Children = append(sub1.Children, sub2)
-	// 	}
-	// 	mods = append(mods, sub1)
-	// }
-	return mods, nil
 }

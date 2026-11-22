@@ -1,0 +1,33 @@
+<svg width="52px" height="45px" viewBox="0 0 52 45" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter x="-4.2%" y="-2.5%" width="108.3%" height="110.0%" filterUnits="objectBoundingBox" id="login-style-mgmt-shadow">
+      <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+      <feGaussianBlur stdDeviation="0.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+      <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+    </filter>
+    <clipPath id="login-style-mgmt-clip">
+      <rect x="0" y="0" width="48" height="40" rx="4"></rect>
+    </clipPath>
+  </defs>
+  <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g transform="translate(2, 2.5)">
+      <rect fill="black" fill-opacity="1" filter="url(#login-style-mgmt-shadow)" x="0" y="0" width="48" height="40" rx="4"></rect>
+      <rect fill="#F0F2F5" fill-rule="evenodd" x="0" y="0" width="48" height="40" rx="4"></rect>
+      <g clip-path="url(#login-style-mgmt-clip)">
+        <!-- 左侧品牌区 -->
+        <rect fill="#2D3243" x="0" y="0" width="20" height="40"></rect>
+        <rect fill="#FFFFFF" x="3" y="8" width="10" height="1.6" rx="0.8"></rect>
+        <rect fill="#FFFFFF" fill-opacity="0.45" x="3" y="12" width="14" height="1.2" rx="0.6"></rect>
+        <rect fill="#FFFFFF" fill-opacity="0.45" x="3" y="15" width="11" height="1.2" rx="0.6"></rect>
+        <rect fill="#FFFFFF" fill-opacity="0.45" x="3" y="18" width="13" height="1.2" rx="0.6"></rect>
+        <!-- 右侧登录卡片 -->
+        <rect fill="#FFFFFF" x="25" y="7" width="20" height="26" rx="2"></rect>
+        <rect fill="#C9CED8" x="27.5" y="11" width="9" height="1.6" rx="0.8"></rect>
+        <rect fill="#EDEFF3" x="27.5" y="16" width="15" height="3.2" rx="1.2"></rect>
+        <rect fill="#EDEFF3" x="27.5" y="21.2" width="15" height="3.2" rx="1.2"></rect>
+        <rect fill="#EDEFF3" x="27.5" y="26.4" width="9.5" height="3.2" rx="1.2"></rect>
+        <rect fill="#2D8CF0" x="37.5" y="26.4" width="5" height="3.2" rx="1.2"></rect>
+      </g>
+    </g>
+  </g>
+</svg>

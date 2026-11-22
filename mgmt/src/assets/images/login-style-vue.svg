@@ -1,0 +1,37 @@
+<svg width="52px" height="45px" viewBox="0 0 52 45" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter x="-4.2%" y="-2.5%" width="108.3%" height="110.0%" filterUnits="objectBoundingBox" id="login-style-vue-shadow">
+      <feOffset dx="0" dy="1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+      <feGaussianBlur stdDeviation="0.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+      <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+    </filter>
+    <clipPath id="login-style-vue-clip">
+      <rect x="0" y="0" width="48" height="40" rx="4"></rect>
+    </clipPath>
+  </defs>
+  <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g transform="translate(2, 2.5)">
+      <rect fill="black" fill-opacity="1" filter="url(#login-style-vue-shadow)" x="0" y="0" width="48" height="40" rx="4"></rect>
+      <!-- 浅灰底：旧版登录页的底色 -->
+      <rect fill="#F0F2F5" fill-rule="evenodd" x="0" y="0" width="48" height="40" rx="4"></rect>
+      <g clip-path="url(#login-style-vue-clip)">
+        <!-- 顶部 Logo + 标题 + 描述 -->
+        <circle fill="#2D8CF0" cx="17" cy="6.5" r="2.2"></circle>
+        <rect fill="#9AA3B0" x="20.5" y="5.5" width="10" height="2" rx="1"></rect>
+        <rect fill="#C9CED8" x="16" y="10.5" width="19" height="1.4" rx="0.7"></rect>
+        <!-- 居中窄表单，左对齐标签 -->
+        <rect fill="#D8DCE3" x="10" y="15.5" width="5" height="1.4" rx="0.7"></rect>
+        <rect fill="#FFFFFF" x="16.5" y="14.6" width="18" height="3.4" rx="1.2"></rect>
+        <rect fill="#D8DCE3" x="10" y="21.1" width="5" height="1.4" rx="0.7"></rect>
+        <rect fill="#FFFFFF" x="16.5" y="20.2" width="18" height="3.4" rx="1.2"></rect>
+        <rect fill="#D8DCE3" x="10" y="26.7" width="5" height="1.4" rx="0.7"></rect>
+        <rect fill="#FFFFFF" x="16.5" y="25.8" width="11" height="3.4" rx="1.2"></rect>
+        <rect fill="#2D8CF0" x="28" y="25.8" width="6.5" height="3.4" rx="1.2"></rect>
+        <!-- 底部链接与版权 -->
+        <rect fill="#C9CED8" x="15" y="34.5" width="6" height="1.2" rx="0.6"></rect>
+        <rect fill="#C9CED8" x="23" y="34.5" width="6" height="1.2" rx="0.6"></rect>
+        <rect fill="#DCE0E6" x="16" y="36.8" width="16" height="1.1" rx="0.55"></rect>
+      </g>
+    </g>
+  </g>
+</svg>

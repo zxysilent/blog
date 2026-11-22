@@ -35,14 +35,14 @@ type Image struct {
 	dotSize   int
 }
 type Field struct {
-	Image string `json:"image"`
-	Real  string `json:"real"`
+	Image string `json:"image"` //验证码图片 base64
+	Real  string `json:"real"`  //服务端签名，客户端回传
+	Code  string `json:"-"`     //明文答案，不对外暴露，仅供调用方在调试时记录
 }
 
 func New(ln int, secret string) *Field {
 	str := rndm.Digit(ln)
-	fmt.Println(str)
-	v := &Field{}
+	v := &Field{Code: str}
 	v.Image = newImage(str).Base64()
 	hm := hmac.New(md5.New, []byte(secret))
 	hm.Write([]byte(str))

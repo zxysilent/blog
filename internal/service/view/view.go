@@ -1,30 +1,41 @@
 package view
 
 import (
+	"blog/conf"
 	"blog/internal/model"
 	"blog/internal/repo"
 	"blog/internal/utils"
-	"context"
+	"blog/pkg/token"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/labstack/echo/v4"
+	"github.com/zxysilent/logs"
 )
+
+// publicFilter 构造前台列表过滤器
+// 前台只展示「已发布 + 可见」的内容，草稿与隐藏内容一律不出现
+// 分页参数缺省值统一由 model.List.Normalize 处理
+func publicFilter(ctx echo.Context, ps int) *model.PostFilterPage {
+	filter := &model.PostFilterPage{}
+	filter.Pi, _ = strconv.Atoi(ctx.FormValue("page"))
+	filter.Normalize(ps)
+	status := model.StatusFinish
+	show := true
+	filter.Status = &status
+	filter.Show = &show
+	return filter
+}
 
 // ------------------------------------------------------ 主页面 ------------------------------------------------------
 // ViewIndex 主页面
 func ViewIndex(ctx echo.Context) error {
-	filter := &model.PostFilterPage{}
-	filter.Pi, _ = strconv.Atoi(ctx.FormValue("page"))
-	if filter.Pi == 0 {
-		filter.Pi = 1
-	}
-	filter.Ps = repo.GetCfg().Blog.PageSize
-	post := model.KindPost
-	filter.Kind = &post
-	mods, total, _ := repo.PostPage(filter, "id", "title", "path", "created", "summary")
+	filter := publicFilter(ctx, repo.GetCfg().Blog.PageSize)
+	kind := model.KindPost
+	filter.Kind = &kind
+	mods, total, _ := repo.PostPage(filter, "id", "title", "path", "created", "summary", "author", "icon", "hits", "istop")
 	naver := model.Naver{}
 	if filter.Pi > 1 {
 		naver.Prev = "/?page=" + strconv.Itoa(filter.Pi-1)
@@ -40,21 +51,16 @@ func ViewIndex(ctx echo.Context) error {
 
 // ViewSearch 搜索页面
 func ViewSearch(ctx echo.Context) error {
-	rctx := utils.WrapCtx(ctx)
+	rctx := ctx.Request().Context()
 	mult := ctx.FormValue("mult")
 	count := 0
 	tags := []model.Tag{}
 	naver := model.Naver{}
 	mods := []model.PostPart{}
 	if mult != "" {
-		filter := &model.PostFilterPage{}
-		filter.Pi, _ = strconv.Atoi(ctx.FormValue("page"))
-		if filter.Pi == 0 {
-			filter.Pi = 1
-		}
-		filter.Ps = repo.GetCfg().Blog.PageSize
-		post := model.KindPost
-		filter.Kind = &post
+		filter := publicFilter(ctx, repo.GetCfg().Blog.PageSize)
+		kind := model.KindPost
+		filter.Kind = &kind
 		filter.Mult = mult
 		mods, count, _ = repo.PostPage(filter, "id", "title", "path", "created", "summary")
 		if filter.Pi > 1 {
@@ -77,22 +83,28 @@ func ViewSearch(ctx echo.Context) error {
 
 // ------------------------------------------------------ 文章页面 ------------------------------------------------------
 // ViewPost 文章页面
+// 按公开路径读取已发布且可见的内容，读取成功即累加浏览量
 func ViewPost(ctx echo.Context) error {
-	rctx := utils.WrapCtx(ctx)
+	rctx := ctx.Request().Context()
 	paths := strings.Split(ctx.Param("*"), ".")
-	if len(paths) >= 1 {
-		mod := &model.Post{Path: paths[0], Kind: model.KindPost}
-		err := repo.PostGet(rctx, mod)
+	if len(paths) >= 1 && paths[0] != "" {
+		mod, err := repo.PostGetPath(rctx, model.PostNormalizePath(paths[0]))
 		if err != nil {
 			return ctx.Render(http.StatusOK, "error.html", map[string]any{
-				"Msg": err.Error(),
+				"Msg": "内容不存在",
 			})
+		}
+		if mod.Kind != model.KindPost && mod.Kind != model.KindPage {
+			return ctx.Redirect(http.StatusFound, "/")
 		}
 		naver := repo.PostNaver(mod.CateId, mod.Created)
 		mod.Richtext = utils.GenLazyLoad(mod.Richtext)
+		// 浏览量自增，失败不影响页面渲染
+		_ = repo.PostHits(rctx, mod.Id)
+		mod.Hits++
 		return ctx.Render(http.StatusOK, "post.html", map[string]any{
 			"Post":  mod,
-			"Show":  mod.Status == 2,
+			"Show":  mod.Status == model.StatusFinish,
 			"Naver": naver,
 		})
 	}
@@ -102,7 +114,7 @@ func ViewPost(ctx echo.Context) error {
 // ViewPost 文章页面
 func ViewNote(ctx echo.Context) error {
 	// share := token.Token[token.Share]{}
-	// err := share.Decode(ctx.QueryParam("s"), conf.App.TokenSecret)
+	// err := share.Decode(ctx.QueryParam("s"), repo.GetCfg().Auth.TokenSecret)
 	// if err != nil {
 	// 	return ctx.Render(http.StatusOK, "error.html", map[string]any{
 	// 		"Msg": "分享失败",
@@ -217,44 +229,82 @@ func ViewArchives(ctx echo.Context) error {
 }
 
 // ------------------------------------------------------ 分类页面 ------------------------------------------------------
-// ViewCatePost 分类文章列表
+// ViewCatePost 栏目页面
+// 按公开路径（Path）访问，而不是名称，改名不影响已有链接：
+//   - Url 非空：直接 302 跳转，不渲染
+//   - Auth 为真：未登录时跳到首页
+//   - 有子栏目且配置了 Itpl：用栏目首页模板（通常用于展示子栏目入口）
+//   - 其余情况：用 Ltpl（默认 post-cate.html）
 func ViewCatePost(ctx echo.Context) error {
-	cateName := ctx.Param("cate")
-	if cateName == "" {
-		return ctx.Redirect(302, "/")
+	raw := strings.TrimSuffix(ctx.Param("cate"), ".html")
+	if raw == "" {
+		return ctx.Redirect(http.StatusFound, "/")
 	}
-	mod := &model.Cate{
-		Name: cateName,
+	mod, ok := repo.CateByPath(model.CateNormalizePath(raw))
+	if !ok {
+		// 兼容旧链接：早期前台用 /cates/<名称>，仍可命中
+		mod, ok = repo.CateByName(raw)
 	}
-	err := repo.CateGet(context.Background(), mod)
+	if !ok {
+		return ctx.Redirect(http.StatusFound, "/")
+	}
+	if mod.Url != "" {
+		return ctx.Redirect(http.StatusFound, mod.Url)
+	}
+	if mod.Auth && !viewAuthed(ctx) {
+		return ctx.Redirect(http.StatusFound, "/")
+	}
+	children := repo.CateChildren(mod.Id)
+	filter := publicFilter(ctx, repo.GetCfg().Blog.PageSize)
+	// 父栏目聚合子栏目的内容，子栏目只查自己
+	filter.CateIds = repo.CateSubIds(mod.Id)
+	kind := mod.Kind
+	filter.Kind = &kind
+	mods, total, err := repo.PostPage(filter, "id", "title", "path", "created", "summary", "updated", "status", "author", "icon", "hits", "istop")
 	if err != nil {
-		return ctx.Redirect(302, "/")
-	}
-	filter := &model.PostFilterPage{}
-	filter.Pi, _ = strconv.Atoi(ctx.FormValue("page"))
-	if filter.Pi == 0 {
-		filter.Pi = 1
-	}
-	filter.Ps = repo.GetCfg().Blog.PageSize
-	post := model.KindPost
-	filter.CateId = &mod.Id
-	filter.Kind = &post
-	mods, total, err := repo.PostPage(filter, "id", "title", "path", "created", "summary", "updated", "status")
-	if err != nil || len(mods) < 1 {
-		return ctx.Redirect(302, "/")
+		logs.Ctx(ctx.Request().Context()).Err(err).Error("repo.PostPage")
 	}
 	naver := model.Naver{}
+	base := "/cates/" + mod.Path
 	if filter.Pi > 1 {
-		naver.Prev = "/cates/" + mod.Name + "?page=" + strconv.Itoa(filter.Pi-1)
+		naver.Prev = base + "?page=" + strconv.Itoa(filter.Pi-1)
 	}
 	if total > (filter.Pi * filter.Ps) {
-		naver.Next = "/cates/" + mod.Name + "?page=" + strconv.Itoa(filter.Pi+1)
+		naver.Next = base + "?page=" + strconv.Itoa(filter.Pi+1)
 	}
-	return ctx.Render(http.StatusOK, "post-cate.html", map[string]any{
+	name := mod.Ltpl
+	if len(children) > 0 && mod.Itpl != "" {
+		name = mod.Itpl
+	}
+	if name == "" {
+		name = "post-cate.html"
+	}
+	return ctx.Render(http.StatusOK, name, map[string]any{
 		"Cate":      mod,
+		"SubCates":  children,
 		"CatePosts": mods,
+		"Total":     total,
 		"Naver":     naver,
 	})
+}
+
+// viewAuthed 前台登录态判定：能解出合法令牌即视为已登录
+// 前台没有权限点概念，只区分匿名与登录
+func viewAuthed(ctx echo.Context) bool {
+	raw := ctx.Request().Header.Get(echo.HeaderAuthorization)
+	if raw == "" {
+		raw = ctx.FormValue(conf.TokenKey)
+	}
+	if raw == "" {
+		if cookie, err := ctx.Cookie(conf.TokenKey); err == nil && cookie != nil {
+			raw = cookie.Value
+		}
+	}
+	if raw == "" {
+		return false
+	}
+	tk := token.Token[token.Auth]{}
+	return tk.Decode(raw, repo.GetCfg().Auth.TokenSecret) == nil
 }
 
 // ------------------------------------------------------ 标签页面 ------------------------------------------------------

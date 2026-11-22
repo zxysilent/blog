@@ -8,6 +8,8 @@ import (
 	"blog/internal/service"
 	"blog/internal/utils"
 	"context"
+	"errors"
+	"flag"
 	"fmt"
 	"net/http"
 	"os"
@@ -23,6 +25,7 @@ var (
 	version   string //
 	buildSha  string //
 	buildTime string //
+	confPath  string // 配置文件路径
 )
 
 // @Title blog’s Api文档
@@ -35,6 +38,8 @@ var (
 // @name						Authorization
 // @description					Description for what is this security definition being used
 func main() {
+	flag.StringVar(&confPath, "conf", "", "配置文件路径，默认 ./conf.toml")
+	flag.Parse()
 	fmt.Println("Golang version :", runtime.Version())
 	fmt.Println("Git commit sha :", buildSha)
 	fmt.Println("Build     time :", buildTime)
@@ -43,7 +48,11 @@ func main() {
 	ctx = logs.TraceCtx(ctx)
 	defer logs.Close()
 	logs.Ctx(ctx).Info("app initializing")
-	conf.Init(ctx)
+	if confPath != "" {
+		conf.Init(ctx, confPath)
+	} else {
+		conf.Init(ctx)
+	}
 	repo.Init(ctx)
 	defer repo.Close()
 	service.Init(ctx)
@@ -55,20 +64,17 @@ func main() {
 		os.MkdirAll("./dist", 0755)
 	}
 	app := router.Init()
+	// 服务在独立协程启动，主协程等到 ctx 结束（收到信号）后优雅关闭
 	go func() {
-		if err := app.Start(conf.Addr()); err != nil {
-			if err != http.ErrServerClosed { //Normal exit
-				logs.Ctx(ctx).Err(err).Error("Server Shutdown")
-			}
+		if err := app.Start(conf.Addr()); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			logs.Ctx(ctx).Err(err).Error("Server Start")
 		}
 	}()
 	<-ctx.Done()
-	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
+	sctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	if err := app.Shutdown(ctx); err != nil {
-		if err != http.ErrServerClosed { //Normal exit
-			logs.Ctx(ctx).Err(err).Error("Server Shutdown")
-		}
+	if err := app.Shutdown(sctx); err != nil {
+		logs.Ctx(ctx).Err(err).Error("Server Shutdown")
 	}
 	logs.Ctx(ctx).Info("app quitted")
 }

@@ -1,0 +1,22 @@
+
+title = "blog"
+mode = "dev"
+port = 8085
+host = "0.0.0.0"
+endpoint = ""
+
+# 令牌密钥、上传限制、SQL 日志开关等运行时参数已全部迁移到数据库 config 表，
+# 初始值由启动种子写入（auth / upload / sql），可登录后台在线修改，无需重启
+
+# 数据库
+[db]
+# mysql\sqlite
+type = "sqlite"
+# uid:pass@tcp(host:port)/dbname?charset=utf8mb4&parseTime=true&loc=Local
+mysql = "root:root@tcp(127.0.0.1:3306)/blog?charset=utf8mb4&parseTime=true&loc=Local"
+sqlite = "file:blog.db"
+
+# 作者
+[author]
+name = "zxysilent"
+website = "https://github.com/zxysilent"

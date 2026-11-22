@@ -4,178 +4,257 @@ import (
 	"blog/conf"
 	"blog/internal/model"
 	"blog/internal/repo"
-	"blog/internal/utils"
 	"blog/pkg/rate"
 	"blog/pkg/reply"
 	"blog/pkg/token"
 	"blog/pkg/vcode"
-	"context"
+	"strings"
 	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/zxysilent/logs"
 )
 
-// 防止暴力破解,每秒20次登录限制
+// 登录接口全局限流器
 var loginLimiter = rate.NewLimiter(20, 5)
 
+// AuthCaptcha doc
+// @Tags auth
+// @Summary 获取图形验证码
+// @Success 200 {object} reply.Reply{data=vcode.Field} "返回数据"
+// @Router /api/captcha [get]
+func AuthCaptcha(ctx echo.Context) error {
+	field := vcode.New(4, authCfg().TokenSecret)
+	// 仅调试模式输出明文答案，方便本地联调，生产不泄露
+	if conf.IsDebug() {
+		logs.Debug("captcha.code:" + field.Code)
+	}
+	return reply.Succ(ctx, "ok", field)
+}
+
 // AuthLogin doc
-// @Tags kernel,auth
-// @Summary 登陆
-// @Accept json
-// @Param body body model.AdminLoginArgs true "请求数据"
-// @Success 200 {object} reply.Reply{data=string} "返回数据"
-// @Router /api/auth/login [post]
+// @Tags auth
+// @Summary 登录-创建令牌
+// @Param body body model.UserLoginArgs true "请求数据"
+// @Success 200 {object} reply.Reply{data=string} "返回令牌"
+// @Router /api/tokens [post]
 func AuthLogin(ctx echo.Context) error {
-	rctx := utils.WrapCtx(ctx)
-	ct, cancel := context.WithTimeout(rctx, 5*time.Second)
-	defer cancel()
-	if err := loginLimiter.Wait(ct); err != nil {
-		return reply.Fail(ctx, "当前登录人数过多,请等待", err)
+	ipt := &model.UserLoginArgs{}
+	if err := ctx.Bind(ipt); err != nil {
+		return reply.Fail(ctx, "输入有误", err.Error())
 	}
-	ipt := &model.AdminLoginArgs{}
-	err := ctx.Bind(ipt)
+	ipt.Num = strings.TrimSpace(ipt.Num)
+	if ipt.Num == "" || len(ipt.Num) > 64 {
+		return reply.Fail(ctx, "请输入正确的账号")
+	}
+	if ipt.Passwd == "" {
+		return reply.Fail(ctx, "请输入密码")
+	}
+	// 限流
+	reserve := loginLimiter.Reserve()
+	if delay := reserve.Delay(); delay > 0 {
+		time.Sleep(min(delay, 5*time.Second))
+	}
+	// 验证码
+	if err := vcode.Check(authCfg().TokenSecret, ipt.Vreal, ipt.Vcode); err != nil {
+		return reply.Fail(ctx, "验证码错误", err.Error())
+	}
+	rctx := ctx.Request().Context()
+	mod, err := repo.UserNum(rctx, ipt.Num)
 	if err != nil {
-		return reply.Fail(ctx, "请输入用户名和密码", err)
+		return reply.Fail(ctx, "账号或密码错误")
 	}
-	logs.With().Any("args", ipt).Debug("login")
-	if err = vcode.Check(conf.App.TokenSecret, ipt.Vreal, ipt.Vcode); err != nil {
-		return reply.Fail(ctx, "验证码错误")
+	if err := mod.EqualPasswd(ipt.Passwd); err != nil {
+		return reply.Fail(ctx, "账号或密码错误")
 	}
-	if ipt.Num == "" && len(ipt.Num) > 18 {
-		return reply.Fail(ctx, "请输入正确的用户名")
+	if mod.Status != model.UserStatusNormal {
+		return reply.ErrDeny(ctx, "账号已被禁用")
 	}
-	mod, has := repo.AdminNum(ipt.Num)
-	if !has {
-		return reply.Fail(ctx, "用户名输入错误")
-	}
-	if mod.Passwd != ipt.Enc() {
-		return reply.Fail(ctx, "密码输入错误")
-	}
+	// 不再按用户类型做登录闸门：账号能否操作完全由角色授权决定，
+	// 未分配角色或角色无权限时，登录后也只能访问无需权限的接口。
 	auth := token.Token[token.Auth]{
-		ExpAt: int64(conf.App.TokenExp),
+		ExpAt: tokenExpAt(),
 		Claim: token.Auth{
 			UserId: mod.Id,
 			RoleId: mod.RoleId,
-			Admin:  true,
 		},
 	}
-	if conf.App.TokenExp > 0 {
-		auth.ExpAt = time.Now().Add(time.Hour * time.Duration(conf.App.TokenExp)).Unix()
+	return reply.Succ(ctx, "登录成功", auth.Encode(authCfg().TokenSecret))
+}
+
+// authCfg 认证配置（令牌过期时间与加密私钥）
+// 缓存由 repo.SyncCfg 维护，配置修改后立即生效，无需重启
+func authCfg() *model.Auth {
+	return repo.GetCfg().Auth
+}
+
+// tokenExpAt 计算 token 过期时间戳（秒），<=0 表示永不过期
+func tokenExpAt() int64 {
+	exp := authCfg().TokenExp
+	if exp <= 0 {
+		return 0
 	}
-	token := auth.Encode(conf.App.TokenSecret)
-	// logs.Info("登陆成功", auth.Id, token)
-	// cookie := new(http.Cookie)
-	// cookie.Name = conf.App.TokenKey
-	// cookie.HttpOnly = true
-	// cookie.Path = "/"
-	// // cookie.MaxAge = conf.App.Hmtexp * 60 * 60 //秒
-	// cookie.Domain = "127.0.0.1"
-	// cookie.Value = token
-	// cookie.Expires = time.Now().Add(time.Duration(conf.App.TokenExp) * time.Hour)
-	// ctx.SetCookie(cookie)
-	ctx.Set("uid", mod.Id)
-	repo.LOG(ctx, "auth", "登录", auth)
-	return reply.Succ(ctx, "登陆成功", token)
+	return time.Now().Add(time.Duration(exp) * time.Hour).Unix()
 }
 
-// AuthVcode doc
-// @Tags kernel,auth
-// @Summary 验证码
-// @Accept mpfd
-// @Success 200 {object} reply.Reply{data=string} "返回数据"
-// @Router /api/auth/vcode [get]
-func AuthVcode(ctx echo.Context) error {
-	return reply.Succ(ctx, "succ", vcode.New(4, conf.App.TokenSecret))
-}
-
-// AuthGet doc
-// @Tags kernel
-// @Auth mgmt
-// @Summary 当前登录信息
+// AuthMe doc
+// @Tags auth
+// @Summary 获取当前登录用户
 // @Security KeyAuth
-// @Success 200 {object} reply.Reply{data=model.Admin} "返回数据"
-// @Router /api/auth/get [get]
-func AuthGet(ctx echo.Context) error {
-	rctx := utils.WrapCtx(ctx)
-	uid, _ := ctx.Get("uid").(string)
-	mod, err := repo.GetAny[model.Admin](rctx, uid)
-	if err != nil {
-		return reply.Fail(ctx, "未查询到信息", err)
+// @Success 200 {object} reply.Reply{data=model.User} "返回数据"
+// @Router /api/auth [get]
+func AuthMe(ctx echo.Context) error {
+	uid, ok := currentUid(ctx)
+	if !ok {
+		return reply.ErrToken(ctx, "请重新登陆")
 	}
-	return reply.Succ(ctx, "succ", mod)
+	rctx := ctx.Request().Context()
+	mod, err := repo.UserGet(rctx, uid)
+	if err != nil {
+		logs.Ctx(rctx).Err(err).Str("uid", uid).Error("repo.UserGet")
+		return reply.Fail(ctx, "用户不存在")
+	}
+	return reply.Succ(ctx, "ok", mod)
 }
 
-// AuthGrant doc
-// @Tags kernel,auth
-// @Auth
-// @Summary 获取当前用户的授权
+// AuthPerms doc
+// @Tags auth
+// @Summary 获取当前用户权限标识集合
 // @Security KeyAuth
 // @Success 200 {object} reply.Reply{data=[]string} "返回数据"
-// @Router /api/auth/grant [get]
-func AuthGrant(ctx echo.Context) error {
-	rctx := utils.WrapCtx(ctx)
-	roleId, _ := ctx.Get("rid").(string)
-	mods, err := repo.RoleGrantAll(rctx, roleId)
+// @Router /api/auth/permissions [get]
+func AuthPerms(ctx echo.Context) error {
+	rid, ok := currentRid(ctx)
+	if !ok {
+		return reply.ErrToken(ctx, "请重新登陆")
+	}
+	rctx := ctx.Request().Context()
+	mods, err := repo.RolePermAll(rctx, rid)
 	if err != nil {
-		return reply.Fail(ctx, "未查询到角色授权信息", err)
+		logs.Ctx(rctx).Err(err).Str("rid", rid).Error("repo.RolePermAll")
+		return reply.Fail(ctx, "获取权限失败")
 	}
-	grants := make([]string, 0, len(mods))
-	for _, val := range mods {
-		grants = append(grants, val.Guid)
+	perms := make([]string, 0, len(mods))
+	for _, item := range mods {
+		perms = append(perms, item.Perm)
 	}
-	return reply.Succ(ctx, "succ", grants)
+	return reply.Succ(ctx, "ok", perms)
+}
+
+// AuthEditMe doc
+// @Tags auth
+// @Summary 修改当前用户资料
+// @Security KeyAuth
+// @Param body body model.MeEditArgs true "请求数据"
+// @Success 200 {object} reply.Reply "返回数据"
+// @Router /api/auth [put]
+func AuthEditMe(ctx echo.Context) error {
+	uid, ok := currentUid(ctx)
+	if !ok {
+		return reply.ErrToken(ctx, "请重新登陆")
+	}
+	ipt := &model.MeEditArgs{}
+	if err := ctx.Bind(ipt); err != nil {
+		return reply.Fail(ctx, "输入有误", err.Error())
+	}
+	rctx := ctx.Request().Context()
+	mod, err := repo.UserGet(rctx, uid)
+	if err != nil {
+		return reply.Fail(ctx, "用户不存在")
+	}
+	mod.Name = strings.TrimSpace(ipt.Name)
+	mod.Avatar = strings.TrimSpace(ipt.Avatar)
+	mod.Phone = strings.TrimSpace(ipt.Phone)
+	mod.Email = strings.TrimSpace(ipt.Email)
+	mod.Updated = time.Now().UnixMilli()
+	if err := repo.UserEdit(rctx, mod, "name", "avatar", "phone", "email", "updated"); err != nil {
+		logs.Ctx(rctx).Err(err).Error("repo.UserEdit")
+		return reply.Fail(ctx, "修改失败")
+	}
+	return reply.Succ(ctx, "修改成功")
+}
+
+// AuthVerifyPasswd doc
+// @Tags auth
+// @Summary 校验当前账号密码
+// @Security KeyAuth
+// @Param body body object true "请求数据"
+// @Success 200 {object} reply.Reply "返回数据"
+// @Router /api/auth/verify [post]
+//
+// 用于锁屏解锁这类「已登录状态下再次确认身份」的场景：
+// 走登录接口会强制图形验证码，体验过重；这里只比对当前账号密码。
+func AuthVerifyPasswd(ctx echo.Context) error {
+	uid, ok := currentUid(ctx)
+	if !ok {
+		return reply.ErrToken(ctx, "请重新登陆")
+	}
+	ipt := &struct {
+		Passwd string `json:"passwd" form:"passwd"`
+	}{}
+	if err := ctx.Bind(ipt); err != nil {
+		return reply.Fail(ctx, "输入有误", err.Error())
+	}
+	if ipt.Passwd == "" {
+		return reply.Fail(ctx, "请输入密码")
+	}
+	mod, err := repo.UserGet(ctx.Request().Context(), uid)
+	if err != nil {
+		return reply.Fail(ctx, "用户不存在")
+	}
+	if err := mod.EqualPasswd(ipt.Passwd); err != nil {
+		return reply.Fail(ctx, "密码错误")
+	}
+	return reply.Succ(ctx, "身份校验通过")
 }
 
 // AuthEditPasswd doc
-// @Tags kernel,auth
-// @Auth mgmt
+// @Tags auth
 // @Summary 修改自己的密码
 // @Security KeyAuth
-// @Param body body model.PasswdArgs true "请求数据"
+// @Param body body model.MePasswdArgs true "请求数据"
 // @Success 200 {object} reply.Reply "返回数据"
-// @Router /api/auth/edit/passwd [post]
+// @Router /api/auth/password [put]
 func AuthEditPasswd(ctx echo.Context) error {
-	rctx := utils.WrapCtx(ctx)
-	ipt := &model.PasswdArgs{}
-	err := ctx.Bind(ipt)
+	uid, ok := currentUid(ctx)
+	if !ok {
+		return reply.ErrToken(ctx, "请重新登陆")
+	}
+	ipt := &model.MePasswdArgs{}
+	if err := ctx.Bind(ipt); err != nil {
+		return reply.Fail(ctx, "输入有误", err.Error())
+	}
+	if len(ipt.Npasswd) < 6 {
+		return reply.Fail(ctx, "新密码长度不能少于 6 位")
+	}
+	rctx := ctx.Request().Context()
+	mod, err := repo.UserGet(rctx, uid)
 	if err != nil {
-		return reply.Fail(ctx, "输入数据有误", err)
+		return reply.Fail(ctx, "用户不存在")
 	}
-	uid, _ := ctx.Get("uid").(string)
-	mod, err := repo.GetAny[model.Admin](rctx, uid)
-	if err != nil {
-		return reply.Fail(ctx, "未查询到信息", err)
+	if err := mod.EqualPasswd(ipt.Opasswd); err != nil {
+		return reply.Fail(ctx, "原密码错误")
 	}
-	ipt.Enc()
-	if mod.Passwd != ipt.Opasswd {
-		return reply.Fail(ctx, "原始密码输入错误,请重试")
+	if err := mod.SetPasswd(ipt.Npasswd); err != nil {
+		logs.Ctx(rctx).Err(err).Error("SetPasswd")
+		return reply.Fail(ctx, "密码加密失败")
 	}
-	mod.Passwd = ipt.Npasswd
-	if err := repo.AdminEdit(rctx, &mod, "passwd"); err != nil {
-		return reply.Fail(ctx, "密码修改失败", err.Error())
+	mod.Updated = time.Now().UnixMilli()
+	if err := repo.UserEdit(rctx, mod, "passwd", "updated"); err != nil {
+		logs.Ctx(rctx).Err(err).Error("repo.UserEdit")
+		return reply.Fail(ctx, "修改失败")
 	}
-	return reply.Succ(ctx, "succ")
+	return reply.Succ(ctx, "修改成功")
 }
 
-// AuthEdit doc
-// @Tags kernel,auth
-// @Auth mgmt
-// @Summary 修改自己的信息
-// @Security KeyAuth
-// @Success 200 {object} reply.Reply "返回数据"
-// @Param body body model.Admin true "request"
-// @Router /api/auth/edit [post]
-func AuthEdit(ctx echo.Context) error {
-	rctx := utils.WrapCtx(ctx)
-	ipt := &model.Admin{}
-	err := ctx.Bind(ipt)
-	if err != nil {
-		return reply.Fail(ctx, "输入数据有误", err.Error())
-	}
-	ipt.Id, _ = ctx.Get("uid").(string)
-	if err := repo.AdminEdit(rctx, ipt, "name", "email", "phone", "avatar"); err != nil {
-		return reply.Fail(ctx, "修改失败", err)
-	}
-	return reply.Succ(ctx, "succ")
+// currentUid 从上下文取当前用户id
+func currentUid(ctx echo.Context) (string, bool) {
+	uid, ok := ctx.Get("uid").(string)
+	return uid, ok && uid != ""
+}
+
+// currentRid 从上下文取当前角色id
+func currentRid(ctx echo.Context) (string, bool) {
+	rid, ok := ctx.Get("rid").(string)
+	return rid, ok && rid != ""
 }

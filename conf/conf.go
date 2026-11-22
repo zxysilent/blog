@@ -12,18 +12,17 @@ const (
 )
 
 type config struct {
-	Title       string `toml:"title"`
-	Mode        string `toml:"mode"`
-	Host        string `toml:"host"`
-	Port        int    `toml:"port"`
-	Endpoint    string `toml:"endpoint"`     //
-	TokenExp    int    `toml:"token_exp"`    //过期时间 h
-	TokenSecret string `toml:"token_secret"` //加密私钥
-	Db          struct {
-		Type    string `toml:"type"`     //数据库类型 mysql sqlite
-		Mysql   string `toml:"mysql"`    //uid:pass@tcp(host:port)/dbname?charset=utf8mb4&parseTime=true&loc=Local
-		Sqlite  string `toml:"sqlite"`   //"file:sqlite.db?journal_mode=WAL"
-		ShowSql bool   `toml:"show_sql"` //显示sql
+	Title    string `toml:"title"`
+	Mode     string `toml:"mode"`
+	Host     string `toml:"host"`
+	Port     int    `toml:"port"`
+	Endpoint string `toml:"endpoint"` //
+	// 令牌过期时间、加密私钥、上传限制、SQL 日志开关等运行时参数
+	// 均已收敛到数据库 config 表，可在后台在线修改，不再从 toml 读取
+	Db struct {
+		Type   string `toml:"type"`   //数据库类型 mysql sqlite
+		Mysql  string `toml:"mysql"`  //uid:pass@tcp(host:port)/dbname?charset=utf8mb4&parseTime=true&loc=Local
+		Sqlite string `toml:"sqlite"` //"file:sqlite.db?journal_mode=WAL"
 	} `toml:"db"`
 	Author struct {
 		Name    string `toml:"name"`

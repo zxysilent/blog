@@ -149,26 +149,24 @@ func EchoWrapHandler(options ...func(*Config)) echo.HandlerFunc {
 		}
 
 		response := ctx.Response()
-		// This check fixes an error introduced here: https://github.com/labstack/echo/blob/8da8e161380fd926d4341721f0328f1e94d6d0a2/response.go#L86-L88
-		if _, ok := response.Writer.(http.Flusher); ok {
-			defer response.Flush()
-		}
+		// *echo.Response 自带 Flush，写完统一刷出
+		defer response.Flush()
 
 		switch path {
 		case "":
-			ctx.Redirect(http.StatusMovedPermanently, matches[1]+"/"+"index.html")
+			return ctx.Redirect(http.StatusMovedPermanently, matches[1]+"/"+"index.html")
 		case "index.html":
-			index.Execute(ctx.Response().Writer, config)
+			return index.Execute(response, config)
 		case "doc.json":
 			doc, err := swag.ReadDoc(config.InstanceName)
 			if err != nil {
-				ctx.Error(err)
-				return nil
+				return err
 			}
-			ctx.Response().Writer.Write([]byte(doc))
+			_, err = response.Write([]byte(doc))
+			return err
 		default:
 			ctx.Request().URL.Path = matches[2]
-			http.FileServer(http.FS(FS)).ServeHTTP(ctx.Response(), ctx.Request())
+			http.FileServer(http.FS(FS)).ServeHTTP(response, ctx.Request())
 		}
 		return nil
 	}

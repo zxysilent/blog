@@ -2,24 +2,17 @@ package router
 
 import (
 	"blog/conf"
-	"blog/internal/model"
+	_ "blog/docs"
 	"blog/internal/repo"
 	"blog/internal/service/view"
 	"blog/internal/utils"
-	"blog/pkg/page"
 	"blog/pkg/reply"
-	"blog/pkg/token"
-	"context"
 	"crypto/md5"
 	"encoding/hex"
-	"fmt"
 	"html/template"
 	"io"
 	"net/http"
 	"os"
-	"regexp"
-	"runtime/debug"
-	"strings"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -27,19 +20,57 @@ import (
 	"github.com/zxysilent/logs"
 )
 
+const AppJsUrl = "/static/js/app.js"
+const AppCssUrl = "/static/css/app.css"
+
+func init() {
+	logs.SetLevel(logs.LDEBUG)
+	logs.SetCaller(true)
+	logs.SetSep("/blog")
+	logs.SetFile("./logs/app.log")
+	logs.SetCons(true)
+}
+
+// staticSafe 静态资源安全响应头
+//
+// 上传文件与站点同源，没有 nosniff 时浏览器可能把内容为 HTML 的 .txt 当页面渲染，
+// 扩展名白名单就失去意义。这里只做这一点，避免给站点自身资源加上过严的 CSP。
+func staticSafe(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(ctx echo.Context) error {
+		ctx.Response().Header().Set("X-Content-Type-Options", "nosniff")
+		return next(ctx)
+	}
+}
+
+// RegDocs 注册文档
+// dev[开发] 模式需要文档
+//
+// 是否对外暴露由「认证配置 → 接口文档」开关（config.auth.docs）决定，
+// 这里恒注册路由、每次请求再读一次配置：开关在后台改完立即生效，不需要重启。
+// 关闭时返回纯文本 404，不暴露「文档存在但被禁用」这一信息。
+func RegDocs(engine *echo.Echo) {
+	swagger := EchoWrapHandler(DocExpansion("none"))
+	engine.GET("/swagger/*", func(ctx echo.Context) error {
+		if !repo.GetCfg().Auth.Docs {
+			return echo.ErrNotFound
+		}
+		return swagger(ctx)
+	})
+}
+
 // Init 入口
 func Init() *echo.Echo {
 	engine := echo.New()
+	// 关闭启动横幅
+	engine.HideBanner = true
+	engine.HidePort = true
 	// 初始渲染引擎
 	engine.Renderer = initRender()
 	// 恢复 日志记录
-	engine.Use(Recover, Logger)
-	// engine.Use(middleware.LoggerWithConfig(logConfig))
+	engine.Use(Recover, Logger, Audit)
 	// 跨域设置
 	engine.Use(middleware.CORSWithConfig(crosConfig))
 	engine.Use(middleware.RateLimiterWithConfig(rateConfig))
-	// 不显示横幅
-	engine.HideBanner = true
 	// 自定义错误处理
 	engine.HTTPErrorHandler = HTTPErrorHandler
 	// ico
@@ -47,8 +78,11 @@ func Init() *echo.Echo {
 	// 注册文档
 	RegDocs(engine)
 	// 静态目录
-	engine.Static("/dist", "dist")
-	engine.Static("/static", "static")
+	// 上传文件与站点同源，必须禁止浏览器嗅探 MIME：
+	// 否则内容为 HTML 的 .txt 仍可能被当成页面渲染，扩展名白名单就形同虚设
+	static := engine.Group("", staticSafe)
+	static.Static("/dist", "dist")
+	static.Static("/static", "static")
 	engine.File("/favicon.ico", "favicon.ico") // ico
 	engine.GET("/", view.ViewIndex)            // 首页
 	engine.GET("/archives", view.ViewArchives) // 归档
@@ -75,106 +109,9 @@ func Init() *echo.Echo {
 		return ctx.Redirect(302, "/mgmt/")
 	})
 	apiRouter(engine)
+	// 构建路由名索引，供 AuthToken 按路由 Name 做权限校验
+	BuildRouteNames(engine)
 	return engine
-}
-
-// func init() {
-// 	logs.SetLevel(logs.LDEBUG)
-// 	logs.SetCaller(true)
-// 	logs.SetConsole(true)
-// 	pool = &sync.Pool{
-// 		New: func() interface{} {
-// 			return bytes.NewBuffer(make([]byte, 512))
-// 		},
-// 	}
-// }
-
-func Recover(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(ctx echo.Context) error {
-		defer func() {
-			if r := recover(); r != nil {
-				err, ok := r.(error)
-				if !ok {
-					err = fmt.Errorf("%v", r)
-				}
-				tctx := logs.TraceCtx(context.Background(), ctx.Request().Header.Get(echo.HeaderXRequestID))
-				logs.Ctx(tctx).Raw("panic", debug.Stack()).Err(err).Error("recover")
-				ctx.Error(err)
-			}
-		}()
-		return next(ctx)
-	}
-}
-
-// Logger 中间件-日志记录
-func Logger(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(ctx echo.Context) (err error) {
-		start := time.Now()
-		rid := ctx.Request().Header.Get(echo.HeaderXRequestID)
-		if rid == "" {
-			rid = logs.TraceId()
-		}
-		ctx.Request().Header.Set(echo.HeaderXRequestID, rid)
-		ctx.Response().Header().Set(echo.HeaderXRequestID, rid)
-		logs.With().Caller(false).Str("trace", rid).Str("caller", "api-begin").Str("ip", ctx.RealIP()).Str(ctx.Request().Method, ctx.Request().RequestURI).Debug()
-		if err = next(ctx); err != nil {
-			ctx.Error(err)
-		}
-		logs.With().Caller(false).Str("trace", rid).Str("caller", "api-end").Int("status", ctx.Response().Status).Int64("size", ctx.Response().Size).Dur("dur", time.Since(start)).Info()
-		return
-	}
-}
-
-// HTTPErrorHandler 全局错误捕捉
-func HTTPErrorHandler(err error, ctx echo.Context) {
-	if !ctx.Response().Committed {
-		if he, ok := err.(*echo.HTTPError); ok {
-			if he.Code == 404 {
-				if strings.HasPrefix(ctx.Request().URL.Path, "/static") || strings.HasPrefix(ctx.Request().URL.Path, "/dist") {
-					ctx.NoContent(404)
-				} else if strings.HasPrefix(ctx.Request().URL.Path, "/api") {
-					reply.Fail(ctx, "系统错误", he.Message)
-				} else {
-					ctx.HTML(404, page.Err404().SetExtra("404").Render())
-				}
-			} else {
-				if strings.HasPrefix(ctx.Request().URL.Path, "/api") {
-					reply.Fail(ctx, "系统错误", he.Message)
-				} else {
-					ctx.HTML(502, page.Error().SetExtra(fmt.Sprint(he.Message)).Render())
-				}
-			}
-		} else {
-			ctx.HTML(502, page.Error().SetExtra(err.Error()).Render())
-		}
-	}
-}
-
-// 跨越配置
-var crosConfig = middleware.CORSConfig{
-	AllowOrigins: []string{"*"},
-	AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAuthorization, "user-token", "accept-serial", "token"},
-	AllowMethods: []string{http.MethodGet, http.MethodHead, http.MethodPut, http.MethodPatch, http.MethodPost, http.MethodDelete},
-}
-var rateConfig = middleware.RateLimiterConfig{
-	Skipper: func(ctx echo.Context) bool {
-		path := ctx.Request().URL.Path
-		if strings.HasPrefix(path, "/api") {
-			return false
-		}
-		return true
-	},
-	Store: middleware.NewRateLimiterMemoryStoreWithConfig(middleware.RateLimiterMemoryStoreConfig{Rate: 20, Burst: 5, ExpiresIn: 3 * time.Minute}),
-	IdentifierExtractor: func(ctx echo.Context) (string, error) {
-		path := ctx.Request().URL.Path
-		return path, nil
-	},
-	ErrorHandler: func(ctx echo.Context, err error) error {
-		return reply.Fail(ctx, "请求错误,请稍后重试", err)
-	},
-	DenyHandler: func(ctx echo.Context, identifier string, err error) error {
-		return reply.Fail(ctx, "当前请求过多,请稍后重试", identifier)
-	},
 }
 
 // TplRender is a custom html/template renderer for Echo framework
@@ -183,13 +120,22 @@ type TplRender struct {
 }
 
 // Render renders a template document
-func (tmpl *TplRender) Render(w io.Writer, name string, data interface{}, ctx echo.Context) error {
+func (tmpl *TplRender) Render(w io.Writer, name string, data any, ctx echo.Context) error {
 	// 获取数据配置项
 	if mp, is := data.(map[string]interface{}); is {
 		mp["appjs"] = AppJsUrl
 		mp["appcss"] = AppCssUrl
-		// mp["basic"] = repo.CfgBasic()
-		// mp["blog"] = repo.CfgBlog()
+		cfg := repo.GetCfg()
+		if _, has := mp["basic"]; !has {
+			mp["basic"] = cfg.Basic
+		}
+		if _, has := mp["blog"]; !has {
+			mp["blog"] = cfg.Blog
+		}
+		// 前台导航：内存快照，零查库
+		if _, has := mp["cates"]; !has {
+			mp["cates"] = repo.CateNaver()
+		}
 	}
 	//开发模式
 	//每次强制读取模板
@@ -242,96 +188,6 @@ func initRender() *TplRender {
 	return &TplRender{
 		templates: tmpl,
 	}
-}
-
-func AuthToken(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(ctx echo.Context) error {
-		rctx := utils.WrapCtx(ctx)
-		tokenRaw := ctx.Request().Header.Get(echo.HeaderAuthorization) // header 查找token--方便前端约定
-		if tokenRaw == "" {
-			tokenRaw = ctx.FormValue(conf.TokenKey) // query/form 查找 token
-			if tokenRaw == "" {
-				cookie, _ := ctx.Cookie(conf.TokenKey)
-				if cookie != nil {
-					tokenRaw = cookie.Value
-				}
-			}
-		}
-		if tokenRaw == "" {
-			return reply.ErrToken(ctx, "请重新登陆", "未发现token")
-		}
-		auth := token.Token[token.Auth]{}
-		err := auth.Decode(tokenRaw, conf.App.TokenSecret)
-		if err == nil {
-			claim := auth.Claim
-			ctx.Set("auth", claim)
-			ctx.Set("uid", claim.UserId)
-			ctx.Set("rid", claim.RoleId)
-			if claim.RoleId != model.RootRoleId {
-				// 判断权限
-				allow := false
-				grants, er := repo.RoleGrantAll(rctx, claim.RoleId)
-				logs.Debug(er)
-				path := ctx.Request().URL.Path
-				for _, grant := range grants {
-					for _, route := range grant.Routes {
-						if routeMatch(path, route) {
-							allow = true
-							break
-						}
-					}
-				}
-				if !allow {
-					return reply.ErrDeny(ctx, "没有权限")
-				}
-			}
-		} else {
-			return reply.ErrToken(ctx, "请重新登陆", err)
-		}
-		return next(ctx)
-	}
-}
-func MgmtToken(next echo.HandlerFunc) echo.HandlerFunc {
-	return func(ctx echo.Context) error {
-		tokenRaw := ctx.Request().Header.Get(echo.HeaderAuthorization) // header 查找token--方便前端约定
-		if tokenRaw == "" {
-			tokenRaw = ctx.FormValue(conf.TokenKey) // query/form 查找 token
-			if tokenRaw == "" {
-				cookie, _ := ctx.Cookie(conf.TokenKey)
-				if cookie != nil {
-					tokenRaw = cookie.Value
-				}
-			}
-		}
-		if tokenRaw == "" {
-			return reply.ErrToken(ctx, "请重新登陆", "未发现token")
-		}
-		auth := token.Token[token.Auth]{}
-		err := auth.Decode(tokenRaw, conf.App.TokenSecret)
-		if err == nil {
-			claim := auth.Claim
-			if !claim.Admin {
-				return reply.ErrDeny(ctx, "没有权限")
-			}
-			ctx.Set("auth", claim)
-			ctx.Set("uid", claim.UserId)
-			ctx.Set("rid", claim.RoleId)
-		} else {
-			return reply.ErrToken(ctx, "请重新登陆", err)
-		}
-		return next(ctx)
-	}
-}
-func routeMatch(path string, route string) bool {
-	if path == route {
-		return true
-	}
-	logs.Debug(path, route)
-	route = strings.Replace(route, "/*", "/.*", -1)
-	re := regexp.MustCompile(`:[^/]+`)
-	route = re.ReplaceAllString(route, "$1[^/]+$2")
-	res, _ := regexp.MatchString("^"+route+"$", path)
-	return res
 }
 
 // html404 404错误页面

@@ -40,6 +40,9 @@ func TagList(ctx context.Context, filter *model.TagListArgs, cols ...string) ([]
 		sess.Cols(cols...)
 	}
 	sess.Asc("created")
+	if filter.Mult != "" {
+		sess.And("(name like ? or intro like ?)", filter.SafeMult(), filter.SafeMult())
+	}
 	if filter.IsZero() {
 		err := sess.Find(&mods)
 		return mods, len(mods), err
@@ -54,9 +57,9 @@ func TagCount(ctx context.Context, filter *model.TagListArgs) int {
 	sess := db.NewSession()
 	defer sess.Close()
 	sess.Context(ctx)
-	// if filter.Mult != "" {
-	// 	sess.And("field like concat('%',?,'%')", filter.Mult)
-	// }
+	if filter.Mult != "" {
+		sess.And("(name like ? or intro like ?)", filter.SafeMult(), filter.SafeMult())
+	}
 	count, _ := sess.Count(&model.Tag{})
 	return int(count)
 }
@@ -117,7 +120,7 @@ func TagIds(ctx context.Context, ids []string) []model.Tag {
 }
 
 // TagMapIds 标签id集合查询
-func TagMapIds(ctx context.Context, ids []int) map[string]*model.Tag {
+func TagMapIds(ctx context.Context, ids []string) map[string]*model.Tag {
 	mods := make([]model.Tag, 0, len(ids))
 	sess := db.NewSession()
 	defer sess.Close()

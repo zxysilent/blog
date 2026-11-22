@@ -2,6 +2,7 @@ package repo
 
 import (
 	"blog/internal/model"
+	"time"
 )
 
 // TagPostCount 通过标签查询文章分页总数
@@ -30,63 +31,47 @@ func TagPostCount(tagId string) int {
 // 	return mods, err
 // }
 
-// TagPostAdds 添加文章标签[]
-func TagPostAdds(mods *[]model.PostTag) error {
+// TagPostDrop 删除标签时删除对应的标签_文章
+func TagPostDrop(tagId string) error {
 	sess := db.NewSession()
 	defer sess.Close()
-	sess.Begin()
-	if _, err := sess.Insert(mods); err != nil {
+	if _, err := sess.Where("tag_id = ?", tagId).Delete(&model.PostTag{}); err != nil {
+		return err
+	}
+	return nil
+}
+
+// PostTags 查询文章关联的标签
+func PostTags(postId string) []model.Tag {
+	mods := make([]model.Tag, 0, 8)
+	db.SQL("SELECT tag.* FROM post_tag ,tag WHERE tag.id=tag_id AND post_id=?", postId).Find(&mods)
+	return mods
+}
+
+// PostTagSync 全量替换文章标签
+func PostTagSync(postId string, tagIds []string) error {
+	sess := db.NewSession()
+	defer sess.Close()
+	if err := sess.Begin(); err != nil {
+		return err
+	}
+	if _, err := sess.Where("post_id = ?", postId).Delete(&model.PostTag{}); err != nil {
 		sess.Rollback()
 		return err
 	}
-	sess.Commit()
-	return nil
-}
-
-// TagPostDrop 删除标签时候
-// 删除对应的标签_文章
-func TagPostDrop(tagId int) error {
-	sess := db.NewSession()
-	defer sess.Close()
-	sess.Begin()
-	sess.Where("tag_id = ?", tagId)
-	if _, err := sess.Delete(&model.PostTag{}); err != nil {
-		sess.Commit()
-		return err
+	if len(tagIds) > 0 {
+		milli := time.Now().UnixMilli()
+		mods := make([]model.PostTag, 0, len(tagIds))
+		for _, tid := range tagIds {
+			mods = append(mods, model.PostTag{PostId: postId, TagId: tid, Updated: milli, Created: milli})
+		}
+		for idx := range mods {
+			mods[idx].BeforeInsert()
+		}
+		if _, err := sess.Insert(&mods); err != nil {
+			sess.Rollback()
+			return err
+		}
 	}
-	sess.Rollback()
-	return nil
-}
-
-// PostTagDrops 修改文章时候
-// 删除对应的标签_文章
-func PostTagDrops(postId int, tagIds []int) error {
-	if len(tagIds) < 1 {
-		return nil
-	}
-	sess := db.NewSession()
-	defer sess.Close()
-	sess.Begin()
-	sess.Where("post_id = ?", postId).In("tag_id", tagIds)
-	if _, err := sess.Delete(&model.PostTag{}); err != nil {
-		sess.Commit()
-		return err
-	}
-	sess.Rollback()
-	return nil
-}
-
-// PostTagDrop 删除文章时候
-// 删除对应的标签_文章
-func PostTagDrop(postId int) error {
-	sess := db.NewSession()
-	defer sess.Close()
-	sess.Begin()
-	sess.Where("post_id = ?", postId)
-	if _, err := sess.Delete(&model.PostTag{}); err != nil {
-		sess.Commit()
-		return err
-	}
-	sess.Rollback()
-	return nil
+	return sess.Commit()
 }

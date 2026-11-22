@@ -1,5 +1,7 @@
 package model
 
+import "blog/pkg/rndm"
+
 // Tag 标签
 type Tag struct {
 	Id      string `xorm:"VARCHAR(64) PK" json:"id"`        //主键
@@ -14,8 +16,21 @@ func (Tag) TableName() string {
 	return "tag"
 }
 
-func (t *Tag) IsPkZero() bool {
-	return t.Id == ""
+// BeforeInsert 插入前生成主键
+func (s *Tag) BeforeInsert() {
+	if s.Id == "" {
+		s.Id = rndm.ULID()
+	}
+}
+
+// IsPkZero 主键是否为空
+func (s Tag) IsPkZero() bool {
+	return s.Id == ""
+}
+
+// GetId 返回主键
+func (s Tag) GetId() string {
+	return s.Id
 }
 
 // TagState 统计

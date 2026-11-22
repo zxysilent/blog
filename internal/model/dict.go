@@ -1,159 +1,313 @@
 package model
 
 import (
-	"encoding/json"
+	"blog/pkg/rndm"
 	"errors"
+	"fmt"
+	"sort"
 	"strconv"
+	"strings"
 	"time"
 )
 
-// Dict 配置
+// 字典值类型
+const (
+	DictTypeString = "string" //字符串
+	DictTypeBool   = "bool"   //布尔
+	DictTypeInt    = "int"    //整数
+	DictTypeTime   = "time"   //时间
+)
+
+// 内置字典主键（主键即业务键，代码中引用可避免拼写错误）
+const (
+	DictIdGender   = "gender"    //性别
+	DictIdPageSize = "page_size" //分页大小，列表页可选的分页条数
+)
+
+var (
+	dictTimeFmts = []string{
+		time.RFC3339,
+		"2006-01-02 15:04:05",
+		"2006-01-02",
+		"15:04:05",
+	}
+)
+
+// Dict 字典（字典类型主表）
+// 主键 Id 同时作为唯一业务键：创建时允许自定义（如 gender），
+// 未指定时由 BeforeInsert 生成 ULID
+// 字典项存放在独立的 dict_entry 表，Entries 仅为读写时组装的结果，不持久化
+// Inner=true 为内置字典，禁止删除
 type Dict struct {
-	Key      string `xorm:"PK UNIQUE VARCHAR(64)" json:"key"`      //唯一Key
-	Name     string `xorm:"VARCHAR(255)" json:"name"`              //显示
-	Value    string `xorm:"TEXT" json:"value"`                     //值
-	Min      int    `xorm:"INT(11)" json:"min"`                    //数字最小值，字符串最小长度
-	Max      int    `xorm:"INT(11)" json:"max"`                    //数字最大值，字符串最大长度
-	Describe string `xorm:"VARCHAR(255)" json:"describe"`          //描述
-	Editable bool   `xorm:"TINYINT(4) DEFAULT(0)" json:"editable"` //是否允许修改
-	Sort     int    `xorm:"INT(11)" json:"sort"`                   //显示排序
-	Type     string `xorm:"VARCHAR(64)" json:"type"`               //类型 JSON,INT,TIME，BOOL,STRING,FLOAT
-	Inner    bool   `xorm:"TINYINT(4) DEFAULT 0" json:"inner"`     //内部-禁止删除
-	Kind     string `xorm:"VARCHAR(64)" json:"kind"`               //种类
-	Intro    string `xorm:"VARCHAR(255)" json:"intro"`             //说明
-	Updated  int64  `xorm:"BIGINT" json:"updated"`                 //修改时间
-	Created  int64  `xorm:"BIGINT" json:"created"`                 //创建时间
+	Id      string      `xorm:"VARCHAR(64) PK" json:"id"`     //主键，兼作字典键
+	Name    string      `xorm:"VARCHAR(128)" json:"name"`     //字典名称
+	Type    string      `xorm:"VARCHAR(16)" json:"type"`      //值类型 string/bool/int/time
+	Status  bool        `xorm:"BOOL DEFAULT 1" json:"status"` //是否启用
+	Inner   bool        `xorm:"BOOL DEFAULT 0" json:"inner"`  //内置-禁止删除
+	Remark  string      `xorm:"VARCHAR(255)" json:"remark"`   //备注
+	Entries []DictEntry `xorm:"-" json:"entries"`             //选项集合-非持久化
+	Created int64       `xorm:"BIGINT" json:"created"`        //创建时间
+	Updated int64       `xorm:"BIGINT" json:"updated"`        //修改时间
 }
 
 func (Dict) TableName() string {
 	return "dict"
 }
 
-// ------------------------------------------------------ Basic 基础配置 ------------------------------------------------------
-// Basic 基础配置
-type Basic struct {
-	Title       string `json:"title"`       //标题
-	SiteUrl     string `json:"site_url"`    //网站地址
-	LogoUrl     string `json:"logo_url"`    //Logo地址
-	Author      string `json:"author"`      //网站作者
-	Copyright   string `json:"copyright"`   //版权
-	Keywords    string `json:"keywords"`    //网站关键词
-	Description string `json:"description"` //描述
-	BeianMiit   string `json:"beian_miit"`  //ICP备案
-	BeianNism   string `json:"beian_nism"`  //公安备案
-
-}
-type Blog struct {
-	PageSize  int    `json:"page_size"`  //分页大小
-	Analytic  string `json:"analytic"`   //统计脚本
-	Comment   string `json:"comment"`    //评论脚本
-	GithubUrl string `json:"github_url"` //githu地址
-	WeiboUrl  string `json:"weibo_url"`  //微博地址
-}
-
-const (
-	DictKeyLogin = "login" //登录页面
-	DictKeyBasic = "basic" //基础配置
-	DictKeyBlog  = "blog"  //应用首页
-)
-
-func (d *Dict) Int() int {
-	v, _ := d.int()
-	return v
-}
-
-func (d *Dict) int() (int, error) {
-	return strconv.Atoi(d.Value)
-}
-
-func (d *Dict) Time() time.Time {
-	v, _ := d.time()
-	return v
-}
-
-func (d *Dict) time() (time.Time, error) {
-	v, err := strconv.ParseInt(d.Value, 10, 64)
-	if err != nil {
-		return time.Time{}, err
+// BeforeInsert 插入前生成主键
+func (s *Dict) BeforeInsert() {
+	if s.Id == "" {
+		s.Id = rndm.ULID()
 	}
-	return time.UnixMilli(v), nil
 }
 
-func (d *Dict) Bool() bool {
-	v, _ := d.bool()
-	return v
+// IsPkZero 主键是否为空
+func (s Dict) IsPkZero() bool {
+	return s.Id == ""
 }
 
-func (d *Dict) bool() (bool, error) {
-	return strconv.ParseBool(d.Value)
+// GetId 返回主键
+func (s Dict) GetId() string {
+	return s.Id
 }
 
-func (d *Dict) json(v any) error {
-	return json.Unmarshal([]byte(d.Value), v)
+// DictEntry 字典项（独立表）
+// dict_id 关联字典，pid 表达层级（支持树形字典）
+// 唯一索引 (dict_id, pid, field) 保证同一层级字段名不重复
+type DictEntry struct {
+	Id       string      `xorm:"VARCHAR(64) PK" json:"id"`                            //主键
+	DictId   string      `xorm:"UNIQUE(dict_entry) INDEX VARCHAR(64)" json:"dict_id"` //所属字典
+	Pid      string      `xorm:"UNIQUE(dict_entry) VARCHAR(64)" json:"pid"`           //父项id，空为顶层
+	Field    string      `xorm:"UNIQUE(dict_entry) VARCHAR(64)" json:"field"`         //字段名，同层唯一
+	Label    string      `xorm:"VARCHAR(128)" json:"label"`                           //展示名
+	Value    string      `xorm:"VARCHAR(255)" json:"value"`                           //字典值
+	Sort     int         `xorm:"INT DEFAULT 1000" json:"sort"`                        //排序
+	Status   bool        `xorm:"BOOL DEFAULT 1" json:"status"`                        //是否启用
+	Created  int64       `xorm:"BIGINT" json:"created"`                               //创建时间
+	Updated  int64       `xorm:"BIGINT" json:"updated"`                               //修改时间
+	Type     string      `xorm:"-" json:"type"`                                       //值类型，由所属字典下发-非持久化
+	Children []DictEntry `xorm:"-" json:"children,omitempty"`                         //子级-非持久化
 }
 
-func (d *Dict) ToBasic() *Basic {
-	mod := &Basic{}
-	d.json(mod)
-	return mod
+func (DictEntry) TableName() string {
+	return "dict_entry"
 }
 
-func (d *Dict) ToBlog() *Blog {
-	mod := &Blog{}
-	d.json(mod)
-	return mod
+// BeforeInsert 插入前生成主键
+func (s *DictEntry) BeforeInsert() {
+	if s.Id == "" {
+		s.Id = rndm.ULID()
+	}
 }
 
-func (d *Dict) Check() error {
+// IsPkZero 主键是否为空
+func (s DictEntry) IsPkZero() bool {
+	return s.Id == ""
+}
+
+// GetId 返回主键
+func (s DictEntry) GetId() string {
+	return s.Id
+}
+
+// Valid 校验字典主表字段
+func (d *Dict) Valid() error {
+	d.Id = strings.TrimSpace(d.Id)
+	d.Name = strings.TrimSpace(d.Name)
+	d.Remark = strings.TrimSpace(d.Remark)
+	d.Type = strings.ToLower(strings.TrimSpace(d.Type))
+	if d.Type == "" {
+		d.Type = DictTypeString
+	}
+	if err := ValidateBizId(d.Id, "字典主键"); err != nil {
+		return err
+	}
+	if d.Name == "" || len(d.Name) > 128 {
+		return errors.New("字典名称不能为空且长度不超过 128")
+	}
 	switch d.Type {
-	case "int":
-		_, err := d.int()
-		return err
-	case "bool":
-		_, err := d.bool()
-		return err
-	case "time":
-		_, err := d.time()
-		return err
-	case "json":
-		if !json.Valid([]byte(d.Value)) {
-			return errors.New("invalid json")
-		}
+	case DictTypeString, DictTypeBool, DictTypeInt, DictTypeTime:
 	default:
+		return fmt.Errorf("不支持的字典类型 %s", d.Type)
+	}
+	if len(d.Remark) > 255 {
+		return errors.New("备注长度不能超过 255")
 	}
 	return nil
 }
 
+// BuildTree 把扁平选项列表组装成树填入 Entries，按 sort、field 升序
+func (d *Dict) BuildTree(rows []DictEntry) {
+	if len(rows) < 1 {
+		d.Entries = []DictEntry{}
+		return
+	}
+	group := make(map[string][]DictEntry, len(rows))
+	for idx := range rows {
+		it := rows[idx]
+		it.Type = d.Type
+		it.Children = nil
+		group[it.Pid] = append(group[it.Pid], it)
+	}
+	var build func(pid string, depth int) []DictEntry
+	build = func(pid string, depth int) []DictEntry {
+		if depth > 16 { // 防御脏数据造成的环
+			return nil
+		}
+		items, ok := group[pid]
+		if !ok {
+			return nil
+		}
+		sort.Slice(items, func(i, j int) bool {
+			if items[i].Sort != items[j].Sort {
+				return items[i].Sort < items[j].Sort
+			}
+			return items[i].Field < items[j].Field
+		})
+		out := make([]DictEntry, len(items))
+		copy(out, items)
+		for i := range out {
+			out[i].Children = build(out[i].Id, depth+1)
+		}
+		return out
+	}
+	d.Entries = build("", 0)
+}
+
+// Flatten 展开为平铺选项列表（过滤禁用项，清空 children）
+// 字典整体禁用时返回空列表
+func (d *Dict) Flatten() []DictEntry {
+	if !d.Status {
+		return []DictEntry{}
+	}
+	out := make([]DictEntry, 0, len(d.Entries))
+	var walk func(entries []DictEntry)
+	walk = func(entries []DictEntry) {
+		for idx := range entries {
+			it := entries[idx]
+			if !it.Status {
+				continue
+			}
+			item := it
+			item.Children = nil
+			out = append(out, item)
+			walk(it.Children)
+		}
+	}
+	walk(d.Entries)
+	return out
+}
+
+// FlatDictEntries 校验树形选项并展开为可直接入库的扁平列表
+// 自动补齐主键、dict_id、pid；同一层级 field 不可重复
+func FlatDictEntries(dictId, typ string, entries []DictEntry) ([]DictEntry, error) {
+	out := make([]DictEntry, 0, len(entries))
+	var walk func(pid string, items []DictEntry) error
+	walk = func(pid string, items []DictEntry) error {
+		seen := make(map[string]struct{}, len(items))
+		for idx := range items {
+			it := items[idx]
+			it.Field = strings.TrimSpace(it.Field)
+			it.Label = strings.TrimSpace(it.Label)
+			it.Value = strings.TrimSpace(it.Value)
+			if it.Field == "" {
+				return errors.New("选项字段名不能为空")
+			}
+			if len(it.Field) > 64 {
+				return fmt.Errorf("选项字段名 %s 长度不能超过 64", it.Field)
+			}
+			if _, has := seen[it.Field]; has {
+				return fmt.Errorf("同一层级选项字段名重复 %s", it.Field)
+			}
+			seen[it.Field] = struct{}{}
+			if it.Label == "" {
+				it.Label = it.Value
+			}
+			if len(it.Label) > 128 {
+				return fmt.Errorf("选项 %s 的展示名长度不能超过 128", it.Field)
+			}
+			if len(it.Value) > 255 {
+				return fmt.Errorf("选项 %s 的值长度不能超过 255", it.Field)
+			}
+			if err := ValidateDictValue(typ, it.Value); err != nil {
+				return fmt.Errorf("选项 %s 的值非法: %w", it.Field, err)
+			}
+			id := it.Id
+			if id == "" {
+				id = rndm.ULID()
+			}
+			out = append(out, DictEntry{
+				Id:      id,
+				DictId:  dictId,
+				Pid:     pid,
+				Field:   it.Field,
+				Label:   it.Label,
+				Value:   it.Value,
+				Sort:    it.Sort,
+				Status:  it.Status,
+				Created: it.Created,
+				Updated: it.Updated,
+			})
+			if err := walk(id, it.Children); err != nil {
+				return err
+			}
+		}
+		return nil
+	}
+	if err := walk("", entries); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ValidateDictValue 按类型校验字典值
+func ValidateDictValue(typ, val string) error {
+	switch typ {
+	case DictTypeString:
+		return nil
+	case DictTypeBool:
+		if val != "true" && val != "false" {
+			return errors.New("布尔值只能是 true 或 false")
+		}
+		return nil
+	case DictTypeInt:
+		if _, err := strconv.ParseInt(val, 10, 64); err != nil {
+			return errors.New("必须是整数")
+		}
+		return nil
+	case DictTypeTime:
+		for _, fmtStr := range dictTimeFmts {
+			if _, err := time.Parse(fmtStr, val); err == nil {
+				return nil
+			}
+		}
+		return errors.New("时间格式不合法")
+	}
+	return nil
+}
+
+// DictListArgs 字典列表参数
 type DictListArgs struct {
 	List
-	Name string `form:"name" query:"name" json:"name"`
+	Status *bool `query:"status" form:"status" json:"status"` //状态过滤
 }
 
+// DictAddArgs 字典新增参数
+type DictAddArgs struct {
+	Id      string      `json:"id" form:"id"`           //主键，可自定义，留空自动生成
+	Name    string      `json:"name" form:"name"`       //字典名称
+	Type    string      `json:"type" form:"type"`       //值类型
+	Status  *bool       `json:"status" form:"status"`   //是否启用
+	Remark  string      `json:"remark" form:"remark"`   //备注
+	Entries []DictEntry `json:"entries" form:"entries"` //选项集合
+}
+
+// DictEditArgs 字典修改参数
+// Entries 为 nil 表示不修改选项，指向空切片表示清空选项
 type DictEditArgs struct {
-	Value    *string `json:"value"`
-	Describe *string `json:"describe"`
-}
-
-type DictSet struct {
-	set   map[string]*Dict `json:"-"`
-	Blog  *Blog
-	Basic *Basic
-}
-
-func (cs *DictSet) Get(id string) *Dict {
-	cfg, ok := cs.set[id]
-	if !ok {
-		cfg = &Dict{Key: id}
-	}
-	return cfg
-}
-
-func NewDictSet() *DictSet {
-	return &DictSet{
-		set: make(map[string]*Dict),
-	}
-}
-
-func (cs *DictSet) Set(key string, cfg *Dict) {
-	cs.set[key] = cfg
+	Name    *string      `json:"name" form:"name"`       //字典名称
+	Type    *string      `json:"type" form:"type"`       //值类型
+	Status  *bool        `json:"status" form:"status"`   //是否启用
+	Remark  *string      `json:"remark" form:"remark"`   //备注
+	Entries *[]DictEntry `json:"entries" form:"entries"` //选项集合
 }

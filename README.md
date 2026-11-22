@@ -10,7 +10,7 @@
 - golang [https://golang.google.cn](https://golang.google.cn)
 - vue3+vite4+pinia+typescript
 - xorm [https://xorm.io](https://xorm.io)
-- echo [https://echo.labstack.com](https://echo.labstack.com)
+- echo v4 [https://echo.labstack.com](https://echo.labstack.com)
 - naiveui [http://naiveui.com](http://naiveui.com)
 - UI 修改于 [https://firekylin.org](https://firekylin.org)
 
@@ -23,6 +23,38 @@
 [github(https://github.com/zxysilent/blog)](https://github.com/zxysilent/blog)
 
 [gitee(https://gitee.com/zxysilent/blog)](https://gitee.com/zxysilent/blog)
+
+## 本地开发
+## Local development
+
+开两个终端，各自常驻，改代码即时生效，不需要手动重启。
+
+后端（`fish run` 热重载：改 .go / .html 自动重编译并重启）：
+
+```bash
+fish run          # 或 ./dev-srv.sh（额外带 -all，也监听 views 下的模板）
+```
+
+管理端 `mgmt`（Vite 热更新，`/api`、`/static` 代理到 8085）：
+
+```bash
+cd mgmt && pnpm run dev    # 或 ./dev-mgmt.sh（首次会自动装依赖）
+```
+
+- 前端地址 `http://localhost:8001`，后端地址 `http://localhost:8085`
+- `mgmt` 的依赖由 pnpm 管理（有 `pnpm-lock.yaml`），装包和跑脚本都用 `pnpm`；
+  `mgmt/.npmrc` 里的 `node-linker` / `verify-deps-before-run` 是 pnpm 专用键，
+  在 `mgmt` 目录下用 `npm run` 会打印 `Unknown project config` 警告
+- 改 `mgmt/src/**` 走 HMR，页面不刷新；改后端 `.go` 由 fish 重编译重启，前端无需重启
+- 默认管理员账号 `root / admin888`
+- 本地没有 MySQL 时，把 `conf.toml` 的 `[db] type` 改成 `sqlite` 即可，
+  `sqlite = "file:sqlite.db?_pragma=busy_timeout(5000)"`；
+  令牌密钥、上传限制、SQL 日志等运行时参数在后台「配置管理」里在线调整，改完立即生效。
+
+首次启动若提示某张表结构变更并 drop 重建，属于预期行为：
+`permission` / `role_permission` 由路由派生，`dict` / `dict_entry` 由代码默认值重新种入，
+不做任何迁移脚本。
+
 ## 开发原因 
 - 现在自己使用博客系统不方便管理、部署和二次开发
 - 渲染速度到不到想要的效果

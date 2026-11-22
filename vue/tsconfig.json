@@ -1,8 +1,8 @@
 {
 	"compilerOptions": {
-		"target": "esnext",
-		"module": "esnext",
-		"moduleResolution": "node",
+		"target": "es2022",
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
 		"strict": true,
 		"jsx": "preserve",
 		"sourceMap": true,
@@ -16,7 +16,7 @@
 		"incremental": true,
 		"noImplicitAny": false,
 		"skipLibCheck": true,
-		"baseUrl": ".",
+		"rootDir": ".",
 		"paths": {
 			"@/*": ["src/*"]
 		},
